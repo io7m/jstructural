@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:document xmlns:s="http://www.io7m.com/schemas/structural/1.0.0">
+  <s:document-title>Document</s:document-title>
+  <s:section xml:id="section_0">
+    <s:section-title>Section</s:section-title>
+    <s:paragraph xml:id="paragraph_0">
+      Paragraph.
+    </s:paragraph>
+  </s:section>
+</s:document>

@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright © 2014 http://io7m.com
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+-->
+
+<!-- version: structural 1.0.0 -->
+
+<r:grammar
+  xmlns:s="http://www.io7m.com/schemas/structural/1.0.0"
+  xmlns:r="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <r:start combine="choice">
+    <r:choice>
+      <r:ref name="io7m.structural-1_0_0.set"/>
+      <r:ref name="io7m.structural-1_0_0.document"/>
+    </r:choice>
+  </r:start>
+
+  <r:define name="io7m.structural-1_0_0.xml-id">
+    <r:attribute name="xml:id">
+      <r:data type="ID"/>
+    </r:attribute>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.standard-attributes">
+    <r:optional>
+      <r:attribute name="xml:base">
+        <r:text/>
+      </r:attribute>
+    </r:optional>
+    <r:optional>
+      <r:attribute name="xml:lang">
+        <r:text/>
+      </r:attribute>
+    </r:optional>
+    <r:optional>
+      <r:attribute name="s:type">
+        <r:data type="token"/>
+      </r:attribute>
+    </r:optional>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.link">
+    <r:element name="s:link">
+      <r:attribute name="s:target">
+        <r:data type="IDREF"/>
+      </r:attribute>
+      <r:oneOrMore>
+        <r:choice>
+          <r:ref name="io7m.structural-1_0_0.image"/>
+          <r:text/>
+        </r:choice>
+      </r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.link-external">
+    <r:element name="s:link-external">
+      <r:attribute name="s:target">
+        <r:data type="anyURI"/>
+      </r:attribute>
+      <r:oneOrMore>
+        <r:choice>
+          <r:ref name="io7m.structural-1_0_0.image"/>
+          <r:text/>
+        </r:choice>
+      </r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.footnote">
+    <r:element name="s:footnote">
+      <r:oneOrMore>
+        <r:choice>
+          <r:ref name="io7m.structural-1_0_0.footnote"/>
+          <r:ref name="io7m.structural-1_0_0.image"/>
+          <r:ref name="io7m.structural-1_0_0.link"/>
+          <r:ref name="io7m.structural-1_0_0.link-external"/>
+          <r:ref name="io7m.structural-1_0_0.list-ordered"/>
+          <r:ref name="io7m.structural-1_0_0.list-unordered"/>
+          <r:ref name="io7m.structural-1_0_0.table"/>
+          <r:ref name="io7m.structural-1_0_0.term"/>
+          <r:ref name="io7m.structural-1_0_0.verbatim"/>
+          <r:text/>
+        </r:choice>
+      </r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.term">
+    <r:element name="s:term">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:text/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.image">
+    <r:element name="s:image">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:attribute name="s:source">
+        <r:data type="anyURI"/>
+      </r:attribute>
+      <r:optional>
+        <r:attribute name="s:width">
+          <r:data type="positiveInteger"/>
+        </r:attribute>
+      </r:optional>
+      <r:optional>
+        <r:attribute name="s:height">
+          <r:data type="positiveInteger"/>
+        </r:attribute>
+      </r:optional>
+      <r:text/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.paragraph">
+    <r:element name="s:paragraph">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:optional><r:ref name="io7m.structural-1_0_0.xml-id"/></r:optional>
+      <r:oneOrMore>
+        <r:choice>
+          <r:ref name="io7m.structural-1_0_0.footnote"/>
+          <r:ref name="io7m.structural-1_0_0.formal-item-list"/>
+          <r:ref name="io7m.structural-1_0_0.image"/>
+          <r:ref name="io7m.structural-1_0_0.link"/>
+          <r:ref name="io7m.structural-1_0_0.link-external"/>
+          <r:ref name="io7m.structural-1_0_0.list-ordered"/>
+          <r:ref name="io7m.structural-1_0_0.list-unordered"/>
+          <r:ref name="io7m.structural-1_0_0.table"/>
+          <r:ref name="io7m.structural-1_0_0.term"/>
+          <r:ref name="io7m.structural-1_0_0.verbatim"/>
+          <r:text/>
+        </r:choice>
+      </r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.verbatim">
+    <r:element name="s:verbatim">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:text/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.list-item">
+    <r:element name="s:list-item">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:oneOrMore>
+        <r:choice>
+          <r:ref name="io7m.structural-1_0_0.footnote"/>
+          <r:ref name="io7m.structural-1_0_0.image"/>
+          <r:ref name="io7m.structural-1_0_0.link"/>
+          <r:ref name="io7m.structural-1_0_0.link-external"/>
+          <r:ref name="io7m.structural-1_0_0.list-ordered"/>
+          <r:ref name="io7m.structural-1_0_0.list-unordered"/>
+          <r:ref name="io7m.structural-1_0_0.term"/>
+          <r:ref name="io7m.structural-1_0_0.verbatim"/>
+          <r:text/>
+        </r:choice>
+      </r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.list-unordered">
+    <r:element name="s:list-unordered">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+
+      <r:oneOrMore><r:ref name="io7m.structural-1_0_0.list-item"/></r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.list-ordered">
+    <r:element name="s:list-ordered">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:oneOrMore><r:ref name="io7m.structural-1_0_0.list-item"/></r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.formal-item-list">
+    <r:element name="s:formal-item-list">
+      <r:attribute name="s:kind">
+        <r:data type="token"/>
+      </r:attribute>
+      <r:empty/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.formal-item-title">
+    <r:element name="s:formal-item-title">
+      <r:text/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.formal-item">
+    <r:element name="s:formal-item">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:attribute name="s:kind">
+        <r:data type="token"/>
+      </r:attribute>
+      <r:ref name="io7m.structural-1_0_0.formal-item-title"/>
+      <r:choice>
+        <r:ref name="io7m.structural-1_0_0.formal-item-list"/>
+        <r:ref name="io7m.structural-1_0_0.image"/>
+        <r:ref name="io7m.structural-1_0_0.list-ordered"/>
+        <r:ref name="io7m.structural-1_0_0.list-unordered"/>
+        <r:ref name="io7m.structural-1_0_0.table"/>
+        <r:ref name="io7m.structural-1_0_0.verbatim"/>
+      </r:choice>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.subsection-title">
+    <r:element name="s:subsection-title">
+      <r:text/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.subsection">
+    <r:element name="s:subsection">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:optional>
+        <r:ref name="io7m.structural-1_0_0.xml-id"/>
+      </r:optional>
+      <r:ref name="io7m.structural-1_0_0.subsection-title"/>
+      <r:oneOrMore>
+        <r:choice>
+          <r:ref name="io7m.structural-1_0_0.paragraph"/>
+          <r:ref name="io7m.structural-1_0_0.formal-item"/>
+        </r:choice>
+      </r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.section-contents">
+    <r:element name="s:section-contents">
+      <r:empty/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.section-title">
+    <r:element name="s:section-title">
+      <r:text/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.section">
+    <r:element name="s:section">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:optional><r:ref name="io7m.structural-1_0_0.xml-id"/></r:optional>
+      <r:ref name="io7m.structural-1_0_0.section-title"/>
+      <r:optional><r:ref name="io7m.structural-1_0_0.section-contents"/></r:optional>
+      <r:choice>
+        <r:oneOrMore><r:ref name="io7m.structural-1_0_0.subsection"/></r:oneOrMore>
+        <r:oneOrMore>
+          <r:choice>
+            <r:ref name="io7m.structural-1_0_0.paragraph"/>
+            <r:ref name="io7m.structural-1_0_0.formal-item"/>
+          </r:choice>
+        </r:oneOrMore>
+      </r:choice>
+    </r:element>
+  </r:define>
+
+  <!--
+    - Tables
+    -->
+
+  <r:define name="io7m.structural-1_0_0.table-summary">
+    <r:element name="s:table-summary">
+      <r:text/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.table-column-name">
+    <r:element name="s:table-column-name">
+      <r:text/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.table-head">
+    <r:element name="s:table-head">
+      <r:oneOrMore>
+        <r:ref name="io7m.structural-1_0_0.table-column-name"/>
+      </r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.table-cell">
+    <r:element name="s:table-cell">
+      <r:oneOrMore>
+        <r:choice>
+          <r:ref name="io7m.structural-1_0_0.footnote"/>
+          <r:ref name="io7m.structural-1_0_0.image"/>
+          <r:ref name="io7m.structural-1_0_0.link"/>
+          <r:ref name="io7m.structural-1_0_0.link-external"/>
+          <r:ref name="io7m.structural-1_0_0.list-ordered"/>
+          <r:ref name="io7m.structural-1_0_0.list-unordered"/>
+          <r:ref name="io7m.structural-1_0_0.term"/>
+          <r:ref name="io7m.structural-1_0_0.verbatim"/>
+          <r:text/>
+        </r:choice>
+      </r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.table-row">
+    <r:element name="s:table-row">
+      <r:oneOrMore>
+        <r:ref name="io7m.structural-1_0_0.table-cell"/>
+      </r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.table-body">
+    <r:element name="s:table-body">
+      <r:oneOrMore>
+        <r:ref name="io7m.structural-1_0_0.table-row"/>
+      </r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.table">
+    <r:element name="s:table">
+      <r:ref name="io7m.structural-1_0_0.table-summary"/>
+      <r:optional>
+        <r:ref name="io7m.structural-1_0_0.table-head"/>
+      </r:optional>
+      <r:ref name="io7m.structural-1_0_0.table-body"/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.part-contents">
+    <r:element name="s:part-contents">
+      <r:empty/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.part-title">
+    <r:element name="s:part-title">
+      <r:text/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.part">
+    <r:element name="s:part">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:ref name="io7m.structural-1_0_0.part-title"/>
+      <r:optional><r:ref name="io7m.structural-1_0_0.xml-id"/></r:optional>
+      <r:optional><r:ref name="io7m.structural-1_0_0.part-contents"/></r:optional>
+      <r:oneOrMore><r:ref name="io7m.structural-1_0_0.section"/></r:oneOrMore>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.document-title">
+    <r:element name="s:document-title">
+      <r:text/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.document-contents">
+    <r:element name="s:document-contents">
+      <r:empty/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.document-style">
+    <r:element name="s:document-style">
+      <r:data type="anyURI"/>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.document">
+    <r:element name="s:document">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:interleave>
+        <r:ref name="io7m.structural-1_0_0.document-title"/>
+        <r:optional><r:ref name="io7m.structural-1_0_0.document-style"/></r:optional>
+        <r:optional><r:ref name="io7m.structural-1_0_0.document-contents"/></r:optional>
+      </r:interleave>
+      <r:choice>
+        <r:oneOrMore><r:ref name="io7m.structural-1_0_0.part"/></r:oneOrMore>
+        <r:oneOrMore><r:ref name="io7m.structural-1_0_0.section"/></r:oneOrMore>
+      </r:choice>
+    </r:element>
+  </r:define>
+
+  <r:define name="io7m.structural-1_0_0.set">
+    <r:element name="s:set">
+      <r:ref name="io7m.structural-1_0_0.standard-attributes"/>
+      <r:oneOrMore><r:ref name="io7m.structural-1_0_0.document"/></r:oneOrMore>
+    </r:element>
+  </r:define>
+
+</r:grammar>
