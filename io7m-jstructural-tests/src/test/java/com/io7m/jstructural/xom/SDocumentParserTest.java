@@ -39,21 +39,21 @@ import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jaux.functional.Option.Some;
 import com.io7m.jaux.functional.Unit;
-import com.io7m.jstructural.SDocument;
-import com.io7m.jstructural.SDocumentWithSections;
-import com.io7m.jstructural.SID;
-import com.io7m.jstructural.SImage;
-import com.io7m.jstructural.SLink;
-import com.io7m.jstructural.SLinkExternal;
-import com.io7m.jstructural.SNonEmptyList;
-import com.io7m.jstructural.SParagraph;
-import com.io7m.jstructural.SParagraphContent;
-import com.io7m.jstructural.SSection;
-import com.io7m.jstructural.SSectionWithParagraphs;
-import com.io7m.jstructural.SSubsectionContent;
-import com.io7m.jstructural.STerm;
-import com.io7m.jstructural.SText;
-import com.io7m.jstructural.SVerbatim;
+import com.io7m.jstructural.core.SDocument;
+import com.io7m.jstructural.core.SDocumentWithSections;
+import com.io7m.jstructural.core.SID;
+import com.io7m.jstructural.core.SImage;
+import com.io7m.jstructural.core.SLink;
+import com.io7m.jstructural.core.SLinkExternal;
+import com.io7m.jstructural.core.SNonEmptyList;
+import com.io7m.jstructural.core.SParagraph;
+import com.io7m.jstructural.core.SParagraphContent;
+import com.io7m.jstructural.core.SSection;
+import com.io7m.jstructural.core.SSectionWithParagraphs;
+import com.io7m.jstructural.core.SSubsectionContent;
+import com.io7m.jstructural.core.STerm;
+import com.io7m.jstructural.core.SText;
+import com.io7m.jstructural.core.SVerbatim;
 
 public final class SDocumentParserTest
 {
