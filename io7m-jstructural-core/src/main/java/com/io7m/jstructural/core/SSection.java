@@ -123,12 +123,12 @@ import com.io7m.jaux.functional.Option;
    *           If the visitor raises {@link ConstraintError}
    * @throws Exception
    *           If the visitor raises an {@link Exception}
-   * @param <A>
-   *          The type of values returned by the visitor
+   * @param <S>
+   *          The type of transformed {@link SSection}s
    */
 
-  public abstract <A> A sectionAccept(
-    final @Nonnull SSectionVisitor<A> v)
+  public abstract <S> S sectionAccept(
+    final @Nonnull SSectionVisitor<S> v)
     throws ConstraintError,
       Exception;
 }

@@ -41,6 +41,10 @@ import nu.xom.Node;
 import nu.xom.ParsingException;
 import nu.xom.Text;
 import nu.xom.ValidityException;
+import nu.xom.xinclude.BadParseAttributeException;
+import nu.xom.xinclude.InclusionLoopException;
+import nu.xom.xinclude.NoIncludeLocationException;
+import nu.xom.xinclude.XIncludeException;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -53,6 +57,8 @@ import com.io7m.jaux.UnimplementedCodeException;
 import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jlog.Level;
 import com.io7m.jlog.Log;
+import com.io7m.jstructural.SVersion;
+import com.io7m.jstructural.SXML;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentStyle;
 import com.io7m.jstructural.core.SDocumentTitle;
@@ -469,6 +475,14 @@ public final class SDocumentParser
    *           On I/O errors
    * @throws URISyntaxException
    *           On failing to parse a URI
+   * @throws XIncludeException
+   *           If an xinclude fails
+   * @throws NoIncludeLocationException
+   *           If an xinclude fails
+   * @throws InclusionLoopException
+   *           If an xinclude fails
+   * @throws BadParseAttributeException
+   *           If an xinclude fails
    */
 
   public static @Nonnull SDocument fromStream(
@@ -480,7 +494,11 @@ public final class SDocumentParser
       ParserConfigurationException,
       ParsingException,
       IOException,
-      URISyntaxException
+      URISyntaxException,
+      BadParseAttributeException,
+      InclusionLoopException,
+      NoIncludeLocationException,
+      XIncludeException
   {
     final Log lp = new Log(log, "parser");
     final Document doc = SDocumentParser.fromStreamValidate(stream, log);
@@ -514,6 +532,14 @@ public final class SDocumentParser
    *           On parser errors
    * @throws IOException
    *           On I/O errors
+   * @throws XIncludeException
+   *           If an xinclude fails
+   * @throws NoIncludeLocationException
+   *           If an xinclude fails
+   * @throws InclusionLoopException
+   *           If an xinclude fails
+   * @throws BadParseAttributeException
+   *           If an xinclude fails
    */
 
   static @Nonnull Document fromStreamValidate(
@@ -524,7 +550,11 @@ public final class SDocumentParser
       ParserConfigurationException,
       ValidityException,
       ParsingException,
-      IOException
+      IOException,
+      BadParseAttributeException,
+      InclusionLoopException,
+      NoIncludeLocationException,
+      XIncludeException
   {
     Constraints.constrainNotNull(stream, "Stream");
     Constraints.constrainNotNull(log, "Log");
@@ -532,20 +562,23 @@ public final class SDocumentParser
     final Log log_xml = new Log(log, "xml");
 
     log_xml.debug("creating sax parser");
+
     final SAXParserFactory factory = SAXParserFactory.newInstance();
     factory.setValidating(false);
     factory.setNamespaceAware(true);
+    factory.setXIncludeAware(true);
+    factory.setFeature("http://apache.org/xml/features/xinclude", true);
 
     log_xml.debug("opening xml.xsd");
 
     final InputStream xml_xsd =
-      SDocument.class.getResourceAsStream("/com/io7m/jstructural/xml.xsd");
+      SVersion.class.getResourceAsStream("/com/io7m/jstructural/xml.xsd");
 
     try {
       log_xml.debug("opening schema.xsd");
 
       final InputStream schema_xsd =
-        SDocument.class
+        SVersion.class
           .getResourceAsStream("/com/io7m/jstructural/schema.xsd");
 
       try {
@@ -585,21 +618,20 @@ public final class SDocumentParser
     final @Nonnull Element element,
     final @Nonnull String name)
   {
-    return element.getFirstChildElement(name, SDocument.XML_URI.toString());
+    return element.getFirstChildElement(name, SXML.XML_URI.toString());
   }
 
   private static @CheckForNull Elements getElements(
     final @Nonnull Element element,
     final @Nonnull String name)
   {
-    return element.getChildElements(name, SDocument.XML_URI.toString());
+    return element.getChildElements(name, SXML.XML_URI.toString());
   }
 
   private static @CheckForNull Integer heightAttribute(
     final @Nonnull Element ec)
   {
-    final Attribute a =
-      ec.getAttribute("height", SDocument.XML_URI.toString());
+    final Attribute a = ec.getAttribute("height", SXML.XML_URI.toString());
     if (a == null) {
       return null;
     }
@@ -668,7 +700,7 @@ public final class SDocumentParser
   private static @CheckForNull String kindAttribute(
     final @Nonnull Element e)
   {
-    final Attribute et = e.getAttribute("kind", SDocument.XML_URI.toString());
+    final Attribute et = e.getAttribute("kind", SXML.XML_URI.toString());
     if (et == null) {
       return null;
     }
@@ -801,7 +833,7 @@ public final class SDocumentParser
     final String type = SDocumentParser.typeAttribute(e);
     final List<SListItem> items = new ArrayList<SListItem>();
     final Elements children =
-      e.getChildElements("list-item", SDocument.XML_URI.toString());
+      e.getChildElements("list-item", SXML.XML_URI.toString());
     for (int index = 0; index < children.size(); ++index) {
       final Element ec = children.get(index);
       items.add(SDocumentParser.listItem(log, ec));
@@ -825,7 +857,7 @@ public final class SDocumentParser
     final String type = SDocumentParser.typeAttribute(e);
     final List<SListItem> items = new ArrayList<SListItem>();
     final Elements children =
-      e.getChildElements("list-item", SDocument.XML_URI.toString());
+      e.getChildElements("list-item", SXML.XML_URI.toString());
     for (int index = 0; index < children.size(); ++index) {
       final Element ec = children.get(index);
       items.add(SDocumentParser.listItem(log, ec));
@@ -1279,8 +1311,7 @@ public final class SDocumentParser
     final @Nonnull Element ec)
     throws URISyntaxException
   {
-    final Attribute a =
-      ec.getAttribute("source", SDocument.XML_URI.toString());
+    final Attribute a = ec.getAttribute("source", SXML.XML_URI.toString());
     return new URI(a.getValue());
   }
 
@@ -1395,7 +1426,7 @@ public final class SDocumentParser
 
     final List<STableRow> rows = new ArrayList<STableRow>();
     final Elements ecs =
-      ec.getChildElements("table-row", SDocument.XML_URI.toString());
+      ec.getChildElements("table-row", SXML.XML_URI.toString());
     for (int index = 0; index < ecs.size(); ++index) {
       final Element ecc = ecs.get(index);
       rows.add(SDocumentParser.tableRow(log, ecc));
@@ -1472,8 +1503,7 @@ public final class SDocumentParser
 
       final List<STableColumnName> names = new ArrayList<STableColumnName>();
       final Elements ecs =
-        ec
-          .getChildElements("table-column-name", SDocument.XML_URI.toString());
+        ec.getChildElements("table-column-name", SXML.XML_URI.toString());
       for (int index = 0; index < ecs.size(); ++index) {
         final Element ecc = ecs.get(index);
         names.add(STableColumnName.tableColumnName(ecc.getValue()));
@@ -1492,7 +1522,7 @@ public final class SDocumentParser
   {
     final List<STableCell> cells = new ArrayList<STableCell>();
     final Elements ecs =
-      e.getChildElements("table-cell", SDocument.XML_URI.toString());
+      e.getChildElements("table-cell", SXML.XML_URI.toString());
     for (int index = 0; index < ecs.size(); ++index) {
       final Element ecc = ecs.get(index);
       cells.add(SDocumentParser.tableCell(log, ecc));
@@ -1512,8 +1542,7 @@ public final class SDocumentParser
   private static @Nonnull String targetAttribute(
     final @Nonnull Element ec)
   {
-    final Attribute a =
-      ec.getAttribute("target", SDocument.XML_URI.toString());
+    final Attribute a = ec.getAttribute("target", SXML.XML_URI.toString());
     return a.getValue();
   }
 
@@ -1532,7 +1561,7 @@ public final class SDocumentParser
   private static @CheckForNull String typeAttribute(
     final @Nonnull Element e)
   {
-    final Attribute et = e.getAttribute("type", SDocument.XML_URI.toString());
+    final Attribute et = e.getAttribute("type", SXML.XML_URI.toString());
     if (et == null) {
       return null;
     }
@@ -1554,8 +1583,7 @@ public final class SDocumentParser
   private static @CheckForNull Integer widthAttribute(
     final @Nonnull Element ec)
   {
-    final Attribute a =
-      ec.getAttribute("width", SDocument.XML_URI.toString());
+    final Attribute a = ec.getAttribute("width", SXML.XML_URI.toString());
     if (a == null) {
       return null;
     }

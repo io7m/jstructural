@@ -23,7 +23,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Option;
 
 /**
- * A document with sections.
+ * A document with parts.
  */
 
 public final class SDocumentWithParts extends SDocument
@@ -156,8 +156,8 @@ public final class SDocumentWithParts extends SDocument
     this.parts = Constraints.constrainNotNull(in_content, "Parts");
   }
 
-  @Override public <A> A documentAccept(
-    final @Nonnull SDocumentVisitor<A> v)
+  @Override public <D> D documentAccept(
+    final @Nonnull SDocumentVisitor<D> v)
     throws ConstraintError,
       Exception
   {

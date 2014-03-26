@@ -341,8 +341,8 @@ import com.io7m.jaux.functional.Option;
     return result;
   }
 
-  @Override public <A> A sectionAccept(
-    final @Nonnull SSectionVisitor<A> v)
+  @Override public <S> S sectionAccept(
+    final @Nonnull SSectionVisitor<S> v)
     throws ConstraintError,
       Exception
   {

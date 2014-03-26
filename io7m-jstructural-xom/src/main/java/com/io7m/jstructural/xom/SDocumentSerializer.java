@@ -28,6 +28,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jaux.functional.Unit;
+import com.io7m.jstructural.SXML;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentContents;
 import com.io7m.jstructural.core.SDocumentStyle;
@@ -89,11 +90,6 @@ import com.io7m.jstructural.core.SVerbatim;
 
 public final class SDocumentSerializer
 {
-  private SDocumentSerializer()
-  {
-
-  }
-
   private static class IDAdder implements Function<SID, Unit>
   {
     private final @Nonnull Element e;
@@ -130,8 +126,7 @@ public final class SDocumentSerializer
     @Override public Unit call(
       final @Nonnull String x)
     {
-      final Attribute a =
-        new Attribute("s:type", SDocument.XML_URI.toString(), x);
+      final Attribute a = new Attribute("s:type", SXML.XML_URI.toString(), x);
       this.e.addAttribute(a);
       return Unit.unit();
     }
@@ -156,19 +151,19 @@ public final class SDocumentSerializer
     try {
       return d.documentAccept(new SDocumentVisitor<Element>() {
         @Override public Element visitDocumentWithParts(
-          final @Nonnull SDocumentWithParts document)
+          final SDocumentWithParts dp)
           throws ConstraintError,
             Exception
         {
-          return SDocumentSerializer.documentWithParts(document);
+          return SDocumentSerializer.documentWithParts(dp);
         }
 
         @Override public Element visitDocumentWithSections(
-          final @Nonnull SDocumentWithSections document)
+          final SDocumentWithSections ds)
           throws ConstraintError,
             Exception
         {
-          return SDocumentSerializer.documentWithSections(document);
+          return SDocumentSerializer.documentWithSections(ds);
         }
       });
     } catch (final Exception e) {
@@ -192,7 +187,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Document contents");
     final Element e =
-      new Element("s:document-contents", SDocument.XML_URI.toString());
+      new Element("s:document-contents", SXML.XML_URI.toString());
     return e;
   }
 
@@ -212,7 +207,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Document style");
     final Element e =
-      new Element("s:document-style", SDocument.XML_URI.toString());
+      new Element("s:document-style", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
     return e;
   }
@@ -233,7 +228,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Document title");
     final Element e =
-      new Element("s:document-title", SDocument.XML_URI.toString());
+      new Element("s:document-title", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
     return e;
   }
@@ -254,7 +249,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Document");
 
-    final Element e = new Element("s:document", SDocument.XML_URI.toString());
+    final Element e = new Element("s:document", SXML.XML_URI.toString());
     s.getStyle().map(new Function<SDocumentStyle, Unit>() {
       @Override public Unit call(
         final SDocumentStyle x)
@@ -306,7 +301,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Document");
 
-    final Element e = new Element("s:document", SDocument.XML_URI.toString());
+    final Element e = new Element("s:document", SXML.XML_URI.toString());
     s.getStyle().map(new Function<SDocumentStyle, Unit>() {
       @Override public Unit call(
         final SDocumentStyle x)
@@ -335,7 +330,7 @@ public final class SDocumentSerializer
 
     e.appendChild(SDocumentSerializer.documentTitle(s.getTitle()));
 
-    for (final SSection c : s.getContent().getElements()) {
+    for (final SSection c : s.getSections().getElements()) {
       e.appendChild(SDocumentSerializer.section(c));
     }
 
@@ -358,7 +353,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Footnote");
 
-    final Element e = new Element("s:footnote", SDocument.XML_URI.toString());
+    final Element e = new Element("s:footnote", SXML.XML_URI.toString());
     for (final SFootnoteContent c : s.getContent().getElements()) {
       e.appendChild(SDocumentSerializer.footnoteContent(c));
     }
@@ -476,12 +471,11 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Formal item");
 
-    final Element e =
-      new Element("s:formal-item", SDocument.XML_URI.toString());
+    final Element e = new Element("s:formal-item", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
 
     final Attribute ak =
-      new Attribute("s:kind", SDocument.XML_URI.toString(), s.getKind());
+      new Attribute("s:kind", SXML.XML_URI.toString(), s.getKind());
     e.addAttribute(ak);
     e.appendChild(SDocumentSerializer.formalItemTitle(s.getTitle()));
     e.appendChild(SDocumentSerializer.formalItemContent(s.getContent()));
@@ -576,9 +570,9 @@ public final class SDocumentSerializer
     Constraints.constrainNotNull(s, "List");
 
     final Element e =
-      new Element("s:formal-item-list", SDocument.XML_URI.toString());
+      new Element("s:formal-item-list", SXML.XML_URI.toString());
     final Attribute ak =
-      new Attribute("s:kind", SDocument.XML_URI.toString(), s.getKind());
+      new Attribute("s:kind", SXML.XML_URI.toString(), s.getKind());
     e.addAttribute(ak);
     return e;
   }
@@ -600,7 +594,7 @@ public final class SDocumentSerializer
     Constraints.constrainNotNull(s, "Title");
 
     final Element e =
-      new Element("s:formal-item-title", SDocument.XML_URI.toString());
+      new Element("s:formal-item-title", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
     return e;
   }
@@ -621,9 +615,9 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Image");
 
-    final Element e = new Element("s:image", SDocument.XML_URI.toString());
+    final Element e = new Element("s:image", SXML.XML_URI.toString());
     final Attribute at =
-      new Attribute("s:source", SDocument.XML_URI.toString(), s
+      new Attribute("s:source", SXML.XML_URI.toString(), s
         .getURI()
         .toString());
 
@@ -636,8 +630,7 @@ public final class SDocumentSerializer
         final Integer x)
       {
         final Attribute a =
-          new Attribute("s:height", SDocument.XML_URI.toString(), x
-            .toString());
+          new Attribute("s:height", SXML.XML_URI.toString(), x.toString());
         e.addAttribute(a);
         return Unit.unit();
       }
@@ -648,7 +641,7 @@ public final class SDocumentSerializer
         final Integer x)
       {
         final Attribute a =
-          new Attribute("s:width", SDocument.XML_URI.toString(), x.toString());
+          new Attribute("s:width", SXML.XML_URI.toString(), x.toString());
         e.addAttribute(a);
         return Unit.unit();
       }
@@ -673,8 +666,8 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Link");
     final Attribute at =
-      new Attribute("s:target", SDocument.XML_URI.toString(), s.getTarget());
-    final Element e = new Element("s:link", SDocument.XML_URI.toString());
+      new Attribute("s:target", SXML.XML_URI.toString(), s.getTarget());
+    final Element e = new Element("s:link", SXML.XML_URI.toString());
     e.addAttribute(at);
 
     for (final SLinkContent c : s.getContent().getElements()) {
@@ -739,11 +732,10 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Link");
     final Attribute at =
-      new Attribute("s:target", SDocument.XML_URI.toString(), s
+      new Attribute("s:target", SXML.XML_URI.toString(), s
         .getTarget()
         .toString());
-    final Element e =
-      new Element("s:link-external", SDocument.XML_URI.toString());
+    final Element e = new Element("s:link-external", SXML.XML_URI.toString());
     e.addAttribute(at);
 
     for (final SLinkContent c : s.getContent().getElements()) {
@@ -769,8 +761,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "List item");
 
-    final Element e =
-      new Element("s:list-item", SDocument.XML_URI.toString());
+    final Element e = new Element("s:list-item", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
 
     for (final SListItemContent c : s.getContent().getElements()) {
@@ -889,8 +880,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "List");
 
-    final Element e =
-      new Element("s:list-ordered", SDocument.XML_URI.toString());
+    final Element e = new Element("s:list-ordered", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
 
     for (final SListItem c : s.getItems().getElements()) {
@@ -917,7 +907,7 @@ public final class SDocumentSerializer
     Constraints.constrainNotNull(s, "List");
 
     final Element e =
-      new Element("s:list-unordered", SDocument.XML_URI.toString());
+      new Element("s:list-unordered", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
 
     for (final SListItem c : s.getItems().getElements()) {
@@ -942,8 +932,7 @@ public final class SDocumentSerializer
     throws ConstraintError
   {
     Constraints.constrainNotNull(s, "Paragraph");
-    final Element e =
-      new Element("s:paragraph", SDocument.XML_URI.toString());
+    final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
     s.getID().map(new IDAdder(e));
 
@@ -1072,7 +1061,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(p, "Part");
 
-    final Element e = new Element("s:part", SDocument.XML_URI.toString());
+    final Element e = new Element("s:part", SXML.XML_URI.toString());
     p.getID().map(new IDAdder(e));
     p.getType().map(new TypeAdder(e));
     p.getContents().map(new Function<SPartContents, Unit>() {
@@ -1113,8 +1102,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Contents");
 
-    final Element e =
-      new Element("s:part-contents", SDocument.XML_URI.toString());
+    final Element e = new Element("s:part-contents", SXML.XML_URI.toString());
     return e;
   }
 
@@ -1134,8 +1122,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Title");
 
-    final Element e =
-      new Element("s:part-title", SDocument.XML_URI.toString());
+    final Element e = new Element("s:part-title", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
     return e;
   }
@@ -1195,7 +1182,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Section contents");
     final Element e =
-      new Element("s:section-contents", SDocument.XML_URI.toString());
+      new Element("s:section-contents", SXML.XML_URI.toString());
     return e;
   }
 
@@ -1214,8 +1201,7 @@ public final class SDocumentSerializer
     throws ConstraintError
   {
     Constraints.constrainNotNull(s, "Section title");
-    final Element e =
-      new Element("s:section-title", SDocument.XML_URI.toString());
+    final Element e = new Element("s:section-title", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
     return e;
   }
@@ -1236,7 +1222,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Section");
 
-    final Element e = new Element("s:section", SDocument.XML_URI.toString());
+    final Element e = new Element("s:section", SXML.XML_URI.toString());
     s.getID().map(new IDAdder(e));
     s.getType().map(new TypeAdder(e));
     s.getContents().map(new Function<SSectionContents, Unit>() {
@@ -1277,7 +1263,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Section");
 
-    final Element e = new Element("s:section", SDocument.XML_URI.toString());
+    final Element e = new Element("s:section", SXML.XML_URI.toString());
     s.getID().map(new IDAdder(e));
     s.getType().map(new TypeAdder(e));
     s.getContents().map(new Function<SSectionContents, Unit>() {
@@ -1318,8 +1304,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Subsection");
 
-    final Element e =
-      new Element("s:subsection", SDocument.XML_URI.toString());
+    final Element e = new Element("s:subsection", SXML.XML_URI.toString());
     s.getID().map(new IDAdder(e));
     s.getType().map(new TypeAdder(e));
 
@@ -1388,7 +1373,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Subsection title");
     final Element e =
-      new Element("s:subsection-title", SDocument.XML_URI.toString());
+      new Element("s:subsection-title", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
     return e;
   }
@@ -1409,7 +1394,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Table");
 
-    final Element e = new Element("s:table", SDocument.XML_URI.toString());
+    final Element e = new Element("s:table", SXML.XML_URI.toString());
 
     e.appendChild(SDocumentSerializer.tableSummary(s.getSummary()));
     s.getHeader().map(new Function<STableHead, Unit>() {
@@ -1444,8 +1429,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Table body");
 
-    final Element e =
-      new Element("s:table-body", SDocument.XML_URI.toString());
+    final Element e = new Element("s:table-body", SXML.XML_URI.toString());
 
     for (final STableRow r : s.getRows().getElements()) {
       e.appendChild(SDocumentSerializer.tableRow(r));
@@ -1470,8 +1454,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(c, "Table cell");
 
-    final Element e =
-      new Element("s:table-cell", SDocument.XML_URI.toString());
+    final Element e = new Element("s:table-cell", SXML.XML_URI.toString());
 
     for (final STableCellContent cc : c.getContent().getElements()) {
       e.appendChild(SDocumentSerializer.tableCellContent(cc));
@@ -1592,7 +1575,7 @@ public final class SDocumentSerializer
     Constraints.constrainNotNull(s, "Table column");
 
     final Element e =
-      new Element("s:table-column-name", SDocument.XML_URI.toString());
+      new Element("s:table-column-name", SXML.XML_URI.toString());
     e.appendChild(s.getText());
     return e;
   }
@@ -1613,8 +1596,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Table header");
 
-    final Element e =
-      new Element("s:table-head", SDocument.XML_URI.toString());
+    final Element e = new Element("s:table-head", SXML.XML_URI.toString());
 
     for (final STableColumnName cn : s.getHeader().getElements()) {
       e.appendChild(SDocumentSerializer.tableColumnName(cn));
@@ -1638,8 +1620,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(r, "Table row");
 
-    final Element e =
-      new Element("s:table-row", SDocument.XML_URI.toString());
+    final Element e = new Element("s:table-row", SXML.XML_URI.toString());
 
     for (final STableCell c : r.getColumns().getElements()) {
       e.appendChild(SDocumentSerializer.tableCell(c));
@@ -1664,8 +1645,7 @@ public final class SDocumentSerializer
   {
     Constraints.constrainNotNull(s, "Table summary");
 
-    final Element e =
-      new Element("s:table-summary", SDocument.XML_URI.toString());
+    final Element e = new Element("s:table-summary", SXML.XML_URI.toString());
     e.appendChild(s.getText());
     return e;
   }
@@ -1685,7 +1665,7 @@ public final class SDocumentSerializer
     throws ConstraintError
   {
     Constraints.constrainNotNull(s, "Term");
-    final Element e = new Element("s:term", SDocument.XML_URI.toString());
+    final Element e = new Element("s:term", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
     e.appendChild(s.getText().getText());
     return e;
@@ -1724,9 +1704,14 @@ public final class SDocumentSerializer
     throws ConstraintError
   {
     Constraints.constrainNotNull(s, "Verbatim");
-    final Element e = new Element("s:verbatim", SDocument.XML_URI.toString());
+    final Element e = new Element("s:verbatim", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
     e.appendChild(s.getText());
     return e;
+  }
+
+  private SDocumentSerializer()
+  {
+
   }
 }

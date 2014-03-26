@@ -23,11 +23,11 @@ import com.io7m.jaux.Constraints.ConstraintError;
 /**
  * Document visitor.
  * 
- * @param <A>
- *          The type of values returned by the visitor
+ * @param <D>
+ *          The type of transformed {@link SDocument}s.
  */
 
-public interface SDocumentVisitor<A>
+public interface SDocumentVisitor<D>
 {
   /**
    * Visit a document with top-level parts.
@@ -41,7 +41,7 @@ public interface SDocumentVisitor<A>
    *           If required
    */
 
-  A visitDocumentWithParts(
+  D visitDocumentWithParts(
     final @Nonnull SDocumentWithParts document)
     throws ConstraintError,
       Exception;
@@ -58,7 +58,7 @@ public interface SDocumentVisitor<A>
    *           If required
    */
 
-  A visitDocumentWithSections(
+  D visitDocumentWithSections(
     final @Nonnull SDocumentWithSections document)
     throws ConstraintError,
       Exception;

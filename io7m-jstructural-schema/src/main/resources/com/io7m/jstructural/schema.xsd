@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright © 2014 http://io7m.com
+  Copyright © 2014 <code@io7m.com> http://io7m.com
   
   Permission to use, copy, modify, and/or distribute this software for any
   purpose with or without fee is hereby granted, provided that the above
@@ -14,13 +14,13 @@
   ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
   OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 -->
-<!-- version: structural 1.0.0 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.io7m.com/schemas/structural/1.0.0" xmlns:s="http://www.io7m.com/schemas/structural/1.0.0">
+<!-- version: structural 2.0.0 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.io7m.com/schemas/structural/2.0.0" xmlns:s="http://www.io7m.com/schemas/structural/2.0.0">
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
-  <xs:attributeGroup name="io7m.structural-1_0_0.xml-id">
+  <xs:attributeGroup name="io7m.structural-2_0_0.xml-id">
     <xs:attribute ref="xml:id" use="required"/>
   </xs:attributeGroup>
-  <xs:attributeGroup name="io7m.structural-1_0_0.standard-attributes">
+  <xs:attributeGroup name="io7m.structural-2_0_0.standard-attributes">
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
     <xs:attribute name="type" form="qualified" type="xs:token"/>
@@ -58,12 +58,12 @@
   </xs:element>
   <xs:element name="term">
     <xs:complexType mixed="true">
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="image">
     <xs:complexType mixed="true">
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
       <xs:attribute name="source" use="required" form="qualified" type="xs:anyURI"/>
       <xs:attribute name="width" form="qualified" type="xs:positiveInteger"/>
       <xs:attribute name="height" form="qualified" type="xs:positiveInteger"/>
@@ -83,13 +83,13 @@
         <xs:element ref="s:term"/>
         <xs:element ref="s:verbatim"/>
       </xs:choice>
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
       <xs:attribute ref="xml:id"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="verbatim">
     <xs:complexType mixed="true">
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="list-item">
@@ -104,7 +104,7 @@
         <xs:element ref="s:term"/>
         <xs:element ref="s:verbatim"/>
       </xs:choice>
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="list-unordered">
@@ -112,7 +112,7 @@
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="s:list-item"/>
       </xs:sequence>
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="list-ordered">
@@ -120,7 +120,7 @@
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="s:list-item"/>
       </xs:sequence>
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="formal-item-list">
@@ -142,7 +142,7 @@
           <xs:element ref="s:verbatim"/>
         </xs:choice>
       </xs:sequence>
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
       <xs:attribute name="kind" use="required" form="qualified" type="xs:token"/>
     </xs:complexType>
   </xs:element>
@@ -156,7 +156,7 @@
           <xs:element ref="s:formal-item"/>
         </xs:choice>
       </xs:sequence>
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
       <xs:attribute ref="xml:id"/>
     </xs:complexType>
   </xs:element>
@@ -177,7 +177,7 @@
           </xs:choice>
         </xs:choice>
       </xs:sequence>
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
       <xs:attribute ref="xml:id"/>
     </xs:complexType>
   </xs:element>
@@ -239,7 +239,7 @@
         <xs:element minOccurs="0" ref="s:part-contents"/>
         <xs:element maxOccurs="unbounded" ref="s:section"/>
       </xs:sequence>
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
       <xs:attribute ref="xml:id"/>
     </xs:complexType>
   </xs:element>
@@ -261,7 +261,7 @@
           <xs:element maxOccurs="unbounded" ref="s:section"/>
         </xs:choice>
       </xs:sequence>
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="set">
@@ -269,7 +269,7 @@
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="s:document"/>
       </xs:sequence>
-      <xs:attributeGroup ref="s:io7m.structural-1_0_0.standard-attributes"/>
+      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

@@ -23,11 +23,11 @@ import com.io7m.jaux.Constraints.ConstraintError;
 /**
  * A subsection content visitor.
  * 
- * @param <A>
- *          The type of values returned by the visitor.
+ * @param <C>
+ *          The type of transformed {@link SSubsectionContent}
  */
 
-public interface SSubsectionContentVisitor<A>
+public interface SSubsectionContentVisitor<C>
 {
   /**
    * Visit a formal item.
@@ -41,7 +41,7 @@ public interface SSubsectionContentVisitor<A>
    *           If required
    */
 
-  A visitFormalItem(
+  C visitFormalItem(
     final @Nonnull SFormalItem formal)
     throws ConstraintError,
       Exception;
@@ -58,7 +58,7 @@ public interface SSubsectionContentVisitor<A>
    *           If required
    */
 
-  A visitParagraph(
+  C visitParagraph(
     final @Nonnull SParagraph paragraph)
     throws ConstraintError,
       Exception;

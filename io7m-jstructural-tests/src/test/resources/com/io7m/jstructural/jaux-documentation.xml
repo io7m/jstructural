@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright © 2013 <code@io7m.com> http://io7m.com
+  Copyright © 2014 <code@io7m.com> http://io7m.com
 
   Permission to use, copy, modify, and/or distribute this software for any
   purpose with or without fee is hereby granted, provided that the above
@@ -17,7 +17,7 @@
   -->
 
 <s:document
-  xmlns:s="http://www.io7m.com/schemas/structural/1.0.0"
+  xmlns:s="http://www.io7m.com/schemas/structural/2.0.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
   <s:document-title>io7m-jaux 3.0.0 Documentation</s:document-title>
   <s:document-style>documentation.css</s:document-style>
@@ -120,7 +120,7 @@
             <s:table-column-name>VM-Version</s:table-column-name>
           </s:table-head>
           <s:table-body>
-<s:table-row xmlns:s="http://www.io7m.com/schemas/structural/1.0.0">
+<s:table-row>
   <s:table-cell>Linux</s:table-cell>
   <s:table-cell>3.12.3-1-ARCH</s:table-cell>
   <s:table-cell>amd64</s:table-cell>
@@ -147,7 +147,7 @@
       <s:paragraph>
         All files distributed with the <s:term s:type="package">jaux</s:term>
         package are placed under the following license:
-        <s:verbatim s:type="license"><![CDATA[Copyright © 2013 <code@io7m.com> http://io7m.com
+        <s:verbatim s:type="license"><![CDATA[Copyright © 2014 <code@io7m.com> http://io7m.com
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above

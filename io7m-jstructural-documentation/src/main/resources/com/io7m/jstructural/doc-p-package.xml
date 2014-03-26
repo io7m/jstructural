@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright © 2014 http://io7m.com
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+  version: structural 2.0.0
+  -->
+
+<s:part
+  xmlns:s="http://www.io7m.com/schemas/structural/2.0.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <s:part-title>Package Information</s:part-title>
+  <s:part-contents />
+  <s:section>
+    <s:section-title>Orientation</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Overview</s:subsection-title>
+      <s:paragraph>
+        The <s:term s:type="package">structural</s:term>
+        package implements a set of primitives for producing technical
+        documentation. The package provides
+        <s:link-external s:target="http://relaxng.org/">RELAX-NG</s:link-external>
+        and <s:link-external s:target="http://www.w3.org/XML/Schema">XSD</s:link-external>
+        schemas describing the format of <s:term s:type="package">structural</s:term>
+        documents and a set of
+        <s:link-external s:target="http://www.w3.org/TR/xslt">XSLT</s:link-external>
+        1.0 and 2.0 stylesheets for producing XHTML output.
+      </s:paragraph>
+      <s:paragraph>
+        In contrast to other systems such as
+        <s:link-external s:target="http://www.docbook.org/">DocBook</s:link-external>,
+        the <s:term s:type="package">structural</s:term>
+        language only defines elements concerning the structure of the document
+        and not the semantics of the elements. The intention is that higher
+        level languages will produce <s:term s:type="package">structural</s:term>
+        documents as output and then use the provided stylesheets to get various
+        services such as table of contents generation, chapter numbering,
+        footnotes, et cetera, without having to re-implement all of those
+        features for each new language.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Portability</s:subsection-title>
+      <s:paragraph>
+        The canonical format for the <s:term s:type="package">structural</s:term>
+        schema is RELAX-NG, but an XSD schema (generated from the RELAX-NG
+        schema is also provided, for validation using tools that do not support
+        RELAX-NG).
+      </s:paragraph>
+      <s:paragraph>
+        The provided XSLT stylesheets are written in pure XSLT 1.0, with the
+        exception of one extension per XSLT implementation for the purposes of
+        producing multiple output documents from XML source
+        <s:footnote>XSLT 1.0 does not support producing multiple documents from
+          one XML source file, requiring the use of implementation-specific
+          extensions. This restriction is lifted in XSLT 2.0, which has a
+          standard element for producing multiple output documents.</s:footnote>.
+        A pure XSLT 2.0 stylesheet is also provided, which should be
+        completely implementation independent
+        <s:footnote>The package produces both stylesheets from a common source
+          at "compile" time.</s:footnote>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Simplicity</s:subsection-title>
+      <s:paragraph>
+        As the <s:term s:type="package">structural</s:term>
+        language focuses only on structural elements, it is far simpler than any
+        of the other XML documentation formats. As an example,
+        <s:link-external s:target="http://www.docbook.org/">DocBook</s:link-external>,
+        which mixes structural and semantic elements, defines nearly 400
+        elements as opposed to the 30 or so defined by the
+        <s:term s:type="package">structural</s:term> language.
+      </s:paragraph>
+      <s:paragraph>
+        Given the small number of elements and the relatively strict schema, the
+        number of possible permutations of elements is low and, as a result, the
+        XSLT stylesheets are simple and the XHTML output is easily predictable
+        <s:footnote>There are various combinations of DocBook elements that are
+          valid according to the schema but cannot realistically be used due to
+          the resulting XHTML output.</s:footnote>.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+  <s:section>
+    <s:section-title>Installation</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Installation Requirements</s:subsection-title>
+      <s:paragraph>
+        The package has no specific requirements for installation beyond
+        minimal POSIX <s:term s:type="command">sh</s:term>,
+        <s:term s:type="command">sed</s:term>, and
+        <s:term s:type="command">make</s:term> implementations used to
+        process source files to produce the XSLT stylesheets.
+      </s:paragraph>
+      <s:paragraph>
+        Currently, the package requires
+        <s:link-external s:target="http://xmlsoft.org/">xmllint</s:link-external>
+        and
+        <s:link-external s:target="http://xmlsoft.org/">xsltproc</s:link-external>
+        to build the optional documentation. The documentation can obviously be
+        built by hand using any XSLT 1.0/2.0 compliant processor; it is just
+        that there is currently no explicit support for this in the
+        <s:term s:type="file">Makefile</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Installation</s:subsection-title>
+      <s:paragraph>
+        To produce the stylesheets, compile the package with the
+        <s:term s:type="command">make</s:term> command:
+        <s:verbatim s:type="terminal">make</s:verbatim>
+      </s:paragraph>
+      <s:paragraph>
+        Compilation will produce two directories,
+        <s:term s:type="file">dist-10</s:term>
+        and <s:term s:type="file">dist-20</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        Optionally, the following command compiles the documentation:
+        <s:verbatim s:type="terminal"><![CDATA[make documentation]]></s:verbatim>
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Post Installation</s:subsection-title>
+      <s:paragraph>
+        The <s:term s:type="package">structural</s:term> package is written with
+        the expectation that the files produced by compilation will be
+        copied directly into projects wishing to use it. If the projects in
+        question use XSLT 1.0, files from the <s:term s:type="file">dist-10</s:term>
+        directory should be used. If the projects in question use XSLT 2.0,
+        files from the <s:term s:type="file">dist-20</s:term> directory should
+        be used.
+      </s:paragraph>
+      <s:paragraph>
+        The following CSS files should be included in XML projects directly (or
+        more accurately, along with the XHTML output produced by the XML
+        project):
+        <s:list-unordered>
+          <s:list-item>
+            <s:term s:type="file">structural-1_0_0-layout.css</s:term>
+          </s:list-item>
+          <s:list-item>
+            <s:term s:type="file">structural-1_0_0-colour.css</s:term>
+          </s:list-item>
+        </s:list-unordered>
+      </s:paragraph>
+      <s:paragraph>
+        If the project in question uses RELAX-NG for validation, the file
+        <s:term s:type="file">structural-1_0_0.rng</s:term> should be included.
+        Otherwise, the files <s:term s:type="file">structural-1_0_0.xsd</s:term> and
+        <s:term s:type="file">xml.xsd</s:term> should be included.
+      </s:paragraph>
+      <s:paragraph>
+        Compilation produces two top-level stylesheets per XSLT version. The
+        stylesheet(s)
+        <s:term s:type="file">structural-1_0_0-standalone-x{10,20}.xsl</s:term>
+        produce multi-page XHTML documents as output. The stylesheet(s)
+        <s:term s:type="file">structural-1_0_0-single-x{10,20}.xsl</s:term>
+        produce single-page XHTML documents as output. The single-page
+        stylesheets are essentially considered supplemental to the
+        multi-page stylesheets and this documentation is written in terms
+        of the multi-page stylesheets. Where relevant, the differences
+        between the two are documented.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+  <s:section>
+    <s:section-title>Supported Systems</s:section-title>
+    <s:paragraph>
+      The XSLT 1.0 stylesheets have been tested and are known to work with the
+      following XSLT processors:
+      <s:list-unordered>
+        <s:list-item>
+          <s:link-external s:target="http://xml.apache.org/xalan-j/">xalan-java</s:link-external>
+          version 2.7.1 and above.
+        </s:list-item>
+        <s:list-item>
+          <s:link-external s:target="http://xmlsoft.org">xsltproc</s:link-external>
+          version 1.1.26 and above.
+        </s:list-item>
+        <s:list-item>
+          <s:link-external s:target="http://saxon.sourceforge.net">saxon</s:link-external>
+          version 6.5.5.
+        </s:list-item>
+      </s:list-unordered>
+    </s:paragraph>
+    <s:paragraph>
+      The XSLT 2.0 stylesheets have been tested and are known to work with the
+      following XSLT processors:
+      <s:list-unordered>
+        <s:list-item>
+          <s:link-external s:target="http://saxon.sourceforge.net">saxon</s:link-external>
+          version 9.3.0.4J.
+        </s:list-item>
+      </s:list-unordered>
+    </s:paragraph>
+  </s:section>
+  <s:section>
+    <s:section-title>Platform Specific Issues</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Saxon</s:subsection-title>
+      <s:paragraph>
+        The "Home Edition" versions of
+        <s:link-external s:target="http://saxon.sourceforge.net">Saxon</s:link-external>
+        do not support the extensions required to create multiple output
+        documents with XSLT 1.0 stylesheets. It is necessary to either use the
+        XSLT 2.0 stylesheets with these versions of Saxon, or use a commercially
+        supported version of Saxon.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+  <s:section>
+    <s:section-title>License</s:section-title>
+    <s:paragraph>
+      All files distributed with the <s:term s:type="package">structural</s:term>
+      package are placed under the following license:
+      <s:verbatim s:type="license"><![CDATA[
+Copyright © 2011 http://io7m.com
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
+      </s:verbatim>
+    </s:paragraph>
+  </s:section>
+</s:part>

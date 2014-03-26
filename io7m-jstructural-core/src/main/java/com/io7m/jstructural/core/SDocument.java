@@ -16,14 +16,10 @@
 
 package com.io7m.jstructural.core;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.annotation.Nonnull;
 
 import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jaux.functional.Option;
 
 /**
@@ -32,20 +28,6 @@ import com.io7m.jaux.functional.Option;
 
 public abstract class SDocument
 {
-  /**
-   * The XML URI for structural documents.
-   */
-
-  public static final @Nonnull URI                 XML_URI;
-
-  static {
-    try {
-      XML_URI = new URI("http://www.io7m.com/schemas/structural/1.0.0");
-    } catch (final URISyntaxException e) {
-      throw new UnreachableCodeException(e);
-    }
-  }
-
   private final @Nonnull Option<SDocumentContents> contents;
   private final @Nonnull Option<SDocumentStyle>    style;
   private final @Nonnull SDocumentTitle            title;
@@ -71,12 +53,12 @@ public abstract class SDocument
    *           If the visitor raises {@link ConstraintError}
    * @throws Exception
    *           If the visitor raises an {@link Exception}
-   * @param <A>
-   *          The type of values returned by the visitor
+   * @param <D>
+   *          The type of transformed {@link SDocument}s
    */
 
-  public abstract <A> A documentAccept(
-    final @Nonnull SDocumentVisitor<A> v)
+  public abstract <D> D documentAccept(
+    final @Nonnull SDocumentVisitor<D> v)
     throws ConstraintError,
       Exception;
 

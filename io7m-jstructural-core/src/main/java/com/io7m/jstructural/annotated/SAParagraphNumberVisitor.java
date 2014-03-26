@@ -1,0 +1,99 @@
+/*
+ * Copyright © 2014 <code@io7m.com> http://io7m.com
+ * 
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+ * SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
+ * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
+package com.io7m.jstructural.annotated;
+
+import javax.annotation.Nonnull;
+
+import com.io7m.jaux.Constraints.ConstraintError;
+
+/**
+ * A paragraph number visitor.
+ * 
+ * @param <T>
+ *          The type of transformed paragraph numbers
+ */
+
+public interface SAParagraphNumberVisitor<T>
+{
+  /**
+   * Visit a PSP paragraph number.
+   * 
+   * @param p
+   *          The number
+   * @return A value of type <code>T</code>
+   * @throws ConstraintError
+   *           If required
+   * @throws Exception
+   *           If required
+   */
+
+  T visitParagraphNumberPSP(
+    final @Nonnull SAParagraphNumberPSP p)
+    throws ConstraintError,
+      Exception;
+
+  /**
+   * Visit a PSSP paragraph number.
+   * 
+   * @param p
+   *          The number
+   * @return A value of type <code>T</code>
+   * @throws ConstraintError
+   *           If required
+   * @throws Exception
+   *           If required
+   */
+
+  T visitParagraphNumberPSSP(
+    final @Nonnull SAParagraphNumberPSSP p)
+    throws ConstraintError,
+      Exception;
+
+  /**
+   * Visit a SP paragraph number.
+   * 
+   * @param p
+   *          The number
+   * @return A value of type <code>T</code>
+   * @throws ConstraintError
+   *           If required
+   * @throws Exception
+   *           If required
+   */
+
+  T visitParagraphNumberSP(
+    final @Nonnull SAParagraphNumberSP p)
+    throws ConstraintError,
+      Exception;
+
+  /**
+   * Visit a SSP paragraph number.
+   * 
+   * @param p
+   *          The number
+   * @return A value of type <code>T</code>
+   * @throws ConstraintError
+   *           If required
+   * @throws Exception
+   *           If required
+   */
+
+  T visitParagraphNumberSSP(
+    final @Nonnull SAParagraphNumberSSP p)
+    throws ConstraintError,
+      Exception;
+}

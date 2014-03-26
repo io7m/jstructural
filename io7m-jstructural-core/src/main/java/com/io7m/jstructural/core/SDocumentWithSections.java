@@ -143,7 +143,7 @@ public final class SDocumentWithSections extends SDocument
       in_content);
   }
 
-  private final @Nonnull SNonEmptyList<SSection> content;
+  private final @Nonnull SNonEmptyList<SSection> sections;
 
   private SDocumentWithSections(
     final @Nonnull SDocumentTitle in_title,
@@ -153,15 +153,7 @@ public final class SDocumentWithSections extends SDocument
     throws ConstraintError
   {
     super(in_title, in_contents, in_style);
-    this.content = Constraints.constrainNotNull(in_content, "Content");
-  }
-
-  @Override public <A> A documentAccept(
-    final @Nonnull SDocumentVisitor<A> v)
-    throws ConstraintError,
-      Exception
-  {
-    return v.visitDocumentWithSections(this);
+    this.sections = Constraints.constrainNotNull(in_content, "Content");
   }
 
   @Override public boolean equals(
@@ -177,23 +169,31 @@ public final class SDocumentWithSections extends SDocument
       return false;
     }
     final SDocumentWithSections other = (SDocumentWithSections) obj;
-    return this.content.equals(other.content);
+    return this.sections.equals(other.sections);
   }
 
   /**
    * @return The document sections
    */
 
-  public @Nonnull SNonEmptyList<SSection> getContent()
+  public @Nonnull SNonEmptyList<SSection> getSections()
   {
-    return this.content;
+    return this.sections;
   }
 
   @Override public int hashCode()
   {
     final int prime = 31;
     int result = super.hashCode();
-    result = (prime * result) + this.content.hashCode();
+    result = (prime * result) + this.sections.hashCode();
     return result;
+  }
+
+  @Override public <D> D documentAccept(
+    final @Nonnull SDocumentVisitor<D> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitDocumentWithSections(this);
   }
 }

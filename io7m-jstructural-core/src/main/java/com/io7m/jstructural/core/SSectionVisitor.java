@@ -23,14 +23,14 @@ import com.io7m.jaux.Constraints.ConstraintError;
 /**
  * Section visitor.
  * 
- * @param <A>
- *          The type of values returned by the visitor
+ * @param <S>
+ *          The type of transformed {@link SSection}s
  */
 
-public interface SSectionVisitor<A>
+public interface SSectionVisitor<S>
 {
   /**
-   * Visit a section with top-level paragraphs.
+   * Visit a section with top-level subsection content.
    * 
    * @param s
    *          The section element
@@ -41,7 +41,7 @@ public interface SSectionVisitor<A>
    *           If required
    */
 
-  A visitSectionWithParagraphs(
+  S visitSectionWithParagraphs(
     final @Nonnull SSectionWithParagraphs s)
     throws ConstraintError,
       Exception;
@@ -58,7 +58,7 @@ public interface SSectionVisitor<A>
    *           If required
    */
 
-  A visitSectionWithSubsections(
+  S visitSectionWithSubsections(
     final @Nonnull SSectionWithSubsections s)
     throws ConstraintError,
       Exception;

@@ -66,6 +66,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.io7m.jstructural.schema</groupId>
+      <artifactId>io7m-jstructural-schema</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.io7m.jstructural.core</groupId>
       <artifactId>io7m-jstructural-core</artifactId>
       <version>${project.version}</version>

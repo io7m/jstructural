@@ -28,8 +28,13 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
+import nu.xom.xinclude.BadParseAttributeException;
+import nu.xom.xinclude.InclusionLoopException;
+import nu.xom.xinclude.NoIncludeLocationException;
+import nu.xom.xinclude.XIncludeException;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -39,6 +44,7 @@ import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jaux.functional.Option.Some;
 import com.io7m.jaux.functional.Unit;
+import com.io7m.jstructural.SXML;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentWithSections;
 import com.io7m.jstructural.core.SID;
@@ -57,7 +63,7 @@ import com.io7m.jstructural.core.SVerbatim;
 
 public final class SDocumentParserTest
 {
-  static SDocument parse(
+  public static @Nonnull SDocument parse(
     final @Nonnull String name)
     throws ValidityException,
       SAXException,
@@ -65,7 +71,11 @@ public final class SDocumentParserTest
       ParsingException,
       IOException,
       ConstraintError,
-      URISyntaxException
+      URISyntaxException,
+      BadParseAttributeException,
+      InclusionLoopException,
+      NoIncludeLocationException,
+      XIncludeException
   {
     return SDocumentParser.fromStream(
       SDocumentParserTest.class.getResourceAsStream("/com/io7m/jstructural/"
@@ -73,22 +83,7 @@ public final class SDocumentParserTest
       TestUtilities.getLog());
   }
 
-  @SuppressWarnings("static-method") @Test public void testRoundTrip_0()
-  {
-    SDocumentParserTest.roundTrip("basic-0.xml");
-  }
-
-  @SuppressWarnings("static-method") @Test public void testRoundTrip_1()
-  {
-    SDocumentParserTest.roundTrip("basic-1.xml");
-  }
-
-  @SuppressWarnings("static-method") @Test public void testRoundTrip_2()
-  {
-    SDocumentParserTest.roundTrip("jaux-documentation.xml");
-  }
-
-  private static void roundTrip(
+  public static @Nonnull SDocument roundTripParse(
     final @Nonnull String name)
   {
     try {
@@ -97,6 +92,7 @@ public final class SDocumentParserTest
       final SDocument d1 =
         SDocumentParser.document(TestUtilities.getLog(), e);
       Assert.assertEquals(d0, d1);
+      return d1;
     } catch (final ValidityException e1) {
       throw new UnreachableCodeException(e1);
     } catch (final SAXException e1) {
@@ -111,9 +107,27 @@ public final class SDocumentParserTest
       throw new UnreachableCodeException(e1);
     } catch (final ConstraintError e1) {
       throw new UnreachableCodeException(e1);
-    } finally {
-
+    } catch (final BadParseAttributeException e1) {
+      throw new UnreachableCodeException(e1);
+    } catch (final InclusionLoopException e1) {
+      throw new UnreachableCodeException(e1);
+    } catch (final NoIncludeLocationException e1) {
+      throw new UnreachableCodeException(e1);
+    } catch (final XIncludeException e1) {
+      throw new UnreachableCodeException(e1);
     }
+  }
+
+  /**
+   * Enable a custom URL handler so that XIncludes can use a structuraltest://
+   * URL scheme in order to include other files in the test resources.
+   */
+
+  @SuppressWarnings("static-method") @Before public void before()
+  {
+    System.setProperty(
+      "java.protocol.handler.pkgs",
+      "com.io7m.jstructural.xom");
   }
 
   @SuppressWarnings("static-method") @Test public void testBasic0()
@@ -123,12 +137,16 @@ public final class SDocumentParserTest
       ParsingException,
       IOException,
       ConstraintError,
-      URISyntaxException
+      URISyntaxException,
+      BadParseAttributeException,
+      InclusionLoopException,
+      NoIncludeLocationException,
+      XIncludeException
   {
     final SDocumentWithSections doc =
       (SDocumentWithSections) SDocumentParserTest.parse("basic-0.xml");
 
-    final List<SSection> sections = doc.getContent().getElements();
+    final List<SSection> sections = doc.getSections().getElements();
     Assert.assertEquals(1, sections.size());
 
     final SSectionWithParagraphs section =
@@ -151,12 +169,16 @@ public final class SDocumentParserTest
       ParsingException,
       IOException,
       ConstraintError,
-      URISyntaxException
+      URISyntaxException,
+      BadParseAttributeException,
+      InclusionLoopException,
+      NoIncludeLocationException,
+      XIncludeException
   {
     final SDocumentWithSections doc =
       (SDocumentWithSections) SDocumentParserTest.parse("basic-1.xml");
 
-    final List<SSection> sections = doc.getContent().getElements();
+    final List<SSection> sections = doc.getSections().getElements();
     Assert.assertEquals(1, sections.size());
 
     final SSectionWithParagraphs section =
@@ -181,7 +203,11 @@ public final class SDocumentParserTest
         ParsingException,
         IOException,
         ConstraintError,
-        URISyntaxException
+        URISyntaxException,
+        BadParseAttributeException,
+        InclusionLoopException,
+        NoIncludeLocationException,
+        XIncludeException
   {
     SDocumentParserTest.parse("empty.xml");
   }
@@ -192,9 +218,9 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
 
-    final Element e = new Element("s:image", SDocument.XML_URI.toString());
+    final Element e = new Element("s:image", SXML.XML_URI.toString());
     e.appendChild("Image.");
     e.addAttribute(as);
 
@@ -212,11 +238,11 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
     final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
 
-    final Element e = new Element("s:image", SDocument.XML_URI.toString());
+    final Element e = new Element("s:image", SXML.XML_URI.toString());
     e.appendChild("Image.");
     e.addAttribute(as);
     e.addAttribute(at);
@@ -240,11 +266,11 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
     final Attribute ah =
-      new Attribute("s:height", SDocument.XML_URI.toString(), "23");
+      new Attribute("s:height", SXML.XML_URI.toString(), "23");
 
-    final Element e = new Element("s:image", SDocument.XML_URI.toString());
+    final Element e = new Element("s:image", SXML.XML_URI.toString());
     e.appendChild("Image.");
     e.addAttribute(as);
     e.addAttribute(ah);
@@ -268,13 +294,13 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
     final Attribute ah =
-      new Attribute("s:height", SDocument.XML_URI.toString(), "23");
+      new Attribute("s:height", SXML.XML_URI.toString(), "23");
     final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
 
-    final Element e = new Element("s:image", SDocument.XML_URI.toString());
+    final Element e = new Element("s:image", SXML.XML_URI.toString());
     e.appendChild("Image.");
     e.addAttribute(as);
     e.addAttribute(ah);
@@ -304,11 +330,11 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
     final Attribute aw =
-      new Attribute("s:width", SDocument.XML_URI.toString(), "42");
+      new Attribute("s:width", SXML.XML_URI.toString(), "42");
 
-    final Element e = new Element("s:image", SDocument.XML_URI.toString());
+    final Element e = new Element("s:image", SXML.XML_URI.toString());
     e.appendChild("Image.");
     e.addAttribute(as);
     e.addAttribute(aw);
@@ -332,13 +358,13 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
     final Attribute aw =
-      new Attribute("s:width", SDocument.XML_URI.toString(), "42");
+      new Attribute("s:width", SXML.XML_URI.toString(), "42");
     final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
 
-    final Element e = new Element("s:image", SDocument.XML_URI.toString());
+    final Element e = new Element("s:image", SXML.XML_URI.toString());
     e.appendChild("Image.");
     e.addAttribute(as);
     e.addAttribute(aw);
@@ -368,13 +394,13 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
     final Attribute aw =
-      new Attribute("s:width", SDocument.XML_URI.toString(), "42");
+      new Attribute("s:width", SXML.XML_URI.toString(), "42");
     final Attribute ah =
-      new Attribute("s:height", SDocument.XML_URI.toString(), "23");
+      new Attribute("s:height", SXML.XML_URI.toString(), "23");
 
-    final Element e = new Element("s:image", SDocument.XML_URI.toString());
+    final Element e = new Element("s:image", SXML.XML_URI.toString());
     e.appendChild("Image.");
     e.addAttribute(as);
     e.addAttribute(aw);
@@ -403,15 +429,15 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
     final Attribute aw =
-      new Attribute("s:width", SDocument.XML_URI.toString(), "42");
+      new Attribute("s:width", SXML.XML_URI.toString(), "42");
     final Attribute ah =
-      new Attribute("s:height", SDocument.XML_URI.toString(), "23");
+      new Attribute("s:height", SXML.XML_URI.toString(), "23");
     final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
 
-    final Element e = new Element("s:image", SDocument.XML_URI.toString());
+    final Element e = new Element("s:image", SXML.XML_URI.toString());
     e.appendChild("Image.");
     e.addAttribute(as);
     e.addAttribute(aw);
@@ -445,15 +471,15 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
     final Attribute aw =
-      new Attribute("s:width", SDocument.XML_URI.toString(), "42");
+      new Attribute("s:width", SXML.XML_URI.toString(), "42");
     final Attribute ah =
-      new Attribute("s:height", SDocument.XML_URI.toString(), "23");
+      new Attribute("s:height", SXML.XML_URI.toString(), "23");
     final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
 
-    final Element e = new Element("s:image", SDocument.XML_URI.toString());
+    final Element e = new Element("s:image", SXML.XML_URI.toString());
     e.appendChild("Image.");
     e.addAttribute(as);
     e.addAttribute(aw);
@@ -472,14 +498,14 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
-    final Element ei = new Element("s:image", SDocument.XML_URI.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
+    final Element ei = new Element("s:image", SXML.XML_URI.toString());
     ei.appendChild("Image.");
     ei.addAttribute(as);
 
     final Attribute at =
-      new Attribute("s:target", SDocument.XML_URI.toString(), uri.toString());
-    final Element el = new Element("s:link", SDocument.XML_URI.toString());
+      new Attribute("s:target", SXML.XML_URI.toString(), uri.toString());
+    final Element el = new Element("s:link", SXML.XML_URI.toString());
     el.appendChild(ei);
     el.addAttribute(at);
 
@@ -490,44 +516,66 @@ public final class SDocumentParserTest
     Assert.assertEquals("Image.", ii.getText());
   }
 
-  @SuppressWarnings("static-method") @Test public void testLinkRoundTrip_0()
+  @SuppressWarnings("static-method") @Test public void testLink1()
+    throws ConstraintError,
+      URISyntaxException
+  {
+    final URI uri = new URI("http://io7m.com");
+
+    final Attribute at =
+      new Attribute("s:target", SXML.XML_URI.toString(), uri.toString());
+    final Element el = new Element("s:link", SXML.XML_URI.toString());
+    el.appendChild("Link.");
+    el.addAttribute(at);
+
+    final SLink i = SDocumentParser.link(el);
+    Assert.assertEquals(uri.toString(), i.getTarget());
+
+    final SText ii = (SText) i.getContent().getElements().get(0);
+    Assert.assertEquals("Link.", ii.getText());
+  }
+
+  @SuppressWarnings("static-method") @Test public void testLinkExternal0()
     throws ConstraintError,
       URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
-    final Element ei = new Element("s:image", SDocument.XML_URI.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
+    final Element ei = new Element("s:image", SXML.XML_URI.toString());
     ei.appendChild("Image.");
     ei.addAttribute(as);
 
     final Attribute at =
-      new Attribute("s:target", SDocument.XML_URI.toString(), uri.toString());
-    final Element el = new Element("s:link", SDocument.XML_URI.toString());
+      new Attribute("s:target", SXML.XML_URI.toString(), uri.toString());
+    final Element el = new Element("s:link", SXML.XML_URI.toString());
     el.appendChild(ei);
     el.addAttribute(at);
 
-    final SLink i0 = SDocumentParser.link(el);
-    final Element ie = SDocumentSerializer.link(i0);
-    final SLink i1 = SDocumentParser.link(ie);
-    Assert.assertEquals(i0, i1);
+    final SLinkExternal i = SDocumentParser.linkExternal(el);
+    Assert.assertEquals(uri, i.getTarget());
+
+    final SImage ii = (SImage) i.getContent().getElements().get(0);
+    Assert.assertEquals("Image.", ii.getText());
   }
 
-  @SuppressWarnings("static-method") @Test public void testLinkRoundTrip_1()
+  @SuppressWarnings("static-method") @Test public void testLinkExternal1()
     throws ConstraintError,
       URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
+
     final Attribute at =
-      new Attribute("s:target", SDocument.XML_URI.toString(), uri.toString());
-    final Element el = new Element("s:link", SDocument.XML_URI.toString());
-    el.appendChild("Link.");
+      new Attribute("s:target", SXML.XML_URI.toString(), uri.toString());
+    final Element el = new Element("s:link", SXML.XML_URI.toString());
+    el.appendChild("LinkExternal.");
     el.addAttribute(at);
 
-    final SLink i0 = SDocumentParser.link(el);
-    final Element ie = SDocumentSerializer.link(i0);
-    final SLink i1 = SDocumentParser.link(ie);
-    Assert.assertEquals(i0, i1);
+    final SLinkExternal i = SDocumentParser.linkExternal(el);
+    Assert.assertEquals(uri, i.getTarget());
+
+    final SText ii = (SText) i.getContent().getElements().get(0);
+    Assert.assertEquals("LinkExternal.", ii.getText());
   }
 
   @SuppressWarnings("static-method") @Test public
@@ -538,15 +586,15 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
-    final Element ei = new Element("s:image", SDocument.XML_URI.toString());
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
+    final Element ei = new Element("s:image", SXML.XML_URI.toString());
     ei.appendChild("Image.");
     ei.addAttribute(as);
 
     final Attribute at =
-      new Attribute("s:target", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:target", SXML.XML_URI.toString(), uri.toString());
     final Element el =
-      new Element("s:link-external", SDocument.XML_URI.toString());
+      new Element("s:link-external", SXML.XML_URI.toString());
     el.appendChild(ei);
     el.addAttribute(at);
 
@@ -564,9 +612,9 @@ public final class SDocumentParserTest
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute at =
-      new Attribute("s:target", SDocument.XML_URI.toString(), uri.toString());
+      new Attribute("s:target", SXML.XML_URI.toString(), uri.toString());
     final Element el =
-      new Element("s:link-external", SDocument.XML_URI.toString());
+      new Element("s:link-external", SXML.XML_URI.toString());
     el.appendChild("LinkExternal.");
     el.addAttribute(at);
 
@@ -576,31 +624,51 @@ public final class SDocumentParserTest
     Assert.assertEquals(i0, i1);
   }
 
-  @SuppressWarnings("static-method") @Test public void testLink1()
+  @SuppressWarnings("static-method") @Test public void testLinkRoundTrip_0()
     throws ConstraintError,
       URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
+    final Attribute as =
+      new Attribute("s:source", SXML.XML_URI.toString(), uri.toString());
+    final Element ei = new Element("s:image", SXML.XML_URI.toString());
+    ei.appendChild("Image.");
+    ei.addAttribute(as);
 
     final Attribute at =
-      new Attribute("s:target", SDocument.XML_URI.toString(), uri.toString());
-    final Element el = new Element("s:link", SDocument.XML_URI.toString());
+      new Attribute("s:target", SXML.XML_URI.toString(), uri.toString());
+    final Element el = new Element("s:link", SXML.XML_URI.toString());
+    el.appendChild(ei);
+    el.addAttribute(at);
+
+    final SLink i0 = SDocumentParser.link(el);
+    final Element ie = SDocumentSerializer.link(i0);
+    final SLink i1 = SDocumentParser.link(ie);
+    Assert.assertEquals(i0, i1);
+  }
+
+  @SuppressWarnings("static-method") @Test public void testLinkRoundTrip_1()
+    throws ConstraintError,
+      URISyntaxException
+  {
+    final URI uri = new URI("http://io7m.com");
+    final Attribute at =
+      new Attribute("s:target", SXML.XML_URI.toString(), uri.toString());
+    final Element el = new Element("s:link", SXML.XML_URI.toString());
     el.appendChild("Link.");
     el.addAttribute(at);
 
-    final SLink i = SDocumentParser.link(el);
-    Assert.assertEquals(uri.toString(), i.getTarget());
-
-    final SText ii = (SText) i.getContent().getElements().get(0);
-    Assert.assertEquals("Link.", ii.getText());
+    final SLink i0 = SDocumentParser.link(el);
+    final Element ie = SDocumentSerializer.link(i0);
+    final SLink i1 = SDocumentParser.link(ie);
+    Assert.assertEquals(i0, i1);
   }
 
   @SuppressWarnings("static-method") @Test public void testParagraph0()
     throws ConstraintError,
       URISyntaxException
   {
-    final Element e =
-      new Element("s:paragraph", SDocument.XML_URI.toString());
+    final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     e.appendChild("Paragraph.");
 
     final SParagraph p = SDocumentParser.paragraph(TestUtilities.getLog(), e);
@@ -618,8 +686,7 @@ public final class SDocumentParserTest
     throws ConstraintError,
       URISyntaxException
   {
-    final Element e =
-      new Element("s:paragraph", SDocument.XML_URI.toString());
+    final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     final Attribute a =
       new Attribute(
         "xml:id",
@@ -653,15 +720,14 @@ public final class SDocumentParserTest
     throws ConstraintError,
       URISyntaxException
   {
-    final Element e =
-      new Element("s:paragraph", SDocument.XML_URI.toString());
+    final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     final Attribute ai =
       new Attribute(
         "xml:id",
         "http://www.w3.org/XML/1998/namespace",
         "paragraph_0");
     final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
 
     e.addAttribute(at);
     e.addAttribute(ai);
@@ -701,10 +767,9 @@ public final class SDocumentParserTest
     throws ConstraintError,
       URISyntaxException
   {
-    final Element e =
-      new Element("s:paragraph", SDocument.XML_URI.toString());
+    final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
 
     e.addAttribute(at);
     e.appendChild("Paragraph.");
@@ -730,10 +795,30 @@ public final class SDocumentParserTest
       .get(0));
   }
 
+  @SuppressWarnings("static-method") @Test public void testResolve_0()
+  {
+    SDocumentParserTest.roundTripParse("resolve-0.xml");
+  }
+
+  @SuppressWarnings("static-method") @Test public void testRoundTrip_0()
+  {
+    SDocumentParserTest.roundTripParse("basic-0.xml");
+  }
+
+  @SuppressWarnings("static-method") @Test public void testRoundTrip_1()
+  {
+    SDocumentParserTest.roundTripParse("basic-1.xml");
+  }
+
+  @SuppressWarnings("static-method") @Test public void testRoundTrip_2()
+  {
+    SDocumentParserTest.roundTripParse("jaux-documentation.xml");
+  }
+
   @SuppressWarnings("static-method") @Test public void testTerm0()
     throws ConstraintError
   {
-    final Element e = new Element("s:term", SDocument.XML_URI.toString());
+    final Element e = new Element("s:term", SXML.XML_URI.toString());
     e.appendChild("Term.");
 
     final STerm t = SDocumentParser.term(e);
@@ -743,44 +828,12 @@ public final class SDocumentParserTest
     Assert.assertEquals(SText.text("Term."), text);
   }
 
-  @SuppressWarnings("static-method") @Test public void testTermRoundTrip()
-    throws ConstraintError
-  {
-    final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
-    final Element e = new Element("s:term", SDocument.XML_URI.toString());
-    e.appendChild("Term.");
-    e.addAttribute(at);
-
-    final STerm t0 = SDocumentParser.term(e);
-    final Element t1 = SDocumentSerializer.term(t0);
-    final STerm t2 = SDocumentParser.term(t1);
-    Assert.assertEquals(t0, t2);
-  }
-
-  @SuppressWarnings("static-method") @Test public
-    void
-    testVerbatimRoundTrip()
-      throws ConstraintError
-  {
-    final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
-    final Element e = new Element("s:verbatim", SDocument.XML_URI.toString());
-    e.appendChild("Verbatim.");
-    e.addAttribute(at);
-
-    final SVerbatim t0 = SDocumentParser.verbatim(e);
-    final Element t1 = SDocumentSerializer.verbatim(t0);
-    final SVerbatim t2 = SDocumentParser.verbatim(t1);
-    Assert.assertEquals(t0, t2);
-  }
-
   @SuppressWarnings("static-method") @Test public void testTerm1()
     throws ConstraintError
   {
     final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
-    final Element e = new Element("s:term", SDocument.XML_URI.toString());
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
+    final Element e = new Element("s:term", SXML.XML_URI.toString());
     e.appendChild("Term.");
     e.addAttribute(at);
 
@@ -801,10 +854,25 @@ public final class SDocumentParserTest
     Assert.assertEquals(SText.text("Term."), text);
   }
 
+  @SuppressWarnings("static-method") @Test public void testTermRoundTrip()
+    throws ConstraintError
+  {
+    final Attribute at =
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
+    final Element e = new Element("s:term", SXML.XML_URI.toString());
+    e.appendChild("Term.");
+    e.addAttribute(at);
+
+    final STerm t0 = SDocumentParser.term(e);
+    final Element t1 = SDocumentSerializer.term(t0);
+    final STerm t2 = SDocumentParser.term(t1);
+    Assert.assertEquals(t0, t2);
+  }
+
   @SuppressWarnings("static-method") @Test public void testVerbatim0()
     throws ConstraintError
   {
-    final Element e = new Element("s:verbatim", SDocument.XML_URI.toString());
+    final Element e = new Element("s:verbatim", SXML.XML_URI.toString());
     e.appendChild("Verbatim.");
 
     final SVerbatim t = SDocumentParser.verbatim(e);
@@ -817,11 +885,11 @@ public final class SDocumentParserTest
   @SuppressWarnings("static-method") @Test public void testVerbatim1()
     throws ConstraintError
   {
-    final Element e = new Element("s:verbatim", SDocument.XML_URI.toString());
+    final Element e = new Element("s:verbatim", SXML.XML_URI.toString());
     e.appendChild("Verbatim.");
 
     final Attribute at =
-      new Attribute("s:type", SDocument.XML_URI.toString(), "a_type");
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
     e.addAttribute(at);
 
     final SVerbatim t = SDocumentParser.verbatim(e);
@@ -841,46 +909,20 @@ public final class SDocumentParserTest
     Assert.assertEquals("Verbatim.", text);
   }
 
-  @SuppressWarnings("static-method") @Test public void testLinkExternal0()
-    throws ConstraintError,
-      URISyntaxException
+  @SuppressWarnings("static-method") @Test public
+    void
+    testVerbatimRoundTrip()
+      throws ConstraintError
   {
-    final URI uri = new URI("http://io7m.com");
-    final Attribute as =
-      new Attribute("s:source", SDocument.XML_URI.toString(), uri.toString());
-    final Element ei = new Element("s:image", SDocument.XML_URI.toString());
-    ei.appendChild("Image.");
-    ei.addAttribute(as);
-
     final Attribute at =
-      new Attribute("s:target", SDocument.XML_URI.toString(), uri.toString());
-    final Element el = new Element("s:link", SDocument.XML_URI.toString());
-    el.appendChild(ei);
-    el.addAttribute(at);
+      new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
+    final Element e = new Element("s:verbatim", SXML.XML_URI.toString());
+    e.appendChild("Verbatim.");
+    e.addAttribute(at);
 
-    final SLinkExternal i = SDocumentParser.linkExternal(el);
-    Assert.assertEquals(uri, i.getTarget());
-
-    final SImage ii = (SImage) i.getContent().getElements().get(0);
-    Assert.assertEquals("Image.", ii.getText());
-  }
-
-  @SuppressWarnings("static-method") @Test public void testLinkExternal1()
-    throws ConstraintError,
-      URISyntaxException
-  {
-    final URI uri = new URI("http://io7m.com");
-
-    final Attribute at =
-      new Attribute("s:target", SDocument.XML_URI.toString(), uri.toString());
-    final Element el = new Element("s:link", SDocument.XML_URI.toString());
-    el.appendChild("LinkExternal.");
-    el.addAttribute(at);
-
-    final SLinkExternal i = SDocumentParser.linkExternal(el);
-    Assert.assertEquals(uri, i.getTarget());
-
-    final SText ii = (SText) i.getContent().getElements().get(0);
-    Assert.assertEquals("LinkExternal.", ii.getText());
+    final SVerbatim t0 = SDocumentParser.verbatim(e);
+    final Element t1 = SDocumentSerializer.verbatim(t0);
+    final SVerbatim t2 = SDocumentParser.verbatim(t1);
+    Assert.assertEquals(t0, t2);
   }
 }

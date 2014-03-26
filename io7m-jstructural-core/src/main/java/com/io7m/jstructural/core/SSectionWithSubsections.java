@@ -304,7 +304,8 @@ import com.io7m.jaux.functional.Option;
     throws ConstraintError
   {
     super(in_type, in_id, in_title, in_contents);
-    this.subsections = Constraints.constrainNotNull(in_content, "Subsections");
+    this.subsections =
+      Constraints.constrainNotNull(in_content, "Subsections");
   }
 
   @Override public boolean equals(
@@ -340,8 +341,8 @@ import com.io7m.jaux.functional.Option;
     return result;
   }
 
-  @Override public <A> A sectionAccept(
-    final @Nonnull SSectionVisitor<A> v)
+  @Override public <S> S sectionAccept(
+    final @Nonnull SSectionVisitor<S> v)
     throws ConstraintError,
       Exception
   {
