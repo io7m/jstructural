@@ -430,8 +430,6 @@ public final class JSCMain
 
     try {
       final Serializer s = new Serializer(stream);
-      s.setIndent(2);
-      s.setMaxLength(120);
       s.write(document);
       s.flush();
     } finally {
