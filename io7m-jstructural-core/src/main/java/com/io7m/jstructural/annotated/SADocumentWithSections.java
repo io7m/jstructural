@@ -33,7 +33,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
 
 public final class SADocumentWithSections extends SADocument
 {
-  private final @Nonnull SNonEmptyList<SASection> content;
+  private final @Nonnull SNonEmptyList<SASection> sections;
 
   /**
    * Construct a new document with sections.
@@ -50,6 +50,8 @@ public final class SADocumentWithSections extends SADocument
    *          The list of sections
    * @param in_footnotes
    *          The list of footnotes
+   * @param in_formals
+   *          The formal items
    * @throws ConstraintError
    *           If any parameter is <code>null</code>
    */
@@ -60,11 +62,12 @@ public final class SADocumentWithSections extends SADocument
     final @Nonnull Option<SDocumentContents> in_contents,
     final @Nonnull Option<SDocumentStyle> in_style,
     final @Nonnull SNonEmptyList<SASection> in_content,
-    final @Nonnull List<SAFootnote> in_footnotes)
+    final @Nonnull List<SAFootnote> in_footnotes,
+    final @Nonnull SAFormalItemsByKind in_formals)
     throws ConstraintError
   {
-    super(in_ids, in_title, in_contents, in_style, in_footnotes);
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+    super(in_ids, in_title, in_contents, in_style, in_footnotes, in_formals);
+    this.sections = Constraints.constrainNotNull(in_content, "Content");
   }
 
   @Override public <A> A documentAccept(
@@ -88,23 +91,23 @@ public final class SADocumentWithSections extends SADocument
       return false;
     }
     final SADocumentWithSections other = (SADocumentWithSections) obj;
-    return this.content.equals(other.content);
+    return this.sections.equals(other.sections);
   }
 
   /**
    * @return The document sections
    */
 
-  public @Nonnull SNonEmptyList<SASection> getContent()
+  public @Nonnull SNonEmptyList<SASection> getSections()
   {
-    return this.content;
+    return this.sections;
   }
 
   @Override public int hashCode()
   {
     final int prime = 31;
     int result = super.hashCode();
-    result = (prime * result) + this.content.hashCode();
+    result = (prime * result) + this.sections.hashCode();
     return result;
   }
 }

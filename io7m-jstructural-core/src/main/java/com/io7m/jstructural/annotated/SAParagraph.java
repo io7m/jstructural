@@ -139,6 +139,14 @@ import com.io7m.jstructural.core.SNonEmptyList;
     return v.visitParagraph(this);
   }
 
+  @Override public <T> T targetContentAccept(
+    final @Nonnull SAIDTargetContentVisitor<T> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitParagraph(this);
+  }
+
   @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();
@@ -152,13 +160,5 @@ import com.io7m.jstructural.core.SNonEmptyList;
     builder.append(this.number);
     builder.append("]");
     return builder.toString();
-  }
-
-  @Override public <T> T targetContentAccept(
-    final @Nonnull SAIDTargetContentVisitor<T> v)
-    throws ConstraintError,
-      Exception
-  {
-    return v.visitParagraph(this);
   }
 }

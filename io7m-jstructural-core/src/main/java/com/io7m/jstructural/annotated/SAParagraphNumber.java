@@ -16,16 +16,55 @@
 
 package com.io7m.jstructural.annotated;
 
+import javax.annotation.Nonnull;
+
 import com.io7m.jaux.Constraints.ConstraintError;
 
 /**
  * An abstract paragraph number.
  */
 
-public abstract class SAParagraphNumber
+public abstract class SAParagraphNumber implements
+  Comparable<SAParagraphNumber>,
+  SASubsectionContentNumber
 {
-  abstract <T> T paragraphNumberAccept(
-    final SAParagraphNumberVisitor<T> v)
+  /**
+   * @return The paragraph number
+   */
+
+  public abstract int getParagraph();
+
+  /**
+   * Accept a paragraph number visitor.
+   * 
+   * @param <T>
+   *          The type of values returned by the visitor
+   * @param v
+   *          The visitor
+   * @return The value returned by the visitor
+   * @throws ConstraintError
+   *           If the visitor raises {@link ConstraintError}
+   * @throws Exception
+   *           If the visitor raises an {@link Exception}
+   */
+
+  public abstract <T> T paragraphNumberAccept(
+    final @Nonnull SAParagraphNumberVisitor<T> v)
     throws ConstraintError,
       Exception;
+
+  /**
+   * @return A human-readable string representing the paragraph number (such
+   *         as "1.2.3.4")
+   */
+
+  public abstract String paragraphNumberFormat();
+
+  @Override public final <T> T subsectionContentNumberAccept(
+    final @Nonnull SASubsectionContentNumberVisitor<T> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitParagraphNumber(this);
+  }
 }

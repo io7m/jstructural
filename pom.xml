@@ -18,6 +18,7 @@
     <module>io7m-jstructural-documentation</module>
     <module>io7m-jstructural-schema</module>
     <module>io7m-jstructural-tests</module>
+    <module>io7m-jstructural-tools</module>
     <module>io7m-jstructural-xom</module>
   </modules>
 

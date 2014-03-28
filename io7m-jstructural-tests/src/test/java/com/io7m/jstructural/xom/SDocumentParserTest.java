@@ -19,6 +19,7 @@ package com.io7m.jstructural.xom;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -44,7 +45,6 @@ import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jaux.functional.Option.Some;
 import com.io7m.jaux.functional.Unit;
-import com.io7m.jstructural.SXML;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentWithSections;
 import com.io7m.jstructural.core.SID;
@@ -60,6 +60,9 @@ import com.io7m.jstructural.core.SSubsectionContent;
 import com.io7m.jstructural.core.STerm;
 import com.io7m.jstructural.core.SText;
 import com.io7m.jstructural.core.SVerbatim;
+import com.io7m.jstructural.core.SXML;
+import com.io7m.jstructural.xom.SDocumentParser;
+import com.io7m.jstructural.xom.SDocumentSerializer;
 
 public final class SDocumentParserTest
 {
@@ -77,9 +80,13 @@ public final class SDocumentParserTest
       NoIncludeLocationException,
       XIncludeException
   {
+    final String file = "/com/io7m/jstructural/" + name;
+    final URL url = SDocumentParserTest.class.getResource(file);
+    final URI uri = url.toURI();
+
     return SDocumentParser.fromStream(
-      SDocumentParserTest.class.getResourceAsStream("/com/io7m/jstructural/"
-        + name),
+      SDocumentParserTest.class.getResourceAsStream(file),
+      uri,
       TestUtilities.getLog());
   }
 

@@ -102,12 +102,17 @@ public final class SASectionNumberPS extends SASectionNumber
     return result;
   }
 
-  @Override <T> T sectionNumberAccept(
+  @Override public <T> T sectionNumberAccept(
     final @Nonnull SASectionNumberVisitor<T> v)
     throws ConstraintError,
       Exception
   {
     return v.visitSectionNumberWithPart(this);
+  }
+
+  @SuppressWarnings("boxing") @Override public String sectionNumberFormat()
+  {
+    return String.format("%d.%d", this.part, this.section);
   }
 
   @Override public String toString()

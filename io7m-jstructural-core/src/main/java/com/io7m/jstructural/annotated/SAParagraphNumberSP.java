@@ -16,8 +16,11 @@
 
 package com.io7m.jstructural.annotated;
 
+import javax.annotation.Nonnull;
+
 import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jaux.UnreachableCodeException;
 
 /**
  * A paragraph number consisting of a section, and paragraph.
@@ -55,6 +58,81 @@ public final class SAParagraphNumberSP extends SAParagraphNumber
         "Paragraph");
   }
 
+  @SuppressWarnings({ "boxing", "synthetic-access" }) @Override public
+    int
+    compareTo(
+      final SAParagraphNumber o)
+  {
+    try {
+      return o.paragraphNumberAccept(new SAParagraphNumberVisitor<Integer>() {
+        @Override public Integer visitParagraphNumberPSP(
+          final @Nonnull SAParagraphNumberPSP p)
+          throws ConstraintError,
+            Exception
+        {
+          final int rsect =
+            Integer.compare(SAParagraphNumberSP.this.section, p.getSection());
+          if (rsect == 0) {
+            return Integer.compare(
+              SAParagraphNumberSP.this.paragraph,
+              p.getParagraph());
+          }
+          return rsect;
+        }
+
+        @Override public Integer visitParagraphNumberPSSP(
+          final @Nonnull SAParagraphNumberPSSP p)
+          throws ConstraintError,
+            Exception
+        {
+          final int rsect =
+            Integer.compare(SAParagraphNumberSP.this.section, p.getSection());
+          if (rsect == 0) {
+            return Integer.compare(
+              SAParagraphNumberSP.this.paragraph,
+              p.getParagraph());
+          }
+          return rsect;
+        }
+
+        @Override public Integer visitParagraphNumberSP(
+          final @Nonnull SAParagraphNumberSP p)
+          throws ConstraintError,
+            Exception
+        {
+          final int rsect =
+            Integer.compare(SAParagraphNumberSP.this.section, p.getSection());
+          if (rsect == 0) {
+            return Integer.compare(
+              SAParagraphNumberSP.this.paragraph,
+              p.getParagraph());
+          }
+          return rsect;
+        }
+
+        @Override public Integer visitParagraphNumberSSP(
+          final @Nonnull SAParagraphNumberSSP p)
+          throws ConstraintError,
+            Exception
+        {
+          final int rsect =
+            Integer.compare(SAParagraphNumberSP.this.section, p.getSection());
+          if (rsect == 0) {
+            return Integer.compare(
+              SAParagraphNumberSP.this.paragraph,
+              p.getParagraph());
+          }
+          return rsect;
+        }
+      })
+        .intValue();
+    } catch (final ConstraintError e) {
+      throw new UnreachableCodeException(e);
+    } catch (final Exception e) {
+      throw new UnreachableCodeException(e);
+    }
+  }
+
   @Override public boolean equals(
     final Object obj)
   {
@@ -81,7 +159,7 @@ public final class SAParagraphNumberSP extends SAParagraphNumber
    * @return The paragraph number
    */
 
-  public int getParagraph()
+  @Override public int getParagraph()
   {
     return this.paragraph;
   }
@@ -104,12 +182,17 @@ public final class SAParagraphNumberSP extends SAParagraphNumber
     return result;
   }
 
-  @Override <T> T paragraphNumberAccept(
+  @Override public <T> T paragraphNumberAccept(
     final SAParagraphNumberVisitor<T> v)
     throws ConstraintError,
       Exception
   {
     return v.visitParagraphNumberSP(this);
+  }
+
+  @SuppressWarnings("boxing") @Override public String paragraphNumberFormat()
+  {
+    return String.format("%d.%d", this.section, this.paragraph);
   }
 
   @Override public String toString()

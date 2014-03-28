@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,8 +58,6 @@ import com.io7m.jaux.UnimplementedCodeException;
 import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jlog.Level;
 import com.io7m.jlog.Log;
-import com.io7m.jstructural.SVersion;
-import com.io7m.jstructural.SXML;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentStyle;
 import com.io7m.jstructural.core.SDocumentTitle;
@@ -102,6 +101,8 @@ import com.io7m.jstructural.core.STableSummary;
 import com.io7m.jstructural.core.STerm;
 import com.io7m.jstructural.core.SText;
 import com.io7m.jstructural.core.SVerbatim;
+import com.io7m.jstructural.core.SXML;
+import com.io7m.jstructural.schema.SSchema;
 
 /**
  * A document parser that uses XOM to process documents.
@@ -329,7 +330,7 @@ public final class SDocumentParser
       new ArrayList<SFootnoteContent>();
     for (int index = 0; index < e.getChildCount(); ++index) {
       final Node ec = e.getChild(index);
-      content_nodes.add(SDocumentParser.footnoteContent(ec));
+      content_nodes.add(SDocumentParser.footnoteContent(log, ec));
     }
 
     final SNonEmptyList<SFootnoteContent> content =
@@ -338,6 +339,7 @@ public final class SDocumentParser
   }
 
   private static @Nonnull SFootnoteContent footnoteContent(
+    final @Nonnull Log log,
     final @Nonnull Node c)
     throws ConstraintError,
       URISyntaxException
@@ -363,6 +365,9 @@ public final class SDocumentParser
       }
       if ("verbatim".equals(ecc.getLocalName())) {
         return SDocumentParser.verbatim(ecc);
+      }
+      if ("footnote".equals(ecc.getLocalName())) {
+        return SDocumentParser.footnote(log, ecc);
       }
     }
 
@@ -455,6 +460,8 @@ public final class SDocumentParser
   /**
    * Parse a document from a validated stream.
    * 
+   * @param uri
+   *          The base URI of the document
    * @param stream
    *          The stream
    * @param log
@@ -487,6 +494,7 @@ public final class SDocumentParser
 
   public static @Nonnull SDocument fromStream(
     final @Nonnull InputStream stream,
+    final @Nonnull URI uri,
     final @Nonnull Log log)
     throws ConstraintError,
       ValidityException,
@@ -501,7 +509,7 @@ public final class SDocumentParser
       XIncludeException
   {
     final Log lp = new Log(log, "parser");
-    final Document doc = SDocumentParser.fromStreamValidate(stream, log);
+    final Document doc = SDocumentParser.fromStreamValidate(stream, uri, log);
     final Element root = doc.getRootElement();
 
     if ("document".equals(root.getLocalName())) {
@@ -516,6 +524,7 @@ public final class SDocumentParser
    * 
    * @param stream
    *          An input stream
+   * @param uri
    * @param log
    *          A log handle
    * @return A parsed and validated document
@@ -544,6 +553,7 @@ public final class SDocumentParser
 
   static @Nonnull Document fromStreamValidate(
     final @Nonnull InputStream stream,
+    final @Nonnull URI uri,
     final @Nonnull Log log)
     throws SAXException,
       ConstraintError,
@@ -572,14 +582,13 @@ public final class SDocumentParser
     log_xml.debug("opening xml.xsd");
 
     final InputStream xml_xsd =
-      SVersion.class.getResourceAsStream("/com/io7m/jstructural/xml.xsd");
+      new URL(SSchema.getSchemaXMLXSDLocation().toString()).openStream();
 
     try {
       log_xml.debug("opening schema.xsd");
 
       final InputStream schema_xsd =
-        SVersion.class
-          .getResourceAsStream("/com/io7m/jstructural/schema.xsd");
+        new URL(SSchema.getSchemaXSDLocation().toString()).openStream();
 
       try {
         log_xml.debug("creating schema handler");
@@ -599,7 +608,7 @@ public final class SDocumentParser
 
         log_xml.debug("parsing and validating");
         final Builder builder = new Builder(reader);
-        final Document doc = builder.build(stream);
+        final Document doc = builder.build(stream, uri.toString());
 
         if (handler.getException() != null) {
           throw handler.getException();
@@ -928,6 +937,9 @@ public final class SDocumentParser
       }
       if ("term".equals(ec.getLocalName())) {
         return SDocumentParser.term(ec);
+      }
+      if ("table".equals(ec.getLocalName())) {
+        return SDocumentParser.table(log, ec);
       }
       if ("verbatim".equals(ec.getLocalName())) {
         return SDocumentParser.verbatim(ec);
@@ -1315,21 +1327,6 @@ public final class SDocumentParser
     return new URI(a.getValue());
   }
 
-  private static SSubsectionContent subsectionContent(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws URISyntaxException,
-      ConstraintError
-  {
-    if ("paragraph".equals(e.getLocalName())) {
-      return SDocumentParser.paragraph(log, e);
-    } else if ("formal-item".equals(e.getLocalName())) {
-      return SDocumentParser.formalItem(log, e);
-    }
-
-    throw new UnreachableCodeException();
-  }
-
   private static SSubsection subsection(
     final @Nonnull Log log,
     final @Nonnull Element e)
@@ -1361,6 +1358,21 @@ public final class SDocumentParser
       SNonEmptyList.newList(elements);
 
     return SDocumentParser.subsectionMake(log, title, id, type, content);
+  }
+
+  private static SSubsectionContent subsectionContent(
+    final @Nonnull Log log,
+    final @Nonnull Element e)
+    throws URISyntaxException,
+      ConstraintError
+  {
+    if ("paragraph".equals(e.getLocalName())) {
+      return SDocumentParser.paragraph(log, e);
+    } else if ("formal-item".equals(e.getLocalName())) {
+      return SDocumentParser.formalItem(log, e);
+    }
+
+    throw new UnreachableCodeException();
   }
 
   private static @Nonnull SSubsection subsectionMake(

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright © 2014 http://io7m.com
+  Copyright © 2014 <code@io7m.com> http://io7m.com
 
   Permission to use, copy, modify, and/or distribute this software for any
   purpose with or without fee is hereby granted, provided that the above
@@ -18,10 +18,177 @@
   version: structural 2.0.0
   -->
 
-<s:part
+<s:document
   xmlns:s="http://www.io7m.com/schemas/structural/2.0.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
+  <s:document-title>Structural 2.0.0 Documentation</s:document-title>
+  <s:document-style>documentation.css</s:document-style>
+  <s:document-contents/>
 
+<s:part>
+  <s:part-title>Package Information</s:part-title>
+  <s:part-contents />
+  <s:section>
+    <s:section-title>Orientation</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Overview</s:subsection-title>
+      <s:paragraph>
+        The <s:term s:type="package">jstructural</s:term>
+        package implements a set of primitives for producing technical
+        documentation. The package provides
+        <s:link-external s:target="http://relaxng.org/">RELAX-NG</s:link-external>
+        and <s:link-external s:target="http://www.w3.org/XML/Schema">XSD</s:link-external>
+        schemas describing the format of <s:term s:type="package">structural</s:term>
+        documents and a set of Java tools for producing XHTML 1.0 Strict output.
+      </s:paragraph>
+      <s:paragraph>
+        In contrast to other systems such as
+        <s:link-external s:target="http://www.docbook.org/">DocBook</s:link-external>,
+        the <s:term s:type="package">structural</s:term>
+        language only defines elements concerning the structure of the document
+        and not the semantics of the elements. The intention is that higher
+        level languages will produce <s:term s:type="package">structural</s:term>
+        documents as output and then use the provided stylesheets to get various
+        services such as table of contents generation, chapter numbering,
+        footnotes, et cetera, without having to re-implement all of those
+        features for each new language.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Portability</s:subsection-title>
+      <s:paragraph>
+        The canonical format for the <s:term s:type="package">structural</s:term>
+        schema is RELAX-NG, but an XSD schema (generated from the RELAX-NG
+        schema is also provided, for validation using tools that do not support
+        RELAX-NG).
+      </s:paragraph>
+      <s:paragraph>
+        The provided <s:term s:type="package">structural</s:term> to XHTML
+        translator is written in pure Java and should be usable on any JVM
+        that supports Java 6 and newer.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Simplicity</s:subsection-title>
+      <s:paragraph>
+        As the <s:term s:type="package">structural</s:term>
+        language focuses only on structural elements, it is far simpler than any
+        of the other XML documentation formats. As an example,
+        <s:link-external s:target="http://www.docbook.org/">DocBook</s:link-external>,
+        which mixes structural and semantic elements, defines nearly 400
+        elements as opposed to the 30 or so defined by the
+        <s:term s:type="package">structural</s:term> language.
+      </s:paragraph>
+      <s:paragraph>
+        Given the small number of elements and the relatively strict schema, the
+        number of possible permutations of elements is low and, as a result, the
+        XHTML output is easily predictable
+        <s:footnote>There are various combinations of DocBook elements that are
+          valid according to the schema but cannot realistically be used due to
+          the resulting XHTML output.</s:footnote>.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+  <s:section>
+    <s:section-title>Installation</s:section-title>
+     <s:subsection>
+      <s:subsection-title>Source compilation</s:subsection-title>
+      <s:paragraph>
+        The project can be compiled and installed with
+        <s:link-external s:target="http://maven.apache.org">Maven</s:link-external>:
+      </s:paragraph>
+      <s:paragraph>
+        <s:verbatim s:type="example"><![CDATA[$ mvn -C clean install]]></s:verbatim>
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+  <s:section>
+    <s:section-title>Supported Systems</s:section-title>
+    <s:formal-item s:kind="platform_table" s:type="platforms">
+      <s:formal-item-title>Supported systems</s:formal-item-title>
+      <s:table>
+        <s:table-summary>Supported systems</s:table-summary>
+        <s:table-head>
+          <s:table-column-name>OS</s:table-column-name>
+          <s:table-column-name>OS-Version</s:table-column-name>
+          <s:table-column-name>OS-Arch</s:table-column-name>
+          <s:table-column-name>JDK-Vendor</s:table-column-name>
+          <s:table-column-name>JDK-Version</s:table-column-name>
+          <s:table-column-name>VM</s:table-column-name>
+          <s:table-column-name>VM-Version</s:table-column-name>
+        </s:table-head>
+        <s:table-body>
+<s:table-row>
+  <s:table-cell>Linux</s:table-cell>
+  <s:table-cell>3.12.3-1-ARCH</s:table-cell>
+  <s:table-cell>amd64</s:table-cell>
+  <s:table-cell>Oracle Corporation</s:table-cell>
+  <s:table-cell>1.7.0_45</s:table-cell>
+  <s:table-cell>OpenJDK 64-Bit Server VM</s:table-cell>
+  <s:table-cell>Oracle Corporation</s:table-cell>
+  <s:table-cell>24.45-b08</s:table-cell>
+</s:table-row>
+        </s:table-body>
+      </s:table>
+    </s:formal-item>
+  </s:section>
+  <s:section>
+    <s:section-title>Platform Specific Issues</s:section-title>
+    <s:paragraph>
+      There are no known platform-specific issues.
+    </s:paragraph>
+  </s:section>
+  <s:section>
+    <s:section-title>License</s:section-title>
+    <s:paragraph>
+      All files distributed with the <s:term s:type="package">structural</s:term>
+      package are placed under the following license:
+      <s:verbatim s:type="license"><![CDATA[
+Copyright © 2014 <code@io7m.com> http://io7m.com
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
+      </s:verbatim>
+    </s:paragraph>
+    <s:paragraph>
+      Exceptions to the above are the files:
+    </s:paragraph>
+    <s:formal-item s:kind="files">
+      <s:formal-item-title>Schema files</s:formal-item-title>
+      <s:list-unordered>
+        <s:list-item><s:term s:type="file">src/test/resources/com/io7m/jstructural/xhtml1-strict.xsd</s:term></s:list-item>
+        <s:list-item><s:term s:type="file">src/test/resources/com/io7m/jstructural/xml.xsd</s:term></s:list-item>
+      </s:list-unordered>
+    </s:formal-item>
+    <s:paragraph>
+      These files are the XSD schema for XHTML Strict 1.0
+      <s:footnote>
+        <s:link-external s:target="http://www.w3.org/TR/xhtml1-schema/">http://www.w3.org/TR/xhtml1-schema/</s:link-external>
+      </s:footnote>
+      and are used by the test suite to validate the XHTML output produced by all
+      test documents. They are included to allow the test suite to execute
+      on machines that do not have network access (and therefore cannot fetch
+      the schema files from the <s:term s:type="organization">w3</s:term> servers).
+      They are covered by at least one of the <s:term s:type="organization">w3</s:term>'s
+      many licenses
+      <s:footnote>
+        <s:link-external s:target="http://www.w3.org/Consortium/Legal/">http://www.w3.org/Consortium/Legal/</s:link-external>
+      </s:footnote>. Unfortunately, we're not exactly sure which. No infringement
+      is intended.
+    </s:paragraph>
+  </s:section>
+</s:part>
+
+<s:part>
   <s:part-title>Element Reference</s:part-title>
   <s:part-contents />
 
@@ -35,7 +202,7 @@
         <s:term s:type="package">structural</s:term>
         elements
         are in the
-        <s:link-external s:target="http://www.io7m.com/schemas/structural/1.0.0">http://www.io7m.com/schemas/structural/1.0.0</s:link-external>
+        <s:link-external s:target="http://www.io7m.com/schemas/structural/2.0.0">http://www.io7m.com/schemas/structural/2.0.0</s:link-external>
         namespace.
       </s:paragraph>
     </s:subsection>
@@ -95,39 +262,39 @@
         </s:list-unordered>
       </s:paragraph>
       <s:paragraph>
-	      The contents of the <s:term s:type="attribute">type</s:term>
-	      attribute are appended to the resulting CSS <s:term
-	      s:type="attribute">class</s:term> attribute of the element in the
-	      XHTML output.
+        The contents of the <s:term s:type="attribute">type</s:term>
+        attribute are appended to the resulting CSS <s:term
+        s:type="attribute">class</s:term> attribute of the element in the
+        XHTML output.
       </s:paragraph>
       <s:paragraph>
-	      Elements with an <s:term s:type="attribute">xml:id</s:term>
-	      attribute can be linked to using the <s:link
-	      s:target="elem_link">link</s:link> element.
+        Elements with an <s:term s:type="attribute">xml:id</s:term>
+        attribute can be linked to using the <s:link
+        s:target="elem_link">link</s:link> element.
       </s:paragraph>
       <s:paragraph>
-	      When the XSLT stylesheet encounters an <s:term
-	      s:type="attribute">xml:id</s:term> attribute on an element, it
-	      generates an XHTML anchor with an <s:term
-	      s:type="attribute">id</s:term> attribute consisting of the
-	      original <s:term s:type="attribute">xml:id</s:term> attribute
-	      contents prefixed with <s:term s:type="constant">"ref_"</s:term>.
-	      This allows linking to specific elements in the resulting XHTML
-	      documents from external locations. As an example, given an
-	      element:
+        When the XSLT stylesheet encounters an <s:term
+        s:type="attribute">xml:id</s:term> attribute on an element, it
+        generates an XHTML anchor with an <s:term
+        s:type="attribute">id</s:term> attribute consisting of the
+        original <s:term s:type="attribute">xml:id</s:term> attribute
+        contents prefixed with <s:term s:type="constant">"ref_"</s:term>.
+        This allows linking to specific elements in the resulting XHTML
+        documents from external locations. As an example, given an
+        element:
         <s:verbatim s:type="example"><![CDATA[<s:term s:type="something" xml:id="a_term">Hello</s:term>]]></s:verbatim>
         The XHTML output will be similar to:
         <s:verbatim s:type="example"><![CDATA[<a id="ref_a_term"></a>
-<span class="structural-1_0_0_term something">Hello</span>]]></s:verbatim>
+<span class="st200_term something">Hello</span>]]></s:verbatim>
       </s:paragraph>
     </s:subsection>
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-	      The XHTML elements resulting from each <s:term
-	      s:type="package">structural</s:term> element are assigned specific
-	      CSS classes for easy styling of the output. The CSS classes are
-	      documented with each element.
+        The XHTML elements resulting from each <s:term
+        s:type="package">structural</s:term> element are assigned specific
+        CSS classes for easy styling of the output. The CSS classes are
+        documented with each element.
       </s:paragraph>
     </s:subsection>
     <s:subsection>
@@ -148,21 +315,21 @@
       </s:paragraph>
       <s:paragraph>
         The navigation bar itself is assigned the CSS class
-        <s:term s:type="class">structural-1_0_0_navbar</s:term> in addition to the
-        class <s:term s:type="class">structural-1_0_0_navbar_top</s:term> or
-        <s:term s:type="class">structural-1_0_0_navbar_bottom</s:term> depending
+        <s:term s:type="class">st200_navbar</s:term> in addition to the
+        class <s:term s:type="class">st200_navbar_top</s:term> or
+        <s:term s:type="class">st200_navbar_bottom</s:term> depending
         on where the bar in question appears on the page.
       </s:paragraph>
       <s:paragraph>
         The bar is a table structure with each cell being assigned one
         of the following CSS classes:
         <s:list-unordered>
-          <s:list-item><s:term s:type="class">structural-1_0_0_navbar_prev_file_cell</s:term></s:list-item>
-          <s:list-item><s:term s:type="class">structural-1_0_0_navbar_up_file_cell</s:term></s:list-item>
-          <s:list-item><s:term s:type="class">structural-1_0_0_navbar_next_file_cell</s:term></s:list-item>
-          <s:list-item><s:term s:type="class">structural-1_0_0_navbar_prev_title_cell</s:term></s:list-item>
-          <s:list-item><s:term s:type="class">structural-1_0_0_navbar_up_title_cell</s:term></s:list-item>
-          <s:list-item><s:term s:type="class">structural-1_0_0_navbar_next_title_cell</s:term></s:list-item>
+          <s:list-item><s:term s:type="class">st200_navbar_prev_file_cell</s:term></s:list-item>
+          <s:list-item><s:term s:type="class">st200_navbar_up_file_cell</s:term></s:list-item>
+          <s:list-item><s:term s:type="class">st200_navbar_next_file_cell</s:term></s:list-item>
+          <s:list-item><s:term s:type="class">st200_navbar_prev_title_cell</s:term></s:list-item>
+          <s:list-item><s:term s:type="class">st200_navbar_up_title_cell</s:term></s:list-item>
+          <s:list-item><s:term s:type="class">st200_navbar_next_title_cell</s:term></s:list-item>
         </s:list-unordered>
       </s:paragraph>
     </s:subsection>
@@ -253,26 +420,26 @@
         In addition to any classes specified by the
         <s:term s:type="attribute">type</s:term>
         attribute, the main XHTML structure is assigned the class
-        <s:term s:type="class">structural-1_0_0_document_contents</s:term>.
+        <s:term s:type="class">st200_document_contents</s:term>.
       </s:paragraph>
       <s:paragraph>
         Each element of the list is assigned the class
-        <s:term s:type="class">structural-1_0_0_document_contents_item</s:term>
+        <s:term s:type="class">st200_document_contents_item</s:term>
         in addition to one of
-        <s:term s:type="class">structural-1_0_0_document_contents_item1</s:term>,
-        <s:term s:type="class">structural-1_0_0_document_contents_item2</s:term>
-        or <s:term s:type="class">structural-1_0_0_document_contents_item3</s:term>
+        <s:term s:type="class">st200_document_contents_item1</s:term>,
+        <s:term s:type="class">st200_document_contents_item2</s:term>
+        or <s:term s:type="class">st200_document_contents_item3</s:term>
         depending on the depth of the item in the list.
       </s:paragraph>
       <s:paragraph>
         The root <s:link s:target="elem_document">document</s:link>
         element of the list is assigned the class
-        <s:term s:type="class">structural-1_0_0_document_contents_document</s:term>
+        <s:term s:type="class">st200_document_contents_document</s:term>
         and all <s:link s:target="elem_part">part</s:link> and
         <s:link s:target="elem_section">section</s:link>
         elements appearing in the list are assigned the classes
-        <s:term s:type="class">structural-1_0_0_document_contents_part</s:term> and
-        <s:term s:type="class">structural-1_0_0_document_contents_section</s:term>,
+        <s:term s:type="class">st200_document_contents_part</s:term> and
+        <s:term s:type="class">st200_document_contents_section</s:term>,
         respectively.
       </s:paragraph>
     </s:subsection>
@@ -322,7 +489,7 @@
         The XHTML element generated by the
         <s:term s:type="element">document-title</s:term>
         element is assigned the CSS
-        <s:term s:type="class">structural-1_0_0_document_title</s:term>
+        <s:term s:type="class">st200_document_title</s:term>
          in addition to any specified by the
         <s:term s:type="attribute">type</s:term> attribute.
       </s:paragraph>
@@ -334,14 +501,14 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">footnote</s:term> element denotes
-	      sections of text that will appear at the bottom of the current
-	      page with numbered hyperlink references placed in the original
-	      text. <s:term s:type="element">footnote</s:term> elements are
-	      numbered relative to the ancestor <s:link
-	      s:target="elem_document">document</s:link>. <s:term
-	      s:type="element">footnote</s:term> elements may themselves
-	      contain footnotes.
+        The <s:term s:type="element">footnote</s:term> element denotes
+        sections of text that will appear at the bottom of the current
+        page with numbered hyperlink references placed in the original
+        text. <s:term s:type="element">footnote</s:term> elements are
+        numbered relative to the ancestor <s:link
+        s:target="elem_document">document</s:link>. <s:term
+        s:type="element">footnote</s:term> elements may themselves
+        contain footnotes.
       </s:paragraph>
     </s:subsection>
     <s:subsection>
@@ -390,11 +557,11 @@
       <s:paragraph>
         The <s:term s:type="element">footnote</s:term> element causes a section
         to be generated at the bottom of the page. This section is assigned the
-        class <s:term s:type="class">structural-1_0_0_footnotes</s:term>. Each footnote
+        class <s:term s:type="class">st200_footnotes</s:term>. Each footnote
         is displayed as a form of numbered list. The number is assigned the
-        class <s:term s:type="class">structural-1_0_0_footnote_number</s:term> and
+        class <s:term s:type="class">st200_footnote_number</s:term> and
         the body of each footnote appears in a section with the class
-        <s:term s:type="class">structural-1_0_0_footnote_body</s:term>.
+        <s:term s:type="class">st200_footnote_body</s:term>.
       </s:paragraph>
     </s:subsection>
     <s:subsection>
@@ -464,13 +631,13 @@
         The XHTML elements generated by the
         <s:term s:type="element">formal-item</s:term>
         element is assigned the CSS class
-        <s:term s:type="class">structural-1_0_0_formal_item</s:term>
+        <s:term s:type="class">st200_formal_item</s:term>
         in addition to any specified by the
         <s:term s:type="attribute">type</s:term> attribute.
       </s:paragraph>
       <s:paragraph>
         The title element of the generated element is assigned the class
-        <s:term s:type="class">structural-1_0_0_formal_item_title</s:term>.
+        <s:term s:type="class">st200_formal_item_title</s:term>.
       </s:paragraph>
     </s:subsection>
     <s:subsection>
@@ -503,17 +670,17 @@
         The XHTML element generated by the
         <s:term s:type="element">formal-item-list</s:term> element
         is assigned the CSS class
-        <s:term s:type="class">structural-1_0_0_formal_item_list</s:term>
+        <s:term s:type="class">st200_formal_item_list</s:term>
         in addition to any specified by the
         <s:term s:type="attribute">type</s:term> attribute.
       </s:paragraph>
       <s:paragraph>
         Each element of the list is assigned the class
-        <s:term s:type="class">structural-1_0_0_formal_item_list_item</s:term>.
+        <s:term s:type="class">st200_formal_item_list_item</s:term>.
       </s:paragraph>
       <s:paragraph>
         The title of the element is assigned the class
-        <s:term s:type="class">structural-1_0_0_formal_item_list_title</s:term>.
+        <s:term s:type="class">st200_formal_item_list_title</s:term>.
       </s:paragraph>
     </s:subsection>
     <s:subsection>
@@ -551,10 +718,10 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_formal_item_title</s:term>
+            <s:term s:type="class">st200_formal_item_title</s:term>
           </s:list-item>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_formal_item_title_number</s:term>
+            <s:term s:type="class">st200_formal_item_title_number</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -573,12 +740,12 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">image</s:term> element inserts the
-	      image specified by the <s:term s:type="attribute">source</s:term>
-	      attribute into the XHTML output. The width and height may
-	      optionally be specified with the <s:term
-	      s:type="attribute">width</s:term> and <s:term
-	      s:type="attribute">height</s:term> attributes, respectively. The
+        The <s:term s:type="element">image</s:term> element inserts the
+        image specified by the <s:term s:type="attribute">source</s:term>
+        attribute into the XHTML output. The width and height may
+        optionally be specified with the <s:term
+        s:type="attribute">width</s:term> and <s:term
+        s:type="attribute">height</s:term> attributes, respectively. The
         text contents of the element are used in the XHTML if the image
         cannot be loaded<s:footnote>In the <s:term s:type="attribute">alt</s:term>
         attribute of the resulting <s:term s:type="element">img</s:term>.</s:footnote>.
@@ -587,12 +754,12 @@
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-	      <s:term s:type="element">image</s:term> elements are assigned the
-	      following CSS classes in addition to any specified by the
-	      <s:term s:type="attribute">type</s:term> attribute:
+        <s:term s:type="element">image</s:term> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_image</s:term>
+            <s:term s:type="class">st200_image</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -610,18 +777,18 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">link</s:term> element generates a
-	      hyperlink to the element with the given <s:term
-	      s:type="attribute">xml:id</s:term> attribute (specified by the
-	      given <s:term s:type="attribute">target</s:term> attribute) using
-	      the text enclosed by the <s:term s:type="element">link</s:term>
-	      element as the hyperlink text.
+        The <s:term s:type="element">link</s:term> element generates a
+        hyperlink to the element with the given <s:term
+        s:type="attribute">xml:id</s:term> attribute (specified by the
+        given <s:term s:type="attribute">target</s:term> attribute) using
+        the text enclosed by the <s:term s:type="element">link</s:term>
+        element as the hyperlink text.
       </s:paragraph>
       <s:paragraph>
-	      The <s:term s:type="element">link</s:term> element depends on the
-	      XML validator to check link integrity. The XSLT stylesheets make
-	      no attempt to verify the validity or existence of link
-	      targets.
+        The <s:term s:type="element">link</s:term> element depends on the
+        XML validator to check link integrity. The XSLT stylesheets make
+        no attempt to verify the validity or existence of link
+        targets.
       </s:paragraph>
     </s:subsection>
     <s:subsection>
@@ -643,12 +810,12 @@
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-      	<s:term s:type="element">link</s:term> elements are assigned the
-	      following CSS classes in addition to any specified by the
-	      <s:term s:type="attribute">type</s:term> attribute:
+        <s:term s:type="element">link</s:term> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_link</s:term>
+            <s:term s:type="class">st200_link</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -677,10 +844,10 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">link-external</s:term> element
-	      generates a hyperlink to an external WWW address specified by
-	      the given <s:term s:type="attribute">target</s:term> attribute,
-	      using the text enclosed by the element as the hyperlink text.
+        The <s:term s:type="element">link-external</s:term> element
+        generates a hyperlink to an external WWW address specified by
+        the given <s:term s:type="attribute">target</s:term> attribute,
+        using the text enclosed by the element as the hyperlink text.
       </s:paragraph>
     </s:subsection>
     <s:subsection>
@@ -702,12 +869,12 @@
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-	      <s:term s:type="element">link-external</s:term> elements are
-	      assigned the following CSS classes in addition to any specified
-	      by the <s:term s:type="attribute">type</s:term> attribute:
+        <s:term s:type="element">link-external</s:term> elements are
+        assigned the following CSS classes in addition to any specified
+        by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_link_external</s:term>
+            <s:term s:type="class">st200_link_external</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -790,7 +957,7 @@
         attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_list_item</s:term>
+            <s:term s:type="class">st200_list_item</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -828,7 +995,7 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_list_ordered</s:term>
+            <s:term s:type="class">st200_list_ordered</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -866,7 +1033,7 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_list_unordered</s:term>
+            <s:term s:type="class">st200_list_unordered</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -938,10 +1105,10 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_paragraph</s:term>
+            <s:term s:type="class">st200_paragraph</s:term>
           </s:list-item>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_paragraph_number</s:term>
+            <s:term s:type="class">st200_paragraph_number</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1000,7 +1167,7 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_part</s:term>
+            <s:term s:type="class">st200_part</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1035,23 +1202,23 @@
         In addition to any classes specified by the
         <s:term s:type="attribute">type</s:term>
         attribute, the main list structure is assigned the class
-        <s:term s:type="class">structural-1_0_0_part_contents</s:term>.
+        <s:term s:type="class">st200_part_contents</s:term>.
         Each element of the list is assigned the class
-        <s:term s:type="class">structural-1_0_0_part_contents_item</s:term>
+        <s:term s:type="class">st200_part_contents_item</s:term>
         in addition to one of
-        <s:term s:type="class">structural-1_0_0_part_contents_item1</s:term>,
-        <s:term s:type="class">structural-1_0_0_part_contents_item2</s:term> or
-        <s:term s:type="class">structural-1_0_0_part_contents_item3</s:term>
+        <s:term s:type="class">st200_part_contents_item1</s:term>,
+        <s:term s:type="class">st200_part_contents_item2</s:term> or
+        <s:term s:type="class">st200_part_contents_item3</s:term>
         depending on the depth of the item in the list. The root
         <s:link s:target="elem_part">part</s:link>
         element of the list is assigned the class
-        <s:term s:type="class">structural-1_0_0_part_contents_part</s:term> and all
+        <s:term s:type="class">st200_part_contents_part</s:term> and all
         <s:link s:target="elem_section">section</s:link> and
         <s:link s:target="elem_subsection">subsection</s:link> elements
         appearing in the list are assigned the classes
-        <s:term s:type="class">structural-1_0_0_part_contents_section</s:term>
+        <s:term s:type="class">st200_part_contents_section</s:term>
         and
-        <s:term s:type="class">structural-1_0_0_part_contents_subsection</s:term>,
+        <s:term s:type="class">st200_part_contents_subsection</s:term>,
         respectively.
       </s:paragraph>
     </s:subsection>
@@ -1075,10 +1242,10 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_part_title</s:term>
+            <s:term s:type="class">st200_part_title</s:term>
           </s:list-item>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_part_title_number</s:term>
+            <s:term s:type="class">st200_part_title_number</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1143,7 +1310,7 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_section</s:term>
+            <s:term s:type="class">st200_section</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1187,21 +1354,21 @@
         In addition to any classes specified by the
         <s:term s:type="attribute">type</s:term>
         attribute, the main list structure is assigned the
-        class <s:term s:type="class">structural-1_0_0_section_contents</s:term>.
+        class <s:term s:type="class">st200_section_contents</s:term>.
         Each element of the list is assigned the class
-        <s:term s:type="class">structural-1_0_0_section_contents_item</s:term>
+        <s:term s:type="class">st200_section_contents_item</s:term>
         in addition to one of
-        <s:term s:type="class">structural-1_0_0_section_contents_item1</s:term>,
-        <s:term s:type="class">structural-1_0_0_section_contents_item2</s:term> or
-        <s:term s:type="class">structural-1_0_0_section_contents_item3</s:term>
+        <s:term s:type="class">st200_section_contents_item1</s:term>,
+        <s:term s:type="class">st200_section_contents_item2</s:term> or
+        <s:term s:type="class">st200_section_contents_item3</s:term>
         depending on the depth of the item in the list. The root
         <s:link s:target="elem_section">section</s:link> element of the list is
         assigned the class
-        <s:term s:type="class">structural-1_0_0_section_contents_section</s:term>
+        <s:term s:type="class">st200_section_contents_section</s:term>
         and all
         <s:link s:target="elem_subsection">subsection</s:link> elements
         appearing in the list are assigned the class
-        <s:term s:type="class">structural-1_0_0_section_contents_subsection</s:term>.
+        <s:term s:type="class">st200_section_contents_subsection</s:term>.
       </s:paragraph>
     </s:subsection>
     <s:subsection>
@@ -1232,10 +1399,10 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_section_title</s:term>
+            <s:term s:type="class">st200_section_title</s:term>
           </s:list-item>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_section_title_number</s:term>
+            <s:term s:type="class">st200_section_title_number</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1328,7 +1495,7 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_subsection</s:term>
+            <s:term s:type="class">st200_subsection</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1353,10 +1520,10 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_subsection_title</s:term>
+            <s:term s:type="class">st200_subsection_title</s:term>
           </s:list-item>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_subsection_title_number</s:term>
+            <s:term s:type="class">st200_subsection_title_number</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1375,7 +1542,7 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">table</s:term> element allows the
+        The <s:term s:type="element">table</s:term> element allows the
         specification of tabular data.
       </s:paragraph>
     </s:subsection>
@@ -1401,12 +1568,12 @@
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-	      <s:term s:type="element">table</s:term> elements are assigned the
-	      following CSS classes in addition to any specified by the
-	      <s:term s:type="attribute">type</s:term> attribute:
+        <s:term s:type="element">table</s:term> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_table</s:term>
+            <s:term s:type="class">st200_table</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1465,7 +1632,7 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">table-body</s:term> element denotes
+        The <s:term s:type="element">table-body</s:term> element denotes
         the rows and cells of the parent
         <s:link s:target="elem_table">table</s:link> element.
       </s:paragraph>
@@ -1486,12 +1653,12 @@
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-	      <s:term s:type="element">table-body</s:term> elements are assigned the
-	      following CSS classes in addition to any specified by the
-	      <s:term s:type="attribute">type</s:term> attribute:
+        <s:term s:type="element">table-body</s:term> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_table_body</s:term>
+            <s:term s:type="class">st200_table_body</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1503,7 +1670,7 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">table-cell</s:term> element denotes
+        The <s:term s:type="element">table-cell</s:term> element denotes
         a cell in a row of a <s:link s:target="elem_table">table</s:link>
         element.
       </s:paragraph>
@@ -1545,12 +1712,12 @@
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-	      <s:term s:type="element">table-cell</s:term> elements are assigned the
-	      following CSS classes in addition to any specified by the
-	      <s:term s:type="attribute">type</s:term> attribute:
+        <s:term s:type="element">table-cell</s:term> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_table_cell</s:term>
+            <s:term s:type="class">st200_table_cell</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1562,7 +1729,7 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">table-column-name</s:term> element allows
+        The <s:term s:type="element">table-column-name</s:term> element allows
         the specification of column names for
         <s:link s:target="elem_table">table</s:link> elements.
       </s:paragraph>
@@ -1570,12 +1737,12 @@
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-	      <s:term s:type="element">table-column-name</s:term> elements are assigned the
-	      following CSS classes in addition to any specified by the
-	      <s:term s:type="attribute">type</s:term> attribute:
+        <s:term s:type="element">table-column-name</s:term> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_table_column_name</s:term>
+            <s:term s:type="class">st200_table_column_name</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1587,7 +1754,7 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">table-head</s:term> element allows the
+        The <s:term s:type="element">table-head</s:term> element allows the
         optional specification of column names for
         <s:link s:target="elem_table">table</s:link> elements.
       </s:paragraph>
@@ -1608,12 +1775,12 @@
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-	      <s:term s:type="element">table-head</s:term> elements are assigned the
-	      following CSS classes in addition to any specified by the
-	      <s:term s:type="attribute">type</s:term> attribute:
+        <s:term s:type="element">table-head</s:term> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_table_head</s:term>
+            <s:term s:type="class">st200_table_head</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1625,7 +1792,7 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">table-row</s:term> element denotes
+        The <s:term s:type="element">table-row</s:term> element denotes
         a row of cells in a <s:link s:target="elem_table">table</s:link>
         element.
       </s:paragraph>
@@ -1646,12 +1813,12 @@
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-	      <s:term s:type="element">table-row</s:term> elements are assigned the
-	      following CSS classes in addition to any specified by the
-	      <s:term s:type="attribute">type</s:term> attribute:
+        <s:term s:type="element">table-row</s:term> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_table_row</s:term>
+            <s:term s:type="class">st200_table_row</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1663,7 +1830,7 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">table-summary</s:term> element allows
+        The <s:term s:type="element">table-summary</s:term> element allows
         the specification of a summary for
         <s:link s:target="elem_table">table</s:link> elements.
       </s:paragraph>
@@ -1679,21 +1846,21 @@
     <s:subsection>
       <s:subsection-title>Description</s:subsection-title>
       <s:paragraph>
-	      The <s:term s:type="element">term</s:term> element denotes a
-	      significant element of a section of text. It is usually used to
-	      highlight or mark individual words in order to assign them a
-	      particular CSS class.
+        The <s:term s:type="element">term</s:term> element denotes a
+        significant element of a section of text. It is usually used to
+        highlight or mark individual words in order to assign them a
+        particular CSS class.
       </s:paragraph>
     </s:subsection>
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-	      <s:term s:type="element">term</s:term> elements are assigned the
-	      following CSS classes in addition to any specified by the
-	      <s:term s:type="attribute">type</s:term> attribute:
+        <s:term s:type="element">term</s:term> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_term</s:term>
+            <s:term s:type="class">st200_term</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
@@ -1736,10 +1903,12 @@
         specified by the <s:term s:type="attribute">type</s:term> attribute:
         <s:list-unordered>
           <s:list-item>
-            <s:term s:type="class">structural-1_0_0_verbatim</s:term>
+            <s:term s:type="class">st200_verbatim</s:term>
           </s:list-item>
         </s:list-unordered>
       </s:paragraph>
     </s:subsection>
   </s:section>
 </s:part>
+
+</s:document>

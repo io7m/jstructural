@@ -25,9 +25,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jstructural.annotated.SADocument;
+import com.io7m.jstructural.annotated.SAFootnote;
+import com.io7m.jstructural.annotated.SAFootnoteContent;
+import com.io7m.jstructural.annotated.SAID;
+import com.io7m.jstructural.annotated.SAIDMapReadable;
+import com.io7m.jstructural.annotated.SALinkExternal;
+import com.io7m.jstructural.annotated.SAParagraph;
+import com.io7m.jstructural.annotated.SASectionWithParagraphs;
+import com.io7m.jstructural.annotated.SASectionWithSubsections;
+import com.io7m.jstructural.annotated.SASubsection;
+import com.io7m.jstructural.annotated.SAText;
+import com.io7m.jstructural.annotated.SAnnotator;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.jstructural.xom.SDocumentParserTest;
+import com.io7m.jstructural.xom.TestUtilities;
 
 public final class SAnnotatorTest
 {
@@ -48,7 +61,7 @@ public final class SAnnotatorTest
     throws ConstraintError
   {
     final SDocument d = SDocumentParserTest.roundTripParse(name);
-    return SAnnotator.document(d);
+    return SAnnotator.document(TestUtilities.getLog(), d);
   }
 
   @SuppressWarnings("static-method") @Test public void testAnnotate_0()

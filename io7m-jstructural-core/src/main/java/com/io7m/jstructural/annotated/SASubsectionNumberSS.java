@@ -104,6 +104,21 @@ public final class SASubsectionNumberSS extends SASubsectionNumber
     return result;
   }
 
+  @Override public <T> T subsectionNumberAccept(
+    final SASubsectionNumberVisitor<T> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitSubsectionNumberSS(this);
+  }
+
+  @SuppressWarnings("boxing") @Override public
+    String
+    subsectionNumberFormat()
+  {
+    return String.format("%d.%d", this.section, this.subsection);
+  }
+
   @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();
@@ -113,13 +128,5 @@ public final class SASubsectionNumberSS extends SASubsectionNumber
     builder.append(this.subsection);
     builder.append("]");
     return builder.toString();
-  }
-
-  @Override <T> T subsectionNumberAccept(
-    final SASubsectionNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception
-  {
-    return v.visitSubsectionNumberSS(this);
   }
 }

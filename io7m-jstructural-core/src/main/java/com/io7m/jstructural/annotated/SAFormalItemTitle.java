@@ -28,11 +28,11 @@ import com.io7m.jaux.Constraints.ConstraintError;
 
 @Immutable public final class SAFormalItemTitle
 {
-  private final @Nonnull String            actual;
-  private final @Nonnull SAParagraphNumber number;
+  private final @Nonnull String             actual;
+  private final @Nonnull SAFormalItemNumber number;
 
   SAFormalItemTitle(
-    final @Nonnull SAParagraphNumber in_number,
+    final @Nonnull SAFormalItemNumber in_number,
     final @Nonnull String in_actual)
     throws ConstraintError
   {
@@ -71,7 +71,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    *         paragraphs)
    */
 
-  public @Nonnull SAParagraphNumber getNumber()
+  public @Nonnull SAFormalItemNumber getNumber()
   {
     return this.number;
   }

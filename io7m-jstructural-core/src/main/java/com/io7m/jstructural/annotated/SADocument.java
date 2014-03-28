@@ -35,6 +35,7 @@ public abstract class SADocument
 {
   private final @Nonnull Option<SDocumentContents> contents;
   private final @Nonnull List<SAFootnote>          footnotes;
+  private final @Nonnull SAFormalItemsByKind       formals;
   private final @Nonnull SAIDMap                   ids;
   private final @Nonnull Option<SDocumentStyle>    style;
   private final @Nonnull SADocumentTitle           title;
@@ -44,7 +45,8 @@ public abstract class SADocument
     final @Nonnull SADocumentTitle in_title,
     final @Nonnull Option<SDocumentContents> in_contents,
     final @Nonnull Option<SDocumentStyle> in_style,
-    final @Nonnull List<SAFootnote> in_footnotes)
+    final @Nonnull List<SAFootnote> in_footnotes,
+    final @Nonnull SAFormalItemsByKind in_formals)
     throws ConstraintError
   {
     this.ids = Constraints.constrainNotNull(in_ids, "ID mappings");
@@ -52,6 +54,7 @@ public abstract class SADocument
     this.contents = Constraints.constrainNotNull(in_contents, "Contents");
     this.style = Constraints.constrainNotNull(in_style, "Style");
     this.footnotes = Constraints.constrainNotNull(in_footnotes, "Footnotes");
+    this.formals = Constraints.constrainNotNull(in_formals, "Formals");
   }
 
   /**
@@ -87,6 +90,9 @@ public abstract class SADocument
     }
     final SADocument other = (SADocument) obj;
     return this.contents.equals(other.contents)
+      && this.footnotes.equals(other.footnotes)
+      && this.formals.equals(other.formals)
+      && this.ids.equals(other.ids)
       && this.style.equals(other.style)
       && this.title.equals(other.title);
   }
@@ -107,6 +113,15 @@ public abstract class SADocument
   public final @Nonnull List<SAFootnote> getFootnotes()
   {
     return Collections.unmodifiableList(this.footnotes);
+  }
+
+  /**
+   * @return The formal items by kind
+   */
+
+  public final @Nonnull SAFormalItemsByKindReadable getFormals()
+  {
+    return this.formals;
   }
 
   /**
@@ -141,6 +156,9 @@ public abstract class SADocument
     final int prime = 31;
     int result = 1;
     result = (prime * result) + this.contents.hashCode();
+    result = (prime * result) + this.footnotes.hashCode();
+    result = (prime * result) + this.formals.hashCode();
+    result = (prime * result) + this.ids.hashCode();
     result = (prime * result) + this.style.hashCode();
     result = (prime * result) + this.title.hashCode();
     return result;

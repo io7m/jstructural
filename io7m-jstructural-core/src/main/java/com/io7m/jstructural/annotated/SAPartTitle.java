@@ -77,6 +77,15 @@ import com.io7m.jaux.Constraints.ConstraintError;
     return this.actual;
   }
 
+  /**
+   * @return The part number
+   */
+
+  public int getNumber()
+  {
+    return this.number;
+  }
+
   @Override public int hashCode()
   {
     return this.actual.hashCode() + this.number;

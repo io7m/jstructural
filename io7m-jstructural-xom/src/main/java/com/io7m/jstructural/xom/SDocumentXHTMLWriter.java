@@ -14,9 +14,37 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural;
+package com.io7m.jstructural.xom;
 
-public final class SVersion
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import nu.xom.Document;
+
+import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jstructural.annotated.SADocument;
+
+/**
+ * The interface supported by document writers.
+ */
+
+public interface SDocumentXHTMLWriter
 {
-  // Empty placeholder for locating resources.
+  /**
+   * Transform the given document into at least one XHTML file.
+   * 
+   * @param callbacks
+   *          A set of callbacks for document customisation
+   * @param doc
+   *          The document
+   * @return A list of XHTML files
+   * @throws ConstraintError
+   *           If any parameter is <code>null</code>
+   */
+
+  List<Document> writeDocuments(
+    final @Nonnull SDocumentXHTMLWriterCallbacks callbacks,
+    final @Nonnull SADocument doc)
+    throws ConstraintError;
 }

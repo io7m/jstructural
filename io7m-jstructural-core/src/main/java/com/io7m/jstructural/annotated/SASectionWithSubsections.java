@@ -31,14 +31,6 @@ import com.io7m.jstructural.core.SSectionContents;
 
 @Immutable public final class SASectionWithSubsections extends SASection
 {
-  @Override public <T> T targetContentAccept(
-    final @Nonnull SAIDTargetContentVisitor<T> v)
-    throws ConstraintError,
-      Exception
-  {
-    return v.visitSection(this);
-  }
-
   private final @Nonnull SNonEmptyList<SASubsection> subsections;
 
   /**
@@ -113,5 +105,13 @@ import com.io7m.jstructural.core.SSectionContents;
       Exception
   {
     return v.visitSectionWithSubsections(this);
+  }
+
+  @Override public <T> T targetContentAccept(
+    final @Nonnull SAIDTargetContentVisitor<T> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitSection(this);
   }
 }

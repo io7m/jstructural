@@ -23,6 +23,8 @@ import javax.annotation.Nonnull;
 
 import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jlog.Level;
+import com.io7m.jlog.Log;
 
 /**
  * Mappings from IDs to content.
@@ -31,13 +33,19 @@ import com.io7m.jaux.Constraints.ConstraintError;
 public final class SAIDMap implements SAIDMapWritable, SAIDMapReadable
 {
   private final @Nonnull Map<SAID, SAIDTargetContent> map;
+  private final @Nonnull Log                          log;
 
   /**
    * Construct a new empty map.
+   * 
+   * @param in_log
+   *          The log handle
    */
 
-  public SAIDMap()
+  public SAIDMap(
+    final @Nonnull Log in_log)
   {
+    this.log = new Log(in_log, "id-map");
     this.map = new HashMap<SAID, SAIDTargetContent>();
   }
 
@@ -58,6 +66,14 @@ public final class SAIDMap implements SAIDMapWritable, SAIDMapReadable
     Constraints.constrainArbitrary(
       this.map.containsKey(id) == false,
       "ID not already used");
+
+    if (this.log.enabled(Level.LOG_DEBUG)) {
+      final StringBuilder b = new StringBuilder();
+      b.append("new: ");
+      b.append(id.getActual());
+      this.log.debug(b.toString());
+    }
+
     this.map.put(id, c);
   }
 

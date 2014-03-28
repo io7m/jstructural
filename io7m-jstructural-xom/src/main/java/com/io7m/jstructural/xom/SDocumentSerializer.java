@@ -28,7 +28,6 @@ import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jaux.functional.Unit;
-import com.io7m.jstructural.SXML;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentContents;
 import com.io7m.jstructural.core.SDocumentStyle;
@@ -83,6 +82,7 @@ import com.io7m.jstructural.core.STableSummary;
 import com.io7m.jstructural.core.STerm;
 import com.io7m.jstructural.core.SText;
 import com.io7m.jstructural.core.SVerbatim;
+import com.io7m.jstructural.core.SXML;
 
 /**
  * Serialization functions that use XOM to serialize document elements to XML.
@@ -1014,6 +1014,14 @@ public final class SDocumentSerializer
             Exception
         {
           return SDocumentSerializer.listUnordered(list);
+        }
+
+        @Override public Node visitTable(
+          final @Nonnull STable table)
+          throws ConstraintError,
+            Exception
+        {
+          return SDocumentSerializer.table(table);
         }
 
         @Override public Node visitTerm(

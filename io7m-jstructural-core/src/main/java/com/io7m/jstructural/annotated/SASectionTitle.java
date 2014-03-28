@@ -77,6 +77,15 @@ import com.io7m.jaux.Constraints.ConstraintError;
     return this.actual;
   }
 
+  /**
+   * @return The number
+   */
+
+  public @Nonnull SASectionNumber getNumber()
+  {
+    return this.number;
+  }
+
   @Override public int hashCode()
   {
     final int prime = 31;

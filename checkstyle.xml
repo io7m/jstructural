@@ -26,10 +26,10 @@
     <module name="AvoidStaticImport"/>
     <module name="BooleanExpressionComplexity"/>
     <module name="ClassDataAbstractionCoupling">
-      <property name="max" value="50"/>
+      <property name="max" value="60"/>
     </module>
     <module name="ClassFanOutComplexity">
-      <property name="max" value="100"/>
+      <property name="max" value="150"/>
     </module>
     <module name="ClassTypeParameterName"/>
     <module name="ConstantName"/>
@@ -82,7 +82,9 @@
     <!-- <module name="InnerTypeLast"/> -->
     <module name="InterfaceIsType"/>
     <module name="JUnitTestCase"/>
-    <module name="JavaNCSS"/>
+    <module name="JavaNCSS">
+      <property name="methodMaximum" value="100"/>
+    </module>
     <module name="JavadocMethod">
       <property name="scope" value="public"/>
     </module>
@@ -171,7 +173,7 @@
       <property name="format" value="^[A-Z][a-zA-Z0-9_]*$"/>
     </module>
     <module name="TypecastParenPad"/>
-    <module name="UncommentedMain"/>
+    <!-- <module name="UncommentedMain"/> -->
     <module name="UnusedImports"/>
     <module name="UpperEll"/>
     <module name="VisibilityModifier"/>

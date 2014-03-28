@@ -14,5 +14,24 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural;
+package com.io7m.jstructural.documentation;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import javax.annotation.Nonnull;
+
+import com.io7m.jaux.UnreachableCodeException;
+
+public final class SDocumentation
+{
+  public static @Nonnull URI getDocumentationXMLLocation()
+  {
+    try {
+      return SDocumentation.class.getResource(
+        "/com/io7m/jstructural/documentation/documentation.xml").toURI();
+    } catch (final URISyntaxException e) {
+      throw new UnreachableCodeException(e);
+    }
+  }
+}

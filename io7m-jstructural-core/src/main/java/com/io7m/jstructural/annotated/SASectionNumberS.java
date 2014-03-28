@@ -47,32 +47,6 @@ public final class SASectionNumberS extends SASectionNumber
       Constraints.constrainRange(in_section, 1, Integer.MAX_VALUE, "Section");
   }
 
-  /**
-   * @return The section number
-   */
-
-  public int getSection()
-  {
-    return this.section;
-  }
-
-  @Override public String toString()
-  {
-    final StringBuilder builder = new StringBuilder();
-    builder.append("[SASectionNumberWithoutPart section=");
-    builder.append(this.section);
-    builder.append("]");
-    return builder.toString();
-  }
-
-  @Override public int hashCode()
-  {
-    final int prime = 31;
-    int result = 1;
-    result = (prime * result) + this.section;
-    return result;
-  }
-
   @Override public boolean equals(
     final Object obj)
   {
@@ -92,11 +66,42 @@ public final class SASectionNumberS extends SASectionNumber
     return true;
   }
 
-  @Override <T> T sectionNumberAccept(
+  /**
+   * @return The section number
+   */
+
+  public int getSection()
+  {
+    return this.section;
+  }
+
+  @Override public int hashCode()
+  {
+    final int prime = 31;
+    int result = 1;
+    result = (prime * result) + this.section;
+    return result;
+  }
+
+  @Override public <T> T sectionNumberAccept(
     final @Nonnull SASectionNumberVisitor<T> v)
     throws ConstraintError,
       Exception
   {
     return v.visitSectionNumberWithoutPart(this);
+  }
+
+  @SuppressWarnings("boxing") @Override public String sectionNumberFormat()
+  {
+    return String.format("%d", this.section);
+  }
+
+  @Override public String toString()
+  {
+    final StringBuilder builder = new StringBuilder();
+    builder.append("[SASectionNumberWithoutPart section=");
+    builder.append(this.section);
+    builder.append("]");
+    return builder.toString();
   }
 }

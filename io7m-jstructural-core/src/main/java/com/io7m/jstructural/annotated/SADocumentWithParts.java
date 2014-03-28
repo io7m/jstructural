@@ -50,6 +50,8 @@ public final class SADocumentWithParts extends SADocument
    *          The list of parts
    * @param in_footnotes
    *          The list of footnotes
+   * @param in_formals
+   *          The formal items
    * @throws ConstraintError
    *           If any parameter is <code>null</code>
    */
@@ -60,10 +62,11 @@ public final class SADocumentWithParts extends SADocument
     final @Nonnull Option<SDocumentContents> in_contents,
     final @Nonnull Option<SDocumentStyle> in_style,
     final @Nonnull SNonEmptyList<SAPart> in_content,
-    final @Nonnull List<SAFootnote> in_footnotes)
+    final @Nonnull List<SAFootnote> in_footnotes,
+    final @Nonnull SAFormalItemsByKind in_formals)
     throws ConstraintError
   {
-    super(in_ids, in_title, in_contents, in_style, in_footnotes);
+    super(in_ids, in_title, in_contents, in_style, in_footnotes, in_formals);
     this.parts = Constraints.constrainNotNull(in_content, "Parts");
   }
 

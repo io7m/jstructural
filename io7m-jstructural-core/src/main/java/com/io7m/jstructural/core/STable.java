@@ -26,7 +26,7 @@ import com.io7m.jaux.functional.Option;
  * A table.
  */
 
-public final class STable implements SFormalItemContent
+public final class STable implements SFormalItemContent, SParagraphContent
 {
   /**
    * Construct a new table with the given summary and body.
@@ -150,5 +150,13 @@ public final class STable implements SFormalItemContent
     result = (prime * result) + this.header.hashCode();
     result = (prime * result) + this.summary.hashCode();
     return result;
+  }
+
+  @Override public <A> A paragraphContentAccept(
+    final @Nonnull SParagraphContentVisitor<A> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitTable(this);
   }
 }

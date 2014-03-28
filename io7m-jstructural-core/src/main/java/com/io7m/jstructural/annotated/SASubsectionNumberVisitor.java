@@ -30,23 +30,6 @@ import com.io7m.jaux.Constraints.ConstraintError;
 public interface SASubsectionNumberVisitor<T>
 {
   /**
-   * Visit an SS subsection number.
-   * 
-   * @param p
-   *          The number
-   * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
-   * @throws Exception
-   *           If required
-   */
-
-  T visitSubsectionNumberSS(
-    final @Nonnull SASubsectionNumberSS p)
-    throws ConstraintError,
-      Exception;
-
-  /**
    * Visit a PSS subsection number.
    * 
    * @param p
@@ -60,6 +43,23 @@ public interface SASubsectionNumberVisitor<T>
 
   T visitSubsectionNumberPSS(
     final @Nonnull SASubsectionNumberPSS p)
+    throws ConstraintError,
+      Exception;
+
+  /**
+   * Visit an SS subsection number.
+   * 
+   * @param p
+   *          The number
+   * @return A value of type <code>T</code>
+   * @throws ConstraintError
+   *           If required
+   * @throws Exception
+   *           If required
+   */
+
+  T visitSubsectionNumberSS(
+    final @Nonnull SASubsectionNumberSS p)
     throws ConstraintError,
       Exception;
 }

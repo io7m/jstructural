@@ -71,6 +71,11 @@
       <version>[3.0.0, 4.0.0)</version>
     </dependency>
     <dependency>
+      <groupId>com.io7m.jlog</groupId>
+      <artifactId>io7m-jlog</artifactId>
+      <version>[2.4.0, 3.0.0)</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>

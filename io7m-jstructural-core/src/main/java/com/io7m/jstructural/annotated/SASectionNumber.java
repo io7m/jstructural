@@ -26,8 +26,29 @@ import com.io7m.jaux.Constraints.ConstraintError;
 
 public abstract class SASectionNumber
 {
-  abstract <T> T sectionNumberAccept(
+  /**
+   * Accept a section number visitor.
+   * 
+   * @param <T>
+   *          The type of values returned by the visitor
+   * @param v
+   *          The visitor
+   * @return The value returned by the visitor
+   * @throws ConstraintError
+   *           If the visitor raises {@link ConstraintError}
+   * @throws Exception
+   *           If the visitor raises an {@link Exception}
+   */
+
+  public abstract <T> T sectionNumberAccept(
     final @Nonnull SASectionNumberVisitor<T> v)
     throws ConstraintError,
       Exception;
+
+  /**
+   * @return A human-readable string representing the section number (such as
+   *         "1.2")
+   */
+
+  public abstract @Nonnull String sectionNumberFormat();
 }

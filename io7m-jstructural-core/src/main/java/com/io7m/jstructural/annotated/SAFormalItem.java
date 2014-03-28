@@ -30,17 +30,19 @@ import com.io7m.jaux.functional.Option;
 @Immutable public final class SAFormalItem implements SASubsectionContent
 {
   private final @Nonnull SAFormalItemContent content;
+  private final int                          formal_number;
   private final @Nonnull String              kind;
+  private final @Nonnull SAFormalItemNumber  number;
   private final @Nonnull SAFormalItemTitle   title;
   private final @Nonnull Option<String>      type;
-  private final @Nonnull SAParagraphNumber   number;
 
   SAFormalItem(
-    final @Nonnull SAParagraphNumber in_number,
+    final @Nonnull SAFormalItemNumber in_number,
     final @Nonnull SAFormalItemTitle in_title,
     final @Nonnull String in_kind,
     final @Nonnull Option<String> in_type,
-    final @Nonnull SAFormalItemContent in_content)
+    final @Nonnull SAFormalItemContent in_content,
+    final int in_formal_number)
     throws ConstraintError
   {
     this.number = Constraints.constrainNotNull(in_number, "Number");
@@ -48,6 +50,12 @@ import com.io7m.jaux.functional.Option;
     this.kind = Constraints.constrainNotNull(in_kind, "Kind");
     this.type = Constraints.constrainNotNull(in_type, "Type");
     this.content = Constraints.constrainNotNull(in_content, "Content");
+    this.formal_number =
+      Constraints.constrainRange(
+        in_formal_number,
+        1,
+        Integer.MAX_VALUE,
+        "Formals");
   }
 
   @Override public boolean equals(
@@ -67,7 +75,8 @@ import com.io7m.jaux.functional.Option;
       && this.number.equals(other.number)
       && this.kind.equals(other.kind)
       && this.title.equals(other.title)
-      && this.type.equals(other.type);
+      && this.type.equals(other.type)
+      && (this.formal_number == other.formal_number);
   }
 
   /**
@@ -80,6 +89,15 @@ import com.io7m.jaux.functional.Option;
   }
 
   /**
+   * @return The formal item number.
+   */
+
+  public int getFormalNumber()
+  {
+    return this.formal_number;
+  }
+
+  /**
    * @return The kind of formal item
    */
 
@@ -89,11 +107,10 @@ import com.io7m.jaux.functional.Option;
   }
 
   /**
-   * @return The formal item number (note that formal items share numbers with
-   *         paragraphs)
+   * @return The formal item number
    */
 
-  public @Nonnull SAParagraphNumber getNumber()
+  public @Nonnull SAFormalItemNumber getNumber()
   {
     return this.number;
   }
@@ -124,6 +141,7 @@ import com.io7m.jaux.functional.Option;
     result = (prime * result) + this.kind.hashCode();
     result = (prime * result) + this.title.hashCode();
     result = (prime * result) + this.type.hashCode();
+    result = (prime * result) + this.formal_number;
     return result;
   }
 
@@ -138,14 +156,18 @@ import com.io7m.jaux.functional.Option;
   @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();
-    builder.append("[SFormalItem content=");
+    builder.append("[SAFormalItem content=");
     builder.append(this.content);
     builder.append(" kind=");
     builder.append(this.kind);
+    builder.append(" number=");
+    builder.append(this.number);
     builder.append(" title=");
     builder.append(this.title);
     builder.append(" type=");
     builder.append(this.type);
+    builder.append(" formal_number=");
+    builder.append(this.formal_number);
     builder.append("]");
     return builder.toString();
   }

@@ -149,6 +149,23 @@ public interface SAParagraphContentVisitor<A>
       Exception;
 
   /**
+   * Visit a table element.
+   * 
+   * @param table
+   *          The table element
+   * @return A value of type <code>A</code>
+   * @throws ConstraintError
+   *           If required
+   * @throws Exception
+   *           If required
+   */
+
+  A visitTable(
+    final @Nonnull SATable table)
+    throws ConstraintError,
+      Exception;
+
+  /**
    * Visit a term element.
    * 
    * @param term

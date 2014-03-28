@@ -14,7 +14,7 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural;
+package com.io7m.jstructural.schema;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,27 +24,39 @@ import javax.annotation.Nonnull;
 import com.io7m.jaux.UnreachableCodeException;
 
 /**
- * XML schema details.
+ * Functions involving the XML schema files.
  */
 
-public final class SXML
+public final class SSchema
 {
-  /**
-   * The XML URI for structural documents.
-   */
-
-  public static final @Nonnull URI XML_URI;
-
-  static {
+  public static @Nonnull URI getSchemaRNGLocation()
+  {
     try {
-      XML_URI = new URI("http://www.io7m.com/schemas/structural/2.0.0");
+      return SSchema.class.getResource(
+        "/com/io7m/jstructural/schema/schema.rng").toURI();
     } catch (final URISyntaxException e) {
       throw new UnreachableCodeException(e);
     }
   }
 
-  private SXML()
+  public static @Nonnull URI getSchemaXMLXSDLocation()
   {
-    throw new UnreachableCodeException();
+    try {
+      return SSchema.class
+        .getResource("/com/io7m/jstructural/schema/xml.xsd")
+        .toURI();
+    } catch (final URISyntaxException e) {
+      throw new UnreachableCodeException(e);
+    }
+  }
+
+  public static @Nonnull URI getSchemaXSDLocation()
+  {
+    try {
+      return SSchema.class.getResource(
+        "/com/io7m/jstructural/schema/schema.xsd").toURI();
+    } catch (final URISyntaxException e) {
+      throw new UnreachableCodeException(e);
+    }
   }
 }

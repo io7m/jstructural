@@ -26,7 +26,7 @@ import com.io7m.jaux.functional.Option;
  * A table.
  */
 
-public final class SATable implements SAFormalItemContent
+public final class SATable implements SAFormalItemContent, SAParagraphContent
 {
   private final @Nonnull SATableBody         body;
   private final @Nonnull Option<SATableHead> header;
@@ -104,5 +104,13 @@ public final class SATable implements SAFormalItemContent
     result = (prime * result) + this.header.hashCode();
     result = (prime * result) + this.summary.hashCode();
     return result;
+  }
+
+  @Override public <A> A paragraphContentAccept(
+    final @Nonnull SAParagraphContentVisitor<A> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitTable(this);
   }
 }
