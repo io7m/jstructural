@@ -207,12 +207,14 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
   or [options] --xhtml-multi  file outdir
   or [options] --version
 
-     --check           Parse and validate all source files, but do not produce output
-     --debug           Enable debugging (debug messages, exception backtraces)
-  -h,--help            Show this help message
-     --version         Display version
-     --xhtml-multi     Produce multiple XHTML files as output
-     --xhtml-single    Produce a single XHTML file as output]]></s:verbatim>
+     --check                      Parse and validate all source files, but do not produce output
+     --debug                      Enable debugging (debug messages, exception backtraces)
+  -h,--help                       Show this help message
+     --version                    Display version
+     --xhtml-body-end <file>      Insert the given file into the resulting XHTML at the end of the document's body
+     --xhtml-body-start <file>    Insert the given file into the resulting XHTML at the start of the document's body
+     --xhtml-multi                Produce multiple XHTML files as output
+     --xhtml-single               Produce a single XHTML file as output]]></s:verbatim>
       </s:paragraph>
       <s:paragraph>
         When the <s:term s:type="command">--check</s:term> argument is specified,
@@ -245,6 +247,20 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
         <s:term s:type="file">outdir/jstructural-2.0.0-colour.css</s:term> are
         created iff they do not already exist. These files contain CSS controlling
         the visual presentation of the XHTML.
+      </s:paragraph>
+      <s:paragraph>
+        The <s:term s:type="command">--xhtml-body-start</s:term> option causes
+        the contents of the given XML file to be inserted as the first child of the
+        resulting XHTML <s:term s:type="element">body</s:term> element on each page.
+        It is the user's responsibility to ensure that the resulting document is
+        valid XHTML 1.0 Strict.
+      </s:paragraph>
+      <s:paragraph>
+        The <s:term s:type="command">--xhtml-body-end</s:term> option causes
+        the contents of the given XML file to be inserted as the last child of the
+        resulting XHTML <s:term s:type="element">body</s:term> element on each page.
+        It is the user's responsibility to ensure that the resulting document is
+        valid XHTML 1.0 Strict.
       </s:paragraph>
     </s:subsection>
     <s:subsection>

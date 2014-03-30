@@ -31,8 +31,10 @@ import java.util.Properties;
 import java.util.SortedMap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 import javax.xml.parsers.ParserConfigurationException;
 
+import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ParsingException;
@@ -54,6 +56,7 @@ import org.apache.commons.cli.PosixParser;
 import org.xml.sax.SAXException;
 
 import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jaux.functional.Option.Some;
 import com.io7m.jlog.Log;
 import com.io7m.jstructural.annotated.SADocument;
 import com.io7m.jstructural.annotated.SAnnotator;
@@ -70,10 +73,75 @@ import com.io7m.jstructural.xom.SDocumentXHTMLWriterSingle;
 
 public final class JSCMain
 {
+  @Immutable private static final class XMLInserts
+  {
+    private final @Nonnull com.io7m.jaux.functional.Option<Element> body_end;
+    private final @Nonnull com.io7m.jaux.functional.Option<Element> body_start;
+
+    XMLInserts(
+      final @Nonnull com.io7m.jaux.functional.Option<Element> in_bs,
+      final @Nonnull com.io7m.jaux.functional.Option<Element> in_be)
+    {
+      this.body_start = in_bs;
+      this.body_end = in_be;
+    }
+
+    public @Nonnull com.io7m.jaux.functional.Option<Element> getBodyEnd()
+    {
+      return this.body_end;
+    }
+
+    public @Nonnull com.io7m.jaux.functional.Option<Element> getBodyStart()
+    {
+      return this.body_start;
+    }
+  }
+
+  private static final @Nonnull String  CMD_CHECK            = "check";
+  private static final @Nonnull String  CMD_XHTML_MULTI      = "xhtml-multi";
+  private static final @Nonnull String  CMD_XHTML_SINGLE     = "xhtml-single";
+  private static final @Nonnull String  OPT_DEBUG            = "debug";
+  private static final @Nonnull String  OPT_VERSION          = "version";
+  private static final @Nonnull String  OPT_XHTML_BODY_END   =
+                                                               "xhtml-body-end";
+  private static final @Nonnull String  OPT_XHTML_BODY_START =
+                                                               "xhtml-body-start";
+
   private static final @Nonnull Options OPTIONS;
 
   static {
     OPTIONS = JSCMain.makeOptions();
+  }
+
+  private static void copyFileStream(
+    final @Nonnull File file,
+    final @Nonnull InputStream in)
+    throws FileNotFoundException,
+      IOException
+  {
+    final FileOutputStream out = new FileOutputStream(file);
+    try {
+      JSCMain.copyStreams(in, out);
+    } finally {
+      out.close();
+    }
+  }
+
+  private static void copyStreams(
+    final @Nonnull InputStream input,
+    final @Nonnull OutputStream output)
+    throws IOException
+  {
+    final byte[] buffer = new byte[8192];
+
+    for (;;) {
+      final int r = input.read(buffer);
+      if (r == -1) {
+        output.flush();
+        return;
+      }
+      output.write(buffer, 0, r);
+    }
   }
 
   static @Nonnull Log getLog(
@@ -96,19 +164,26 @@ public final class JSCMain
     return pack;
   }
 
-  private static SDocumentXHTMLWriterCallbacks getXHTMLWriterCallbacks()
+  private static SDocumentXHTMLWriterCallbacks getXHTMLWriterCallbacks(
+    final @Nonnull XMLInserts inserts)
   {
     return new SDocumentXHTMLWriterCallbacks() {
       @Override public void onBodyEnd(
         final @Nonnull Element body)
       {
-        // Nothing
+        if (inserts.getBodyEnd().isSome()) {
+          final Some<Element> some = (Some<Element>) inserts.getBodyEnd();
+          body.appendChild(some.value.copy());
+        }
       }
 
       @Override public void onBodyStart(
         final @Nonnull Element body)
       {
-        // Nothing
+        if (inserts.getBodyStart().isSome()) {
+          final Some<Element> some = (Some<Element>) inserts.getBodyStart();
+          body.appendChild(some.value.copy());
+        }
       }
 
       @Override public void onHead(
@@ -149,7 +224,7 @@ public final class JSCMain
 
     {
       final OptionGroup og = new OptionGroup();
-      OptionBuilder.withLongOpt("check");
+      OptionBuilder.withLongOpt(JSCMain.CMD_CHECK);
       OptionBuilder
         .withDescription("Parse and validate all source files, but do not produce output");
       og.addOption(OptionBuilder.create());
@@ -158,7 +233,7 @@ public final class JSCMain
 
     {
       final OptionGroup og = new OptionGroup();
-      OptionBuilder.withLongOpt("xhtml-single");
+      OptionBuilder.withLongOpt(JSCMain.CMD_XHTML_SINGLE);
       OptionBuilder.withDescription("Produce a single XHTML file as output");
       og.addOption(OptionBuilder.create());
       opts.addOptionGroup(og);
@@ -166,7 +241,7 @@ public final class JSCMain
 
     {
       final OptionGroup og = new OptionGroup();
-      OptionBuilder.withLongOpt("xhtml-multi");
+      OptionBuilder.withLongOpt(JSCMain.CMD_XHTML_MULTI);
       OptionBuilder.withDescription("Produce multiple XHTML files as output");
       og.addOption(OptionBuilder.create());
       opts.addOptionGroup(og);
@@ -174,16 +249,34 @@ public final class JSCMain
 
     {
       final OptionGroup og = new OptionGroup();
-      OptionBuilder.withLongOpt("version");
+      OptionBuilder.withLongOpt(JSCMain.OPT_VERSION);
       OptionBuilder.withDescription("Display version");
       og.addOption(OptionBuilder.create());
       opts.addOptionGroup(og);
     }
 
     {
-      OptionBuilder.withLongOpt("debug");
+      OptionBuilder.withLongOpt(JSCMain.OPT_DEBUG);
       OptionBuilder
         .withDescription("Enable debugging (debug messages, exception backtraces)");
+      opts.addOption(OptionBuilder.create());
+    }
+
+    {
+      OptionBuilder.withLongOpt(JSCMain.OPT_XHTML_BODY_START);
+      OptionBuilder.hasArg();
+      OptionBuilder.withArgName("file");
+      OptionBuilder
+        .withDescription("Insert the given file into the resulting XHTML at the start of the document's body");
+      opts.addOption(OptionBuilder.create());
+    }
+
+    {
+      OptionBuilder.withLongOpt(JSCMain.OPT_XHTML_BODY_END);
+      OptionBuilder.hasArg();
+      OptionBuilder.withArgName("file");
+      OptionBuilder
+        .withDescription("Insert the given file into the resulting XHTML at the end of the document's body");
       opts.addOption(OptionBuilder.create());
     }
 
@@ -249,23 +342,6 @@ public final class JSCMain
     }
   }
 
-  private static void copyStreams(
-    final @Nonnull InputStream input,
-    final @Nonnull OutputStream output)
-    throws IOException
-  {
-    final byte[] buffer = new byte[8192];
-
-    for (;;) {
-      final int r = input.read(buffer);
-      if (r == -1) {
-        output.flush();
-        return;
-      }
-      output.write(buffer, 0, r);
-    }
-  }
-
   private static void runActual(
     final @Nonnull Log log,
     final @Nonnull String[] args)
@@ -292,24 +368,55 @@ public final class JSCMain
     final PosixParser parser = new PosixParser();
     final CommandLine line = parser.parse(JSCMain.OPTIONS, args);
 
-    if (line.hasOption("debug")) {
+    if (line.hasOption(JSCMain.OPT_DEBUG)) {
       logx = JSCMain.getLog(true);
     }
-    if (line.hasOption("xhtml-single")) {
+    if (line.hasOption(JSCMain.CMD_XHTML_SINGLE)) {
       JSCMain.runCommandCompileXHTMLSingle(logx, line);
       return;
-    } else if (line.hasOption("xhtml-multi")) {
+    } else if (line.hasOption(JSCMain.CMD_XHTML_MULTI)) {
       JSCMain.runCommandCompileXHTMLMulti(logx, line);
       return;
-    } else if (line.hasOption("check")) {
+    } else if (line.hasOption(JSCMain.CMD_CHECK)) {
       JSCMain.runCommandCheck(logx, line);
       return;
-    } else if (line.hasOption("version")) {
+    } else if (line.hasOption(JSCMain.OPT_VERSION)) {
       JSCMain.runShowVersion(logx, line);
       return;
     } else {
       JSCMain.showHelp();
     }
+  }
+
+  private static @Nonnull XMLInserts loadXMLInserts(
+    final @Nonnull CommandLine line)
+    throws ValidityException,
+      ParsingException,
+      IOException
+  {
+    final com.io7m.jaux.functional.Option<Element> start;
+    if (line.hasOption(JSCMain.OPT_XHTML_BODY_START)) {
+      final File file =
+        new File(line.getOptionValue(JSCMain.OPT_XHTML_BODY_START));
+      final Builder b = new Builder();
+      final Document d = b.build(file);
+      start = com.io7m.jaux.functional.Option.some(d.getRootElement());
+    } else {
+      start = com.io7m.jaux.functional.Option.none();
+    }
+
+    final com.io7m.jaux.functional.Option<Element> end;
+    if (line.hasOption(JSCMain.OPT_XHTML_BODY_END)) {
+      final File file =
+        new File(line.getOptionValue(JSCMain.OPT_XHTML_BODY_END));
+      final Builder b = new Builder();
+      final Document d = b.build(file);
+      end = com.io7m.jaux.functional.Option.some(d.getRootElement());
+    } else {
+      end = com.io7m.jaux.functional.Option.none();
+    }
+
+    return new XMLInserts(start, end);
   }
 
   private static @Nonnull SADocument runCommandCheck(
@@ -369,13 +476,13 @@ public final class JSCMain
       throw new ParseException("Too few arguments");
     }
 
+    final XMLInserts inserts = JSCMain.loadXMLInserts(line);
     final File outdir = new File(args[1]);
-
     final SADocument doc = JSCMain.runCommandCheck(logx, line);
     final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
 
     final SortedMap<String, Document> results =
-      writer.writeDocuments(JSCMain.getXHTMLWriterCallbacks(), doc);
+      writer.writeDocuments(JSCMain.getXHTMLWriterCallbacks(inserts), doc);
 
     for (final String name : results.keySet()) {
       final File outfile = new File(outdir, name);
@@ -406,6 +513,7 @@ public final class JSCMain
       throw new ParseException("Too few arguments");
     }
 
+    final XMLInserts inserts = JSCMain.loadXMLInserts(line);
     final File outdir = new File(args[1]);
     final File outfile = new File(outdir, "index.xhtml");
 
@@ -414,7 +522,7 @@ public final class JSCMain
       new SDocumentXHTMLWriterSingle();
 
     final SortedMap<String, Document> results =
-      writer.writeDocuments(JSCMain.getXHTMLWriterCallbacks(), doc);
+      writer.writeDocuments(JSCMain.getXHTMLWriterCallbacks(inserts), doc);
 
     JSCMain.writeFile(logx, outfile, results.get(results.firstKey()));
     JSCMain.writeCSS(logx, outdir);
@@ -474,20 +582,6 @@ public final class JSCMain
       } finally {
         in.close();
       }
-    }
-  }
-
-  private static void copyFileStream(
-    final @Nonnull File file,
-    final @Nonnull InputStream in)
-    throws FileNotFoundException,
-      IOException
-  {
-    final FileOutputStream out = new FileOutputStream(file);
-    try {
-      JSCMain.copyStreams(in, out);
-    } finally {
-      out.close();
     }
   }
 
