@@ -580,7 +580,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
         The <s:term s:type="element">formal-item</s:term>
         element provides a means to mark certain other
         elements as significant.  <s:term s:type="element">formal-item</s:term>
-        elements are numbered relative to the start of the document and
+        elements are numbered relative to the containing 
+        <s:link s:target="elem_section">section</s:link> or
+        <s:link s:target="elem_subsection">subsection</s:link> and
         rendered with the given
         <s:link s:target="elem_formal-item-title">formal-item-title</s:link>.
       </s:paragraph>
@@ -654,10 +656,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
         element renders a list of all
         <s:link s:target="elem_formal-item">formal-item</s:link>
         elements of the kind specified by the
-        <s:term s:type="attribute">kind</s:term> attribute. The
-        list will be titled with the contents of the
-        <s:term s:type="attribute">kind</s:term> attribute prefixed
-        with the string "List of".
+        <s:term s:type="attribute">kind</s:term> attribute.
       </s:paragraph>
     </s:subsection>
     <s:subsection>

@@ -478,7 +478,10 @@ public final class SXHTML
     final String[] classes = new String[1];
     classes[0] = "formal_item_list";
     final Element e =
-      SXHTML.elementWithClasses("ul", SXHTML.NO_TYPE, classes);
+      SXHTML.elementWithClasses("div", SXHTML.NO_TYPE, classes);
+
+    final Element eul = new Element("ul", SXHTML.XHTML_URI.toString());
+    e.appendChild(eul);
 
     final SortedMap<SAFormalItemNumber, SAFormalItem> f =
       formals.get(list.getKind());
@@ -501,7 +504,7 @@ public final class SXHTML
       elink.appendChild(title.toString());
 
       el.appendChild(elink);
-      e.appendChild(el);
+      eul.appendChild(el);
     }
 
     return e;
