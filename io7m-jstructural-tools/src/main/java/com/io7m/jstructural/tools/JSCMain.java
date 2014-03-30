@@ -144,7 +144,25 @@ public final class JSCMain
     }
   }
 
-  static @Nonnull Log getLog(
+  private static void createOutdir(
+    final @Nonnull File outdir)
+    throws IOException
+  {
+    final boolean created = outdir.mkdirs();
+    if (created == false) {
+      if (outdir.isDirectory() == false) {
+        throw new IOException("Could not create " + outdir);
+      }
+    }
+  }
+
+  /**
+   * @param debug
+   *          If debugging and stack traces should be enabled
+   * @return The log handle used by the compiler
+   */
+
+  public static @Nonnull Log getLog(
     final boolean debug)
   {
     final Properties p = new Properties();
@@ -192,6 +210,37 @@ public final class JSCMain
         // Nothing
       }
     };
+  }
+
+  private static @Nonnull XMLInserts loadXMLInserts(
+    final @Nonnull CommandLine line)
+    throws ValidityException,
+      ParsingException,
+      IOException
+  {
+    final com.io7m.jaux.functional.Option<Element> start;
+    if (line.hasOption(JSCMain.OPT_XHTML_BODY_START)) {
+      final File file =
+        new File(line.getOptionValue(JSCMain.OPT_XHTML_BODY_START));
+      final Builder b = new Builder();
+      final Document d = b.build(file);
+      start = com.io7m.jaux.functional.Option.some(d.getRootElement());
+    } else {
+      start = com.io7m.jaux.functional.Option.none();
+    }
+
+    final com.io7m.jaux.functional.Option<Element> end;
+    if (line.hasOption(JSCMain.OPT_XHTML_BODY_END)) {
+      final File file =
+        new File(line.getOptionValue(JSCMain.OPT_XHTML_BODY_END));
+      final Builder b = new Builder();
+      final Document d = b.build(file);
+      end = com.io7m.jaux.functional.Option.some(d.getRootElement());
+    } else {
+      end = com.io7m.jaux.functional.Option.none();
+    }
+
+    return new XMLInserts(start, end);
   }
 
   /**
@@ -388,37 +437,6 @@ public final class JSCMain
     }
   }
 
-  private static @Nonnull XMLInserts loadXMLInserts(
-    final @Nonnull CommandLine line)
-    throws ValidityException,
-      ParsingException,
-      IOException
-  {
-    final com.io7m.jaux.functional.Option<Element> start;
-    if (line.hasOption(JSCMain.OPT_XHTML_BODY_START)) {
-      final File file =
-        new File(line.getOptionValue(JSCMain.OPT_XHTML_BODY_START));
-      final Builder b = new Builder();
-      final Document d = b.build(file);
-      start = com.io7m.jaux.functional.Option.some(d.getRootElement());
-    } else {
-      start = com.io7m.jaux.functional.Option.none();
-    }
-
-    final com.io7m.jaux.functional.Option<Element> end;
-    if (line.hasOption(JSCMain.OPT_XHTML_BODY_END)) {
-      final File file =
-        new File(line.getOptionValue(JSCMain.OPT_XHTML_BODY_END));
-      final Builder b = new Builder();
-      final Document d = b.build(file);
-      end = com.io7m.jaux.functional.Option.some(d.getRootElement());
-    } else {
-      end = com.io7m.jaux.functional.Option.none();
-    }
-
-    return new XMLInserts(start, end);
-  }
-
   private static @Nonnull SADocument runCommandCheck(
     final @Nonnull Log logx,
     final @Nonnull CommandLine line)
@@ -484,6 +502,8 @@ public final class JSCMain
     final SortedMap<String, Document> results =
       writer.writeDocuments(JSCMain.getXHTMLWriterCallbacks(inserts), doc);
 
+    JSCMain.createOutdir(outdir);
+
     for (final String name : results.keySet()) {
       final File outfile = new File(outdir, name);
       JSCMain.writeFile(logx, outfile, results.get(name));
@@ -523,6 +543,8 @@ public final class JSCMain
 
     final SortedMap<String, Document> results =
       writer.writeDocuments(JSCMain.getXHTMLWriterCallbacks(inserts), doc);
+
+    JSCMain.createOutdir(outdir);
 
     JSCMain.writeFile(logx, outfile, results.get(results.firstKey()));
     JSCMain.writeCSS(logx, outdir);

@@ -228,7 +228,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
         When the <s:term s:type="command">--xhtml-single</s:term> argument is specified,
         the given <s:term s:type="file">file</s:term> is validated exactly as with 
         <s:term s:type="command">--check</s:term>, and then a single XHTML 1.0 Strict
-        document is written to <s:term s:type="file">outdir/index.xhtml</s:term>.
+        document is written to <s:term s:type="file">outdir/index.xhtml</s:term>. The
+        <s:term s:type="file">outdir</s:term> directory is created iff it does not
+        already exist.
       </s:paragraph>
       <s:paragraph>
         When the <s:term s:type="command">--xhtml-multi</s:term> argument is specified,
@@ -238,7 +240,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
         which represents the front page of the document, and a series of files are
         written to <s:term s:type="file">outdir/*.xhtml</s:term>, representing the
         <s:link s:target="elem_part">parts</s:link> and
-        <s:link s:target="elem_section">sections</s:link> of the document.
+        <s:link s:target="elem_section">sections</s:link> of the document. The
+        <s:term s:type="file">outdir</s:term> directory is created iff it does not
+        already exist.
       </s:paragraph>
       <s:paragraph>
         When either <s:term s:type="command">--xhtml-multi</s:term> or

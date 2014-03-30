@@ -82,6 +82,7 @@ import com.io7m.jstructural.annotated.SAText;
 import com.io7m.jstructural.annotated.SAVerbatim;
 import com.io7m.jstructural.core.SDocumentStyle;
 import com.io7m.jstructural.core.SNonEmptyList;
+import com.io7m.jstructural.core.SResources;
 
 /**
  * XHTML utility functions.
@@ -541,8 +542,8 @@ public final class SXHTML
     final Element e_title = new Element("title", SXHTML.XHTML_URI.toString());
     e_title.appendChild(title);
     e.appendChild(e_title);
-    e.appendChild(SXHTML.stylesheetLink("jstructural-2_0_0-layout.css"));
-    e.appendChild(SXHTML.stylesheetLink("jstructural-2_0_0-colour.css"));
+    e.appendChild(SXHTML.stylesheetLink(SResources.CSS_LAYOUT_NAME));
+    e.appendChild(SXHTML.stylesheetLink(SResources.CSS_COLOUR_NAME));
 
     style.map(new Function<SDocumentStyle, Unit>() {
       @Override public Unit call(

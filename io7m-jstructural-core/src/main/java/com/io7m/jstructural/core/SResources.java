@@ -30,6 +30,20 @@ import com.io7m.jaux.UnreachableCodeException;
 public final class SResources
 {
   /**
+   * The CSS colour file name.
+   */
+
+  public static final @Nonnull String CSS_COLOUR_NAME =
+                                                        "jstructural-2.0.0-colour.css";
+
+  /**
+   * The CSS layout file name.
+   */
+
+  public static final @Nonnull String CSS_LAYOUT_NAME =
+                                                        "jstructural-2.0.0-layout.css";
+
+  /**
    * @return The CSS colour file
    */
 
@@ -37,7 +51,7 @@ public final class SResources
   {
     try {
       return SResources.class.getResource(
-        "/com/io7m/jstructural/jstructural-2_0_0-colour.css").toURI();
+        "/com/io7m/jstructural/" + SResources.CSS_COLOUR_NAME).toURI();
     } catch (final URISyntaxException e) {
       throw new UnreachableCodeException(e);
     }
@@ -51,7 +65,7 @@ public final class SResources
   {
     try {
       return SResources.class.getResource(
-        "/com/io7m/jstructural/jstructural-2_0_0-layout.css").toURI();
+        "/com/io7m/jstructural/" + SResources.CSS_LAYOUT_NAME).toURI();
     } catch (final URISyntaxException e) {
       throw new UnreachableCodeException(e);
     }

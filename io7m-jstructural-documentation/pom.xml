@@ -78,6 +78,11 @@
       <artifactId>jsr305</artifactId>
       <version>2.0.3</version>
     </dependency>
+    <dependency>
+      <groupId>com.io7m.jstructural.tools</groupId>
+      <artifactId>io7m-jstructural-tools</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
   <reporting>
@@ -126,12 +131,99 @@
         <artifactId>maven-install-plugin</artifactId>
         <version>2.4</version>
       </plugin>
+
+      <!-- Copy documentation resources into build directory -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-documentation-resources</id>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/resources/com/io7m/jstructural/documentation/</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
-      
+
+      <!-- Produce documentation -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.2.1</version>
+        <executions>
+          <execution>
+            <id>make-documentation-single</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <mainClass>com.io7m.jstructural.documentation.MakeDocumentation</mainClass>
+              <arguments>
+                <argument>--xhtml-single</argument>
+                <argument>${project.build.directory}/documentation/documentation.xml</argument>
+                <argument>${project.build.directory}/documentation/</argument>
+                <argument>--xhtml-body-start</argument>
+                <argument>${project.build.directory}/documentation/brand.xml</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>make-documentation-multi</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <mainClass>com.io7m.jstructural.documentation.MakeDocumentation</mainClass>
+              <arguments>
+                <argument>--xhtml-multi</argument>
+                <argument>${project.build.directory}/documentation/documentation.xml</argument>
+                <argument>${project.build.directory}/documentation/</argument>
+                <argument>--xhtml-body-start</argument>
+                <argument>${project.build.directory}/documentation/brand.xml</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Produce documentation archive -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/documentation.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <appendAssemblyId>false</appendAssemblyId>
+              <finalName>io7m-jstructural-${project.version}-documentation</finalName>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <!-- Produce jar files -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
