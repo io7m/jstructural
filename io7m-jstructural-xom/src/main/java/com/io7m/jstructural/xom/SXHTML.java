@@ -352,12 +352,11 @@ public final class SXHTML
   static void footnotes(
     final @Nonnull SLinkProvider link_provider,
     final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SADocument doc,
+    final @Nonnull List<SAFootnote> footnotes,
     final @Nonnull Element body)
     throws ConstraintError,
       Exception
   {
-    final List<SAFootnote> footnotes = doc.getFootnotes();
     if (footnotes.size() > 0) {
       final String[] classes = new String[1];
       classes[0] = "footnotes";

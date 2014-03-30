@@ -668,11 +668,18 @@ import com.io7m.jstructural.core.SSectionContents;
       }
     });
 
+    SXHTML.footnotes(
+      link_provider,
+      document.getFormals(),
+      s.getFootnotes(),
+      body);
+
     body.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
       link_provider,
       document,
       some,
       false));
+
     callbacks.onBodyEnd(body);
 
     final String name = SXHTMLAnchors.getSectionFile(number);

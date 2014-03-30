@@ -16,6 +16,8 @@
 
 package com.io7m.jstructural.annotated;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -48,6 +50,8 @@ import com.io7m.jstructural.core.SSectionContents;
    *          The section table of contents
    * @param in_subsections
    *          The subsections
+   * @param in_footnotes
+   *          The footnotes
    * @throws ConstraintError
    *           If any parameter is <code>null</code>
    */
@@ -58,10 +62,11 @@ import com.io7m.jstructural.core.SSectionContents;
     final @Nonnull Option<SAID> in_id,
     final @Nonnull SASectionTitle in_title,
     final @Nonnull Option<SSectionContents> in_contents,
-    final @Nonnull SNonEmptyList<SASubsection> in_subsections)
+    final @Nonnull SNonEmptyList<SASubsection> in_subsections,
+    final @Nonnull List<SAFootnote> in_footnotes)
     throws ConstraintError
   {
-    super(in_number, in_type, in_id, in_title, in_contents);
+    super(in_number, in_type, in_id, in_title, in_contents, in_footnotes);
     this.subsections =
       Constraints.constrainNotNull(in_subsections, "Subsections");
   }

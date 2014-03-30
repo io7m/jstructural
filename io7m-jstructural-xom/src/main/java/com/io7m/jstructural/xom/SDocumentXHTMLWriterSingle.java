@@ -481,8 +481,7 @@ import com.io7m.jstructural.core.SSectionContents;
         }
       });
 
-      SXHTML.footnotes(link_provider, formals, doc, body);
-
+      SXHTML.footnotes(link_provider, formals, doc.getFootnotes(), body);
       callbacks.onBodyEnd(body);
 
       final SortedMap<String, Document> documents =

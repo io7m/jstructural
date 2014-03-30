@@ -1200,6 +1200,7 @@ import com.io7m.jstructural.core.SVerbatim;
       new ArrayList<SASubsectionContent>();
     final AtomicInteger paragraph_no = new AtomicInteger(1);
     final AtomicInteger formal_no = new AtomicInteger(1);
+    final int footnotes_before = footnotes.size();
 
     for (final SSubsectionContent p : s.getSectionContent().getElements()) {
       final SASubsectionContent r =
@@ -1242,6 +1243,14 @@ import com.io7m.jstructural.core.SVerbatim;
 
     final Option<SAID> id = s.getID().mapPartial(new SAIDMapper());
 
+    final List<SAFootnote> footnotes_here = new ArrayList<SAFootnote>();
+    final int footnotes_now = footnotes.size();
+    if ((footnotes_now - footnotes_before) > 0) {
+      for (int index = footnotes_before; index < footnotes_now; ++index) {
+        footnotes_here.add(footnotes.get(index));
+      }
+    }
+
     final SNonEmptyList<SASubsectionContent> content =
       SNonEmptyList.newList(content_r);
     return new SASectionWithParagraphs(
@@ -1250,7 +1259,8 @@ import com.io7m.jstructural.core.SVerbatim;
       id,
       title,
       s.getContents(),
-      content);
+      content,
+      footnotes_here);
   }
 
   private static @Nonnull SASection transformSectionWithSubsections(
@@ -1265,6 +1275,7 @@ import com.io7m.jstructural.core.SVerbatim;
     final SASectionTitle title =
       new SASectionTitle(number, s.getTitle().getActual());
 
+    final int footnotes_before = footnotes.size();
     final List<SASubsection> subsections_r = new ArrayList<SASubsection>();
     for (final SSubsection ss : s.getSubsections().getElements()) {
       final SASubsection sa =
@@ -1281,6 +1292,14 @@ import com.io7m.jstructural.core.SVerbatim;
     final SNonEmptyList<SASubsection> subsections =
       SNonEmptyList.newList(subsections_r);
 
+    final List<SAFootnote> footnotes_here = new ArrayList<SAFootnote>();
+    final int footnotes_now = footnotes.size();
+    if ((footnotes_now - footnotes_before) > 0) {
+      for (int index = footnotes_before; index < footnotes_now; ++index) {
+        footnotes_here.add(footnotes.get(index));
+      }
+    }
+
     final Option<SAID> id = s.getID().mapPartial(new SAIDMapper());
     return new SASectionWithSubsections(
       number,
@@ -1288,7 +1307,8 @@ import com.io7m.jstructural.core.SVerbatim;
       id,
       title,
       s.getContents(),
-      subsections);
+      subsections,
+      footnotes_here);
   }
 
   private static SASubsection transformSubsection(

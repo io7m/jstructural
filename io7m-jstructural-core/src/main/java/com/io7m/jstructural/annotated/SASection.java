@@ -16,6 +16,8 @@
 
 package com.io7m.jstructural.annotated;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -31,6 +33,7 @@ import com.io7m.jstructural.core.SSectionContents;
 @Immutable public abstract class SASection implements SAIDTargetContent
 {
   private final @Nonnull Option<SSectionContents> contents;
+  private final @Nonnull List<SAFootnote>         footnotes;
   private final @Nonnull Option<SAID>             id;
   private final @Nonnull SASectionNumber          number;
   private final @Nonnull SASectionTitle           title;
@@ -41,7 +44,8 @@ import com.io7m.jstructural.core.SSectionContents;
     final @Nonnull Option<String> in_type,
     final @Nonnull Option<SAID> in_id,
     final @Nonnull SASectionTitle in_title,
-    final @Nonnull Option<SSectionContents> in_contents)
+    final @Nonnull Option<SSectionContents> in_contents,
+    final @Nonnull List<SAFootnote> in_footnotes)
     throws ConstraintError
   {
     this.number = Constraints.constrainNotNull(in_number, "Number");
@@ -49,6 +53,7 @@ import com.io7m.jstructural.core.SSectionContents;
     this.id = Constraints.constrainNotNull(in_id, "ID");
     this.title = Constraints.constrainNotNull(in_title, "Title");
     this.contents = Constraints.constrainNotNull(in_contents, "Contents");
+    this.footnotes = Constraints.constrainNotNull(in_footnotes, "Footnotes");
   }
 
   @Override public boolean equals(
@@ -78,6 +83,15 @@ import com.io7m.jstructural.core.SSectionContents;
   public final @Nonnull Option<SSectionContents> getContents()
   {
     return this.contents;
+  }
+
+  /**
+   * @return The list of footnotes for this section
+   */
+
+  public final List<SAFootnote> getFootnotes()
+  {
+    return this.footnotes;
   }
 
   /**
