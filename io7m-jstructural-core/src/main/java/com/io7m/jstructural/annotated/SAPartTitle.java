@@ -28,8 +28,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
 
 @Immutable public final class SAPartTitle
 {
-  private final @Nonnull String actual;
-  private final int             number;
+  private final @Nonnull String       actual;
+  private final @Nonnull SAPartNumber number;
 
   /**
    * Construct a new part title.
@@ -43,12 +43,11 @@ import com.io7m.jaux.Constraints.ConstraintError;
    */
 
   public SAPartTitle(
-    final int in_number,
+    final @Nonnull SAPartNumber in_number,
     final @Nonnull String in_actual)
     throws ConstraintError
   {
-    this.number =
-      Constraints.constrainRange(in_number, 1, Integer.MAX_VALUE, "Number");
+    this.number = Constraints.constrainNotNull(in_number, "Part number");
     this.actual = Constraints.constrainNotNull(in_actual, "Actual");
   }
 
@@ -65,7 +64,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
       return false;
     }
     final SAPartTitle other = (SAPartTitle) obj;
-    return this.actual.equals(other.actual) && (this.number == other.number);
+    return this.actual.equals(other.actual)
+      && this.number.equals(other.number);
   }
 
   /**
@@ -81,14 +81,14 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The part number
    */
 
-  public int getNumber()
+  public @Nonnull SAPartNumber getNumber()
   {
     return this.number;
   }
 
   @Override public int hashCode()
   {
-    return this.actual.hashCode() + this.number;
+    return this.actual.hashCode() + this.number.hashCode();
   }
 
   @Override public String toString()

@@ -24,7 +24,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
  * An abstract section number.
  */
 
-public abstract class SASectionNumber
+public abstract class SASectionNumber implements SASegmentNumber
 {
   /**
    * Accept a section number visitor.

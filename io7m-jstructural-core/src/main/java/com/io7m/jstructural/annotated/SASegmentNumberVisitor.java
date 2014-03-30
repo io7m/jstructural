@@ -14,37 +14,52 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural.xom;
-
-import java.util.SortedMap;
+package com.io7m.jstructural.annotated;
 
 import javax.annotation.Nonnull;
 
-import nu.xom.Document;
-
 import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jstructural.annotated.SADocument;
 
 /**
- * The interface supported by document writers.
+ * A segment number visitor.
+ * 
+ * @param <T>
+ *          The type of values returned by the visitor
  */
 
-public interface SDocumentXHTMLWriter
+public interface SASegmentNumberVisitor<T>
 {
   /**
-   * Transform the given document into at least one XHTML file.
+   * Visit a part number.
    * 
-   * @param callbacks
-   *          A set of callbacks for document customisation
-   * @param doc
-   *          The document
-   * @return A list of XHTML files
+   * @param n
+   *          The number
+   * @return A value of type <code>T</code>
    * @throws ConstraintError
-   *           If any parameter is <code>null</code>
+   *           If required
+   * @throws Exception
+   *           If required
    */
 
-  SortedMap<String, Document> writeDocuments(
-    final @Nonnull SDocumentXHTMLWriterCallbacks callbacks,
-    final @Nonnull SADocument doc)
-    throws ConstraintError;
+  T visitPartNumber(
+    final @Nonnull SAPartNumber n)
+    throws ConstraintError,
+      Exception;
+
+  /**
+   * Visit a section number.
+   * 
+   * @param n
+   *          The number
+   * @return A value of type <code>T</code>
+   * @throws ConstraintError
+   *           If required
+   * @throws Exception
+   *           If required
+   */
+
+  T visitSectionNumber(
+    final @Nonnull SASectionNumber n)
+    throws ConstraintError,
+      Exception;
 }

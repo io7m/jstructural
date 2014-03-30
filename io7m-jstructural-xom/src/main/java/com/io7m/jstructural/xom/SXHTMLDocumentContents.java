@@ -50,7 +50,17 @@ final class SXHTMLDocumentContents
           "contents_item",
           "contents_item1",
           "contents_item_part", });
-      pe.appendChild(this.callbacks.getPartLink(p));
+
+      final Element plink =
+        SXHTML.linkRaw(this.callbacks.getPartLinkTarget(p.getNumber()));
+      {
+        final StringBuilder title = new StringBuilder();
+        title.append(p.getNumber().getActual());
+        title.append(". ");
+        title.append(p.getTitle().getActual());
+        plink.appendChild(title.toString());
+      }
+      pe.appendChild(plink);
       dce.appendChild(pe);
 
       final Element pce =
@@ -64,7 +74,17 @@ final class SXHTMLDocumentContents
             "contents_item",
             "contents_item2",
             "contents_item_section", });
-        se.appendChild(this.callbacks.getSectionLink(s));
+
+        final Element slink =
+          SXHTML.linkRaw(this.callbacks.getSectionLinkTarget(s.getNumber()));
+        {
+          final StringBuilder title = new StringBuilder();
+          title.append(s.getNumber().sectionNumberFormat());
+          title.append(". ");
+          title.append(s.getTitle().getActual());
+          slink.appendChild(title.toString());
+        }
+        se.appendChild(slink);
         pce.appendChild(se);
       }
 
@@ -89,7 +109,17 @@ final class SXHTMLDocumentContents
           "contents_item",
           "contents_item1",
           "contents_item_section", });
-      pe.appendChild(this.callbacks.getSectionLink(s));
+
+      final Element slink =
+        SXHTML.linkRaw(this.callbacks.getSectionLinkTarget(s.getNumber()));
+      {
+        final StringBuilder title = new StringBuilder();
+        title.append(s.getNumber().sectionNumberFormat());
+        title.append(". ");
+        title.append(s.getTitle().getActual());
+        slink.appendChild(title.toString());
+      }
+      pe.appendChild(slink);
       dce.appendChild(pe);
 
       final Element pce =

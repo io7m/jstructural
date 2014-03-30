@@ -181,6 +181,21 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
     return true;
   }
 
+  @Override public <T> T formalItemNumberAccept(
+    final SAFormalItemNumberVisitor<T> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitFormalItemNumberPSF(this);
+  }
+
+  @SuppressWarnings("boxing") @Override public
+    String
+    formalItemNumberFormat()
+  {
+    return String.format("%d.%d.%d", this.part, this.section, this.formal);
+  }
+
   /**
    * @return The formal item number
    */
@@ -216,21 +231,6 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
     result = (prime * result) + this.part;
     result = (prime * result) + this.section;
     return result;
-  }
-
-  @Override public <T> T formalItemNumberAccept(
-    final SAFormalItemNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception
-  {
-    return v.visitFormalItemNumberPSF(this);
-  }
-
-  @SuppressWarnings("boxing") @Override public
-    String
-    formalItemNumberFormat()
-  {
-    return String.format("%d.%d.%d", this.part, this.section, this.formal);
   }
 
   @Override public String toString()

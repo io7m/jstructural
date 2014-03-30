@@ -85,8 +85,8 @@ import com.io7m.jstructural.core.SVerbatim;
     SDocumentVisitor<SADocument>
   {
     private final @Nonnull List<SAFootnote>    footnotes;
-    private final @Nonnull SAIDMap             ids;
     private final @Nonnull SAFormalItemsByKind formals;
+    private final @Nonnull SAIDMap             ids;
 
     public DocumentAnnotator(
       final @Nonnull Log log)
@@ -98,7 +98,7 @@ import com.io7m.jstructural.core.SVerbatim;
 
     public @Nonnull SAPart part(
       final @Nonnull SPart p,
-      final int part_no)
+      final @Nonnull SAPartNumber part_no)
       throws ConstraintError,
         Exception
     {
@@ -109,7 +109,7 @@ import com.io7m.jstructural.core.SVerbatim;
       final List<SASection> sections_r = new ArrayList<SASection>();
       for (final SSection s : p.getSections().getElements()) {
         final SASectionNumberPS number =
-          new SASectionNumberPS(part_no, sections_r.size() + 1);
+          new SASectionNumberPS(part_no.getActual(), sections_r.size() + 1);
 
         final SASection sp =
           s.sectionAccept(new PartSectionAnnotator(
@@ -140,7 +140,7 @@ import com.io7m.jstructural.core.SVerbatim;
     {
       final List<SAPart> parts_r = new ArrayList<SAPart>();
       for (final SPart p : dp.getParts().getElements()) {
-        final SAPart q = this.part(p, parts_r.size() + 1);
+        final SAPart q = this.part(p, new SAPartNumber(parts_r.size() + 1));
         parts_r.add(q);
       }
       final SNonEmptyList<SAPart> parts = SNonEmptyList.newList(parts_r);
@@ -503,9 +503,9 @@ import com.io7m.jstructural.core.SVerbatim;
     SSectionVisitor<SASection>
   {
     private final @Nonnull List<SAFootnote>    footnotes;
+    private final @Nonnull SAFormalItemsByKind formals;
     private final @Nonnull SAIDMap             ids;
     private final @Nonnull SASectionNumberS    number;
-    private final @Nonnull SAFormalItemsByKind formals;
 
     public NoPartSectionAnnotator(
       final @Nonnull SAIDMap in_ids,
@@ -673,9 +673,9 @@ import com.io7m.jstructural.core.SVerbatim;
     SSectionVisitor<SASection>
   {
     private final @Nonnull List<SAFootnote>    footnotes;
+    private final @Nonnull SAFormalItemsByKind formals;
     private final @Nonnull SAIDMap             ids;
     private final @Nonnull SASectionNumberPS   number;
-    private final @Nonnull SAFormalItemsByKind formals;
 
     public PartSectionAnnotator(
       final @Nonnull SAIDMap in_ids,
@@ -1361,73 +1361,6 @@ import com.io7m.jstructural.core.SVerbatim;
       in_content);
   }
 
-  private static @Nonnull SAParagraph transformSubsectionParagraph(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASubsectionNumber number,
-    final @Nonnull SParagraph paragraph,
-    final int paragraph_number)
-    throws ConstraintError,
-      Exception
-  {
-    final Option<SAID> id = paragraph.getID().mapPartial(new SAIDMapper());
-
-    final SAParagraph sap =
-      number
-        .subsectionNumberAccept(new SASubsectionNumberVisitor<SAParagraph>() {
-          @Override public SAParagraph visitSubsectionNumberPSS(
-            final SASubsectionNumberPSS ssn)
-            throws ConstraintError,
-              Exception
-          {
-            final SAParagraphNumber p_number =
-              new SAParagraphNumberPSSP(ssn.getPart(), ssn.getSection(), ssn
-                .getSubsection(), paragraph_number);
-
-            final SNonEmptyList<SAParagraphContent> in_content =
-              SAnnotator.transformParagraphContent(
-                ids,
-                footnotes,
-                paragraph,
-                p_number);
-
-            return new SAParagraph(
-              p_number,
-              paragraph.getType(),
-              in_content,
-              id);
-          }
-
-          @Override public SAParagraph visitSubsectionNumberSS(
-            final SASubsectionNumberSS ssn)
-            throws ConstraintError,
-              Exception
-          {
-            final SAParagraphNumber p_number =
-              new SAParagraphNumberSSP(
-                ssn.getSection(),
-                ssn.getSubsection(),
-                paragraph_number);
-
-            final SNonEmptyList<SAParagraphContent> in_content =
-              SAnnotator.transformParagraphContent(
-                ids,
-                footnotes,
-                paragraph,
-                p_number);
-
-            return new SAParagraph(
-              p_number,
-              paragraph.getType(),
-              in_content,
-              id);
-          }
-        });
-
-    id.mapPartial(new SAIDLinkCreator(ids, sap));
-    return sap;
-  }
-
   private static @Nonnull SAFormalItem transformSubsectionFormalItem(
     final @Nonnull SAIDMap ids,
     final @Nonnull SAFormalItemsByKind formals,
@@ -1519,6 +1452,73 @@ import com.io7m.jstructural.core.SVerbatim;
             subsection_number);
         }
       });
+  }
+
+  private static @Nonnull SAParagraph transformSubsectionParagraph(
+    final @Nonnull SAIDMap ids,
+    final @Nonnull List<SAFootnote> footnotes,
+    final @Nonnull SASubsectionNumber number,
+    final @Nonnull SParagraph paragraph,
+    final int paragraph_number)
+    throws ConstraintError,
+      Exception
+  {
+    final Option<SAID> id = paragraph.getID().mapPartial(new SAIDMapper());
+
+    final SAParagraph sap =
+      number
+        .subsectionNumberAccept(new SASubsectionNumberVisitor<SAParagraph>() {
+          @Override public SAParagraph visitSubsectionNumberPSS(
+            final SASubsectionNumberPSS ssn)
+            throws ConstraintError,
+              Exception
+          {
+            final SAParagraphNumber p_number =
+              new SAParagraphNumberPSSP(ssn.getPart(), ssn.getSection(), ssn
+                .getSubsection(), paragraph_number);
+
+            final SNonEmptyList<SAParagraphContent> in_content =
+              SAnnotator.transformParagraphContent(
+                ids,
+                footnotes,
+                paragraph,
+                p_number);
+
+            return new SAParagraph(
+              p_number,
+              paragraph.getType(),
+              in_content,
+              id);
+          }
+
+          @Override public SAParagraph visitSubsectionNumberSS(
+            final SASubsectionNumberSS ssn)
+            throws ConstraintError,
+              Exception
+          {
+            final SAParagraphNumber p_number =
+              new SAParagraphNumberSSP(
+                ssn.getSection(),
+                ssn.getSubsection(),
+                paragraph_number);
+
+            final SNonEmptyList<SAParagraphContent> in_content =
+              SAnnotator.transformParagraphContent(
+                ids,
+                footnotes,
+                paragraph,
+                p_number);
+
+            return new SAParagraph(
+              p_number,
+              paragraph.getType(),
+              in_content,
+              id);
+          }
+        });
+
+    id.mapPartial(new SAIDLinkCreator(ids, sap));
+    return sap;
   }
 
   private static @Nonnull SATable transformTable(

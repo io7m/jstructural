@@ -50,7 +50,18 @@ final class SXHTMLSectionContents
           "contents_item",
           "contents_item1",
           "contents_item_subsection", });
-      se.appendChild(this.callbacks.getSubsectionLink(s));
+
+      final Element sslink =
+        SXHTML.linkRaw(this.callbacks.getSubsectionLinkTarget(s.getNumber()));
+      {
+        final StringBuilder title = new StringBuilder();
+        title.append(s.getNumber().subsectionNumberFormat());
+        title.append(". ");
+        title.append(s.getTitle().getActual());
+        sslink.appendChild(title.toString());
+      }
+
+      se.appendChild(sslink);
       sce.appendChild(se);
     }
 

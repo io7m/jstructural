@@ -46,11 +46,6 @@ import com.io7m.jstructural.annotated.SAFormalItemContent;
 import com.io7m.jstructural.annotated.SAFormalItemContentVisitor;
 import com.io7m.jstructural.annotated.SAFormalItemList;
 import com.io7m.jstructural.annotated.SAFormalItemNumber;
-import com.io7m.jstructural.annotated.SAFormalItemNumberPSF;
-import com.io7m.jstructural.annotated.SAFormalItemNumberPSSF;
-import com.io7m.jstructural.annotated.SAFormalItemNumberSF;
-import com.io7m.jstructural.annotated.SAFormalItemNumberSSF;
-import com.io7m.jstructural.annotated.SAFormalItemNumberVisitor;
 import com.io7m.jstructural.annotated.SAFormalItemsByKindReadable;
 import com.io7m.jstructural.annotated.SAID;
 import com.io7m.jstructural.annotated.SAImage;
@@ -67,25 +62,13 @@ import com.io7m.jstructural.annotated.SAParagraph;
 import com.io7m.jstructural.annotated.SAParagraphContent;
 import com.io7m.jstructural.annotated.SAParagraphContentVisitor;
 import com.io7m.jstructural.annotated.SAParagraphNumber;
-import com.io7m.jstructural.annotated.SAParagraphNumberPSP;
-import com.io7m.jstructural.annotated.SAParagraphNumberPSSP;
-import com.io7m.jstructural.annotated.SAParagraphNumberSP;
-import com.io7m.jstructural.annotated.SAParagraphNumberSSP;
-import com.io7m.jstructural.annotated.SAParagraphNumberVisitor;
+import com.io7m.jstructural.annotated.SAPartNumber;
 import com.io7m.jstructural.annotated.SAPartTitle;
 import com.io7m.jstructural.annotated.SASection;
-import com.io7m.jstructural.annotated.SASectionNumber;
-import com.io7m.jstructural.annotated.SASectionNumberPS;
-import com.io7m.jstructural.annotated.SASectionNumberS;
-import com.io7m.jstructural.annotated.SASectionNumberVisitor;
 import com.io7m.jstructural.annotated.SASectionTitle;
 import com.io7m.jstructural.annotated.SASubsection;
 import com.io7m.jstructural.annotated.SASubsectionContent;
 import com.io7m.jstructural.annotated.SASubsectionContentVisitor;
-import com.io7m.jstructural.annotated.SASubsectionNumber;
-import com.io7m.jstructural.annotated.SASubsectionNumberPSS;
-import com.io7m.jstructural.annotated.SASubsectionNumberSS;
-import com.io7m.jstructural.annotated.SASubsectionNumberVisitor;
 import com.io7m.jstructural.annotated.SASubsectionTitle;
 import com.io7m.jstructural.annotated.SATable;
 import com.io7m.jstructural.annotated.SATableCell;
@@ -110,10 +93,12 @@ public final class SXHTML
   static final @Nonnull String         FOOTNOTE_CODE;
   static final @Nonnull String         FORMAL_CODE;
   static final @Nonnull Option<String> NO_TYPE;
+  static final @Nonnull String         OUTPUT_FILE_SUFFIX;
   static final @Nonnull String         PARAGRAPH_CODE;
   static final @Nonnull String         PART_CODE;
   static final @Nonnull String         SECTION_CODE;
   static final @Nonnull String         SUBSECTION_CODE;
+
   static final @Nonnull URI            XHTML_URI;
 
   static {
@@ -131,6 +116,10 @@ public final class SXHTML
     FOOTNOTE_CODE = "fn";
     FORMAL_CODE = "fo";
     NO_TYPE = Option.none();
+  }
+
+  static {
+    OUTPUT_FILE_SUFFIX = "xhtml";
   }
 
   static @Nonnull Element body()
@@ -195,6 +184,29 @@ public final class SXHTML
     return e;
   }
 
+  static @Nonnull Element footnoteBody(
+    final @Nonnull SLinkProvider link_provider,
+    final @Nonnull SAFormalItemsByKindReadable formals,
+    final @Nonnull SAFootnote f)
+    throws ConstraintError,
+      Exception
+  {
+    final Element e = SXHTML.footnoteContainer(link_provider, formals, f);
+    final String[] classes = new String[1];
+    classes[0] = "footnote_body";
+    final Element ea =
+      SXHTML.elementWithClasses("div", SXHTML.NO_TYPE, classes);
+
+    final SNonEmptyList<Node> eac =
+      SXHTML.footnoteContentList(link_provider, formals, f.getContent());
+    for (final Node x : eac.getElements()) {
+      ea.appendChild(x);
+    }
+
+    e.appendChild(ea);
+    return e;
+  }
+
   static @Nonnull Element footnoteContainer(
     final @Nonnull SLinkProvider link_provider,
     final @Nonnull SAFormalItemsByKindReadable formals,
@@ -222,29 +234,6 @@ public final class SXHTML
       e.appendChild(epn);
     }
 
-    return e;
-  }
-
-  static @Nonnull Element footnoteContent(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SAFootnote f)
-    throws ConstraintError,
-      Exception
-  {
-    final Element e = SXHTML.footnoteContainer(link_provider, formals, f);
-    final String[] classes = new String[1];
-    classes[0] = "footnote_body";
-    final Element ea =
-      SXHTML.elementWithClasses("div", SXHTML.NO_TYPE, classes);
-
-    final SNonEmptyList<Node> eac =
-      SXHTML.footnoteContentList(link_provider, formals, f.getContent());
-    for (final Node x : eac.getElements()) {
-      ea.appendChild(x);
-    }
-
-    e.appendChild(ea);
     return e;
   }
 
@@ -360,6 +349,30 @@ public final class SXHTML
     return e;
   }
 
+  static void footnotes(
+    final @Nonnull SLinkProvider link_provider,
+    final @Nonnull SAFormalItemsByKindReadable formals,
+    final @Nonnull SADocument doc,
+    final @Nonnull Element body)
+    throws ConstraintError,
+      Exception
+  {
+    final List<SAFootnote> footnotes = doc.getFootnotes();
+    if (footnotes.size() > 0) {
+      final String[] classes = new String[1];
+      classes[0] = "footnotes";
+      final Element e =
+        SXHTML.elementWithClasses("div", SXHTML.NO_TYPE, classes);
+      e.appendChild(new Element("hr", SXHTML.XHTML_URI.toString()));
+
+      for (final SAFootnote f : footnotes) {
+        e.appendChild(SXHTML.footnoteBody(link_provider, formals, f));
+      }
+
+      body.appendChild(e);
+    }
+  }
+
   static @Nonnull Element formalItem(
     final @Nonnull SLinkProvider link_provider,
     final @Nonnull SAFormalItemsByKindReadable formals,
@@ -379,7 +392,8 @@ public final class SXHTML
       final Element et =
         SXHTML.elementWithClasses("div", formal.getType(), et_classes);
 
-      final String id = SXHTML.getFormalItemAnchorID(formal.getNumber());
+      final String id =
+        SXHTMLAnchors.getFormalItemAnchorID(formal.getNumber());
       final Element elink = SXHTML.linkRawIDTarget("#" + id, id);
       final StringBuilder title = new StringBuilder();
       title.append(formal.getNumber().formalItemNumberFormat());
@@ -478,7 +492,15 @@ public final class SXHTML
       final Element el =
         SXHTML.elementWithClasses("li", SXHTML.NO_TYPE, el_classes);
 
-      final Element elink = link_provider.getFormalItemLink(formal);
+      final Element elink =
+        SXHTML.linkRaw(link_provider.getFormalItemLinkTarget(formal
+          .getNumber()));
+      final StringBuilder title = new StringBuilder();
+      title.append(formal.getNumber().formalItemNumberFormat());
+      title.append(". ");
+      title.append(formal.getTitle().getActual());
+      elink.appendChild(title.toString());
+
       el.appendChild(elink);
       e.appendChild(el);
     }
@@ -500,242 +522,14 @@ public final class SXHTML
     return id;
   }
 
-  static @Nonnull String getFormalItemAnchorID(
-    final @Nonnull SAFormalItemNumber n)
-    throws ConstraintError,
-      Exception
-  {
-    return n.formalItemNumberAccept(new SAFormalItemNumberVisitor<String>() {
-      @Override public String visitFormalItemNumberPSF(
-        final @Nonnull SAFormalItemNumberPSF p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.PART_CODE);
-        b.append(p.getPart());
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        b.append(SXHTML.FORMAL_CODE);
-        b.append(p.getFormalItem());
-        return b.toString();
-      }
-
-      @Override public String visitFormalItemNumberPSSF(
-        final @Nonnull SAFormalItemNumberPSSF p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.PART_CODE);
-        b.append(p.getPart());
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        b.append(SXHTML.SUBSECTION_CODE);
-        b.append(p.getSubsection());
-        b.append(SXHTML.FORMAL_CODE);
-        b.append(p.getFormalItem());
-        return b.toString();
-      }
-
-      @Override public String visitFormalItemNumberSF(
-        final @Nonnull SAFormalItemNumberSF p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        b.append(SXHTML.FORMAL_CODE);
-        b.append(p.getFormalItem());
-        return b.toString();
-      }
-
-      @Override public String visitFormalItemNumberSSF(
-        final @Nonnull SAFormalItemNumberSSF p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        b.append(SXHTML.SUBSECTION_CODE);
-        b.append(p.getSubsection());
-        b.append(SXHTML.FORMAL_CODE);
-        b.append(p.getFormalItem());
-        return b.toString();
-      }
-    });
-  }
-
-  static @Nonnull String getParagraphAnchorID(
-    final @Nonnull SAParagraphNumber n)
-    throws ConstraintError,
-      Exception
-  {
-    return n.paragraphNumberAccept(new SAParagraphNumberVisitor<String>() {
-      @Override public String visitParagraphNumberPSP(
-        final @Nonnull SAParagraphNumberPSP p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.PART_CODE);
-        b.append(p.getPart());
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        b.append(SXHTML.PARAGRAPH_CODE);
-        b.append(p.getParagraph());
-        return b.toString();
-      }
-
-      @Override public String visitParagraphNumberPSSP(
-        final @Nonnull SAParagraphNumberPSSP p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.PART_CODE);
-        b.append(p.getPart());
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        b.append(SXHTML.SUBSECTION_CODE);
-        b.append(p.getSubsection());
-        b.append(SXHTML.PARAGRAPH_CODE);
-        b.append(p.getParagraph());
-        return b.toString();
-      }
-
-      @Override public String visitParagraphNumberSP(
-        final @Nonnull SAParagraphNumberSP p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        b.append(SXHTML.PARAGRAPH_CODE);
-        b.append(p.getParagraph());
-        return b.toString();
-      }
-
-      @Override public String visitParagraphNumberSSP(
-        final @Nonnull SAParagraphNumberSSP p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        b.append(SXHTML.SUBSECTION_CODE);
-        b.append(p.getSubsection());
-        b.append(SXHTML.PARAGRAPH_CODE);
-        b.append(p.getParagraph());
-        return b.toString();
-      }
-    });
-  }
-
   static @Nonnull String getPartAnchorID(
-    final int number)
+    final @Nonnull SAPartNumber part)
   {
     final StringBuilder b = new StringBuilder();
     b.append(SXHTML.ATTRIBUTE_PREFIX);
     b.append("_p");
-    b.append(number);
+    b.append(part.getActual());
     return b.toString();
-  }
-
-  static @Nonnull String getSectionAnchorID(
-    final @Nonnull SASectionNumber n)
-    throws ConstraintError,
-      Exception
-  {
-    return n.sectionNumberAccept(new SASectionNumberVisitor<String>() {
-      @Override public String visitSectionNumberWithoutPart(
-        final @Nonnull SASectionNumberS p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        return b.toString();
-      }
-
-      @Override public String visitSectionNumberWithPart(
-        final @Nonnull SASectionNumberPS p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.PART_CODE);
-        b.append(p.getPart());
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        return b.toString();
-      }
-    });
-  }
-
-  static @Nonnull String getSubsectionAnchorID(
-    final @Nonnull SASubsectionNumber n)
-    throws ConstraintError,
-      Exception
-  {
-    return n.subsectionNumberAccept(new SASubsectionNumberVisitor<String>() {
-      @Override public String visitSubsectionNumberPSS(
-        final @Nonnull SASubsectionNumberPSS p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.PART_CODE);
-        b.append(p.getPart());
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        b.append(SXHTML.SUBSECTION_CODE);
-        b.append(p.getSubsection());
-        return b.toString();
-      }
-
-      @Override public String visitSubsectionNumberSS(
-        final @Nonnull SASubsectionNumberSS p)
-        throws ConstraintError,
-          Exception
-      {
-        final StringBuilder b = new StringBuilder();
-        b.append(SXHTML.ATTRIBUTE_PREFIX);
-        b.append("_");
-        b.append(SXHTML.SECTION_CODE);
-        b.append(p.getSection());
-        b.append(SXHTML.SUBSECTION_CODE);
-        b.append(p.getSubsection());
-        return b.toString();
-      }
-    });
   }
 
   static @Nonnull Element head(
@@ -1135,7 +929,7 @@ public final class SXHTML
       final String[] classes = new String[1];
       classes[0] = "paragraph_number";
       final Element epn = SXHTML.elementWithClasses("div", type, classes);
-      final String id = SXHTML.getParagraphAnchorID(number);
+      final String id = SXHTMLAnchors.getParagraphAnchorID(number);
       final Element elink = SXHTML.linkRawIDTarget("#" + id, id);
       elink.appendChild(Integer.toString(number.getParagraph()));
       epn.appendChild(elink);
@@ -1270,7 +1064,7 @@ public final class SXHTML
       final Element epn =
         SXHTML.elementWithClasses("div", SXHTML.NO_TYPE, classes);
       final String id = SXHTML.getPartAnchorID(title.getNumber());
-      final String text = Integer.toString(title.getNumber());
+      final String text = Integer.toString(title.getNumber().getActual());
       final Element elink = SXHTML.linkRawIDTarget("#" + id, id);
       elink.appendChild(text);
       epn.appendChild(elink);
@@ -1306,7 +1100,7 @@ public final class SXHTML
       classes[0] = "section_title_number";
       final Element epn =
         SXHTML.elementWithClasses("div", SXHTML.NO_TYPE, classes);
-      final String id = SXHTML.getSectionAnchorID(title.getNumber());
+      final String id = SXHTMLAnchors.getSectionAnchorID(title.getNumber());
       final String text = title.getNumber().sectionNumberFormat();
       final Element elink = SXHTML.linkRawIDTarget("#" + id, id);
       elink.appendChild(text);
@@ -1370,7 +1164,8 @@ public final class SXHTML
       classes[0] = "subsection_title_number";
       final Element epn =
         SXHTML.elementWithClasses("div", SXHTML.NO_TYPE, classes);
-      final String id = SXHTML.getSubsectionAnchorID(title.getNumber());
+      final String id =
+        SXHTMLAnchors.getSubsectionAnchorID(title.getNumber());
       final String text = title.getNumber().subsectionNumberFormat();
       final Element elink = SXHTML.linkRawIDTarget("#" + id, id);
       elink.appendChild(text);

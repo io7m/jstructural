@@ -58,7 +58,17 @@ final class SXHTMLPartContents
           "contents_item",
           "contents_item1",
           "contents_item_section", });
-      se.appendChild(cb.getSectionLink(s));
+
+      final Element slink =
+        SXHTML.linkRaw(this.callbacks.getSectionLinkTarget(s.getNumber()));
+      {
+        final StringBuilder title = new StringBuilder();
+        title.append(s.getNumber().sectionNumberFormat());
+        title.append(". ");
+        title.append(s.getTitle().getActual());
+        slink.appendChild(title.toString());
+      }
+      se.appendChild(slink);
       pce.appendChild(se);
 
       s.sectionAccept(new SASectionVisitor<Unit>() {
@@ -90,7 +100,18 @@ final class SXHTMLPartContents
                 "contents_item",
                 "contents_item2",
                 "contents_item_subsection", });
-            sse.appendChild(cb.getSubsectionLink(ss));
+
+            final Element sslink =
+              SXHTML.linkRaw(cb.getSubsectionLinkTarget(ss.getNumber()));
+            {
+              final StringBuilder title = new StringBuilder();
+              title.append(ss.getNumber().subsectionNumberFormat());
+              title.append(". ");
+              title.append(ss.getTitle().getActual());
+              sslink.appendChild(title.toString());
+            }
+
+            sse.appendChild(sslink);
             sce.appendChild(sse);
           }
           return Unit.unit();

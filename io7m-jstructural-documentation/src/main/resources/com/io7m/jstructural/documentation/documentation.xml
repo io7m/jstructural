@@ -165,8 +165,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
     <s:formal-item s:kind="files">
       <s:formal-item-title>Schema files</s:formal-item-title>
       <s:list-unordered>
-        <s:list-item><s:term s:type="file">src/test/resources/com/io7m/jstructural/xhtml1-strict.xsd</s:term></s:list-item>
-        <s:list-item><s:term s:type="file">src/test/resources/com/io7m/jstructural/xml.xsd</s:term></s:list-item>
+        <s:list-item><s:term s:type="file">io7m-jstructural-tests/src/test/resources/com/io7m/jstructural/xhtml1-strict.xsd</s:term></s:list-item>
+        <s:list-item><s:term s:type="file">io7m-jstructural-tests/src/test/resources/com/io7m/jstructural/xml.xsd</s:term></s:list-item>
       </s:list-unordered>
     </s:formal-item>
     <s:paragraph>
@@ -246,9 +246,6 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
           </s:list-item>
           <s:list-item>
             <s:link s:target="elem_section">section</s:link>
-          </s:list-item>
-          <s:list-item>
-            <s:link s:target="elem_set">set</s:link>
           </s:list-item>
           <s:list-item>
             <s:link s:target="elem_subsection">subsection</s:link>
@@ -342,9 +339,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
       <s:paragraph>
         The <s:term s:type="element">document</s:term>
         element denotes a <s:term s:type="package">structural</s:term>
-        document. It may appear as the root node of an XML document,
-        or as a child of a
-        <s:link s:target="elem_set">set</s:link>. The element may contain
+        document. It must appear as the root node of an XML document.
+        The element may contain
         either a series of <s:link s:target="elem_section">sections</s:link>
         or a series of <s:link s:target="elem_part">parts</s:link>.
       </s:paragraph>
@@ -1413,35 +1409,6 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
         The 'section-title' text above was specified with the
         <s:term s:type="element">section-title</s:term>
         element.
-      </s:paragraph>
-    </s:subsection>
-  </s:section>
-
-  <s:section xml:id="elem_set">
-    <s:section-title>set</s:section-title>
-    <s:subsection>
-      <s:subsection-title>Description</s:subsection-title>
-      <s:paragraph>
-        The
-        <s:term s:type="element">set</s:term>
-        element denotes a set of
-        <s:link s:target="elem_document">documents</s:link>
-        It may only appear as the root node of an XML document.
-        The element must contain a series of
-        <s:link s:target="elem_document">documents</s:link>.
-      </s:paragraph>
-    </s:subsection>
-    <s:subsection>
-      <s:subsection-title>Children</s:subsection-title>
-      <s:paragraph>
-        The following elements may occur as children of
-        <s:term s:type="element">document</s:term>
-        elements:
-        <s:list-unordered>
-          <s:list-item>
-            <s:link s:target="elem_document">document</s:link>
-          </s:list-item>
-        </s:list-unordered>
       </s:paragraph>
     </s:subsection>
   </s:section>

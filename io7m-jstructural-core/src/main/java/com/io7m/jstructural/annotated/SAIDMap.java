@@ -32,8 +32,8 @@ import com.io7m.jlog.Log;
 
 public final class SAIDMap implements SAIDMapWritable, SAIDMapReadable
 {
-  private final @Nonnull Map<SAID, SAIDTargetContent> map;
   private final @Nonnull Log                          log;
+  private final @Nonnull Map<SAID, SAIDTargetContent> map;
 
   /**
    * Construct a new empty map.

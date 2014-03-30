@@ -31,7 +31,7 @@ import com.io7m.jstructural.core.SDocumentStyle;
  * A document.
  */
 
-public abstract class SADocument
+public abstract class SADocument implements SASegmentsReadable
 {
   private final @Nonnull Option<SDocumentContents> contents;
   private final @Nonnull List<SAFootnote>          footnotes;
@@ -132,6 +132,18 @@ public abstract class SADocument
   {
     return this.ids;
   }
+
+  /**
+   * @param n
+   *          The section number
+   * @return The section with the given section number, if any.
+   * @throws ConstraintError
+   *           If any parameter is <code>null</code>
+   */
+
+  public abstract Option<SASection> getSection(
+    final @Nonnull SASectionNumber n)
+    throws ConstraintError;
 
   /**
    * @return The document style

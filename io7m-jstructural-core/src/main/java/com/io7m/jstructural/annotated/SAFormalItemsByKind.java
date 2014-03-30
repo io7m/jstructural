@@ -40,8 +40,14 @@ public final class SAFormalItemsByKind implements
   SAFormalItemsByKindWritable
 {
   private static final @Nonnull SortedMap<SAFormalItemNumber, SAFormalItem> EMPTY;
-  private final @Nonnull Map<String, Set<SAFormalItem>>                     map;
+  static {
+    EMPTY =
+      Collections
+        .unmodifiableSortedMap(new TreeMap<SAFormalItemNumber, SAFormalItem>());
+  }
   private final @Nonnull Log                                                log;
+
+  private final @Nonnull Map<String, Set<SAFormalItem>>                     map;
 
   /**
    * Construct a new empty map.
@@ -55,12 +61,6 @@ public final class SAFormalItemsByKind implements
   {
     this.log = new Log(in_log, "formal-items");
     this.map = new HashMap<String, Set<SAFormalItem>>();
-  }
-
-  static {
-    EMPTY =
-      Collections
-        .unmodifiableSortedMap(new TreeMap<SAFormalItemNumber, SAFormalItem>());
   }
 
   @Override public SortedMap<SAFormalItemNumber, SAFormalItem> get(

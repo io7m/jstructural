@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
+import java.util.SortedMap;
 
 import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
@@ -50,26 +50,20 @@ import com.io7m.jstructural.annotated.SAnnotatorTest;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.documentation.SDocumentation;
 
-public final class SDocumentXHTMLTest
+public final class SDocumentXHTMLWriterMultiTest
 {
   private static final class Callbacks implements
     SDocumentXHTMLWriterCallbacks
   {
-    int on_head_called;
     int on_body_end_called;
     int on_body_start_called;
+    int on_head_called;
 
     public Callbacks()
     {
       this.on_head_called = 0;
       this.on_body_end_called = 0;
       this.on_body_start_called = 0;
-    }
-
-    @Override public void onHead(
-      final @Nonnull Element head)
-    {
-      this.on_head_called++;
     }
 
     @Override public void onBodyEnd(
@@ -83,128 +77,12 @@ public final class SDocumentXHTMLTest
     {
       this.on_body_start_called++;
     }
-  }
 
-  @SuppressWarnings("static-method") @Test public void testBasic_0()
-    throws ConstraintError,
-      ValidityException,
-      IOException,
-      SAXException,
-      ParserConfigurationException,
-      ParsingException,
-      URISyntaxException
-  {
-    final SADocument d = SAnnotatorTest.annotate("basic-0.xml");
-    final SDocumentXHTMLWriterSingle writer =
-      new SDocumentXHTMLWriterSingle();
-    final Callbacks cb = new Callbacks();
-    final List<Document> dr = writer.writeDocuments(cb, d);
-    Assert.assertEquals(1, cb.on_head_called);
-    Assert.assertEquals(1, cb.on_body_start_called);
-    Assert.assertEquals(1, cb.on_body_end_called);
-
-    for (final Document dd : dr) {
-      SDocumentXHTMLTest.checkDocument(dd);
+    @Override public void onHead(
+      final @Nonnull Element head)
+    {
+      this.on_head_called++;
     }
-  }
-
-  @SuppressWarnings("static-method") @Test public void testBasic_2()
-    throws ConstraintError,
-      ValidityException,
-      IOException,
-      SAXException,
-      ParserConfigurationException,
-      ParsingException,
-      URISyntaxException
-  {
-    final SADocument d = SAnnotatorTest.annotate("basic-2.xml");
-    final SDocumentXHTMLWriterSingle writer =
-      new SDocumentXHTMLWriterSingle();
-    final Callbacks cb = new Callbacks();
-    final List<Document> dr = writer.writeDocuments(cb, d);
-    Assert.assertEquals(1, cb.on_head_called);
-    Assert.assertEquals(1, cb.on_body_start_called);
-    Assert.assertEquals(1, cb.on_body_end_called);
-
-    for (final Document dd : dr) {
-      SDocumentXHTMLTest.checkDocument(dd);
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public void testLarge_0()
-    throws ConstraintError,
-      ValidityException,
-      IOException,
-      SAXException,
-      ParserConfigurationException,
-      ParsingException,
-      URISyntaxException
-  {
-    final SADocument d = SAnnotatorTest.annotate("jaux-documentation.xml");
-    final SDocumentXHTMLWriterSingle writer =
-      new SDocumentXHTMLWriterSingle();
-    final Callbacks cb = new Callbacks();
-    final List<Document> dr = writer.writeDocuments(cb, d);
-    Assert.assertEquals(1, cb.on_head_called);
-    Assert.assertEquals(1, cb.on_body_start_called);
-    Assert.assertEquals(1, cb.on_body_end_called);
-
-    for (final Document dd : dr) {
-      SDocumentXHTMLTest.checkDocument(dd);
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public void testDocumentation_0()
-    throws ConstraintError,
-      IOException,
-      ValidityException,
-      BadParseAttributeException,
-      InclusionLoopException,
-      NoIncludeLocationException,
-      SAXException,
-      ParserConfigurationException,
-      ParsingException,
-      URISyntaxException,
-      XIncludeException
-  {
-    final URI uri = SDocumentation.getDocumentationXMLLocation();
-    final InputStream s = uri.toURL().openStream();
-
-    final Log log = TestUtilities.getLog();
-    final SDocument d = SDocumentParser.fromStream(s, uri, log);
-    s.close();
-
-    final SADocument da = SAnnotator.document(log, d);
-    final SDocumentXHTMLWriterSingle writer =
-      new SDocumentXHTMLWriterSingle();
-    final Callbacks cb = new Callbacks();
-    final List<Document> dr = writer.writeDocuments(cb, da);
-    Assert.assertEquals(1, cb.on_head_called);
-    Assert.assertEquals(1, cb.on_body_start_called);
-    Assert.assertEquals(1, cb.on_body_end_called);
-
-    for (final Document dd : dr) {
-      SDocumentXHTMLTest.checkDocument(dd);
-    }
-  }
-
-  /**
-   * Ensure that validation is working in the test suite. Try to validate
-   * something that is certainly not XHTML 1.0 Strict.
-   */
-
-  @SuppressWarnings("static-method") @Test(expected = SAXException.class) public
-    void
-    testFailure()
-      throws ValidityException,
-        IOException,
-        SAXException,
-        ParserConfigurationException,
-        ParsingException,
-        URISyntaxException,
-        ConstraintError
-  {
-    SDocumentXHTMLTest.checkDocument(new Document(new Element("z")));
   }
 
   private static void checkDocument(
@@ -239,5 +117,124 @@ public final class SDocumentXHTMLTest
     System.setProperty(
       "java.protocol.handler.pkgs",
       "com.io7m.jstructural.xom");
+  }
+
+  @SuppressWarnings("static-method") @Test public void testBasic_0()
+    throws ConstraintError,
+      ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
+  {
+    final SADocument d = SAnnotatorTest.annotate("basic-0.xml");
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    final Callbacks cb = new Callbacks();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
+    Assert.assertEquals(1, cb.on_head_called);
+    Assert.assertEquals(1, cb.on_body_start_called);
+    Assert.assertEquals(1, cb.on_body_end_called);
+
+    for (final String name : dr.keySet()) {
+      SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public void testBasic_2()
+    throws ConstraintError,
+      ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
+  {
+    final SADocument d = SAnnotatorTest.annotate("basic-2.xml");
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    final Callbacks cb = new Callbacks();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
+    Assert.assertEquals(1, cb.on_head_called);
+    Assert.assertEquals(1, cb.on_body_start_called);
+    Assert.assertEquals(1, cb.on_body_end_called);
+
+    for (final String name : dr.keySet()) {
+      SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public void testDocumentation_0()
+    throws ConstraintError,
+      IOException,
+      ValidityException,
+      BadParseAttributeException,
+      InclusionLoopException,
+      NoIncludeLocationException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException,
+      XIncludeException
+  {
+    final URI uri = SDocumentation.getDocumentationXMLLocation();
+    final InputStream s = uri.toURL().openStream();
+
+    final Log log = TestUtilities.getLog();
+    final SDocument d = SDocumentParser.fromStream(s, uri, log);
+    s.close();
+
+    final SADocument da = SAnnotator.document(log, d);
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    final Callbacks cb = new Callbacks();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, da);
+    Assert.assertEquals(41, cb.on_head_called);
+    Assert.assertEquals(41, cb.on_body_start_called);
+    Assert.assertEquals(41, cb.on_body_end_called);
+
+    for (final String name : dr.keySet()) {
+      SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
+    }
+  }
+
+  /**
+   * Ensure that validation is working in the test suite. Try to validate
+   * something that is certainly not XHTML 1.0 Strict.
+   */
+
+  @SuppressWarnings("static-method") @Test(expected = SAXException.class) public
+    void
+    testFailure()
+      throws ValidityException,
+        IOException,
+        SAXException,
+        ParserConfigurationException,
+        ParsingException,
+        URISyntaxException,
+        ConstraintError
+  {
+    SDocumentXHTMLWriterMultiTest
+      .checkDocument(new Document(new Element("z")));
+  }
+
+  @SuppressWarnings("static-method") @Test public void testLarge_0()
+    throws ConstraintError,
+      ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
+  {
+    final SADocument d = SAnnotatorTest.annotate("jaux-documentation.xml");
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    final Callbacks cb = new Callbacks();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
+    Assert.assertEquals(9, cb.on_head_called);
+    Assert.assertEquals(9, cb.on_body_start_called);
+    Assert.assertEquals(9, cb.on_body_end_called);
+
+    for (final String name : dr.keySet()) {
+      SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
+    }
   }
 }

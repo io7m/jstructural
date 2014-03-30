@@ -9,7 +9,8 @@
 .command,
 .constant,
 .element,
-.file
+.file,
+.type
 {
   font-family: monospace;
 }
@@ -25,3 +26,20 @@
   overflow:       auto;
 }
 
+.dependencies table td
+{
+  padding-right: 3.0em;
+  font-family:   monospace;
+  font-size:     9pt;
+}
+
+.platforms table td
+{
+  padding-right: 2.0em;
+}
+.platforms table tbody,
+.platforms table thead
+{
+  font-size:     8pt;
+  font-family:   monospace;
+}

@@ -86,6 +86,7 @@ import com.io7m.jaux.functional.Option;
   private final @Nonnull String             kind;
   private final @Nonnull SFormalItemTitle   title;
   private final @Nonnull Option<String>     type;
+
   private SFormalItem(
     final @Nonnull SFormalItemTitle in_title,
     final @Nonnull String in_kind,

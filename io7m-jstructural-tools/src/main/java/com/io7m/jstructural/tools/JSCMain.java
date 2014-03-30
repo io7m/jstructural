@@ -24,8 +24,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Properties;
+import java.util.SortedMap;
 
 import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
@@ -51,14 +51,13 @@ import org.apache.commons.cli.PosixParser;
 import org.xml.sax.SAXException;
 
 import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnimplementedCodeException;
-import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jlog.Log;
 import com.io7m.jstructural.annotated.SADocument;
 import com.io7m.jstructural.annotated.SAnnotator;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.xom.SDocumentParser;
 import com.io7m.jstructural.xom.SDocumentXHTMLWriterCallbacks;
+import com.io7m.jstructural.xom.SDocumentXHTMLWriterMulti;
 import com.io7m.jstructural.xom.SDocumentXHTMLWriterSingle;
 
 /**
@@ -194,41 +193,23 @@ public final class JSCMain
    *          The log handle
    * @param args
    *          The arguments
-   * @throws ParseException
-   *           If the command-line arguments are invalid
-   * @throws IOException
-   *           If an I/O error occurs
-   * @throws ConstraintError
-   *           If an internal constraint error occurs
-   * @throws SAXException
-   *           If an XML parser error occurs
-   * @throws ParserConfigurationException
-   *           If an XML parser error occurs
-   * @throws ParsingException
-   *           If an XML parser error occurs
-   * @throws URISyntaxException
-   *           If an XML parser error occurs
-   * @throws XIncludeException
-   *           If an XML parser error occurs
+   * @throws Throwable
+   *           On errors
    */
 
   public static void run(
     final @Nonnull Log log,
     final @Nonnull String[] args)
-    throws ParseException,
-      IOException,
-      ConstraintError,
-      SAXException,
-      ParserConfigurationException,
-      ParsingException,
-      URISyntaxException,
-      XIncludeException
+    throws Throwable
   {
     try {
       JSCMain.runActual(log, args);
     } catch (final ParseException e) {
       log.error(e.getMessage());
       JSCMain.showHelp();
+      throw e;
+    } catch (final IOException e) {
+      log.error(e.getMessage());
       throw e;
     } catch (final ValidityException e) {
       log.error(e.getMessage());
@@ -257,11 +238,7 @@ public final class JSCMain
     } catch (final XIncludeException e) {
       log.error(e.getMessage());
       throw e;
-    } catch (final UnimplementedCodeException x) {
-      log.critical("bug: " + x.getMessage());
-      x.printStackTrace(System.err);
-      throw x;
-    } catch (final UnreachableCodeException x) {
+    } catch (final Throwable x) {
       log.critical("bug: " + x.getMessage());
       x.printStackTrace(System.err);
       throw x;
@@ -353,9 +330,36 @@ public final class JSCMain
   private static void runCommandCompileXHTMLMulti(
     final @Nonnull Log logx,
     final @Nonnull CommandLine line)
+    throws ValidityException,
+      BadParseAttributeException,
+      InclusionLoopException,
+      NoIncludeLocationException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      IOException,
+      URISyntaxException,
+      XIncludeException,
+      ParseException,
+      ConstraintError
   {
-    // TODO Auto-generated method stub
-    throw new UnimplementedCodeException();
+    final String[] args = line.getArgs();
+    if (args.length < 2) {
+      throw new ParseException("Too few arguments");
+    }
+
+    final File outdir = new File(args[1]);
+
+    final SADocument doc = JSCMain.runCommandCheck(logx, line);
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+
+    final SortedMap<String, Document> results =
+      writer.writeDocuments(JSCMain.getXHTMLWriterCallbacks(), doc);
+
+    for (final String name : results.keySet()) {
+      final File outfile = new File(outdir, name);
+      JSCMain.writeFile(logx, outfile, results.get(name));
+    }
   }
 
   private static void runCommandCompileXHTMLSingle(
@@ -386,10 +390,10 @@ public final class JSCMain
     final SDocumentXHTMLWriterSingle writer =
       new SDocumentXHTMLWriterSingle();
 
-    final List<Document> results =
+    final SortedMap<String, Document> results =
       writer.writeDocuments(JSCMain.getXHTMLWriterCallbacks(), doc);
 
-    JSCMain.writeFile(logx, outfile, results.get(0));
+    JSCMain.writeFile(logx, outfile, results.get(results.firstKey()));
   }
 
   @SuppressWarnings("unused") private static void runShowVersion(

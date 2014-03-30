@@ -115,6 +115,14 @@ public final class SASectionNumberPS extends SASectionNumber
     return String.format("%d.%d", this.part, this.section);
   }
 
+  @Override public <T> T segmentNumberAccept(
+    final @Nonnull SASegmentNumberVisitor<T> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitSectionNumber(this);
+  }
+
   @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();

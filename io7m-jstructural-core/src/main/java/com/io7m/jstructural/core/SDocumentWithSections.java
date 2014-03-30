@@ -156,6 +156,14 @@ public final class SDocumentWithSections extends SDocument
     this.sections = Constraints.constrainNotNull(in_content, "Content");
   }
 
+  @Override public <D> D documentAccept(
+    final @Nonnull SDocumentVisitor<D> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitDocumentWithSections(this);
+  }
+
   @Override public boolean equals(
     final Object obj)
   {
@@ -187,13 +195,5 @@ public final class SDocumentWithSections extends SDocument
     int result = super.hashCode();
     result = (prime * result) + this.sections.hashCode();
     return result;
-  }
-
-  @Override public <D> D documentAccept(
-    final @Nonnull SDocumentVisitor<D> v)
-    throws ConstraintError,
-      Exception
-  {
-    return v.visitDocumentWithSections(this);
   }
 }

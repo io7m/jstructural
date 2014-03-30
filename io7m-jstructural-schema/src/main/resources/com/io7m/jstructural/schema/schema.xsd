@@ -264,12 +264,4 @@
       <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="set">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="s:document"/>
-      </xs:sequence>
-      <xs:attributeGroup ref="s:io7m.structural-2_0_0.standard-attributes"/>
-    </xs:complexType>
-  </xs:element>
 </xs:schema>

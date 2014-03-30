@@ -22,14 +22,14 @@ import com.io7m.jlog.Log;
 
 public final class TestUtilities
 {
-  private TestUtilities()
-  {
-
-  }
-
   public static Log getLog()
   {
     final Properties properties = new Properties();
     return new Log(properties, "com.io7m.jstructural", "tests");
+  }
+
+  private TestUtilities()
+  {
+
   }
 }

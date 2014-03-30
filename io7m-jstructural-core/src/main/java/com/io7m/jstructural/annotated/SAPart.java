@@ -16,6 +16,9 @@
 
 package com.io7m.jstructural.annotated;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -31,12 +34,13 @@ import com.io7m.jstructural.core.SPartContents;
 
 @Immutable public final class SAPart
 {
-  private final @Nonnull Option<SPartContents>    contents;
-  private final @Nonnull Option<SAID>             id;
-  private final int                               number;
-  private final @Nonnull SNonEmptyList<SASection> sections;
-  private final @Nonnull SAPartTitle              title;
-  private final @Nonnull Option<String>           type;
+  private final @Nonnull Option<SPartContents>           contents;
+  private final @Nonnull Option<SAID>                    id;
+  private final @Nonnull SAPartNumber                    number;
+  private final @Nonnull Map<SASectionNumber, SASection> numbered_sections;
+  private final @Nonnull SNonEmptyList<SASection>        sections;
+  private final @Nonnull SAPartTitle                     title;
+  private final @Nonnull Option<String>                  type;
 
   /**
    * Construct a new part.
@@ -58,7 +62,7 @@ import com.io7m.jstructural.core.SPartContents;
    */
 
   public SAPart(
-    final int in_number,
+    final @Nonnull SAPartNumber in_number,
     final @Nonnull Option<String> in_type,
     final @Nonnull Option<SAID> in_id,
     final @Nonnull SAPartTitle in_title,
@@ -66,13 +70,18 @@ import com.io7m.jstructural.core.SPartContents;
     final @Nonnull SNonEmptyList<SASection> in_sections)
     throws ConstraintError
   {
-    this.number =
-      Constraints.constrainRange(in_number, 1, Integer.MAX_VALUE, "Number");
+    this.number = Constraints.constrainNotNull(in_number, "Part number");
     this.type = Constraints.constrainNotNull(in_type, "Type");
     this.id = Constraints.constrainNotNull(in_id, "ID");
     this.title = Constraints.constrainNotNull(in_title, "Title");
     this.contents = Constraints.constrainNotNull(in_contents, "Contents");
     this.sections = Constraints.constrainNotNull(in_sections, "Content");
+
+    this.numbered_sections = new HashMap<SASectionNumber, SASection>();
+    for (final SASection s : this.sections.getElements()) {
+      assert this.numbered_sections.containsKey(s.getNumber()) == false;
+      this.numbered_sections.put(s.getNumber(), s);
+    }
   }
 
   @Override public boolean equals(
@@ -88,7 +97,8 @@ import com.io7m.jstructural.core.SPartContents;
       return false;
     }
     final SAPart other = (SAPart) obj;
-    return this.contents.equals(other.contents)
+    return this.number.equals(other.number)
+      && this.contents.equals(other.contents)
       && this.id.equals(other.id)
       && this.sections.equals(other.sections)
       && this.title.equals(other.title)
@@ -117,9 +127,30 @@ import com.io7m.jstructural.core.SPartContents;
    * @return The part number
    */
 
-  public int getNumber()
+  public @Nonnull SAPartNumber getNumber()
   {
     return this.number;
+  }
+
+  /**
+   * The section with the given number.
+   * 
+   * @param n
+   *          The number
+   * @return The section, if any
+   * @throws ConstraintError
+   *           If any parameter is <code>null</code>
+   */
+
+  public @Nonnull Option<SASection> getSection(
+    final @Nonnull SASectionNumber n)
+    throws ConstraintError
+  {
+    Constraints.constrainNotNull(n, "Number");
+    if (this.numbered_sections.containsKey(n)) {
+      return Option.some(this.numbered_sections.get(n));
+    }
+    return Option.none();
   }
 
   /**
@@ -153,6 +184,7 @@ import com.io7m.jstructural.core.SPartContents;
   {
     final int prime = 31;
     int result = 1;
+    result = (prime * result) + this.number.hashCode();
     result = (prime * result) + this.contents.hashCode();
     result = (prime * result) + this.id.hashCode();
     result = (prime * result) + this.sections.hashCode();

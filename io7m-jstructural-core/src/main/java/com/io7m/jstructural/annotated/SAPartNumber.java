@@ -16,35 +16,27 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
 import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
 
 /**
- * A section number with no other components.
+ * A part number.
  */
 
-public final class SASectionNumberS extends SASectionNumber
+public final class SAPartNumber implements SASegmentNumber
 {
-  private final int section;
+  private final int actual;
 
-  /**
-   * Construct a new section number
-   * 
-   * @param in_section
-   *          The section number
-   * @throws ConstraintError
-   *           If any parameter is outside of the range
-   *           <code>[1, {@link Integer#MAX_VALUE}]</code>
-   */
-
-  public SASectionNumberS(
-    final int in_section)
+  SAPartNumber(
+    final int in_actual)
     throws ConstraintError
   {
-    this.section =
-      Constraints.constrainRange(in_section, 1, Integer.MAX_VALUE, "Section");
+    this.actual =
+      Constraints.constrainRange(
+        in_actual,
+        1,
+        Integer.MAX_VALUE,
+        "Part number");
   }
 
   @Override public boolean equals(
@@ -59,56 +51,40 @@ public final class SASectionNumberS extends SASectionNumber
     if (this.getClass() != obj.getClass()) {
       return false;
     }
-    final SASectionNumberS other = (SASectionNumberS) obj;
-    if (this.section != other.section) {
-      return false;
-    }
-    return true;
+    final SAPartNumber other = (SAPartNumber) obj;
+    return this.actual == other.actual;
   }
 
   /**
-   * @return The section number
+   * @return The actual part number
    */
 
-  public int getSection()
+  public int getActual()
   {
-    return this.section;
+    return this.actual;
   }
 
   @Override public int hashCode()
   {
     final int prime = 31;
     int result = 1;
-    result = (prime * result) + this.section;
+    result = (prime * result) + this.actual;
     return result;
   }
 
-  @Override public <T> T sectionNumberAccept(
-    final @Nonnull SASectionNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception
-  {
-    return v.visitSectionNumberWithoutPart(this);
-  }
-
-  @SuppressWarnings("boxing") @Override public String sectionNumberFormat()
-  {
-    return String.format("%d", this.section);
-  }
-
   @Override public <T> T segmentNumberAccept(
-    final @Nonnull SASegmentNumberVisitor<T> v)
+    final SASegmentNumberVisitor<T> v)
     throws ConstraintError,
       Exception
   {
-    return v.visitSectionNumber(this);
+    return v.visitPartNumber(this);
   }
 
   @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();
-    builder.append("[SASectionNumberWithoutPart section=");
-    builder.append(this.section);
+    builder.append("[SAPartNumber ");
+    builder.append(this.actual);
     builder.append("]");
     return builder.toString();
   }

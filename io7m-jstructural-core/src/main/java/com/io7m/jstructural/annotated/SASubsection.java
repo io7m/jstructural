@@ -32,6 +32,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
 {
   private final @Nonnull SNonEmptyList<SASubsectionContent> content;
   private final @Nonnull Option<SAID>                       id;
+  private final @Nonnull SASubsectionNumber                 number;
   private final @Nonnull SASubsectionTitle                  title;
   private final @Nonnull Option<String>                     type;
 
@@ -60,6 +61,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
     final @Nonnull SNonEmptyList<SASubsectionContent> in_content)
     throws ConstraintError
   {
+    this.number = Constraints.constrainNotNull(in_number, "Number");
     this.type = Constraints.constrainNotNull(in_type, "Type");
     this.id = Constraints.constrainNotNull(in_id, "ID");
     this.title = Constraints.constrainNotNull(in_title, "Title");
@@ -79,7 +81,8 @@ import com.io7m.jstructural.core.SNonEmptyList;
       return false;
     }
     final SASubsection other = (SASubsection) obj;
-    return this.content.equals(other.content)
+    return this.number.equals(other.number)
+      && this.content.equals(other.content)
       && this.id.equals(other.id)
       && this.title.equals(other.title)
       && this.type.equals(other.type);
@@ -104,6 +107,15 @@ import com.io7m.jstructural.core.SNonEmptyList;
   }
 
   /**
+   * @return The subsection number
+   */
+
+  public @Nonnull SASubsectionNumber getNumber()
+  {
+    return this.number;
+  }
+
+  /**
    * @return The subsection title
    */
 
@@ -125,6 +137,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
   {
     final int prime = 31;
     int result = 1;
+    result = (prime * result) + this.number.hashCode();
     result = (prime * result) + this.content.hashCode();
     result = (prime * result) + this.id.hashCode();
     result = (prime * result) + this.title.hashCode();

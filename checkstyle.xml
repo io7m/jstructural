@@ -13,7 +13,7 @@
 
     <!-- Require that anonymous inner classes are less than 100 lines. -->
     <module name="AnonInnerLength">
-      <property name="max" value="100"/>
+      <property name="max" value="150"/>
     </module>
 
     <module name="ArrayTrailingComma"/>
@@ -69,7 +69,7 @@
     <!-- <module name="IllegalCatch"/> -->
     <module name="IllegalImport"/>
     <module name="IllegalInstantiation"/>
-    <module name="IllegalThrows"/>
+    <!-- <module name="IllegalThrows"/> -->
     <module name="IllegalToken">
       <property name="tokens" value="POST_INC,POST_DEC"/>
     </module>

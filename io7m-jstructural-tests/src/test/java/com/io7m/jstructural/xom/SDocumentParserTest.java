@@ -61,8 +61,6 @@ import com.io7m.jstructural.core.STerm;
 import com.io7m.jstructural.core.SText;
 import com.io7m.jstructural.core.SVerbatim;
 import com.io7m.jstructural.core.SXML;
-import com.io7m.jstructural.xom.SDocumentParser;
-import com.io7m.jstructural.xom.SDocumentSerializer;
 
 public final class SDocumentParserTest
 {

@@ -16,12 +16,15 @@
 
 package com.io7m.jstructural.annotated;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
 import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jaux.functional.Option;
 import com.io7m.jstructural.core.SDocumentContents;
 import com.io7m.jstructural.core.SDocumentStyle;
@@ -33,7 +36,8 @@ import com.io7m.jstructural.core.SNonEmptyList;
 
 public final class SADocumentWithSections extends SADocument
 {
-  private final @Nonnull SNonEmptyList<SASection> sections;
+  private final @Nonnull Map<SASectionNumber, SASection> numbered_sections;
+  private final @Nonnull SNonEmptyList<SASection>        sections;
 
   /**
    * Construct a new document with sections.
@@ -68,6 +72,12 @@ public final class SADocumentWithSections extends SADocument
   {
     super(in_ids, in_title, in_contents, in_style, in_footnotes, in_formals);
     this.sections = Constraints.constrainNotNull(in_content, "Content");
+
+    this.numbered_sections = new HashMap<SASectionNumber, SASection>();
+    for (final SASection s : this.sections.getElements()) {
+      assert this.numbered_sections.containsKey(s.getNumber()) == false;
+      this.numbered_sections.put(s.getNumber(), s);
+    }
   }
 
   @Override public <A> A documentAccept(
@@ -94,6 +104,17 @@ public final class SADocumentWithSections extends SADocument
     return this.sections.equals(other.sections);
   }
 
+  @Override public Option<SASection> getSection(
+    final @Nonnull SASectionNumber n)
+    throws ConstraintError
+  {
+    Constraints.constrainNotNull(n, "Number");
+    if (this.numbered_sections.containsKey(n)) {
+      return Option.some(this.numbered_sections.get(n));
+    }
+    return Option.none();
+  }
+
   /**
    * @return The document sections
    */
@@ -109,5 +130,130 @@ public final class SADocumentWithSections extends SADocument
     int result = super.hashCode();
     result = (prime * result) + this.sections.hashCode();
     return result;
+  }
+
+  @Override public SASegmentNumber segmentGetFirst()
+  {
+    return this.sections.getElements().get(0).getNumber();
+  }
+
+  @Override public Option<SASegmentNumber> segmentGetNext(
+    final @Nonnull SASegmentNumber n)
+    throws ConstraintError
+  {
+    try {
+      final List<SASection> section_list = this.sections.getElements();
+
+      return n
+        .segmentNumberAccept(new SASegmentNumberVisitor<Option<SASegmentNumber>>() {
+          @Override public Option<SASegmentNumber> visitPartNumber(
+            final @Nonnull SAPartNumber pn)
+            throws ConstraintError,
+              Exception
+          {
+            throw new UnreachableCodeException();
+          }
+
+          @Override public Option<SASegmentNumber> visitSectionNumber(
+            final @Nonnull SASectionNumber pn)
+            throws ConstraintError,
+              Exception
+          {
+            return pn
+              .sectionNumberAccept(new SASectionNumberVisitor<Option<SASegmentNumber>>() {
+                @Override public
+                  Option<SASegmentNumber>
+                  visitSectionNumberWithoutPart(
+                    final @Nonnull SASectionNumberS p)
+                    throws ConstraintError,
+                      Exception
+                {
+                  if (p.getSection() >= section_list.size()) {
+                    return Option.none();
+                  }
+
+                  final SASectionNumberS next =
+                    new SASectionNumberS(p.getSection() + 1);
+                  return Option.some((SASegmentNumber) next);
+                }
+
+                @Override public
+                  Option<SASegmentNumber>
+                  visitSectionNumberWithPart(
+                    final @Nonnull SASectionNumberPS p)
+                    throws ConstraintError,
+                      Exception
+                {
+                  throw new UnreachableCodeException();
+                }
+              });
+          }
+        });
+    } catch (final Exception e) {
+      throw new UnreachableCodeException(e);
+    }
+  }
+
+  @Override public Option<SASegmentNumber> segmentGetPrevious(
+    final @Nonnull SASegmentNumber n)
+    throws ConstraintError
+  {
+    try {
+      return n
+        .segmentNumberAccept(new SASegmentNumberVisitor<Option<SASegmentNumber>>() {
+          @Override public Option<SASegmentNumber> visitPartNumber(
+            final @Nonnull SAPartNumber pn)
+            throws ConstraintError,
+              Exception
+          {
+            throw new UnreachableCodeException();
+          }
+
+          @Override public Option<SASegmentNumber> visitSectionNumber(
+            final @Nonnull SASectionNumber pn)
+            throws ConstraintError,
+              Exception
+          {
+            return pn
+              .sectionNumberAccept(new SASectionNumberVisitor<Option<SASegmentNumber>>() {
+                @Override public
+                  Option<SASegmentNumber>
+                  visitSectionNumberWithoutPart(
+                    final @Nonnull SASectionNumberS p)
+                    throws ConstraintError,
+                      Exception
+                {
+                  if (p.getSection() == 1) {
+                    return Option.none();
+                  }
+
+                  final SASectionNumberS prev =
+                    new SASectionNumberS(p.getSection() - 1);
+                  return Option.some((SASegmentNumber) prev);
+
+                }
+
+                @Override public
+                  Option<SASegmentNumber>
+                  visitSectionNumberWithPart(
+                    final @Nonnull SASectionNumberPS p)
+                    throws ConstraintError,
+                      Exception
+                {
+                  throw new UnreachableCodeException();
+                }
+              });
+          }
+        });
+    } catch (final Exception e) {
+      throw new UnreachableCodeException(e);
+    }
+  }
+
+  @Override public Option<SASegmentNumber> segmentGetUp(
+    final @Nonnull SASegmentNumber n)
+    throws ConstraintError
+  {
+    return Option.none();
   }
 }

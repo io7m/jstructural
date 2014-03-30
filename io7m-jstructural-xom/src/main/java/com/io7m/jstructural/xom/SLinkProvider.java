@@ -18,34 +18,37 @@ package com.io7m.jstructural.xom;
 
 import javax.annotation.Nonnull;
 
-import nu.xom.Element;
-
 import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jstructural.annotated.SAFormalItem;
+import com.io7m.jstructural.annotated.SAFormalItemNumber;
 import com.io7m.jstructural.annotated.SAID;
-import com.io7m.jstructural.annotated.SAPart;
-import com.io7m.jstructural.annotated.SASection;
-import com.io7m.jstructural.annotated.SASubsection;
+import com.io7m.jstructural.annotated.SAPartNumber;
+import com.io7m.jstructural.annotated.SASectionNumber;
+import com.io7m.jstructural.annotated.SASegmentNumber;
+import com.io7m.jstructural.annotated.SASubsectionNumber;
 
 interface SLinkProvider
 {
+  @Nonnull String getFormalItemLinkTarget(
+    final @Nonnull SAFormalItemNumber f)
+    throws ConstraintError;
+
   @Nonnull String getLinkTargetForID(
     final @Nonnull SAID id)
     throws ConstraintError;
 
-  @Nonnull Element getFormalItemLink(
-    final @Nonnull SAFormalItem f)
+  @Nonnull String getPartLinkTarget(
+    final @Nonnull SAPartNumber p)
     throws ConstraintError;
 
-  @Nonnull Element getPartLink(
-    final @Nonnull SAPart p)
+  @Nonnull String getSectionLinkTarget(
+    final @Nonnull SASectionNumber s)
     throws ConstraintError;
 
-  @Nonnull Element getSectionLink(
-    final @Nonnull SASection s)
+  @Nonnull String getSegmentLinkTarget(
+    final @Nonnull SASegmentNumber segment)
     throws ConstraintError;
 
-  @Nonnull Element getSubsectionLink(
-    final @Nonnull SASubsection s)
+  @Nonnull String getSubsectionLinkTarget(
+    final @Nonnull SASubsectionNumber s)
     throws ConstraintError;
 }

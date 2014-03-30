@@ -25,7 +25,6 @@
 
   <r:start combine="choice">
     <r:choice>
-      <r:ref name="io7m.structural-2_0_0.set"/>
       <r:ref name="io7m.structural-2_0_0.document"/>
     </r:choice>
   </r:start>
@@ -396,13 +395,6 @@
         <r:oneOrMore><r:ref name="io7m.structural-2_0_0.part"/></r:oneOrMore>
         <r:oneOrMore><r:ref name="io7m.structural-2_0_0.section"/></r:oneOrMore>
       </r:choice>
-    </r:element>
-  </r:define>
-
-  <r:define name="io7m.structural-2_0_0.set">
-    <r:element name="s:set">
-      <r:ref name="io7m.structural-2_0_0.standard-attributes"/>
-      <r:oneOrMore><r:ref name="io7m.structural-2_0_0.document"/></r:oneOrMore>
     </r:element>
   </r:define>
 
