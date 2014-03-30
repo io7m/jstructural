@@ -20,8 +20,11 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.util.Properties;
@@ -55,6 +58,7 @@ import com.io7m.jlog.Log;
 import com.io7m.jstructural.annotated.SADocument;
 import com.io7m.jstructural.annotated.SAnnotator;
 import com.io7m.jstructural.core.SDocument;
+import com.io7m.jstructural.core.SResources;
 import com.io7m.jstructural.xom.SDocumentParser;
 import com.io7m.jstructural.xom.SDocumentXHTMLWriterCallbacks;
 import com.io7m.jstructural.xom.SDocumentXHTMLWriterMulti;
@@ -245,6 +249,23 @@ public final class JSCMain
     }
   }
 
+  private static void copyStreams(
+    final @Nonnull InputStream input,
+    final @Nonnull OutputStream output)
+    throws IOException
+  {
+    final byte[] buffer = new byte[8192];
+
+    for (;;) {
+      final int r = input.read(buffer);
+      if (r == -1) {
+        output.flush();
+        return;
+      }
+      output.write(buffer, 0, r);
+    }
+  }
+
   private static void runActual(
     final @Nonnull Log log,
     final @Nonnull String[] args)
@@ -360,6 +381,8 @@ public final class JSCMain
       final File outfile = new File(outdir, name);
       JSCMain.writeFile(logx, outfile, results.get(name));
     }
+
+    JSCMain.writeCSS(logx, outdir);
   }
 
   private static void runCommandCompileXHTMLSingle(
@@ -394,6 +417,7 @@ public final class JSCMain
       writer.writeDocuments(JSCMain.getXHTMLWriterCallbacks(), doc);
 
     JSCMain.writeFile(logx, outfile, results.get(results.firstKey()));
+    JSCMain.writeCSS(logx, outdir);
   }
 
   @SuppressWarnings("unused") private static void runShowVersion(
@@ -419,6 +443,52 @@ public final class JSCMain
     pw.println("  Version: " + version);
     pw.println();
     pw.flush();
+  }
+
+  private static void writeCSS(
+    final @Nonnull Log log,
+    final @Nonnull File outdir)
+    throws IOException
+  {
+    final File layout = new File(outdir, "jstructural-2.0.0-layout.css");
+    if (layout.exists() == false) {
+      log.info("creating " + layout);
+
+      final InputStream in =
+        SResources.getLayoutCSSLocation().toURL().openStream();
+      try {
+        JSCMain.copyFileStream(layout, in);
+      } finally {
+        in.close();
+      }
+    }
+
+    final File colour = new File(outdir, "jstructural-2.0.0-colour.css");
+    if (colour.exists() == false) {
+      log.info("creating " + colour);
+
+      final InputStream in =
+        SResources.getColourCSSLocation().toURL().openStream();
+      try {
+        JSCMain.copyFileStream(colour, in);
+      } finally {
+        in.close();
+      }
+    }
+  }
+
+  private static void copyFileStream(
+    final @Nonnull File file,
+    final @Nonnull InputStream in)
+    throws FileNotFoundException,
+      IOException
+  {
+    final FileOutputStream out = new FileOutputStream(file);
+    try {
+      JSCMain.copyStreams(in, out);
+    } finally {
+      out.close();
+    }
   }
 
   private static void writeFile(

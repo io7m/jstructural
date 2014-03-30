@@ -98,7 +98,6 @@ public final class SXHTML
   static final @Nonnull String         PART_CODE;
   static final @Nonnull String         SECTION_CODE;
   static final @Nonnull String         SUBSECTION_CODE;
-
   static final @Nonnull URI            XHTML_URI;
 
   static {

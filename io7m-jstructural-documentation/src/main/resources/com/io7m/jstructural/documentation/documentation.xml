@@ -189,6 +189,76 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
 </s:part>
 
 <s:part>
+  <s:part-title>Tool Reference</s:part-title>
+  <s:part-contents/>
+  
+  <s:section xml:id="tool_ref_jsc">
+    <s:section-title>jsc</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Overview</s:subsection-title>
+      <s:paragraph>
+        The <s:term s:type="command">jsc</s:term> tool transforms
+        <s:term s:type="package">structural</s:term> documents into
+        XHTML 1.0 Strict.
+      </s:paragraph>
+      <s:paragraph>
+        <s:verbatim s:type="terminal"><![CDATA[jsc: [options] --check        file
+  or [options] --xhtml-single file outdir
+  or [options] --xhtml-multi  file outdir
+  or [options] --version
+
+     --check           Parse and validate all source files, but do not produce output
+     --debug           Enable debugging (debug messages, exception backtraces)
+  -h,--help            Show this help message
+     --version         Display version
+     --xhtml-multi     Produce multiple XHTML files as output
+     --xhtml-single    Produce a single XHTML file as output]]></s:verbatim>
+      </s:paragraph>
+      <s:paragraph>
+        When the <s:term s:type="command">--check</s:term> argument is specified,
+        the file <s:term s:type="file">file</s:term> is parsed and validated according
+        to the <s:term s:type="package">structural</s:term> schema. 
+        <s:link-external s:target="http://www.w3.org/TR/xinclude">XIncludes</s:link-external>
+        are understood by <s:term s:type="command">jsc</s:term> and will be processed prior
+        to validation.
+      </s:paragraph>
+      <s:paragraph>
+        When the <s:term s:type="command">--xhtml-single</s:term> argument is specified,
+        the given <s:term s:type="file">file</s:term> is validated exactly as with 
+        <s:term s:type="command">--check</s:term>, and then a single XHTML 1.0 Strict
+        document is written to <s:term s:type="file">outdir/index.xhtml</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        When the <s:term s:type="command">--xhtml-multi</s:term> argument is specified,
+        the given <s:term s:type="file">file</s:term> is validated exactly as with 
+        <s:term s:type="command">--check</s:term>, and then a single XHTML 1.0 Strict
+        document is written to <s:term s:type="file">outdir/index-m.xhtml</s:term>,
+        which represents the front page of the document, and a series of files are
+        written to <s:term s:type="file">outdir/*.xhtml</s:term>, representing the
+        <s:link s:target="elem_part">parts</s:link> and
+        <s:link s:target="elem_section">sections</s:link> of the document.
+      </s:paragraph>
+      <s:paragraph>
+        When either <s:term s:type="command">--xhtml-multi</s:term> or
+        <s:term s:type="command">--xhtml-single</s:term> are specified, the files
+        <s:term s:type="file">outdir/jstructural-2.0.0-layout.css</s:term> and
+        <s:term s:type="file">outdir/jstructural-2.0.0-colour.css</s:term> are
+        created iff they do not already exist. These files contain CSS controlling
+        the visual presentation of the XHTML.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Packaging</s:subsection-title>
+      <s:paragraph>
+        The <s:term s:type="command">jsc</s:term> tool is packaged into the
+        standalone <s:term s:type="file">io7m-jstructural-tools-2.0.0-jsc.jar</s:term>
+        file distributed with <s:term s:type="package">jstructural</s:term>.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+</s:part>
+
+<s:part>
   <s:part-title>Element Reference</s:part-title>
   <s:part-contents />
 
