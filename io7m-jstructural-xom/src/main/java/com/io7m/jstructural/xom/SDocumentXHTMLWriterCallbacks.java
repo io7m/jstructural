@@ -16,6 +16,7 @@
 
 package com.io7m.jstructural.xom;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import nu.xom.Element;
@@ -37,13 +38,18 @@ public interface SDocumentXHTMLWriterCallbacks
     final @Nonnull Element body);
 
   /**
-   * Called upon creation of the XHTML body element.
+   * Called upon creation of the XHTML body element. If the function returns
+   * an element, then the returned element becomes the new parent of any
+   * subsequently generated elements (effectively becoming the "container" for
+   * the generated document).
    * 
+   * @return The element that will be used as the container for the generated
+   *         document
    * @param body
    *          The XHTML body element
    */
 
-  void onBodyStart(
+  @CheckForNull Element onBodyStart(
     final @Nonnull Element body);
 
   /**

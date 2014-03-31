@@ -195,13 +195,14 @@ public final class JSCMain
         }
       }
 
-      @Override public void onBodyStart(
+      @Override public Element onBodyStart(
         final @Nonnull Element body)
       {
         if (inserts.getBodyStart().isSome()) {
           final Some<Element> some = (Some<Element>) inserts.getBodyStart();
           body.appendChild(some.value.copy());
         }
+        return null;
       }
 
       @Override public void onHead(

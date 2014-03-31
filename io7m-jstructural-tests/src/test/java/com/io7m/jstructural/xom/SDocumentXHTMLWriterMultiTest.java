@@ -27,11 +27,14 @@ import java.util.SortedMap;
 import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
 
+import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
+import nu.xom.XPathContext;
 import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.InclusionLoopException;
 import nu.xom.xinclude.NoIncludeLocationException;
@@ -72,10 +75,11 @@ public final class SDocumentXHTMLWriterMultiTest
       this.on_body_end_called++;
     }
 
-    @Override public void onBodyStart(
+    @Override public Element onBodyStart(
       final Element body)
     {
       this.on_body_start_called++;
+      return null;
     }
 
     @Override public void onHead(
@@ -235,6 +239,158 @@ public final class SDocumentXHTMLWriterMultiTest
 
     for (final String name : dr.keySet()) {
       SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
+    }
+  }
+
+  private static class BodyReplacerTrivial implements
+    SDocumentXHTMLWriterCallbacks
+  {
+    public BodyReplacerTrivial()
+    {
+      // Nothing
+    }
+
+    @Override public void onBodyEnd(
+      final Element body)
+    {
+      // Nothing
+    }
+
+    @Override public Element onBodyStart(
+      final Element body)
+    {
+      final Element e = new Element("div", SXHTML.XHTML_URI.toString());
+      e.addAttribute(new Attribute("class", null, "new_parent"));
+      return e;
+    }
+
+    @Override public void onHead(
+      final Element head)
+    {
+      // Nothing
+    }
+  }
+
+  private static class BodyReplacerExtra implements
+    SDocumentXHTMLWriterCallbacks
+  {
+    public BodyReplacerExtra()
+    {
+      // Nothing
+    }
+
+    @Override public void onBodyEnd(
+      final Element body)
+    {
+      // Nothing
+    }
+
+    @Override public Element onBodyStart(
+      final Element body)
+    {
+      final Element ea = new Element("div", SXHTML.XHTML_URI.toString());
+      ea.addAttribute(new Attribute("class", null, "new_ancestor"));
+
+      final Element ep = new Element("div", SXHTML.XHTML_URI.toString());
+      ep.addAttribute(new Attribute("class", null, "new_parent"));
+
+      ea.appendChild(ep);
+      return ep;
+    }
+
+    @Override public void onHead(
+      final Element head)
+    {
+      // Nothing
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public void testBasicReparent_0()
+    throws ConstraintError,
+      ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException,
+      BadParseAttributeException,
+      InclusionLoopException,
+      NoIncludeLocationException,
+      XIncludeException
+  {
+    final URI uri = SDocumentation.getDocumentationXMLLocation();
+    final InputStream s = uri.toURL().openStream();
+    final Log log = TestUtilities.getLog();
+    final SDocument d = SDocumentParser.fromStream(s, uri, log);
+    s.close();
+
+    final SADocument da = SAnnotator.document(log, d);
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    final BodyReplacerTrivial cb = new BodyReplacerTrivial();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, da);
+
+    for (final String name : dr.keySet()) {
+      final Document doc = dr.get(name);
+
+      final XPathContext ns = new XPathContext();
+      ns.addNamespace("h", SXHTML.XHTML_URI.toString());
+      final Nodes nodes =
+        doc
+          .query(
+            "/h:html/h:body/h:div[@class='new_parent']/h:div[@class='st200_body']",
+            ns);
+      Assert.assertEquals(1, nodes.size());
+
+      SDocumentXHTMLWriterMultiTest.checkDocument(doc);
+
+      final Serializer sr = new Serializer(System.out);
+      sr.setIndent(2);
+      sr.setMaxLength(80);
+      sr.write(doc);
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public void testBasicReparent_1()
+    throws ConstraintError,
+      ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException,
+      BadParseAttributeException,
+      InclusionLoopException,
+      NoIncludeLocationException,
+      XIncludeException
+  {
+    final URI uri = SDocumentation.getDocumentationXMLLocation();
+    final InputStream s = uri.toURL().openStream();
+    final Log log = TestUtilities.getLog();
+    final SDocument d = SDocumentParser.fromStream(s, uri, log);
+    s.close();
+
+    final SADocument da = SAnnotator.document(log, d);
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    final BodyReplacerExtra cb = new BodyReplacerExtra();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, da);
+
+    for (final String name : dr.keySet()) {
+      final Document doc = dr.get(name);
+      SDocumentXHTMLWriterMultiTest.checkDocument(doc);
+
+      final XPathContext ns = new XPathContext();
+      ns.addNamespace("h", SXHTML.XHTML_URI.toString());
+      final Nodes nodes =
+        doc
+          .query(
+            "/h:html/h:body/h:div[@class='new_ancestor']/h:div[@class='new_parent']/h:div[@class='st200_body']",
+            ns);
+      Assert.assertEquals(1, nodes.size());
+
+      final Serializer sr = new Serializer(System.out);
+      sr.setIndent(2);
+      sr.setMaxLength(80);
+      sr.write(doc);
     }
   }
 }

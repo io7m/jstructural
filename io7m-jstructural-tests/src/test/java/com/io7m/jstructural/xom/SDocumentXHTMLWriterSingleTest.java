@@ -27,11 +27,14 @@ import java.util.SortedMap;
 import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
 
+import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
+import nu.xom.XPathContext;
 import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.InclusionLoopException;
 import nu.xom.xinclude.NoIncludeLocationException;
@@ -72,10 +75,11 @@ public final class SDocumentXHTMLWriterSingleTest
       this.on_body_end_called++;
     }
 
-    @Override public void onBodyStart(
+    @Override public Element onBodyStart(
       final Element body)
     {
       this.on_body_start_called++;
+      return null;
     }
 
     @Override public void onHead(
@@ -239,6 +243,135 @@ public final class SDocumentXHTMLWriterSingleTest
 
     for (final String name : dr.keySet()) {
       SDocumentXHTMLWriterSingleTest.checkDocument(dr.get(name));
+    }
+  }
+
+  private static class BodyReplacerTrivial implements
+    SDocumentXHTMLWriterCallbacks
+  {
+    public BodyReplacerTrivial()
+    {
+      // Nothing
+    }
+
+    @Override public void onBodyEnd(
+      final Element body)
+    {
+      // Nothing
+    }
+
+    @Override public Element onBodyStart(
+      final Element body)
+    {
+      final Element e = new Element("div", SXHTML.XHTML_URI.toString());
+      e.addAttribute(new Attribute("class", null, "new_parent"));
+      return e;
+    }
+
+    @Override public void onHead(
+      final Element head)
+    {
+      // Nothing
+    }
+  }
+
+  private static class BodyReplacerExtra implements
+    SDocumentXHTMLWriterCallbacks
+  {
+    public BodyReplacerExtra()
+    {
+      // Nothing
+    }
+
+    @Override public void onBodyEnd(
+      final Element body)
+    {
+      // Nothing
+    }
+
+    @Override public Element onBodyStart(
+      final Element body)
+    {
+      final Element ea = new Element("div", SXHTML.XHTML_URI.toString());
+      ea.addAttribute(new Attribute("class", null, "new_ancestor"));
+
+      final Element ep = new Element("div", SXHTML.XHTML_URI.toString());
+      ep.addAttribute(new Attribute("class", null, "new_parent"));
+
+      ea.appendChild(ep);
+      return ep;
+    }
+
+    @Override public void onHead(
+      final Element head)
+    {
+      // Nothing
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public void testBasicReparent_0()
+    throws ConstraintError,
+      ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
+  {
+    final SADocument d = SAnnotatorTest.annotate("basic-0.xml");
+    final SDocumentXHTMLWriterSingle writer =
+      new SDocumentXHTMLWriterSingle();
+    final BodyReplacerTrivial cb = new BodyReplacerTrivial();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
+
+    for (final String name : dr.keySet()) {
+      final Document doc = dr.get(name);
+
+      final XPathContext ns = new XPathContext();
+      ns.addNamespace("h", SXHTML.XHTML_URI.toString());
+      final Nodes nodes =
+        doc
+          .query(
+            "/h:html/h:body/h:div[@class='new_parent']/h:div[@class='st200_body']",
+            ns);
+      Assert.assertEquals(1, nodes.size());
+
+      SDocumentXHTMLWriterSingleTest.checkDocument(doc);
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public void testBasicReparent_1()
+    throws ConstraintError,
+      ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
+  {
+    final SADocument d = SAnnotatorTest.annotate("basic-0.xml");
+    final SDocumentXHTMLWriterSingle writer =
+      new SDocumentXHTMLWriterSingle();
+    final BodyReplacerExtra cb = new BodyReplacerExtra();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
+
+    for (final String name : dr.keySet()) {
+      final Document doc = dr.get(name);
+      SDocumentXHTMLWriterSingleTest.checkDocument(doc);
+
+      final XPathContext ns = new XPathContext();
+      ns.addNamespace("h", SXHTML.XHTML_URI.toString());
+      final Nodes nodes =
+        doc
+          .query(
+            "/h:html/h:body/h:div[@class='new_ancestor']/h:div[@class='new_parent']/h:div[@class='st200_body']",
+            ns);
+      Assert.assertEquals(1, nodes.size());
+
+      final Serializer s = new Serializer(System.out);
+      s.setIndent(2);
+      s.setMaxLength(80);
+      s.write(doc);
     }
   }
 }

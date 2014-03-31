@@ -526,19 +526,22 @@ import com.io7m.jstructural.core.SSectionContents;
     tb.append(p.getTitle().getActual());
 
     final SXHTMLPage page = SXHTML.newPage(tb.toString(), style);
-    final Element body = page.getBodyContainer();
 
     callbacks.onHead(page.getHead());
-    callbacks.onBodyStart(body);
+
+    final Element container = page.getBodyContainer();
+    final Element rbody = callbacks.onBodyStart(container);
+    SXHTMLReparent.reparentBodyNode(container, rbody);
+
     final Some<SASegmentNumber> some = Option.some((SASegmentNumber) number);
-    body.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+    container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
       link_provider,
       doc,
       some,
       true));
 
     final Element part_main = SXHTML.partContainer(p.getTitle());
-    body.appendChild(part_main);
+    container.appendChild(part_main);
 
     final SNonEmptyList<SASection> sections = p.getSections();
 
@@ -558,12 +561,12 @@ import com.io7m.jstructural.core.SSectionContents;
         }
       });
 
-    body.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+    container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
       link_provider,
       doc,
       some,
       false));
-    callbacks.onBodyEnd(body);
+    callbacks.onBodyEnd(container);
 
     final String name = SXHTMLAnchors.getPartFile(number);
     assert documents.containsKey(name) == false;
@@ -602,19 +605,22 @@ import com.io7m.jstructural.core.SSectionContents;
     tb.append(s.getTitle().getActual());
 
     final SXHTMLPage page = SXHTML.newPage(tb.toString(), style);
-    final Element body = page.getBodyContainer();
 
     callbacks.onHead(page.getHead());
-    callbacks.onBodyStart(body);
+
+    final Element container = page.getBodyContainer();
+    final Element rbody = callbacks.onBodyStart(container);
+    SXHTMLReparent.reparentBodyNode(container, rbody);
+
     final Some<SASegmentNumber> some = Option.some((SASegmentNumber) number);
-    body.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+    container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
       link_provider,
       document,
       some,
       true));
 
     final Element section_main = SXHTML.sectionContainer(s);
-    body.appendChild(section_main);
+    container.appendChild(section_main);
 
     s.sectionAccept(new SASectionVisitor<Unit>() {
       @Override public Unit visitSectionWithParagraphs(
@@ -672,15 +678,15 @@ import com.io7m.jstructural.core.SSectionContents;
       link_provider,
       document.getFormals(),
       s.getFootnotes(),
-      body);
+      container);
 
-    body.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+    container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
       link_provider,
       document,
       some,
       false));
 
-    callbacks.onBodyEnd(body);
+    callbacks.onBodyEnd(container);
 
     final String name = SXHTMLAnchors.getSectionFile(number);
     assert documents.containsKey(name) == false;
@@ -826,18 +832,21 @@ import com.io7m.jstructural.core.SSectionContents;
         {
           final SXHTMLPage page =
             SXHTML.newPage(doc.getTitle().getActual(), doc.getStyle());
-          final Element body = page.getBodyContainer();
 
           callbacks.onHead(page.getHead());
-          callbacks.onBodyStart(body);
-          body.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+
+          final Element container = page.getBodyContainer();
+          final Element rbody = callbacks.onBodyStart(container);
+          SXHTMLReparent.reparentBodyNode(container, rbody);
+
+          container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
             link_provider,
             doc,
             SDocumentXHTMLWriterMulti.NO_NUMBER,
             true));
 
           final SNonEmptyList<SAPart> parts = dwp.getParts();
-          body.appendChild(SXHTML.documentTitle(dwp));
+          container.appendChild(SXHTML.documentTitle(dwp));
 
           doc.getContents().mapPartial(
             new PartialFunction<SDocumentContents, Unit, ConstraintError>() {
@@ -845,17 +854,18 @@ import com.io7m.jstructural.core.SSectionContents;
                 final @Nonnull SDocumentContents x)
                 throws ConstraintError
               {
-                body.appendChild(doc_contents.getTableOfContentsParts(parts));
+                container.appendChild(doc_contents
+                  .getTableOfContentsParts(parts));
                 return Unit.unit();
               }
             });
 
-          body.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+          container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
             link_provider,
             doc,
             SDocumentXHTMLWriterMulti.NO_NUMBER,
             false));
-          callbacks.onBodyEnd(body);
+          callbacks.onBodyEnd(container);
 
           assert documents.containsKey(SDocumentXHTMLWriterMulti.FRONT_PAGE) == false;
           documents.put(
@@ -883,19 +893,22 @@ import com.io7m.jstructural.core.SSectionContents;
         {
           final SXHTMLPage page =
             SXHTML.newPage(doc.getTitle().getActual(), doc.getStyle());
-          final Element body = page.getBodyContainer();
 
           final SNonEmptyList<SASection> sections = dws.getSections();
 
           callbacks.onHead(page.getHead());
-          callbacks.onBodyStart(body);
-          body.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+
+          final Element container = page.getBodyContainer();
+          final Element rbody = callbacks.onBodyStart(container);
+          SXHTMLReparent.reparentBodyNode(container, rbody);
+
+          container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
             link_provider,
             doc,
             SDocumentXHTMLWriterMulti.NO_NUMBER,
             true));
 
-          body.appendChild(SXHTML.documentTitle(dws));
+          container.appendChild(SXHTML.documentTitle(dws));
 
           doc.getContents().mapPartial(
             new PartialFunction<SDocumentContents, Unit, ConstraintError>() {
@@ -903,18 +916,18 @@ import com.io7m.jstructural.core.SSectionContents;
                 final @Nonnull SDocumentContents x)
                 throws ConstraintError
               {
-                body.appendChild(doc_contents
+                container.appendChild(doc_contents
                   .getTableOfContentsSections(sections));
                 return Unit.unit();
               }
             });
 
-          body.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+          container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
             link_provider,
             doc,
             SDocumentXHTMLWriterMulti.NO_NUMBER,
             false));
-          callbacks.onBodyEnd(body);
+          callbacks.onBodyEnd(container);
 
           assert documents.containsKey(SDocumentXHTMLWriterMulti.FRONT_PAGE) == false;
           documents.put(

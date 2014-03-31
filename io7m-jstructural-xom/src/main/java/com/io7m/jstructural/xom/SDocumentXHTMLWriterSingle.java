@@ -415,10 +415,11 @@ import com.io7m.jstructural.core.SSectionContents;
       final SXHTMLPage page =
         SXHTML.newPage(doc.getTitle().getActual(), doc.getStyle());
       callbacks.onHead(page.getHead());
-      final Element body = page.getBodyContainer();
-      callbacks.onBodyStart(body);
 
-      body.appendChild(SXHTML.documentTitle(doc));
+      final Element container = page.getBodyContainer();
+      final Element rbody = callbacks.onBodyStart(container);
+      SXHTMLReparent.reparentBodyNode(container, rbody);
+      container.appendChild(SXHTML.documentTitle(doc));
 
       doc.documentAccept(new SADocumentVisitor<Unit>() {
         @Override public Unit visitDocumentWithParts(
@@ -434,13 +435,14 @@ import com.io7m.jstructural.core.SSectionContents;
                 final @Nonnull SDocumentContents x)
                 throws ConstraintError
               {
-                body.appendChild(doc_contents.getTableOfContentsParts(parts));
+                container.appendChild(doc_contents
+                  .getTableOfContentsParts(parts));
                 return Unit.unit();
               }
             });
 
           for (final SAPart part : parts.getElements()) {
-            body.appendChild(SDocumentXHTMLWriterSingle.part(
+            container.appendChild(SDocumentXHTMLWriterSingle.part(
               part_contents,
               section_contents,
               link_provider,
@@ -463,14 +465,14 @@ import com.io7m.jstructural.core.SSectionContents;
                 final @Nonnull SDocumentContents x)
                 throws ConstraintError
               {
-                body.appendChild(doc_contents
+                container.appendChild(doc_contents
                   .getTableOfContentsSections(sections));
                 return Unit.unit();
               }
             });
 
           for (final SASection s : sections.getElements()) {
-            body.appendChild(SDocumentXHTMLWriterSingle.section(
+            container.appendChild(SDocumentXHTMLWriterSingle.section(
               section_contents,
               link_provider,
               formals,
@@ -481,8 +483,8 @@ import com.io7m.jstructural.core.SSectionContents;
         }
       });
 
-      SXHTML.footnotes(link_provider, formals, doc.getFootnotes(), body);
-      callbacks.onBodyEnd(body);
+      SXHTML.footnotes(link_provider, formals, doc.getFootnotes(), container);
+      callbacks.onBodyEnd(container);
 
       final SortedMap<String, Document> documents =
         new TreeMap<String, Document>();
