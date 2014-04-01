@@ -189,6 +189,105 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
 </s:part>
 
 <s:part>
+  <s:part-title>API Tutorial</s:part-title>
+  <s:part-contents/>
+  <s:section>
+    <s:section-title>API Tutorial</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Overview</s:subsection-title>
+      <s:paragraph>
+        The <s:term s:type="package">jstructural</s:term> API is divided
+        into <s:term s:type="keyword">core</s:term> and <s:term s:type="keyword">annotated</s:term>
+        types. The <s:term s:type="keyword">core</s:term> types have an (almost) 1:1
+        correspondence with the elements that a document author writes in XML. The
+        <s:link-external s:target="apidocs/com/io7m/jstructural/xom/SDocumentParser.html">parser</s:link-external>
+        included with the <s:link-external s:target="http://xom.nu">XOM</s:link-external> backend,
+        for example, produces a document consisting of elements of the
+        <s:term s:type="keyword">core</s:term> types from an XML file. The
+        <s:term s:type="keyword">annotated</s:term> types are, unsurprisingly,
+        values of the <s:term s:type="keyword">core</s:term> types with additional
+        annotations and metadata required to actually produce documents in XHTML
+        format.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Usage</s:subsection-title>
+      <s:paragraph>
+        Parsing documents and producing XHTML output is quite simple. First,
+        a stream representing an XML file is given to the included
+        <s:link-external s:target="apidocs/com/io7m/jstructural/xom/SDocumentParser.html">parser</s:link-external>,
+        which parses and validates the document against the
+        <s:term s:type="package">structural</s:term> schema.
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Parsing</s:formal-item-title>
+        <s:verbatim>
+URI uri;
+Log log;
+InputStream stream;        
+
+final SDocument doc = SDocumentParser.fromStream(stream, uri, log);
+        </s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        Then, the resulting document is annotated with the included
+        <s:link-external s:target="apidocs/com/io7m/jstructural/annotated/SAnnotator.html">annotator</s:link-external>:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Annotation</s:formal-item-title>
+        <s:verbatim>
+Log log;
+SDocument doc;       
+
+final SADocument adoc = SAnnotator.document (doc, log);
+        </s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        Finally, either the
+        <s:link-external s:target="apidocs/com/io7m/jstructural/xom/SDocumentXHTMLWriterSingle.html">single-page writer</s:link-external>
+        or
+        <s:link-external s:target="apidocs/com/io7m/jstructural/xom/SDocumentXHTMLWriterMulti.html">multi-page writer</s:link-external>
+        are used to produce a set of XHTML documents that can be serialized
+        using the standard XOM serializer.
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Writing</s:formal-item-title>
+        <s:verbatim>
+Log log;
+SADocument doc;
+SDocumentXHTMLWriterCallbacks callbacks;      
+
+SDocumentXHTMLWriterSingle writer = new SDocumentXHTMLWriterSingle();
+SortedMap&lt;String, Document> pages = writer.writeDocuments(callbacks, doc);
+        </s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The map returned by the <s:term s:type="function">writeDocuments</s:term>
+        function is a set of mappings from file names to documents.
+      </s:paragraph>
+      <s:paragraph>
+        The writers take a set of callbacks as arguments that can be used
+        to customize the resulting output. See the 
+        <s:link-external s:target="apidocs/com/io7m/jstructural/xom/SDocumentXHTMLWriterCallbacks.html">javadoc</s:link-external>
+        for details.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+</s:part>
+
+<s:part>
+  <s:part-title>API Reference</s:part-title>
+  <s:part-contents/>
+  <s:section>
+    <s:section-title>Javadoc</s:section-title>
+    <s:paragraph>
+      API documentation for the packages is provided via the
+      included <s:link-external s:target="apidocs/index.html">Javadoc</s:link-external>.
+    </s:paragraph>
+  </s:section>
+</s:part>
+
+<s:part>
   <s:part-title>Tool Reference</s:part-title>
   <s:part-contents/>
   

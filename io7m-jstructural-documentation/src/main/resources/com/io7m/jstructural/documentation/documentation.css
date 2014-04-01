@@ -26,6 +26,8 @@
 .constant,
 .element,
 .file,
+.function,
+.keyword,
 .type
 {
   font-family: monospace;

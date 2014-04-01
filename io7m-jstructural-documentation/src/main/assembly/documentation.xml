@@ -12,6 +12,10 @@
       <directory>${project.build.directory}/documentation</directory>
       <outputDirectory>/</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/site/apidocs</directory>
+      <outputDirectory>/apidocs</outputDirectory>
+    </fileSet>
   </fileSets>
 </assembly>
 

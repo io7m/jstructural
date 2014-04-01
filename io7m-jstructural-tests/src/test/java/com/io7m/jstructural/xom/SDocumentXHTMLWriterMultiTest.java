@@ -55,6 +55,8 @@ import com.io7m.jstructural.documentation.SDocumentation;
 
 public final class SDocumentXHTMLWriterMultiTest
 {
+  private static final int DOCUMENTATION_PAGES = 47;
+
   private static final class Callbacks implements
     SDocumentXHTMLWriterCallbacks
   {
@@ -191,9 +193,15 @@ public final class SDocumentXHTMLWriterMultiTest
     final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
     final Callbacks cb = new Callbacks();
     final SortedMap<String, Document> dr = writer.writeDocuments(cb, da);
-    Assert.assertEquals(43, cb.on_head_called);
-    Assert.assertEquals(43, cb.on_body_start_called);
-    Assert.assertEquals(43, cb.on_body_end_called);
+    Assert.assertEquals(
+      SDocumentXHTMLWriterMultiTest.DOCUMENTATION_PAGES,
+      cb.on_head_called);
+    Assert.assertEquals(
+      SDocumentXHTMLWriterMultiTest.DOCUMENTATION_PAGES,
+      cb.on_body_start_called);
+    Assert.assertEquals(
+      SDocumentXHTMLWriterMultiTest.DOCUMENTATION_PAGES,
+      cb.on_body_end_called);
 
     for (final String name : dr.keySet()) {
       SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
