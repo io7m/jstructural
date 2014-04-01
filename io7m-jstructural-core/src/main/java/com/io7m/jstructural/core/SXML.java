@@ -37,7 +37,7 @@ public final class SXML
 
   static {
     try {
-      XML_URI = new URI("http://www.io7m.com/schemas/structural/2.0.0");
+      XML_URI = new URI("http://schemas.io7m.com/structural/2.0.0");
     } catch (final URISyntaxException e) {
       throw new UnreachableCodeException(e);
     }

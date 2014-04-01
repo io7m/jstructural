@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <s:document
-  xmlns:s="http://www.io7m.com/schemas/structural/2.0.0"
+  xmlns:s="http://schemas.io7m.com/structural/2.0.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
   <s:document-title>Document</s:document-title>
   <xi:include href="structuraltest://com/io7m/jstructural/section-0.xml"/>

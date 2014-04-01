@@ -19,7 +19,7 @@
 <!-- version: structural 2.0.0 -->
 
 <r:grammar
-  xmlns:s="http://www.io7m.com/schemas/structural/2.0.0"
+  xmlns:s="http://schemas.io7m.com/structural/2.0.0"
   xmlns:r="http://relaxng.org/ns/structure/1.0"
   datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
 

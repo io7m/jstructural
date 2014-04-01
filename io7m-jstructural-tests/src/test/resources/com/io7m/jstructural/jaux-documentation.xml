@@ -17,7 +17,7 @@
   -->
 
 <s:document
-  xmlns:s="http://www.io7m.com/schemas/structural/2.0.0"
+  xmlns:s="http://schemas.io7m.com/structural/2.0.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
   <s:document-title>io7m-jaux 3.0.0 Documentation</s:document-title>
   <s:document-style>documentation.css</s:document-style>
