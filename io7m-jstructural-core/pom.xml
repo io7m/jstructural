@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -12,7 +15,7 @@
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
   <description>Java implementation of the structural document language (Core types)</description>
-  <url>http://mvn.io7m.com/io7m-jstructural/</url>
+  <url>http://mvn.io7m.com/${project.artifactId}/</url>
 
   <licenses>
     <license>
@@ -45,7 +48,7 @@
     <site>
       <id>io7m</id>
       <name>io7m.com</name>
-      <url>http://mvn.io7m.com/io7m-jstructural-core/</url>
+      <url>http://mvn.io7m.com/${project.artifactId}/</url>
     </site>
   </distributionManagement>
 
@@ -97,7 +100,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.6</version>
+        <version>2.7</version>
         <configuration>
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration>
@@ -105,7 +108,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.2</version>
+        <version>3.3</version>
       </plugin>
       <plugin>
         <groupId>org.sonatype.maven.plugin</groupId>
@@ -121,7 +124,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.12.4</version>
+        <version>2.15</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document
+  xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>io7m-jstructural</title>
+  </properties>
+
+  <body>
+    <subsection name="jstructural">
+      <p>The <var>jstructural</var> package implements a set of
+      primitives for producing technical documentation. The package
+      provides RELAX-NG and XSD schemas describing the format of
+      structural documents and a set of Java classes for producing
+      XHTML output.</p>
+      <p>In contrast to other systems such as DocBook, the structural
+      language only defines elements concerning the structure of the
+      document and not the semantics of the elements. The intention is
+      that higher level languages will produce structural documents
+      as output and then use the provided stylesheets to get various
+      services such as table of contents generation, chapter numbering,
+      footnotes, et cetera, without having to re-implement all of
+      those features for each new language.</p>
+    </subsection>
+  </body>
+
+</document>
