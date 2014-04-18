@@ -236,11 +236,34 @@
         </executions>
       </plugin>
 
-      <!-- Produce aggregate dependency javadocs -->
+      <!-- Javadoc handling -->
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.9.1</version>
         <executions>
+          <!-- Produce javadoc jar for Central -->
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <archive>
+                <manifestEntries>
+                  <Specification-Title>${project.name}</Specification-Title>
+                  <Specification-Version>${project.version}</Specification-Version>
+                  <Specification-Vendor>io7m.com</Specification-Vendor>
+                  <Implementation-Title>${project.name}</Implementation-Title>
+                  <Implementation-Version>${project.version}</Implementation-Version>
+                  <Implementation-Vendor>io7m.com</Implementation-Vendor>
+                  <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+                  <Built-By>io7m</Built-By>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </execution>
+          <!-- Produce aggregate dependency javadocs -->
           <execution>
             <id>javadoc-aggregate</id>
             <phase>package</phase>
@@ -334,36 +357,6 @@
                </manifestEntries>
              </archive>
            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Create javadoc jar -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <archive>
-                <manifestEntries>
-                  <Specification-Title>${project.name}</Specification-Title>
-                  <Specification-Version>${project.version}</Specification-Version>
-                  <Specification-Vendor>io7m.com</Specification-Vendor>
-                  <Implementation-Title>${project.name}</Implementation-Title>
-                  <Implementation-Version>${project.version}</Implementation-Version>
-                  <Implementation-Vendor>io7m.com</Implementation-Vendor>
-                  <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
-                  <Built-By>io7m</Built-By>
-                </manifestEntries>
-              </archive>
-            </configuration>
           </execution>
         </executions>
       </plugin>
