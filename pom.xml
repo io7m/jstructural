@@ -12,7 +12,7 @@
   <packaging>pom</packaging>
   <name>io7m-jstructural</name>
   <description>Java implementation of the structural document language</description>
-  <url>http://mvn.io7m.com/jstructural/</url>
+  <url>http://mvn.io7m.com/${project.artifactId}/</url>
 
   <modules>
     <module>io7m-jstructural-core</module>
@@ -61,7 +61,7 @@
     <site>
       <id>io7m</id>
       <name>io7m.com</name>
-      <url>http://mvn.io7m.com/jstructural/</url>
+      <url>http://mvn.io7m.com/${project.artifactId}/</url>
     </site>
   </distributionManagement>
 
