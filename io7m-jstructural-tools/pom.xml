@@ -5,12 +5,15 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.io7m.jstructural.tools</groupId>
+  <parent>
+    <groupId>com.io7m.jstructural</groupId>
+    <artifactId>io7m-jstructural</artifactId>
+    <version>0.1.0</version>
+  </parent>
   <artifactId>io7m-jstructural-tools</artifactId>
-  <version>0.1.0</version>
   <packaging>jar</packaging>
-  <name>io7m-jstructural-tools</name>
-  <description>Java implementation of the structural document language (tools)</description>
+  <name>${project.artifactId}</name>
+  <description>Java implementation of the structural document language (Tools)</description>
   <url>http://mvn.io7m.com/jstructural/</url>
 
   <licenses>
@@ -44,7 +47,7 @@
     <site>
       <id>io7m</id>
       <name>io7m.com</name>
-      <url>http://mvn.io7m.com/jstructural-tools/</url>
+      <url>http://mvn.io7m.com/io7m-jstructural-tools/</url>
     </site>
   </distributionManagement>
 
@@ -69,12 +72,12 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.io7m.jstructural.core</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>io7m-jstructural-core</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.io7m.jstructural.xom</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>io7m-jstructural-xom</artifactId>
       <version>${project.version}</version>
     </dependency>

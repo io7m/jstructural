@@ -2,13 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.io7m.jstructural.core</groupId>
+  <parent>
+    <groupId>com.io7m.jstructural</groupId>
+    <artifactId>io7m-jstructural</artifactId>
+    <version>0.1.0</version>
+  </parent>
   <artifactId>io7m-jstructural-core</artifactId>
-  <version>0.1.0</version>
+
   <packaging>jar</packaging>
-  <name>io7m-jstructural-core</name>
-  <description>Java implementation of the structural document language</description>
-  <url>http://mvn.io7m.com/jstructural/</url>
+  <name>${project.artifactId}</name>
+  <description>Java implementation of the structural document language (Core types)</description>
+  <url>http://mvn.io7m.com/io7m-jstructural/</url>
 
   <licenses>
     <license>
@@ -41,7 +45,7 @@
     <site>
       <id>io7m</id>
       <name>io7m.com</name>
-      <url>http://mvn.io7m.com/jstructural-core/</url>
+      <url>http://mvn.io7m.com/io7m-jstructural-core/</url>
     </site>
   </distributionManagement>
 

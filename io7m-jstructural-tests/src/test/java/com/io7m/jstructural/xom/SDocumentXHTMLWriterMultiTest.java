@@ -55,7 +55,7 @@ import com.io7m.jstructural.documentation.SDocumentation;
 
 public final class SDocumentXHTMLWriterMultiTest
 {
-  private static final int DOCUMENTATION_PAGES = 47;
+  private static final int DOCUMENTATION_PAGES = 46;
 
   private static final class Callbacks implements
     SDocumentXHTMLWriterCallbacks

@@ -5,12 +5,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.io7m.jstructural.documentation</groupId>
+  <parent>
+    <groupId>com.io7m.jstructural</groupId>
+    <artifactId>io7m-jstructural</artifactId>
+    <version>0.1.0</version>
+  </parent>
   <artifactId>io7m-jstructural-documentation</artifactId>
-  <version>0.1.0</version>
+
   <packaging>jar</packaging>
-  <name>io7m-jstructural-documentation</name>
-  <description>Java implementation of the structural document language (documentation)</description>
+  <name>${project.artifactId}</name>
+  <description>Java implementation of the structural document language (Documentation)</description>
   <url>http://mvn.io7m.com/jstructural/</url>
 
   <licenses>
@@ -44,7 +48,7 @@
     <site>
       <id>io7m</id>
       <name>io7m.com</name>
-      <url>http://mvn.io7m.com/jstructural-documentation/</url>
+      <url>http://mvn.io7m.com/io7m-jstructural-documentation/</url>
     </site>
   </distributionManagement>
 
@@ -78,8 +82,29 @@
       <artifactId>jsr305</artifactId>
       <version>2.0.3</version>
     </dependency>
+    
+    <!-- Depend on the javadoc artifacts of the other modules for aggregation. -->
     <dependency>
-      <groupId>com.io7m.jstructural.tools</groupId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>io7m-jstructural-core</artifactId>
+      <version>${project.version}</version>
+      <classifier>javadoc</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>io7m-jstructural-xom</artifactId>
+      <version>${project.version}</version>
+      <classifier>javadoc</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>io7m-jstructural-tools</artifactId>
+      <version>${project.version}</version>
+      <classifier>javadoc</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>io7m-jstructural-tools</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -216,7 +241,7 @@
               <includeDependencySources>true</includeDependencySources>
               <includeTransitiveDependencySources>true</includeTransitiveDependencySources>
               <dependencySourceIncludes>
-                <dependencySourceSet>com.io7m.jstructural.*</dependencySourceSet>
+                <dependencySourceSet>com.io7m.jstructural*</dependencySourceSet>
               </dependencySourceIncludes>
             </configuration>
           </execution>
@@ -241,7 +266,6 @@
             </goals>
             <configuration>
               <appendAssemblyId>false</appendAssemblyId>
-              <finalName>io7m-jstructural-${project.version}-documentation</finalName>
             </configuration>
           </execution>
         </executions>

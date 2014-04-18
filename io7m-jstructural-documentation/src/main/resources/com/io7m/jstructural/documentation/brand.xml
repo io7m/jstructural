@@ -4,6 +4,6 @@
     <a href="http://io7m.com/">io7m</a>
   </div>
   <div class="brand_right">
-    <a href="http://io7m.com/software/jstructural">jstructural</a> 2.0.0
+    <a href="${project.parent.url}">${project.parent.name}</a> ${project.version}
   </div>
 </div>

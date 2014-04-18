@@ -14,14 +14,12 @@
   WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
   ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
   OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
-  version: structural 2.0.0
-  -->
+-->
 
 <s:document
   xmlns:s="http://schemas.io7m.com/structural/2.0.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
-  <s:document-title>Structural 2.0.0 Documentation</s:document-title>
+  <s:document-title>${project.parent.name} ${project.version} Documentation</s:document-title>
   <s:document-style>documentation.css</s:document-style>
   <s:document-contents/>
 
@@ -101,36 +99,6 @@
         <s:verbatim s:type="example"><![CDATA[$ mvn -C clean install]]></s:verbatim>
       </s:paragraph>
     </s:subsection>
-  </s:section>
-  <s:section>
-    <s:section-title>Supported Systems</s:section-title>
-    <s:formal-item s:kind="platform_table" s:type="platforms">
-      <s:formal-item-title>Supported systems</s:formal-item-title>
-      <s:table>
-        <s:table-summary>Supported systems</s:table-summary>
-        <s:table-head>
-          <s:table-column-name>OS</s:table-column-name>
-          <s:table-column-name>OS-Version</s:table-column-name>
-          <s:table-column-name>OS-Arch</s:table-column-name>
-          <s:table-column-name>JDK-Vendor</s:table-column-name>
-          <s:table-column-name>JDK-Version</s:table-column-name>
-          <s:table-column-name>VM</s:table-column-name>
-          <s:table-column-name>VM-Version</s:table-column-name>
-        </s:table-head>
-        <s:table-body>
-<s:table-row>
-  <s:table-cell>Linux</s:table-cell>
-  <s:table-cell>3.12.3-1-ARCH</s:table-cell>
-  <s:table-cell>amd64</s:table-cell>
-  <s:table-cell>Oracle Corporation</s:table-cell>
-  <s:table-cell>1.7.0_45</s:table-cell>
-  <s:table-cell>OpenJDK 64-Bit Server VM</s:table-cell>
-  <s:table-cell>Oracle Corporation</s:table-cell>
-  <s:table-cell>24.45-b08</s:table-cell>
-</s:table-row>
-        </s:table-body>
-      </s:table>
-    </s:formal-item>
   </s:section>
   <s:section>
     <s:section-title>Platform Specific Issues</s:section-title>
