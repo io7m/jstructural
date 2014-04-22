@@ -82,7 +82,7 @@
       <artifactId>jsr305</artifactId>
       <version>2.0.3</version>
     </dependency>
-    
+
     <!-- Depend on the javadoc artifacts of the other modules for aggregation. -->
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -249,6 +249,7 @@
               <goal>jar</goal>
             </goals>
             <configuration>
+              <bottom><![CDATA[Copyright &#169; {currentYear} &lt;code@io7m.com&gt; http://io7m.com]]></bottom>
               <archive>
                 <manifestEntries>
                   <Specification-Title>${project.name}</Specification-Title>
@@ -271,6 +272,7 @@
               <goal>javadoc</goal>
             </goals>
             <configuration>
+              <bottom><![CDATA[Copyright &#169; {currentYear} &lt;code@io7m.com&gt; http://io7m.com]]></bottom>
               <outputDirectory>${project.build.directory}/apidocs</outputDirectory>
               <includeDependencySources>true</includeDependencySources>
               <includeTransitiveDependencySources>true</includeTransitiveDependencySources>
