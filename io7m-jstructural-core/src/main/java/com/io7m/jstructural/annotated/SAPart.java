@@ -32,7 +32,7 @@ import com.io7m.jstructural.core.SPartContents;
  * A document part.
  */
 
-@Immutable public final class SAPart
+@Immutable public final class SAPart implements SAIDTargetContent
 {
   private final @Nonnull Option<SPartContents>           contents;
   private final @Nonnull Option<SAID>                    id;
@@ -191,5 +191,13 @@ import com.io7m.jstructural.core.SPartContents;
     result = (prime * result) + this.title.hashCode();
     result = (prime * result) + this.type.hashCode();
     return result;
+  }
+
+  @Override public <T> T targetContentAccept(
+    final SAIDTargetContentVisitor<T> v)
+    throws ConstraintError,
+      Exception
+  {
+    return v.visitPart(this);
   }
 }

@@ -38,6 +38,7 @@ import com.io7m.jstructural.annotated.SAFormalItemNumber;
 import com.io7m.jstructural.annotated.SAFormalItemsByKindReadable;
 import com.io7m.jstructural.annotated.SAID;
 import com.io7m.jstructural.annotated.SAIDMapReadable;
+import com.io7m.jstructural.annotated.SAIDTargetContent;
 import com.io7m.jstructural.annotated.SAIDTargetContentVisitor;
 import com.io7m.jstructural.annotated.SAParagraph;
 import com.io7m.jstructural.annotated.SAParagraphNumber;
@@ -320,8 +321,11 @@ import com.io7m.jstructural.core.SSectionContents;
         {
           try {
             final SAIDMapReadable map = doc.getIDMappings();
-            return map.get(id).targetContentAccept(
-              new SAIDTargetContentVisitor<String>() {
+            final SAIDTargetContent content = map.get(id);
+            assert content != null;
+
+            return content
+              .targetContentAccept(new SAIDTargetContentVisitor<String>() {
                 @Override public String visitParagraph(
                   final @Nonnull SAParagraph paragraph)
                   throws ConstraintError,

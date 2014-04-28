@@ -53,7 +53,16 @@ public final class SAIDMap implements SAIDMapWritable, SAIDMapReadable
     final @Nonnull SAID id)
     throws ConstraintError
   {
-    return this.map.get(Constraints.constrainNotNull(id, "ID"));
+    Constraints.constrainNotNull(id, "ID");
+
+    if (this.log.enabled(Level.LOG_DEBUG)) {
+      final StringBuilder b = new StringBuilder();
+      b.append("get: ");
+      b.append(id.getActual());
+      this.log.debug(b.toString());
+    }
+
+    return this.map.get(id);
   }
 
   @Override public void put(

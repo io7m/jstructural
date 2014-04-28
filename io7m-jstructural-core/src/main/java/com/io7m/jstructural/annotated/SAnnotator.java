@@ -141,6 +141,7 @@ import com.io7m.jstructural.core.SVerbatim;
       final List<SAPart> parts_r = new ArrayList<SAPart>();
       for (final SPart p : dp.getParts().getElements()) {
         final SAPart q = this.part(p, new SAPartNumber(parts_r.size() + 1));
+        q.getID().mapPartial(new SAIDLinkCreator(this.ids, q));
         parts_r.add(q);
       }
       final SNonEmptyList<SAPart> parts = SNonEmptyList.newList(parts_r);
