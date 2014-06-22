@@ -8,6 +8,12 @@
     <c:item>
       <c:date>2014-06-22</c:date>
       <c:type-code-fix/>
+      <c:ticket>4415343366</c:ticket>
+      <c:summary>Subsections are missing from document contents in sections-only documents.</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2014-06-22</c:date>
+      <c:type-code-fix/>
       <c:ticket>cd7bc9304c</c:ticket>
       <c:summary>Multiple pages were not produced for documents with sections in the root.</c:summary>
     </c:item>

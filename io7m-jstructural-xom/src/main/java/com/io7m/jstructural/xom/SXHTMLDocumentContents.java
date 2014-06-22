@@ -18,9 +18,15 @@ package com.io7m.jstructural.xom;
 
 import nu.xom.Element;
 
+import com.io7m.jfunctional.Unit;
 import com.io7m.jstructural.annotated.SAPart;
 import com.io7m.jstructural.annotated.SASection;
+import com.io7m.jstructural.annotated.SASectionVisitor;
+import com.io7m.jstructural.annotated.SASectionWithParagraphs;
+import com.io7m.jstructural.annotated.SASectionWithSubsections;
+import com.io7m.jstructural.annotated.SASubsection;
 import com.io7m.jstructural.core.SNonEmptyList;
+import com.io7m.junreachable.UnreachableCodeException;
 
 final class SXHTMLDocumentContents
 {
@@ -93,6 +99,8 @@ final class SXHTMLDocumentContents
   public Element getTableOfContentsSections(
     final SNonEmptyList<SASection> sections)
   {
+    final SLinkProvider cb = this.callbacks;
+
     final Element dce =
       SXHTML.elementWithClasses("ul", SXHTML.NO_TYPE, new String[] {
         "contents",
@@ -106,7 +114,7 @@ final class SXHTMLDocumentContents
           "contents_item_section", });
 
       final Element slink =
-        SXHTML.linkRaw(this.callbacks.getSectionLinkTarget(s.getNumber()));
+        SXHTML.linkRaw(cb.getSectionLinkTarget(s.getNumber()));
       {
         final StringBuilder title = new StringBuilder();
         title.append(s.getNumber().sectionNumberFormat());
@@ -117,12 +125,52 @@ final class SXHTMLDocumentContents
       pe.appendChild(slink);
       dce.appendChild(pe);
 
-      final Element pce =
-        SXHTML.elementWithClasses("ul", SXHTML.NO_TYPE, new String[] {
-          "contents",
-          "section_contents", });
+      try {
+        s.sectionAccept(new SASectionVisitor<Unit>() {
+          @Override public Unit visitSectionWithParagraphs(
+            final SASectionWithParagraphs swp)
+            throws Exception
+          {
+            return Unit.unit();
+          }
 
-      pe.appendChild(pce);
+          @Override public Unit visitSectionWithSubsections(
+            final SASectionWithSubsections sws)
+            throws Exception
+          {
+            final Element pce =
+              SXHTML.elementWithClasses("ul", SXHTML.NO_TYPE, new String[] {
+                "contents",
+                "section_contents", });
+            pe.appendChild(pce);
+
+            for (final SASubsection ss : sws.getSubsections().getElements()) {
+              final Element pse =
+                SXHTML.elementWithClasses("li", SXHTML.NO_TYPE, new String[] {
+                  "contents_item",
+                  "contents_item2",
+                  "contents_item_subsection", });
+              pce.appendChild(pse);
+
+              final Element sslink =
+                SXHTML.linkRaw(cb.getSubsectionLinkTarget(ss.getNumber()));
+
+              {
+                final StringBuilder title = new StringBuilder();
+                title.append(ss.getNumber().subsectionNumberFormat());
+                title.append(". ");
+                title.append(ss.getTitle().getActual());
+                sslink.appendChild(title.toString());
+              }
+              pse.appendChild(sslink);
+            }
+
+            return Unit.unit();
+          }
+        });
+      } catch (final Exception e) {
+        throw new UnreachableCodeException(e);
+      }
     }
 
     return dce;
