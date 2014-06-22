@@ -30,6 +30,14 @@
     <section name="Changes">
 <table summary="Changes for project io7m-jstructural" xmlns="http://www.w3.org/1999/xhtml" class="changelog">
   <tr>
+    <td>2014-06-22</td>
+    <td>Release: io7m-jstructural 3.0.0</td>
+  </tr>
+  <tr>
+    <td>2014-06-22</td>
+    <td>Code change: Do not depend on jaux. This effectively removes ConstraintError from all public APIs.</td>
+  </tr>
+  <tr>
     <td>2014-04-28</td>
     <td>Release: io7m-jstructural 2.1.0</td>
   </tr>
