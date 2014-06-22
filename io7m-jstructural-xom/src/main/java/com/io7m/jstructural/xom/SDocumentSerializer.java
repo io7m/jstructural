@@ -945,6 +945,9 @@ public final class SDocumentSerializer
     final Element e = new Element("s:part", SXML.XML_URI.toString());
     p.getID().map(new IDAdder(e));
     p.getType().map(new TypeAdder(e));
+
+    e.appendChild(SDocumentSerializer.partTitle(p.getTitle()));
+
     p.getContents().map(new FunctionType<SPartContents, Unit>() {
       @Override public Unit call(
         final SPartContents x)
@@ -953,8 +956,6 @@ public final class SDocumentSerializer
         return Unit.unit();
       }
     });
-
-    e.appendChild(SDocumentSerializer.partTitle(p.getTitle()));
 
     for (final SSection c : p.getSections().getElements()) {
       e.appendChild(SDocumentSerializer.section(c));
@@ -1082,6 +1083,9 @@ public final class SDocumentSerializer
     final Element e = new Element("s:section", SXML.XML_URI.toString());
     s.getID().map(new IDAdder(e));
     s.getType().map(new TypeAdder(e));
+
+    e.appendChild(SDocumentSerializer.sectionTitle(s.getTitle()));
+
     s.getContents().map(new FunctionType<SSectionContents, Unit>() {
       @Override public Unit call(
         final SSectionContents x)
@@ -1090,8 +1094,6 @@ public final class SDocumentSerializer
         return Unit.unit();
       }
     });
-
-    e.appendChild(SDocumentSerializer.sectionTitle(s.getTitle()));
 
     for (final SSubsectionContent c : s.getSectionContent().getElements()) {
       e.appendChild(SDocumentSerializer.subsectionContent(c));
@@ -1116,6 +1118,9 @@ public final class SDocumentSerializer
     final Element e = new Element("s:section", SXML.XML_URI.toString());
     s.getID().map(new IDAdder(e));
     s.getType().map(new TypeAdder(e));
+
+    e.appendChild(SDocumentSerializer.sectionTitle(s.getTitle()));
+
     s.getContents().map(new FunctionType<SSectionContents, Unit>() {
       @Override public Unit call(
         final SSectionContents x)
@@ -1124,8 +1129,6 @@ public final class SDocumentSerializer
         return Unit.unit();
       }
     });
-
-    e.appendChild(SDocumentSerializer.sectionTitle(s.getTitle()));
 
     for (final SSubsection c : s.getSubsections().getElements()) {
       e.appendChild(SDocumentSerializer.subsection(c));

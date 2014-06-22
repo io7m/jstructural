@@ -27,30 +27,5 @@
         <a href="http://mvn-repository.io7m.com/${siteDocumentationDirectory}">repository</a>.
       </p>
     </section>
-    <section name="Changes">
-<table summary="Changes for project io7m-jstructural" xmlns="http://www.w3.org/1999/xhtml" class="changelog">
-  <tr>
-    <td>2014-06-22</td>
-    <td>Release: io7m-jstructural 3.0.0</td>
-  </tr>
-  <tr>
-    <td>2014-06-22</td>
-    <td>Code change: Do not depend on jaux. This effectively removes ConstraintError from all public APIs.</td>
-  </tr>
-  <tr>
-    <td>2014-04-28</td>
-    <td>Release: io7m-jstructural 2.1.0</td>
-  </tr>
-  <tr>
-    <td>2014-04-28</td>
-    <td>Code fix: Parts were not assigned IDs by the annotator. Ticket <a href="http://fossil.io7m.com/repo.cgi/io7m-jstructural/tktview?name=4d3f9a84b72">4d3f9a84b72</a></td>
-  </tr>
-  <tr>
-    <td>2014-04-18</td>
-    <td>Release: io7m-jstructural 2.0.0</td>
-  </tr>
-</table>
-    </section>
   </body>
 </document>
-

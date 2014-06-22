@@ -16,6 +16,8 @@
 
 package com.io7m.jstructural.xom;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,8 +27,10 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 
 import nu.xom.Attribute;
+import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ParsingException;
+import nu.xom.Serializer;
 import nu.xom.ValidityException;
 import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.InclusionLoopException;
@@ -90,9 +94,21 @@ import com.io7m.junreachable.UnreachableCodeException;
   {
     try {
       final SDocument d0 = SDocumentParserTest.parse(name);
-      final Element e = SDocumentSerializer.document(d0);
+      final Element root = SDocumentSerializer.document(d0);
+      final Document out_doc = new Document(root);
+
+      final ByteArrayOutputStream bao = new ByteArrayOutputStream();
+      final Serializer s = new Serializer(bao, "UTF-8");
+      s.write(out_doc);
+      s.flush();
+
+      final ByteArrayInputStream bai =
+        new ByteArrayInputStream(bao.toByteArray());
+
+      final URI uri = new URI("/temporary");
       final SDocument d1 =
-        SDocumentParser.document(TestUtilities.getLog(), e);
+        SDocumentParser.fromStream(bai, uri, TestUtilities.getLog());
+
       Assert.assertEquals(d0, d1);
       return d1;
     } catch (final ValidityException e1) {
@@ -783,6 +799,11 @@ import com.io7m.junreachable.UnreachableCodeException;
   @Test public void testRoundTrip_2()
   {
     SDocumentParserTest.roundTripParse("jaux-documentation.xml");
+  }
+
+  @Test public void testRoundTrip_Bug_ebbe752c4e()
+  {
+    SDocumentParserTest.roundTripParse("bug-ebbe752c4e.xml");
   }
 
   @Test public void testTerm0()

@@ -2,7 +2,18 @@
 <c:changelog xmlns:c="http://schemas.io7m.com/changelog/2.0.0">
   <c:project>io7m-jstructural</c:project>
 
-  <c:release ticket-system="com.io7m.fossil.jstructural">
+  <c:release c:ticket-system="com.io7m.fossil.jstructural">
+    <c:date>2014-06-22</c:date>
+    <c:version>3.0.1</c:version>
+    <c:item>
+      <c:date>2014-06-22</c:date>
+      <c:type-code-fix/>
+      <c:ticket>ebbe752c4e</c:ticket>
+      <c:summary>The document serializer was producing invalid documents.</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release c:ticket-system="com.io7m.fossil.jstructural">
     <c:date>2014-06-22</c:date>
     <c:version>3.0.0</c:version>
     <c:item>
@@ -12,7 +23,7 @@
     </c:item>
   </c:release>
 
-  <c:release ticket-system="com.io7m.fossil.jstructural">
+  <c:release c:ticket-system="com.io7m.fossil.jstructural">
     <c:date>2014-04-28</c:date>
     <c:version>2.1.0</c:version>
     <c:item>
@@ -23,7 +34,7 @@
     </c:item>
   </c:release>
 
-  <c:release ticket-system="com.io7m.fossil.jstructural">
+  <c:release c:ticket-system="com.io7m.fossil.jstructural">
     <c:date>2014-04-18</c:date>
     <c:version>2.0.0</c:version>
     <c:item>
