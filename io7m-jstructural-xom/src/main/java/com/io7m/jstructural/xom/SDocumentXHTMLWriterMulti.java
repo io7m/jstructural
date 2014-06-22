@@ -70,12 +70,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 @SuppressWarnings("synthetic-access") public final class SDocumentXHTMLWriterMulti implements
   SDocumentXHTMLWriter
 {
-  private static final String                      FRONT_PAGE;
   private static final OptionType<SASegmentNumber> NO_NUMBER;
-
-  static {
-    FRONT_PAGE = "index-m." + SXHTML.OUTPUT_FILE_SUFFIX;
-  }
 
   static {
     NO_NUMBER = Option.none();
@@ -156,7 +151,7 @@ import com.io7m.junreachable.UnreachableCodeException;
     return b.toString();
   }
 
-  private static Element navigationBar(
+  private Element navigationBar(
     final SLinkProvider link_provider,
     final SADocument document,
     final OptionType<SASegmentNumber> segment,
@@ -181,14 +176,14 @@ import com.io7m.junreachable.UnreachableCodeException;
       etn.appendChild(SDocumentXHTMLWriterMulti.navigationBarTitleRow(
         document,
         segment));
-      etn.appendChild(SDocumentXHTMLWriterMulti.navigationBarLinkRow(
+      etn.appendChild(this.navigationBarLinkRow(
         document,
         link_provider,
         segment));
     } else {
       en.appendChild(SDocumentXHTMLWriterMulti.navigationBarHR());
       en.appendChild(etn);
-      etn.appendChild(SDocumentXHTMLWriterMulti.navigationBarLinkRow(
+      etn.appendChild(this.navigationBarLinkRow(
         document,
         link_provider,
         segment));
@@ -207,16 +202,18 @@ import com.io7m.junreachable.UnreachableCodeException;
     return SXHTML.elementWithClasses("hr", SXHTML.NO_TYPE, ehr_classes);
   }
 
-  private static Element navigationBarLinkRow(
+  private Element navigationBarLinkRow(
     final SASegmentsReadable segments,
     final SLinkProvider link_provider,
     final OptionType<SASegmentNumber> current)
   {
     final Element er = new Element("tr", SXHTML.XHTML_URI.toString());
 
-    er.appendChild(SDocumentXHTMLWriterMulti
-      .navigationBarLinkRowCellPrevious(segments, link_provider, current));
-    er.appendChild(SDocumentXHTMLWriterMulti.navigationBarLinkRowCellUp(
+    er.appendChild(this.navigationBarLinkRowCellPrevious(
+      segments,
+      link_provider,
+      current));
+    er.appendChild(this.navigationBarLinkRowCellUp(
       segments,
       link_provider,
       current));
@@ -261,7 +258,7 @@ import com.io7m.junreachable.UnreachableCodeException;
     return etc;
   }
 
-  private static Element navigationBarLinkRowCellPrevious(
+  private Element navigationBarLinkRowCellPrevious(
     final SASegmentsReadable segments,
     final SLinkProvider link_provider,
     final OptionType<SASegmentNumber> current)
@@ -284,7 +281,7 @@ import com.io7m.junreachable.UnreachableCodeException;
           SXHTML.linkRaw(link_provider.getSegmentLinkTarget(previous_some
             .get()));
       } else {
-        elink = SXHTML.linkRaw(SDocumentXHTMLWriterMulti.FRONT_PAGE);
+        elink = SXHTML.linkRaw(this.front_page);
       }
 
       elink.appendChild("Previous");
@@ -293,7 +290,7 @@ import com.io7m.junreachable.UnreachableCodeException;
     return etc;
   }
 
-  private static Element navigationBarLinkRowCellUp(
+  private Element navigationBarLinkRowCellUp(
     final SASegmentsReadable segments,
     final SLinkProvider link_provider,
     final OptionType<SASegmentNumber> current)
@@ -314,7 +311,7 @@ import com.io7m.junreachable.UnreachableCodeException;
         elink =
           SXHTML.linkRaw(link_provider.getSegmentLinkTarget(up_some.get()));
       } else {
-        elink = SXHTML.linkRaw(SDocumentXHTMLWriterMulti.FRONT_PAGE);
+        elink = SXHTML.linkRaw(this.front_page);
       }
 
       elink.appendChild("Up");
@@ -481,7 +478,7 @@ import com.io7m.junreachable.UnreachableCodeException;
     return etc;
   }
 
-  private static void part(
+  private void part(
     final SortedMap<String, Document> documents,
     final SLinkProvider link_provider,
     final SDocumentXHTMLWriterCallbacks callbacks,
@@ -512,11 +509,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 
     final OptionType<SASegmentNumber> some =
       Option.some((SASegmentNumber) number);
-    container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
-      link_provider,
-      doc,
-      some,
-      true));
+    container.appendChild(this.navigationBar(link_provider, doc, some, true));
 
     final Element part_main = SXHTML.partContainer(p.getTitle());
     container.appendChild(part_main);
@@ -537,11 +530,8 @@ import com.io7m.junreachable.UnreachableCodeException;
       }
     });
 
-    container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
-      link_provider,
-      doc,
-      some,
-      false));
+    container
+      .appendChild(this.navigationBar(link_provider, doc, some, false));
     callbacks.onBodyEnd(container);
 
     final String name = SXHTMLAnchors.getPartFile(number);
@@ -549,7 +539,7 @@ import com.io7m.junreachable.UnreachableCodeException;
     documents.put(name, page.getDocument());
 
     for (final SASection s : p.getSections().getElements()) {
-      SDocumentXHTMLWriterMulti.section(
+      this.section(
         documents,
         link_provider,
         callbacks,
@@ -559,7 +549,7 @@ import com.io7m.junreachable.UnreachableCodeException;
     }
   }
 
-  private static void section(
+  private void section(
     final SortedMap<String, Document> documents,
     final SLinkProvider link_provider,
     final SDocumentXHTMLWriterCallbacks callbacks,
@@ -589,7 +579,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 
     final OptionType<SASegmentNumber> some =
       Option.some((SASegmentNumber) number);
-    container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+    container.appendChild(this.navigationBar(
       link_provider,
       document,
       some,
@@ -652,7 +642,7 @@ import com.io7m.junreachable.UnreachableCodeException;
       s.getFootnotes(),
       container);
 
-    container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+    container.appendChild(this.navigationBar(
       link_provider,
       document,
       some,
@@ -665,13 +655,34 @@ import com.io7m.junreachable.UnreachableCodeException;
     documents.put(name, page.getDocument());
   }
 
+  private String front_page;
+
   /**
    * Construct a new XHTML writer.
    */
 
   public SDocumentXHTMLWriterMulti()
   {
+    this.front_page = "index-m." + SXHTML.OUTPUT_FILE_SUFFIX;
+  }
 
+  /**
+   * <p>
+   * Set the name that will be used for the "front page" of the produced
+   * pages.
+   * </p>
+   * <p>
+   * Defaults to: <code>"index-m." + {@link SXHTML#OUTPUT_FILE_SUFFIX}</code>
+   * </p>
+   * 
+   * @param name
+   *          The file name.
+   */
+
+  public void setFrontPageName(
+    final String name)
+  {
+    this.front_page = NullCheck.notNull(name, "Name");
   }
 
   @Override public SortedMap<String, Document> writeDocuments(
@@ -801,7 +812,7 @@ import com.io7m.junreachable.UnreachableCodeException;
           final Element rbody = callbacks.onBodyStart(container);
           SXHTMLReparent.reparentBodyNode(container, rbody);
 
-          container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+          container.appendChild(SDocumentXHTMLWriterMulti.this.navigationBar(
             link_provider,
             doc,
             SDocumentXHTMLWriterMulti.NO_NUMBER,
@@ -820,20 +831,21 @@ import com.io7m.junreachable.UnreachableCodeException;
             }
           });
 
-          container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+          container.appendChild(SDocumentXHTMLWriterMulti.this.navigationBar(
             link_provider,
             doc,
             SDocumentXHTMLWriterMulti.NO_NUMBER,
             false));
           callbacks.onBodyEnd(container);
 
-          assert documents.containsKey(SDocumentXHTMLWriterMulti.FRONT_PAGE) == false;
+          assert documents
+            .containsKey(SDocumentXHTMLWriterMulti.this.front_page) == false;
           documents.put(
-            SDocumentXHTMLWriterMulti.FRONT_PAGE,
+            SDocumentXHTMLWriterMulti.this.front_page,
             page.getDocument());
 
           for (final SAPart p : parts.getElements()) {
-            SDocumentXHTMLWriterMulti.part(
+            SDocumentXHTMLWriterMulti.this.part(
               documents,
               link_provider,
               callbacks,
@@ -861,7 +873,7 @@ import com.io7m.junreachable.UnreachableCodeException;
           final Element rbody = callbacks.onBodyStart(container);
           SXHTMLReparent.reparentBodyNode(container, rbody);
 
-          container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+          container.appendChild(SDocumentXHTMLWriterMulti.this.navigationBar(
             link_provider,
             doc,
             SDocumentXHTMLWriterMulti.NO_NUMBER,
@@ -879,20 +891,21 @@ import com.io7m.junreachable.UnreachableCodeException;
             }
           });
 
-          container.appendChild(SDocumentXHTMLWriterMulti.navigationBar(
+          container.appendChild(SDocumentXHTMLWriterMulti.this.navigationBar(
             link_provider,
             doc,
             SDocumentXHTMLWriterMulti.NO_NUMBER,
             false));
           callbacks.onBodyEnd(container);
 
-          assert documents.containsKey(SDocumentXHTMLWriterMulti.FRONT_PAGE) == false;
+          assert documents
+            .containsKey(SDocumentXHTMLWriterMulti.this.front_page) == false;
           documents.put(
-            SDocumentXHTMLWriterMulti.FRONT_PAGE,
+            SDocumentXHTMLWriterMulti.this.front_page,
             page.getDocument());
 
           for (final SASection s : sections.getElements()) {
-            SDocumentXHTMLWriterMulti.section(
+            SDocumentXHTMLWriterMulti.this.section(
               documents,
               link_provider,
               callbacks,

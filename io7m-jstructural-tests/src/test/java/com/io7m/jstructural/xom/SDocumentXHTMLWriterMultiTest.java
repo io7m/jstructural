@@ -144,6 +144,30 @@ import com.io7m.jstructural.documentation.SDocumentation;
     }
   }
 
+  @Test public void testBasic_0_frontPage()
+    throws ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
+  {
+    final SADocument d = SAnnotatorTest.annotate("basic-0.xml");
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    writer.setFrontPageName("CUSTOM.XHTML");
+    final Callbacks cb = new Callbacks();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
+    Assert.assertEquals(2, cb.on_head_called);
+    Assert.assertEquals(2, cb.on_body_start_called);
+    Assert.assertEquals(2, cb.on_body_end_called);
+
+    for (final String name : dr.keySet()) {
+      SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
+    }
+
+    Assert.assertTrue(dr.keySet().contains("CUSTOM.XHTML"));
+  }
+
   @Test public void testBasic_2()
     throws ValidityException,
       IOException,
