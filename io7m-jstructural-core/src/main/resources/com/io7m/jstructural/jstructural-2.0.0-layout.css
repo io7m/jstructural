@@ -9,11 +9,14 @@
 
 .st200_contents
 {
-  list-style: none;
   margin-left: 0;
   padding-left: 0;
 }
 
+.st200_contents_item
+{
+  list-style: none;
+}
 .st200_contents_item1
 {
 
