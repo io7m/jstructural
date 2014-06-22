@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * A segment number visitor.
  * 
@@ -35,16 +31,14 @@ public interface SASegmentNumberVisitor<T>
    * @param n
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitPartNumber(
-    final @Nonnull SAPartNumber n)
-    throws ConstraintError,
-      Exception;
+    final SAPartNumber n)
+    throws Exception;
 
   /**
    * Visit a section number.
@@ -52,14 +46,12 @@ public interface SASegmentNumberVisitor<T>
    * @param n
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitSectionNumber(
-    final @Nonnull SASectionNumber n)
-    throws ConstraintError,
-      Exception;
+    final SASectionNumber n)
+    throws Exception;
 }

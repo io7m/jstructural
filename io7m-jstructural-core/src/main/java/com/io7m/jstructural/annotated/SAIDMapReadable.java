@@ -16,10 +16,7 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.Nullable;
 
 /**
  * Readable interface to the ID → content mappings.
@@ -33,14 +30,12 @@ public interface SAIDMapReadable
    * 
    * @param id
    *          The ID
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
+   * 
    * @return The associated content
    */
 
-  @CheckForNull SAIDTargetContent get(
-    final @Nonnull SAID id)
-    throws ConstraintError;
+  @Nullable SAIDTargetContent get(
+    final SAID id);
 
   /**
    * @return The number of mappings

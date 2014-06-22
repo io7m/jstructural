@@ -18,10 +18,6 @@ package com.io7m.jstructural.annotated;
 
 import java.util.SortedMap;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * Readable interface to the sets of {@link SAFormalItem}s organized by kind.
  */
@@ -33,12 +29,10 @@ public interface SAFormalItemsByKindReadable
    * 
    * @param kind
    *          The kind
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
+   * 
    * @return The associated set of formal items
    */
 
-  @Nonnull SortedMap<SAFormalItemNumber, SAFormalItem> get(
-    final @Nonnull String kind)
-    throws ConstraintError;
+  SortedMap<SAFormalItemNumber, SAFormalItem> get(
+    final String kind);
 }

@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * Elements that can appear in the body of a footnote.
  */
@@ -34,14 +30,12 @@ public interface SFootnoteContent
    * @param <A>
    *          The type of values returned by the visitor
    * @return The value returned by the visitor.
-   * @throws ConstraintError
-   *           If the visitor raises a {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises and {@link Exception}
    */
 
   <A> A footnoteContentAccept(
-    final @Nonnull SFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception;
+    final SFootnoteContentVisitor<A> v)
+    throws Exception;
 }

@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
 
 import nu.xom.Attribute;
@@ -40,11 +39,9 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnreachableCodeException;
-import com.io7m.jaux.functional.Function;
-import com.io7m.jaux.functional.Option.Some;
-import com.io7m.jaux.functional.Unit;
+import com.io7m.jfunctional.FunctionType;
+import com.io7m.jfunctional.Some;
+import com.io7m.jfunctional.Unit;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentWithSections;
 import com.io7m.jstructural.core.SID;
@@ -61,17 +58,17 @@ import com.io7m.jstructural.core.STerm;
 import com.io7m.jstructural.core.SText;
 import com.io7m.jstructural.core.SVerbatim;
 import com.io7m.jstructural.core.SXML;
+import com.io7m.junreachable.UnreachableCodeException;
 
-public final class SDocumentParserTest
+@SuppressWarnings("static-method") public final class SDocumentParserTest
 {
-  public static @Nonnull SDocument parse(
-    final @Nonnull String name)
+  public static SDocument parse(
+    final String name)
     throws ValidityException,
       SAXException,
       ParserConfigurationException,
       ParsingException,
       IOException,
-      ConstraintError,
       URISyntaxException,
       BadParseAttributeException,
       InclusionLoopException,
@@ -88,8 +85,8 @@ public final class SDocumentParserTest
       TestUtilities.getLog());
   }
 
-  public static @Nonnull SDocument roundTripParse(
-    final @Nonnull String name)
+  public static SDocument roundTripParse(
+    final String name)
   {
     try {
       final SDocument d0 = SDocumentParserTest.parse(name);
@@ -110,8 +107,6 @@ public final class SDocumentParserTest
       throw new UnreachableCodeException(e1);
     } catch (final URISyntaxException e1) {
       throw new UnreachableCodeException(e1);
-    } catch (final ConstraintError e1) {
-      throw new UnreachableCodeException(e1);
     } catch (final BadParseAttributeException e1) {
       throw new UnreachableCodeException(e1);
     } catch (final InclusionLoopException e1) {
@@ -128,20 +123,19 @@ public final class SDocumentParserTest
    * URL scheme in order to include other files in the test resources.
    */
 
-  @SuppressWarnings("static-method") @Before public void before()
+  @Before public void before()
   {
     System.setProperty(
       "java.protocol.handler.pkgs",
       "com.io7m.jstructural.xom");
   }
 
-  @SuppressWarnings("static-method") @Test public void testBasic0()
+  @Test public void testBasic0()
     throws ValidityException,
       SAXException,
       ParserConfigurationException,
       ParsingException,
       IOException,
-      ConstraintError,
       URISyntaxException,
       BadParseAttributeException,
       InclusionLoopException,
@@ -167,13 +161,12 @@ public final class SDocumentParserTest
     Assert.assertEquals("Paragraph.", text.getText().trim());
   }
 
-  @SuppressWarnings("static-method") @Test public void testBasic1()
+  @Test public void testBasic1()
     throws ValidityException,
       SAXException,
       ParserConfigurationException,
       ParsingException,
       IOException,
-      ConstraintError,
       URISyntaxException,
       BadParseAttributeException,
       InclusionLoopException,
@@ -199,27 +192,23 @@ public final class SDocumentParserTest
     Assert.assertEquals("Paragraph.", text.getText().trim());
   }
 
-  @SuppressWarnings("static-method") @Test(expected = SAXParseException.class) public
-    void
-    testEmpty()
-      throws ValidityException,
-        SAXException,
-        ParserConfigurationException,
-        ParsingException,
-        IOException,
-        ConstraintError,
-        URISyntaxException,
-        BadParseAttributeException,
-        InclusionLoopException,
-        NoIncludeLocationException,
-        XIncludeException
+  @Test(expected = SAXParseException.class) public void testEmpty()
+    throws ValidityException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      IOException,
+      URISyntaxException,
+      BadParseAttributeException,
+      InclusionLoopException,
+      NoIncludeLocationException,
+      XIncludeException
   {
     SDocumentParserTest.parse("empty.xml");
   }
 
-  @SuppressWarnings("static-method") @Test public void testImage0()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testImage0()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -237,9 +226,8 @@ public final class SDocumentParserTest
     Assert.assertEquals(uri, i.getURI());
   }
 
-  @SuppressWarnings("static-method") @Test public void testImage0t()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testImage0t()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -256,7 +244,7 @@ public final class SDocumentParserTest
 
     {
       final Some<String> some = (Some<String>) i.getType();
-      Assert.assertEquals("a_type", some.value);
+      Assert.assertEquals("a_type", some.get());
     }
 
     Assert.assertTrue(i.getWidth().isNone());
@@ -265,9 +253,8 @@ public final class SDocumentParserTest
     Assert.assertEquals(uri, i.getURI());
   }
 
-  @SuppressWarnings("static-method") @Test public void testImage1()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testImage1()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -286,16 +273,15 @@ public final class SDocumentParserTest
 
     {
       final Some<Integer> some = (Some<Integer>) i.getHeight();
-      Assert.assertEquals(23, some.value.intValue());
+      Assert.assertEquals(23, some.get().intValue());
     }
 
     Assert.assertEquals("Image.", i.getText());
     Assert.assertEquals(uri, i.getURI());
   }
 
-  @SuppressWarnings("static-method") @Test public void testImage1t()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testImage1t()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -315,23 +301,22 @@ public final class SDocumentParserTest
 
     {
       final Some<String> some = (Some<String>) i.getType();
-      Assert.assertEquals("a_type", some.value);
+      Assert.assertEquals("a_type", some.get());
     }
 
     Assert.assertTrue(i.getWidth().isNone());
 
     {
       final Some<Integer> some = (Some<Integer>) i.getHeight();
-      Assert.assertEquals(23, some.value.intValue());
+      Assert.assertEquals(23, some.get().intValue());
     }
 
     Assert.assertEquals("Image.", i.getText());
     Assert.assertEquals(uri, i.getURI());
   }
 
-  @SuppressWarnings("static-method") @Test public void testImage2()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testImage2()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -350,16 +335,15 @@ public final class SDocumentParserTest
 
     {
       final Some<Integer> some = (Some<Integer>) i.getWidth();
-      Assert.assertEquals(42, some.value.intValue());
+      Assert.assertEquals(42, some.get().intValue());
     }
 
     Assert.assertEquals("Image.", i.getText());
     Assert.assertEquals(uri, i.getURI());
   }
 
-  @SuppressWarnings("static-method") @Test public void testImage2t()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testImage2t()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -379,23 +363,22 @@ public final class SDocumentParserTest
 
     {
       final Some<String> some = (Some<String>) i.getType();
-      Assert.assertEquals("a_type", some.value);
+      Assert.assertEquals("a_type", some.get());
     }
 
     Assert.assertTrue(i.getHeight().isNone());
 
     {
       final Some<Integer> some = (Some<Integer>) i.getWidth();
-      Assert.assertEquals(42, some.value.intValue());
+      Assert.assertEquals(42, some.get().intValue());
     }
 
     Assert.assertEquals("Image.", i.getText());
     Assert.assertEquals(uri, i.getURI());
   }
 
-  @SuppressWarnings("static-method") @Test public void testImage3()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testImage3()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -416,21 +399,20 @@ public final class SDocumentParserTest
 
     {
       final Some<Integer> some = (Some<Integer>) i.getHeight();
-      Assert.assertEquals(23, some.value.intValue());
+      Assert.assertEquals(23, some.get().intValue());
     }
 
     {
       final Some<Integer> some = (Some<Integer>) i.getWidth();
-      Assert.assertEquals(42, some.value.intValue());
+      Assert.assertEquals(42, some.get().intValue());
     }
 
     Assert.assertEquals("Image.", i.getText());
     Assert.assertEquals(uri, i.getURI());
   }
 
-  @SuppressWarnings("static-method") @Test public void testImage3t()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testImage3t()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -453,26 +435,25 @@ public final class SDocumentParserTest
 
     {
       final Some<String> some = (Some<String>) i.getType();
-      Assert.assertEquals("a_type", some.value);
+      Assert.assertEquals("a_type", some.get());
     }
 
     {
       final Some<Integer> some = (Some<Integer>) i.getHeight();
-      Assert.assertEquals(23, some.value.intValue());
+      Assert.assertEquals(23, some.get().intValue());
     }
 
     {
       final Some<Integer> some = (Some<Integer>) i.getWidth();
-      Assert.assertEquals(42, some.value.intValue());
+      Assert.assertEquals(42, some.get().intValue());
     }
 
     Assert.assertEquals("Image.", i.getText());
     Assert.assertEquals(uri, i.getURI());
   }
 
-  @SuppressWarnings("static-method") @Test public void testImageRoundTrip()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testImageRoundTrip()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -497,9 +478,8 @@ public final class SDocumentParserTest
     Assert.assertEquals(i0, i1);
   }
 
-  @SuppressWarnings("static-method") @Test public void testLink0()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testLink0()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -521,9 +501,8 @@ public final class SDocumentParserTest
     Assert.assertEquals("Image.", ii.getText());
   }
 
-  @SuppressWarnings("static-method") @Test public void testLink1()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testLink1()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
 
@@ -540,9 +519,8 @@ public final class SDocumentParserTest
     Assert.assertEquals("Link.", ii.getText());
   }
 
-  @SuppressWarnings("static-method") @Test public void testLinkExternal0()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testLinkExternal0()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -564,9 +542,8 @@ public final class SDocumentParserTest
     Assert.assertEquals("Image.", ii.getText());
   }
 
-  @SuppressWarnings("static-method") @Test public void testLinkExternal1()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testLinkExternal1()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
 
@@ -583,11 +560,8 @@ public final class SDocumentParserTest
     Assert.assertEquals("LinkExternal.", ii.getText());
   }
 
-  @SuppressWarnings("static-method") @Test public
-    void
-    testLinkExternalRoundTrip_0()
-      throws ConstraintError,
-        URISyntaxException
+  @Test public void testLinkExternalRoundTrip_0()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -609,11 +583,8 @@ public final class SDocumentParserTest
     Assert.assertEquals(i0, i1);
   }
 
-  @SuppressWarnings("static-method") @Test public
-    void
-    testLinkExternalRoundTrip_1()
-      throws ConstraintError,
-        URISyntaxException
+  @Test public void testLinkExternalRoundTrip_1()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute at =
@@ -629,9 +600,8 @@ public final class SDocumentParserTest
     Assert.assertEquals(i0, i1);
   }
 
-  @SuppressWarnings("static-method") @Test public void testLinkRoundTrip_0()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testLinkRoundTrip_0()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute as =
@@ -652,9 +622,8 @@ public final class SDocumentParserTest
     Assert.assertEquals(i0, i1);
   }
 
-  @SuppressWarnings("static-method") @Test public void testLinkRoundTrip_1()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testLinkRoundTrip_1()
+    throws URISyntaxException
   {
     final URI uri = new URI("http://io7m.com");
     final Attribute at =
@@ -669,9 +638,8 @@ public final class SDocumentParserTest
     Assert.assertEquals(i0, i1);
   }
 
-  @SuppressWarnings("static-method") @Test public void testParagraph0()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testParagraph0()
+    throws URISyntaxException
   {
     final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     e.appendChild("Paragraph.");
@@ -687,9 +655,8 @@ public final class SDocumentParserTest
       .get(0));
   }
 
-  @SuppressWarnings("static-method") @Test public void testParagraph1()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testParagraph1()
+    throws URISyntaxException
   {
     final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     final Attribute a =
@@ -705,7 +672,7 @@ public final class SDocumentParserTest
     final SNonEmptyList<SParagraphContent> content = p.getContent();
 
     Assert.assertTrue(p.getID().isSome());
-    p.getID().map(new Function<SID, Unit>() {
+    p.getID().map(new FunctionType<SID, Unit>() {
       @Override public Unit call(
         final SID x)
       {
@@ -721,9 +688,8 @@ public final class SDocumentParserTest
       .get(0));
   }
 
-  @SuppressWarnings("static-method") @Test public void testParagraph2()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testParagraph2()
+    throws URISyntaxException
   {
     final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     final Attribute ai =
@@ -742,7 +708,7 @@ public final class SDocumentParserTest
     final SNonEmptyList<SParagraphContent> content = p.getContent();
 
     Assert.assertTrue(p.getID().isSome());
-    p.getID().map(new Function<SID, Unit>() {
+    p.getID().map(new FunctionType<SID, Unit>() {
       @Override public Unit call(
         final SID x)
       {
@@ -752,7 +718,7 @@ public final class SDocumentParserTest
     });
 
     Assert.assertTrue(p.getType().isSome());
-    p.getType().map(new Function<String, Unit>() {
+    p.getType().map(new FunctionType<String, Unit>() {
 
       @Override public Unit call(
         final String x)
@@ -768,9 +734,8 @@ public final class SDocumentParserTest
       .get(0));
   }
 
-  @SuppressWarnings("static-method") @Test public void testParagraph3()
-    throws ConstraintError,
-      URISyntaxException
+  @Test public void testParagraph3()
+    throws URISyntaxException
   {
     final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     final Attribute at =
@@ -784,7 +749,7 @@ public final class SDocumentParserTest
 
     Assert.assertTrue(p.getID().isNone());
     Assert.assertTrue(p.getType().isSome());
-    p.getType().map(new Function<String, Unit>() {
+    p.getType().map(new FunctionType<String, Unit>() {
 
       @Override public Unit call(
         final String x)
@@ -800,28 +765,27 @@ public final class SDocumentParserTest
       .get(0));
   }
 
-  @SuppressWarnings("static-method") @Test public void testResolve_0()
+  @Test public void testResolve_0()
   {
     SDocumentParserTest.roundTripParse("resolve-0.xml");
   }
 
-  @SuppressWarnings("static-method") @Test public void testRoundTrip_0()
+  @Test public void testRoundTrip_0()
   {
     SDocumentParserTest.roundTripParse("basic-0.xml");
   }
 
-  @SuppressWarnings("static-method") @Test public void testRoundTrip_1()
+  @Test public void testRoundTrip_1()
   {
     SDocumentParserTest.roundTripParse("basic-1.xml");
   }
 
-  @SuppressWarnings("static-method") @Test public void testRoundTrip_2()
+  @Test public void testRoundTrip_2()
   {
     SDocumentParserTest.roundTripParse("jaux-documentation.xml");
   }
 
-  @SuppressWarnings("static-method") @Test public void testTerm0()
-    throws ConstraintError
+  @Test public void testTerm0()
   {
     final Element e = new Element("s:term", SXML.XML_URI.toString());
     e.appendChild("Term.");
@@ -833,8 +797,7 @@ public final class SDocumentParserTest
     Assert.assertEquals(SText.text("Term."), text);
   }
 
-  @SuppressWarnings("static-method") @Test public void testTerm1()
-    throws ConstraintError
+  @Test public void testTerm1()
   {
     final Attribute at =
       new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
@@ -847,7 +810,7 @@ public final class SDocumentParserTest
 
     Assert.assertTrue(t.getType().isSome());
 
-    t.getType().map(new Function<String, Unit>() {
+    t.getType().map(new FunctionType<String, Unit>() {
       @Override public Unit call(
         final String x)
       {
@@ -859,8 +822,7 @@ public final class SDocumentParserTest
     Assert.assertEquals(SText.text("Term."), text);
   }
 
-  @SuppressWarnings("static-method") @Test public void testTermRoundTrip()
-    throws ConstraintError
+  @Test public void testTermRoundTrip()
   {
     final Attribute at =
       new Attribute("s:type", SXML.XML_URI.toString(), "a_type");
@@ -874,8 +836,7 @@ public final class SDocumentParserTest
     Assert.assertEquals(t0, t2);
   }
 
-  @SuppressWarnings("static-method") @Test public void testVerbatim0()
-    throws ConstraintError
+  @Test public void testVerbatim0()
   {
     final Element e = new Element("s:verbatim", SXML.XML_URI.toString());
     e.appendChild("Verbatim.");
@@ -887,8 +848,7 @@ public final class SDocumentParserTest
     Assert.assertEquals("Verbatim.", text);
   }
 
-  @SuppressWarnings("static-method") @Test public void testVerbatim1()
-    throws ConstraintError
+  @Test public void testVerbatim1()
   {
     final Element e = new Element("s:verbatim", SXML.XML_URI.toString());
     e.appendChild("Verbatim.");
@@ -902,7 +862,7 @@ public final class SDocumentParserTest
 
     Assert.assertTrue(t.getType().isSome());
 
-    t.getType().map(new Function<String, Unit>() {
+    t.getType().map(new FunctionType<String, Unit>() {
       @Override public Unit call(
         final String x)
       {
@@ -914,10 +874,7 @@ public final class SDocumentParserTest
     Assert.assertEquals("Verbatim.", text);
   }
 
-  @SuppressWarnings("static-method") @Test public
-    void
-    testVerbatimRoundTrip()
-      throws ConstraintError
+  @Test public void testVerbatimRoundTrip()
   {
     final Attribute at =
       new Attribute("s:type", SXML.XML_URI.toString(), "a_type");

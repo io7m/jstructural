@@ -16,18 +16,16 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * The type of sections containing paragraphs.
  */
 
-@Immutable public final class SSectionWithSubsections extends SSection
+public final class SSectionWithSubsections extends SSection
 {
   /**
    * Create a section with the given title and content.
@@ -37,18 +35,15 @@ import com.io7m.jaux.functional.Option;
    * @param in_content
    *          The content
    * @return A new section
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SSectionWithSubsections section(
-    final @Nonnull SSectionTitle in_title,
-    final @Nonnull SNonEmptyList<SSubsection> in_content)
-    throws ConstraintError
+  public static SSectionWithSubsections section(
+    final SSectionTitle in_title,
+    final SNonEmptyList<SSubsection> in_content)
   {
-    final Option<String> no_type = Option.none();
-    final Option<SID> no_id = Option.none();
-    final Option<SSectionContents> no_contents = Option.none();
+    final OptionType<String> no_type = Option.none();
+    final OptionType<SID> no_id = Option.none();
+    final OptionType<SSectionContents> no_contents = Option.none();
     return new SSectionWithSubsections(
       no_type,
       no_id,
@@ -67,20 +62,16 @@ import com.io7m.jaux.functional.Option;
    * @param in_content
    *          The content
    * @return A new section
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SSectionWithSubsections sectionID(
-    final @Nonnull SID id,
-    final @Nonnull SSectionTitle in_title,
-    final @Nonnull SNonEmptyList<SSubsection> in_content)
-    throws ConstraintError
+  public static SSectionWithSubsections sectionID(
+    final SID id,
+    final SSectionTitle in_title,
+    final SNonEmptyList<SSubsection> in_content)
   {
-    final Option<String> no_type = Option.none();
-    final Option<SID> some_id =
-      Option.some(Constraints.constrainNotNull(id, "ID"));
-    final Option<SSectionContents> no_contents = Option.none();
+    final OptionType<String> no_type = Option.none();
+    final OptionType<SID> some_id = Option.some(NullCheck.notNull(id, "ID"));
+    final OptionType<SSectionContents> no_contents = Option.none();
     return new SSectionWithSubsections(
       no_type,
       some_id,
@@ -99,20 +90,17 @@ import com.io7m.jaux.functional.Option;
    * @param in_content
    *          The content
    * @return A new section
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SSectionWithSubsections sectionTyped(
-    final @Nonnull String type,
-    final @Nonnull SSectionTitle in_title,
-    final @Nonnull SNonEmptyList<SSubsection> in_content)
-    throws ConstraintError
+  public static SSectionWithSubsections sectionTyped(
+    final String type,
+    final SSectionTitle in_title,
+    final SNonEmptyList<SSubsection> in_content)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Option<SID> no_id = Option.none();
-    final Option<SSectionContents> no_contents = Option.none();
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<SID> no_id = Option.none();
+    final OptionType<SSectionContents> no_contents = Option.none();
     return new SSectionWithSubsections(
       some_type,
       no_id,
@@ -133,22 +121,18 @@ import com.io7m.jaux.functional.Option;
    * @param in_content
    *          The content
    * @return A new section
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SSectionWithSubsections sectionTypedID(
-    final @Nonnull String type,
-    final @Nonnull SID id,
-    final @Nonnull SSectionTitle in_title,
-    final @Nonnull SNonEmptyList<SSubsection> in_content)
-    throws ConstraintError
+  public static SSectionWithSubsections sectionTypedID(
+    final String type,
+    final SID id,
+    final SSectionTitle in_title,
+    final SNonEmptyList<SSubsection> in_content)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Option<SID> some_id =
-      Option.some(Constraints.constrainNotNull(id, "ID"));
-    final Option<SSectionContents> no_contents = Option.none();
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<SID> some_id = Option.some(NullCheck.notNull(id, "ID"));
+    final OptionType<SSectionContents> no_contents = Option.none();
     return new SSectionWithSubsections(
       some_type,
       some_id,
@@ -166,18 +150,15 @@ import com.io7m.jaux.functional.Option;
    * @param in_content
    *          The content
    * @return A new section
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SSectionWithSubsections sectionWithContents(
-    final @Nonnull SSectionTitle in_title,
-    final @Nonnull SNonEmptyList<SSubsection> in_content)
-    throws ConstraintError
+  public static SSectionWithSubsections sectionWithContents(
+    final SSectionTitle in_title,
+    final SNonEmptyList<SSubsection> in_content)
   {
-    final Option<String> no_type = Option.none();
-    final Option<SID> no_id = Option.none();
-    final Option<SSectionContents> some_contents =
+    final OptionType<String> no_type = Option.none();
+    final OptionType<SID> no_id = Option.none();
+    final OptionType<SSectionContents> some_contents =
       Option.some(SSectionContents.get());
     return new SSectionWithSubsections(
       no_type,
@@ -198,20 +179,16 @@ import com.io7m.jaux.functional.Option;
    * @param in_content
    *          The content
    * @return A new section
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SSectionWithSubsections sectionWithContentsID(
-    final @Nonnull SID id,
-    final @Nonnull SSectionTitle in_title,
-    final @Nonnull SNonEmptyList<SSubsection> in_content)
-    throws ConstraintError
+  public static SSectionWithSubsections sectionWithContentsID(
+    final SID id,
+    final SSectionTitle in_title,
+    final SNonEmptyList<SSubsection> in_content)
   {
-    final Option<String> no_type = Option.none();
-    final Option<SID> some_id =
-      Option.some(Constraints.constrainNotNull(id, "ID"));
-    final Option<SSectionContents> some_contents =
+    final OptionType<String> no_type = Option.none();
+    final OptionType<SID> some_id = Option.some(NullCheck.notNull(id, "ID"));
+    final OptionType<SSectionContents> some_contents =
       Option.some(SSectionContents.get());
     return new SSectionWithSubsections(
       no_type,
@@ -232,20 +209,17 @@ import com.io7m.jaux.functional.Option;
    * @param in_content
    *          The content
    * @return A new section
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SSectionWithSubsections sectionWithContentsTyped(
-    final @Nonnull String type,
-    final @Nonnull SSectionTitle in_title,
-    final @Nonnull SNonEmptyList<SSubsection> in_content)
-    throws ConstraintError
+  public static SSectionWithSubsections sectionWithContentsTyped(
+    final String type,
+    final SSectionTitle in_title,
+    final SNonEmptyList<SSubsection> in_content)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Option<SID> no_id = Option.none();
-    final Option<SSectionContents> some_contents =
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<SID> no_id = Option.none();
+    final OptionType<SSectionContents> some_contents =
       Option.some(SSectionContents.get());
     return new SSectionWithSubsections(
       some_type,
@@ -268,22 +242,18 @@ import com.io7m.jaux.functional.Option;
    * @param in_content
    *          The content
    * @return A new section
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SSectionWithSubsections sectionWithContentsTypedID(
-    final @Nonnull String type,
-    final @Nonnull SID id,
-    final @Nonnull SSectionTitle in_title,
-    final @Nonnull SNonEmptyList<SSubsection> in_content)
-    throws ConstraintError
+  public static SSectionWithSubsections sectionWithContentsTypedID(
+    final String type,
+    final SID id,
+    final SSectionTitle in_title,
+    final SNonEmptyList<SSubsection> in_content)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Option<SID> some_id =
-      Option.some(Constraints.constrainNotNull(id, "ID"));
-    final Option<SSectionContents> some_contents =
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<SID> some_id = Option.some(NullCheck.notNull(id, "ID"));
+    final OptionType<SSectionContents> some_contents =
       Option.some(SSectionContents.get());
     return new SSectionWithSubsections(
       some_type,
@@ -293,28 +263,29 @@ import com.io7m.jaux.functional.Option;
       in_content);
   }
 
-  private final @Nonnull SNonEmptyList<SSubsection> subsections;
+  private final SNonEmptyList<SSubsection> subsections;
 
   private SSectionWithSubsections(
-    final @Nonnull Option<String> in_type,
-    final @Nonnull Option<SID> in_id,
-    final @Nonnull SSectionTitle in_title,
-    final @Nonnull Option<SSectionContents> in_contents,
-    final @Nonnull SNonEmptyList<SSubsection> in_content)
-    throws ConstraintError
+    final OptionType<String> in_type,
+    final OptionType<SID> in_id,
+    final SSectionTitle in_title,
+    final OptionType<SSectionContents> in_contents,
+    final SNonEmptyList<SSubsection> in_content)
   {
     super(in_type, in_id, in_title, in_contents);
-    this.subsections =
-      Constraints.constrainNotNull(in_content, "Subsections");
+    this.subsections = NullCheck.notNull(in_content, "Subsections");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
     }
     if (!super.equals(obj)) {
+      return false;
+    }
+    if (obj == null) {
       return false;
     }
     if (this.getClass() != obj.getClass()) {
@@ -328,7 +299,7 @@ import com.io7m.jaux.functional.Option;
    * @return The section content
    */
 
-  public @Nonnull SNonEmptyList<SSubsection> getSubsections()
+  public SNonEmptyList<SSubsection> getSubsections()
   {
     return this.subsections;
   }
@@ -342,9 +313,8 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <S> S sectionAccept(
-    final @Nonnull SSectionVisitor<S> v)
-    throws ConstraintError,
-      Exception
+    final SSectionVisitor<S> v)
+    throws Exception
   {
     return v.visitSectionWithSubsections(this);
   }

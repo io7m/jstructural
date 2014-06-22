@@ -16,18 +16,14 @@
 
 package com.io7m.jstructural.xom;
 
-import javax.annotation.Nonnull;
-
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Text;
 
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnreachableCodeException;
-import com.io7m.jaux.functional.Function;
-import com.io7m.jaux.functional.Unit;
+import com.io7m.jfunctional.FunctionType;
+import com.io7m.jfunctional.Unit;
+import com.io7m.jnull.NullCheck;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentContents;
 import com.io7m.jstructural.core.SDocumentStyle;
@@ -83,6 +79,7 @@ import com.io7m.jstructural.core.STerm;
 import com.io7m.jstructural.core.SText;
 import com.io7m.jstructural.core.SVerbatim;
 import com.io7m.jstructural.core.SXML;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * Serialization functions that use XOM to serialize document elements to XML.
@@ -90,18 +87,18 @@ import com.io7m.jstructural.core.SXML;
 
 public final class SDocumentSerializer
 {
-  private static class IDAdder implements Function<SID, Unit>
+  private static class IDAdder implements FunctionType<SID, Unit>
   {
-    private final @Nonnull Element e;
+    private final Element e;
 
     public IDAdder(
-      final @Nonnull Element in_e)
+      final Element in_e)
     {
       this.e = in_e;
     }
 
     @Override public Unit call(
-      final @Nonnull SID x)
+      final SID x)
     {
       final Attribute a =
         new Attribute(
@@ -113,18 +110,18 @@ public final class SDocumentSerializer
     }
   }
 
-  private static class TypeAdder implements Function<String, Unit>
+  private static class TypeAdder implements FunctionType<String, Unit>
   {
-    private final @Nonnull Element e;
+    private final Element e;
 
     public TypeAdder(
-      final @Nonnull Element in_e)
+      final Element in_e)
     {
       this.e = in_e;
     }
 
     @Override public Unit call(
-      final @Nonnull String x)
+      final String x)
     {
       final Attribute a = new Attribute("s:type", SXML.XML_URI.toString(), x);
       this.e.addAttribute(a);
@@ -138,30 +135,25 @@ public final class SDocumentSerializer
    * @param d
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element document(
-    final @Nonnull SDocument d)
-    throws ConstraintError
+  public static Element document(
+    final SDocument d)
   {
-    Constraints.constrainNotNull(d, "Document");
+    NullCheck.notNull(d, "Document");
 
     try {
       return d.documentAccept(new SDocumentVisitor<Element>() {
         @Override public Element visitDocumentWithParts(
           final SDocumentWithParts dp)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.documentWithParts(dp);
         }
 
         @Override public Element visitDocumentWithSections(
           final SDocumentWithSections ds)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.documentWithSections(ds);
         }
@@ -177,15 +169,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element documentContents(
-    final @Nonnull SDocumentContents s)
-    throws ConstraintError
+  public static Element documentContents(
+    final SDocumentContents s)
   {
-    Constraints.constrainNotNull(s, "Document contents");
+    NullCheck.notNull(s, "Document contents");
     final Element e =
       new Element("s:document-contents", SXML.XML_URI.toString());
     return e;
@@ -197,15 +186,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element documentStyle(
-    final @Nonnull SDocumentStyle s)
-    throws ConstraintError
+  public static Element documentStyle(
+    final SDocumentStyle s)
   {
-    Constraints.constrainNotNull(s, "Document style");
+    NullCheck.notNull(s, "Document style");
     final Element e =
       new Element("s:document-style", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
@@ -218,15 +204,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element documentTitle(
-    final @Nonnull SDocumentTitle s)
-    throws ConstraintError
+  public static Element documentTitle(
+    final SDocumentTitle s)
   {
-    Constraints.constrainNotNull(s, "Document title");
+    NullCheck.notNull(s, "Document title");
     final Element e =
       new Element("s:document-title", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
@@ -239,40 +222,29 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element documentWithParts(
-    final @Nonnull SDocumentWithParts s)
-    throws ConstraintError
+  public static Element documentWithParts(
+    final SDocumentWithParts s)
   {
-    Constraints.constrainNotNull(s, "Document");
+    NullCheck.notNull(s, "Document");
 
     final Element e = new Element("s:document", SXML.XML_URI.toString());
-    s.getStyle().map(new Function<SDocumentStyle, Unit>() {
+    s.getStyle().map(new FunctionType<SDocumentStyle, Unit>() {
       @Override public Unit call(
         final SDocumentStyle x)
       {
-        try {
-          e.appendChild(SDocumentSerializer.documentStyle(x));
-          return Unit.unit();
-        } catch (final ConstraintError z) {
-          throw new UnreachableCodeException(z);
-        }
+        e.appendChild(SDocumentSerializer.documentStyle(x));
+        return Unit.unit();
       }
     });
 
-    s.getContents().map(new Function<SDocumentContents, Unit>() {
+    s.getContents().map(new FunctionType<SDocumentContents, Unit>() {
       @Override public Unit call(
         final SDocumentContents x)
       {
-        try {
-          e.appendChild(SDocumentSerializer.documentContents(x));
-          return Unit.unit();
-        } catch (final ConstraintError z) {
-          throw new UnreachableCodeException(z);
-        }
+        e.appendChild(SDocumentSerializer.documentContents(x));
+        return Unit.unit();
       }
     });
 
@@ -291,40 +263,29 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element documentWithSections(
-    final @Nonnull SDocumentWithSections s)
-    throws ConstraintError
+  public static Element documentWithSections(
+    final SDocumentWithSections s)
   {
-    Constraints.constrainNotNull(s, "Document");
+    NullCheck.notNull(s, "Document");
 
     final Element e = new Element("s:document", SXML.XML_URI.toString());
-    s.getStyle().map(new Function<SDocumentStyle, Unit>() {
+    s.getStyle().map(new FunctionType<SDocumentStyle, Unit>() {
       @Override public Unit call(
         final SDocumentStyle x)
       {
-        try {
-          e.appendChild(SDocumentSerializer.documentStyle(x));
-          return Unit.unit();
-        } catch (final ConstraintError z) {
-          throw new UnreachableCodeException(z);
-        }
+        e.appendChild(SDocumentSerializer.documentStyle(x));
+        return Unit.unit();
       }
     });
 
-    s.getContents().map(new Function<SDocumentContents, Unit>() {
+    s.getContents().map(new FunctionType<SDocumentContents, Unit>() {
       @Override public Unit call(
         final SDocumentContents x)
       {
-        try {
-          e.appendChild(SDocumentSerializer.documentContents(x));
-          return Unit.unit();
-        } catch (final ConstraintError z) {
-          throw new UnreachableCodeException(z);
-        }
+        e.appendChild(SDocumentSerializer.documentContents(x));
+        return Unit.unit();
       }
     });
 
@@ -343,15 +304,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element footnote(
-    final @Nonnull SFootnote s)
-    throws ConstraintError
+  public static Element footnote(
+    final SFootnote s)
   {
-    Constraints.constrainNotNull(s, "Footnote");
+    NullCheck.notNull(s, "Footnote");
 
     final Element e = new Element("s:footnote", SXML.XML_URI.toString());
     for (final SFootnoteContent c : s.getContent().getElements()) {
@@ -366,86 +324,74 @@ public final class SDocumentSerializer
    * @param c
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Node footnoteContent(
-    final @Nonnull SFootnoteContent c)
-    throws ConstraintError
+  public static Node footnoteContent(
+    final SFootnoteContent c)
   {
-    Constraints.constrainNotNull(c, "Footnote content");
+    NullCheck.notNull(c, "Footnote content");
 
     try {
       return c.footnoteContentAccept(new SFootnoteContentVisitor<Node>() {
         @Override public Node visitFootnote(
           final SFootnote footnote)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.footnote(footnote);
         }
 
         @Override public Node visitImage(
           final SImage image)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.image(image);
         }
 
         @Override public Node visitLink(
           final SLink link)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.link(link);
         }
 
         @Override public Node visitLinkExternal(
           final SLinkExternal link)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.linkExternal(link);
         }
 
         @Override public Node visitListOrdered(
           final SListOrdered list)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.listOrdered(list);
         }
 
         @Override public Node visitListUnordered(
           final SListUnordered list)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.listUnordered(list);
         }
 
         @Override public Node visitTerm(
           final STerm term)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.term(term);
         }
 
         @Override public Node visitText(
           final SText text)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.text(text);
         }
 
         @Override public Node visitVerbatim(
           final SVerbatim text)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.verbatim(text);
         }
@@ -461,15 +407,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element formalItem(
-    final @Nonnull SFormalItem s)
-    throws ConstraintError
+  public static Element formalItem(
+    final SFormalItem s)
   {
-    Constraints.constrainNotNull(s, "Formal item");
+    NullCheck.notNull(s, "Formal item");
 
     final Element e = new Element("s:formal-item", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
@@ -488,62 +431,53 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element formalItemContent(
-    final @Nonnull SFormalItemContent s)
-    throws ConstraintError
+  public static Element formalItemContent(
+    final SFormalItemContent s)
   {
-    Constraints.constrainNotNull(s, "Content");
+    NullCheck.notNull(s, "Content");
     try {
       return s
         .formalItemContentAccept(new SFormalItemContentVisitor<Element>() {
           @Override public Element visitFormalItemList(
             final SFormalItemList list)
-            throws ConstraintError,
-              Exception
+            throws Exception
           {
             return SDocumentSerializer.formalItemList(list);
           }
 
           @Override public Element visitImage(
             final SImage image)
-            throws ConstraintError,
-              Exception
+            throws Exception
           {
             return SDocumentSerializer.image(image);
           }
 
           @Override public Element visitListOrdered(
             final SListOrdered list)
-            throws ConstraintError,
-              Exception
+            throws Exception
           {
             return SDocumentSerializer.listOrdered(list);
           }
 
           @Override public Element visitListUnordered(
             final SListUnordered list)
-            throws ConstraintError,
-              Exception
+            throws Exception
           {
             return SDocumentSerializer.listUnordered(list);
           }
 
           @Override public Element visitTable(
             final STable e)
-            throws ConstraintError,
-              Exception
+            throws Exception
           {
             return SDocumentSerializer.table(e);
           }
 
           @Override public Element visitVerbatim(
             final SVerbatim text)
-            throws ConstraintError,
-              Exception
+            throws Exception
           {
             return SDocumentSerializer.verbatim(text);
           }
@@ -559,15 +493,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element formalItemList(
-    final @Nonnull SFormalItemList s)
-    throws ConstraintError
+  public static Element formalItemList(
+    final SFormalItemList s)
   {
-    Constraints.constrainNotNull(s, "List");
+    NullCheck.notNull(s, "List");
 
     final Element e =
       new Element("s:formal-item-list", SXML.XML_URI.toString());
@@ -583,15 +514,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element formalItemTitle(
-    final @Nonnull SFormalItemTitle s)
-    throws ConstraintError
+  public static Element formalItemTitle(
+    final SFormalItemTitle s)
   {
-    Constraints.constrainNotNull(s, "Title");
+    NullCheck.notNull(s, "Title");
 
     final Element e =
       new Element("s:formal-item-title", SXML.XML_URI.toString());
@@ -605,15 +533,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element image(
-    final @Nonnull SImage s)
-    throws ConstraintError
+  public static Element image(
+    final SImage s)
   {
-    Constraints.constrainNotNull(s, "Image");
+    NullCheck.notNull(s, "Image");
 
     final Element e = new Element("s:image", SXML.XML_URI.toString());
     final Attribute at =
@@ -625,7 +550,7 @@ public final class SDocumentSerializer
     e.addAttribute(at);
     s.getType().map(new TypeAdder(e));
 
-    s.getHeight().map(new Function<Integer, Unit>() {
+    s.getHeight().map(new FunctionType<Integer, Unit>() {
       @Override public Unit call(
         final Integer x)
       {
@@ -636,7 +561,7 @@ public final class SDocumentSerializer
       }
     });
 
-    s.getWidth().map(new Function<Integer, Unit>() {
+    s.getWidth().map(new FunctionType<Integer, Unit>() {
       @Override public Unit call(
         final Integer x)
       {
@@ -656,15 +581,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element link(
-    final @Nonnull SLink s)
-    throws ConstraintError
+  public static Element link(
+    final SLink s)
   {
-    Constraints.constrainNotNull(s, "Link");
+    NullCheck.notNull(s, "Link");
     final Attribute at =
       new Attribute("s:target", SXML.XML_URI.toString(), s.getTarget());
     final Element e = new Element("s:link", SXML.XML_URI.toString());
@@ -683,30 +605,25 @@ public final class SDocumentSerializer
    * @param c
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Node linkContent(
-    final @Nonnull SLinkContent c)
-    throws ConstraintError
+  public static Node linkContent(
+    final SLinkContent c)
   {
-    Constraints.constrainNotNull(c, "Link content");
+    NullCheck.notNull(c, "Link content");
 
     try {
       return c.linkContentAccept(new SLinkContentVisitor<Node>() {
         @Override public Node visitImage(
-          final @Nonnull SImage image)
-          throws ConstraintError,
-            Exception
+          final SImage image)
+          throws Exception
         {
           return SDocumentSerializer.image(image);
         }
 
         @Override public Node visitText(
-          final @Nonnull SText text)
-          throws ConstraintError,
-            Exception
+          final SText text)
+          throws Exception
         {
           return SDocumentSerializer.text(text);
         }
@@ -722,15 +639,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element linkExternal(
-    final @Nonnull SLinkExternal s)
-    throws ConstraintError
+  public static Element linkExternal(
+    final SLinkExternal s)
   {
-    Constraints.constrainNotNull(s, "Link");
+    NullCheck.notNull(s, "Link");
     final Attribute at =
       new Attribute("s:target", SXML.XML_URI.toString(), s
         .getTarget()
@@ -751,15 +665,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element listItem(
-    final @Nonnull SListItem s)
-    throws ConstraintError
+  public static Element listItem(
+    final SListItem s)
   {
-    Constraints.constrainNotNull(s, "List item");
+    NullCheck.notNull(s, "List item");
 
     final Element e = new Element("s:list-item", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
@@ -777,84 +688,72 @@ public final class SDocumentSerializer
    * @param c
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Node listItemContent(
-    final @Nonnull SListItemContent c)
-    throws ConstraintError
+  public static Node listItemContent(
+    final SListItemContent c)
   {
     try {
       return c.listItemContentAccept(new SListItemContentVisitor<Node>() {
         @Override public Node visitFootnote(
           final SFootnote footnote)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.footnote(footnote);
         }
 
         @Override public Node visitImage(
           final SImage image)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.image(image);
         }
 
         @Override public Node visitLink(
           final SLink link)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.link(link);
         }
 
         @Override public Node visitLinkExternal(
           final SLinkExternal link)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.linkExternal(link);
         }
 
         @Override public Node visitListOrdered(
           final SListOrdered list)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.listOrdered(list);
         }
 
         @Override public Node visitListUnordered(
           final SListUnordered list)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.listUnordered(list);
         }
 
         @Override public Node visitTerm(
           final STerm term)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.term(term);
         }
 
         @Override public Node visitText(
           final SText text)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.text(text);
         }
 
         @Override public Node visitVerbatim(
           final SVerbatim text)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.verbatim(text);
         }
@@ -870,15 +769,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element listOrdered(
-    final @Nonnull SListOrdered s)
-    throws ConstraintError
+  public static Element listOrdered(
+    final SListOrdered s)
   {
-    Constraints.constrainNotNull(s, "List");
+    NullCheck.notNull(s, "List");
 
     final Element e = new Element("s:list-ordered", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
@@ -896,15 +792,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element listUnordered(
-    final @Nonnull SListUnordered s)
-    throws ConstraintError
+  public static Element listUnordered(
+    final SListUnordered s)
   {
-    Constraints.constrainNotNull(s, "List");
+    NullCheck.notNull(s, "List");
 
     final Element e =
       new Element("s:list-unordered", SXML.XML_URI.toString());
@@ -923,15 +816,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element paragraph(
-    final @Nonnull SParagraph s)
-    throws ConstraintError
+  public static Element paragraph(
+    final SParagraph s)
   {
-    Constraints.constrainNotNull(s, "Paragraph");
+    NullCheck.notNull(s, "Paragraph");
     final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
     s.getID().map(new IDAdder(e));
@@ -949,101 +839,87 @@ public final class SDocumentSerializer
    * @param c
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Node paragraphContent(
-    final @Nonnull SParagraphContent c)
-    throws ConstraintError
+  public static Node paragraphContent(
+    final SParagraphContent c)
   {
-    Constraints.constrainNotNull(c, "Paragraph content");
+    NullCheck.notNull(c, "Paragraph content");
     try {
       return c.paragraphContentAccept(new SParagraphContentVisitor<Node>() {
         @Override public Node visitFootnote(
-          final @Nonnull SFootnote footnote)
-          throws ConstraintError,
-            Exception
+          final SFootnote footnote)
+          throws Exception
         {
           return SDocumentSerializer.footnote(footnote);
         }
 
         @Override public Node visitFormalItemList(
-          final @Nonnull SFormalItemList list)
-          throws ConstraintError,
-            Exception
+          final SFormalItemList list)
+          throws Exception
         {
           return SDocumentSerializer.formalItemList(list);
         }
 
         @Override public Node visitImage(
-          final @Nonnull SImage image)
-          throws ConstraintError,
-            Exception
+          final SImage image)
+          throws Exception
         {
           return SDocumentSerializer.image(image);
         }
 
         @Override public Node visitLink(
-          final @Nonnull SLink link)
-          throws ConstraintError,
-            Exception
+          final SLink link)
+          throws Exception
         {
           return SDocumentSerializer.link(link);
         }
 
         @Override public Node visitLinkExternal(
-          final @Nonnull SLinkExternal link)
-          throws ConstraintError,
-            Exception
+          final SLinkExternal link)
+          throws Exception
         {
           return SDocumentSerializer.linkExternal(link);
         }
 
         @Override public Node visitListOrdered(
-          final @Nonnull SListOrdered list)
-          throws ConstraintError,
-            Exception
+          final SListOrdered list)
+          throws Exception
         {
           return SDocumentSerializer.listOrdered(list);
         }
 
         @Override public Node visitListUnordered(
-          final @Nonnull SListUnordered list)
-          throws ConstraintError,
-            Exception
+          final SListUnordered list)
+          throws Exception
         {
           return SDocumentSerializer.listUnordered(list);
         }
 
         @Override public Node visitTable(
-          final @Nonnull STable table)
-          throws ConstraintError,
-            Exception
+          final STable table)
+          throws Exception
         {
           return SDocumentSerializer.table(table);
         }
 
         @Override public Node visitTerm(
-          final @Nonnull STerm term)
-          throws ConstraintError,
-            Exception
+          final STerm term)
+          throws Exception
         {
           return SDocumentSerializer.term(term);
         }
 
         @Override public Node visitText(
-          final @Nonnull SText text)
-          throws ConstraintError,
-            Exception
+          final SText text)
+          throws Exception
         {
           return SDocumentSerializer.text(text);
         }
 
         @Override public Node visitVerbatim(
-          final @Nonnull SVerbatim text)
-          throws ConstraintError,
-            Exception
+          final SVerbatim text)
+          throws Exception
         {
           return SDocumentSerializer.verbatim(text);
         }
@@ -1059,29 +935,22 @@ public final class SDocumentSerializer
    * @param p
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element part(
-    final @Nonnull SPart p)
-    throws ConstraintError
+  public static Element part(
+    final SPart p)
   {
-    Constraints.constrainNotNull(p, "Part");
+    NullCheck.notNull(p, "Part");
 
     final Element e = new Element("s:part", SXML.XML_URI.toString());
     p.getID().map(new IDAdder(e));
     p.getType().map(new TypeAdder(e));
-    p.getContents().map(new Function<SPartContents, Unit>() {
+    p.getContents().map(new FunctionType<SPartContents, Unit>() {
       @Override public Unit call(
         final SPartContents x)
       {
-        try {
-          e.appendChild(SDocumentSerializer.partContents(x));
-          return Unit.unit();
-        } catch (final ConstraintError z) {
-          throw new UnreachableCodeException(z);
-        }
+        e.appendChild(SDocumentSerializer.partContents(x));
+        return Unit.unit();
       }
     });
 
@@ -1100,15 +969,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element partContents(
-    final @Nonnull SPartContents s)
-    throws ConstraintError
+  public static Element partContents(
+    final SPartContents s)
   {
-    Constraints.constrainNotNull(s, "Contents");
+    NullCheck.notNull(s, "Contents");
 
     final Element e = new Element("s:part-contents", SXML.XML_URI.toString());
     return e;
@@ -1120,15 +986,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element partTitle(
-    final @Nonnull SPartTitle s)
-    throws ConstraintError
+  public static Element partTitle(
+    final SPartTitle s)
   {
-    Constraints.constrainNotNull(s, "Title");
+    NullCheck.notNull(s, "Title");
 
     final Element e = new Element("s:part-title", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
@@ -1141,30 +1004,25 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element section(
-    final @Nonnull SSection s)
-    throws ConstraintError
+  public static Element section(
+    final SSection s)
   {
-    Constraints.constrainNotNull(s, "Section");
+    NullCheck.notNull(s, "Section");
 
     try {
       return s.sectionAccept(new SSectionVisitor<Element>() {
         @Override public Element visitSectionWithParagraphs(
           final SSectionWithParagraphs ss)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.sectionWithParagraphs(ss);
         }
 
         @Override public Element visitSectionWithSubsections(
           final SSectionWithSubsections ss)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.sectionWithSubsections(ss);
         }
@@ -1180,15 +1038,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element sectionContents(
-    final @Nonnull SSectionContents s)
-    throws ConstraintError
+  public static Element sectionContents(
+    final SSectionContents s)
   {
-    Constraints.constrainNotNull(s, "Section contents");
+    NullCheck.notNull(s, "Section contents");
     final Element e =
       new Element("s:section-contents", SXML.XML_URI.toString());
     return e;
@@ -1200,15 +1055,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element sectionTitle(
-    final @Nonnull SSectionTitle s)
-    throws ConstraintError
+  public static Element sectionTitle(
+    final SSectionTitle s)
   {
-    Constraints.constrainNotNull(s, "Section title");
+    NullCheck.notNull(s, "Section title");
     final Element e = new Element("s:section-title", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
     return e;
@@ -1220,29 +1072,22 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element sectionWithParagraphs(
-    final @Nonnull SSectionWithParagraphs s)
-    throws ConstraintError
+  public static Element sectionWithParagraphs(
+    final SSectionWithParagraphs s)
   {
-    Constraints.constrainNotNull(s, "Section");
+    NullCheck.notNull(s, "Section");
 
     final Element e = new Element("s:section", SXML.XML_URI.toString());
     s.getID().map(new IDAdder(e));
     s.getType().map(new TypeAdder(e));
-    s.getContents().map(new Function<SSectionContents, Unit>() {
+    s.getContents().map(new FunctionType<SSectionContents, Unit>() {
       @Override public Unit call(
         final SSectionContents x)
       {
-        try {
-          e.appendChild(SDocumentSerializer.sectionContents(x));
-          return Unit.unit();
-        } catch (final ConstraintError z) {
-          throw new UnreachableCodeException(z);
-        }
+        e.appendChild(SDocumentSerializer.sectionContents(x));
+        return Unit.unit();
       }
     });
 
@@ -1261,29 +1106,22 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element sectionWithSubsections(
-    final @Nonnull SSectionWithSubsections s)
-    throws ConstraintError
+  public static Element sectionWithSubsections(
+    final SSectionWithSubsections s)
   {
-    Constraints.constrainNotNull(s, "Section");
+    NullCheck.notNull(s, "Section");
 
     final Element e = new Element("s:section", SXML.XML_URI.toString());
     s.getID().map(new IDAdder(e));
     s.getType().map(new TypeAdder(e));
-    s.getContents().map(new Function<SSectionContents, Unit>() {
+    s.getContents().map(new FunctionType<SSectionContents, Unit>() {
       @Override public Unit call(
         final SSectionContents x)
       {
-        try {
-          e.appendChild(SDocumentSerializer.sectionContents(x));
-          return Unit.unit();
-        } catch (final ConstraintError z) {
-          throw new UnreachableCodeException(z);
-        }
+        e.appendChild(SDocumentSerializer.sectionContents(x));
+        return Unit.unit();
       }
     });
 
@@ -1302,15 +1140,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element subsection(
-    final @Nonnull SSubsection s)
-    throws ConstraintError
+  public static Element subsection(
+    final SSubsection s)
   {
-    Constraints.constrainNotNull(s, "Subsection");
+    NullCheck.notNull(s, "Subsection");
 
     final Element e = new Element("s:subsection", SXML.XML_URI.toString());
     s.getID().map(new IDAdder(e));
@@ -1331,31 +1166,26 @@ public final class SDocumentSerializer
    * @param c
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element subsectionContent(
-    final @Nonnull SSubsectionContent c)
-    throws ConstraintError
+  public static Element subsectionContent(
+    final SSubsectionContent c)
   {
-    Constraints.constrainNotNull(c, "Subsection content");
+    NullCheck.notNull(c, "Subsection content");
 
     try {
       return c
         .subsectionContentAccept(new SSubsectionContentVisitor<Element>() {
           @Override public Element visitFormalItem(
             final SFormalItem formal)
-            throws ConstraintError,
-              Exception
+            throws Exception
           {
             return SDocumentSerializer.formalItem(formal);
           }
 
           @Override public Element visitParagraph(
             final SParagraph paragraph)
-            throws ConstraintError,
-              Exception
+            throws Exception
           {
             return SDocumentSerializer.paragraph(paragraph);
           }
@@ -1371,15 +1201,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element subsectionTitle(
-    final @Nonnull SSubsectionTitle s)
-    throws ConstraintError
+  public static Element subsectionTitle(
+    final SSubsectionTitle s)
   {
-    Constraints.constrainNotNull(s, "Subsection title");
+    NullCheck.notNull(s, "Subsection title");
     final Element e =
       new Element("s:subsection-title", SXML.XML_URI.toString());
     e.appendChild(s.getActual().toString());
@@ -1392,29 +1219,22 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element table(
-    final @Nonnull STable s)
-    throws ConstraintError
+  public static Element table(
+    final STable s)
   {
-    Constraints.constrainNotNull(s, "Table");
+    NullCheck.notNull(s, "Table");
 
     final Element e = new Element("s:table", SXML.XML_URI.toString());
 
     e.appendChild(SDocumentSerializer.tableSummary(s.getSummary()));
-    s.getHeader().map(new Function<STableHead, Unit>() {
+    s.getHeader().map(new FunctionType<STableHead, Unit>() {
       @Override public Unit call(
-        final @Nonnull STableHead x)
+        final STableHead x)
       {
-        try {
-          e.appendChild(SDocumentSerializer.tableHead(x));
-          return Unit.unit();
-        } catch (final ConstraintError z) {
-          throw new UnreachableCodeException(z);
-        }
+        e.appendChild(SDocumentSerializer.tableHead(x));
+        return Unit.unit();
       }
     });
     e.appendChild(SDocumentSerializer.tableBody(s.getBody()));
@@ -1427,15 +1247,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element tableBody(
-    final @Nonnull STableBody s)
-    throws ConstraintError
+  public static Element tableBody(
+    final STableBody s)
   {
-    Constraints.constrainNotNull(s, "Table body");
+    NullCheck.notNull(s, "Table body");
 
     final Element e = new Element("s:table-body", SXML.XML_URI.toString());
 
@@ -1452,15 +1269,12 @@ public final class SDocumentSerializer
    * @param c
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element tableCell(
-    final @Nonnull STableCell c)
-    throws ConstraintError
+  public static Element tableCell(
+    final STableCell c)
   {
-    Constraints.constrainNotNull(c, "Table cell");
+    NullCheck.notNull(c, "Table cell");
 
     final Element e = new Element("s:table-cell", SXML.XML_URI.toString());
 
@@ -1477,86 +1291,74 @@ public final class SDocumentSerializer
    * @param cc
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Node tableCellContent(
-    final @Nonnull STableCellContent cc)
-    throws ConstraintError
+  public static Node tableCellContent(
+    final STableCellContent cc)
   {
-    Constraints.constrainNotNull(cc, "Table cell content");
+    NullCheck.notNull(cc, "Table cell content");
 
     try {
       return cc.tableCellContentAccept(new STableCellContentVisitor<Node>() {
         @Override public Node visitFootnote(
           final SFootnote footnote)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.footnote(footnote);
         }
 
         @Override public Node visitImage(
           final SImage image)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.image(image);
         }
 
         @Override public Node visitLink(
           final SLink link)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.link(link);
         }
 
         @Override public Node visitLinkExternal(
           final SLinkExternal link)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.linkExternal(link);
         }
 
         @Override public Node visitListOrdered(
           final SListOrdered list)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.listOrdered(list);
         }
 
         @Override public Node visitListUnordered(
           final SListUnordered list)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.listUnordered(list);
         }
 
         @Override public Node visitTerm(
           final STerm term)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.term(term);
         }
 
         @Override public Node visitText(
           final SText text)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.text(text);
         }
 
         @Override public Node visitVerbatim(
           final SVerbatim text)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SDocumentSerializer.verbatim(text);
         }
@@ -1572,15 +1374,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element tableColumnName(
-    final @Nonnull STableColumnName s)
-    throws ConstraintError
+  public static Element tableColumnName(
+    final STableColumnName s)
   {
-    Constraints.constrainNotNull(s, "Table column");
+    NullCheck.notNull(s, "Table column");
 
     final Element e =
       new Element("s:table-column-name", SXML.XML_URI.toString());
@@ -1594,15 +1393,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element tableHead(
-    final @Nonnull STableHead s)
-    throws ConstraintError
+  public static Element tableHead(
+    final STableHead s)
   {
-    Constraints.constrainNotNull(s, "Table header");
+    NullCheck.notNull(s, "Table header");
 
     final Element e = new Element("s:table-head", SXML.XML_URI.toString());
 
@@ -1618,15 +1414,12 @@ public final class SDocumentSerializer
    * @param r
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element tableRow(
-    final @Nonnull STableRow r)
-    throws ConstraintError
+  public static Element tableRow(
+    final STableRow r)
   {
-    Constraints.constrainNotNull(r, "Table row");
+    NullCheck.notNull(r, "Table row");
 
     final Element e = new Element("s:table-row", SXML.XML_URI.toString());
 
@@ -1643,15 +1436,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element tableSummary(
-    final @Nonnull STableSummary s)
-    throws ConstraintError
+  public static Element tableSummary(
+    final STableSummary s)
   {
-    Constraints.constrainNotNull(s, "Table summary");
+    NullCheck.notNull(s, "Table summary");
 
     final Element e = new Element("s:table-summary", SXML.XML_URI.toString());
     e.appendChild(s.getText());
@@ -1664,15 +1454,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element term(
-    final @Nonnull STerm s)
-    throws ConstraintError
+  public static Element term(
+    final STerm s)
   {
-    Constraints.constrainNotNull(s, "Term");
+    NullCheck.notNull(s, "Term");
     final Element e = new Element("s:term", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
     e.appendChild(s.getText().getText());
@@ -1685,15 +1472,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Text text(
-    final @Nonnull SText s)
-    throws ConstraintError
+  public static Text text(
+    final SText s)
   {
-    Constraints.constrainNotNull(s, "Text");
+    NullCheck.notNull(s, "Text");
     return new Text(s.getText());
   }
 
@@ -1703,15 +1487,12 @@ public final class SDocumentSerializer
    * @param s
    *          The element
    * @return An XML element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull Element verbatim(
-    final @Nonnull SVerbatim s)
-    throws ConstraintError
+  public static Element verbatim(
+    final SVerbatim s)
   {
-    Constraints.constrainNotNull(s, "Verbatim");
+    NullCheck.notNull(s, "Verbatim");
     final Element e = new Element("s:verbatim", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
     e.appendChild(s.getText());

@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * An ID attribute, unique over a document.
  */
 
-@Immutable public final class SID
+public final class SID
 {
   /**
    * Construct a new ID.
@@ -34,28 +31,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param actual
    *          The ID text
    * @return A new ID
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SID newID(
-    final @Nonnull String actual)
-    throws ConstraintError
+  public static SID newID(
+    final String actual)
   {
     return new SID(actual);
   }
 
-  private final @Nonnull String actual;
+  private final String actual;
 
   private SID(
-    final @Nonnull String in_actual)
-    throws ConstraintError
+    final String in_actual)
   {
-    this.actual = Constraints.constrainNotNull(in_actual, "Actual");
+    this.actual = NullCheck.notNull(in_actual, "Actual");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -74,7 +67,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The ID text
    */
 
-  public @Nonnull String getActual()
+  public String getActual()
   {
     return this.actual;
   }
@@ -90,6 +83,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
     builder.append("[SID ");
     builder.append(this.actual);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

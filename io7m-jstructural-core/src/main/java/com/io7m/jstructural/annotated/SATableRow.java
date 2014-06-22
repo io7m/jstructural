@@ -16,30 +16,26 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
 
 /**
  * A table row.
  */
 
-@Immutable public final class SATableRow
+public final class SATableRow
 {
-  private final @Nonnull SNonEmptyList<SATableCell> columns;
+  private final SNonEmptyList<SATableCell> columns;
 
   SATableRow(
-    final @Nonnull SNonEmptyList<SATableCell> in_columns)
-    throws ConstraintError
+    final SNonEmptyList<SATableCell> in_columns)
   {
-    this.columns = Constraints.constrainNotNull(in_columns, "Columns");
+    this.columns = NullCheck.notNull(in_columns, "Columns");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -58,7 +54,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The table columns
    */
 
-  public @Nonnull SNonEmptyList<SATableCell> getColumns()
+  public SNonEmptyList<SATableCell> getColumns()
   {
     return this.columns;
   }
@@ -67,5 +63,4 @@ import com.io7m.jstructural.core.SNonEmptyList;
   {
     return this.columns.hashCode();
   }
-
 }

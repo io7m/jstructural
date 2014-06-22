@@ -19,9 +19,7 @@ package com.io7m.jstructural.core;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.UnreachableCodeException;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * XML schema details.
@@ -33,7 +31,7 @@ public final class SXML
    * The XML URI for structural documents.
    */
 
-  public static final @Nonnull URI XML_URI;
+  public static final URI XML_URI;
 
   static {
     try {

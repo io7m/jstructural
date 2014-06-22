@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.jstructural</groupId>
     <artifactId>io7m-jstructural</artifactId>
-    <version>2.1.0</version>
+    <version>3.0.0</version>
   </parent>
   <artifactId>io7m-jstructural-schema</artifactId>
 
@@ -73,14 +73,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.io7m.jaux</groupId>
-      <artifactId>io7m-jaux</artifactId>
-      <version>[3.0.0, 4.0.0)</version>
+      <groupId>com.io7m.jnull</groupId>
+      <artifactId>io7m-jnull-core</artifactId>
+      <version>[0.3.1, 0.4.0)</version>
     </dependency>
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <version>2.0.3</version>
+      <groupId>com.io7m.junreachable</groupId>
+      <artifactId>io7m-junreachable-core</artifactId>
+      <version>[0.3.0, 0.4.0)</version>
     </dependency>
   </dependencies>
 

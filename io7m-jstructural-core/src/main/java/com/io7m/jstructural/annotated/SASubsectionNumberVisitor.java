@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * A subsection number visitor.
  * 
@@ -35,16 +31,14 @@ public interface SASubsectionNumberVisitor<T>
    * @param p
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitSubsectionNumberPSS(
-    final @Nonnull SASubsectionNumberPSS p)
-    throws ConstraintError,
-      Exception;
+    final SASubsectionNumberPSS p)
+    throws Exception;
 
   /**
    * Visit an SS subsection number.
@@ -52,14 +46,12 @@ public interface SASubsectionNumberVisitor<T>
    * @param p
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitSubsectionNumberSS(
-    final @Nonnull SASubsectionNumberSS p)
-    throws ConstraintError,
-      Exception;
+    final SASubsectionNumberSS p)
+    throws Exception;
 }

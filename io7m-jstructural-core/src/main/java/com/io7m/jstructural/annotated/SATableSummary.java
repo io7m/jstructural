@@ -16,29 +16,25 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A table summary.
  */
 
-@Immutable public final class SATableSummary
+public final class SATableSummary
 {
-  private final @Nonnull String text;
+  private final String text;
 
   SATableSummary(
-    final @Nonnull String in_text)
-    throws ConstraintError
+    final String in_text)
   {
-    this.text = Constraints.constrainNotNull(in_text, "Text");
+    this.text = NullCheck.notNull(in_text, "Text");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -57,7 +53,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The summary text
    */
 
-  public @Nonnull String getText()
+  public String getText()
   {
     return this.text;
   }

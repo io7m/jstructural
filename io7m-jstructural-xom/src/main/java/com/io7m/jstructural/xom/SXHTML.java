@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 
-import javax.annotation.Nonnull;
-
 import nu.xom.Attribute;
 import nu.xom.DocType;
 import nu.xom.Document;
@@ -31,12 +29,10 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Text;
 
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnreachableCodeException;
-import com.io7m.jaux.functional.Function;
-import com.io7m.jaux.functional.Option;
-import com.io7m.jaux.functional.PartialFunction;
-import com.io7m.jaux.functional.Unit;
+import com.io7m.jfunctional.FunctionType;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jfunctional.Unit;
 import com.io7m.jstructural.annotated.SADocument;
 import com.io7m.jstructural.annotated.SAFootnote;
 import com.io7m.jstructural.annotated.SAFootnoteContent;
@@ -83,6 +79,7 @@ import com.io7m.jstructural.annotated.SAVerbatim;
 import com.io7m.jstructural.core.SDocumentStyle;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.jstructural.core.SResources;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * XHTML utility functions.
@@ -90,16 +87,16 @@ import com.io7m.jstructural.core.SResources;
 
 public final class SXHTML
 {
-  static final @Nonnull String         ATTRIBUTE_PREFIX;
-  static final @Nonnull String         FOOTNOTE_CODE;
-  static final @Nonnull String         FORMAL_CODE;
-  static final @Nonnull Option<String> NO_TYPE;
-  static final @Nonnull String         OUTPUT_FILE_SUFFIX;
-  static final @Nonnull String         PARAGRAPH_CODE;
-  static final @Nonnull String         PART_CODE;
-  static final @Nonnull String         SECTION_CODE;
-  static final @Nonnull String         SUBSECTION_CODE;
-  static final @Nonnull URI            XHTML_URI;
+  static final String             ATTRIBUTE_PREFIX;
+  static final String             FOOTNOTE_CODE;
+  static final String             FORMAL_CODE;
+  static final OptionType<String> NO_TYPE;
+  static final String             OUTPUT_FILE_SUFFIX;
+  static final String             PARAGRAPH_CODE;
+  static final String             PART_CODE;
+  static final String             SECTION_CODE;
+  static final String             SUBSECTION_CODE;
+  static final URI                XHTML_URI;
 
   static {
     try {
@@ -122,31 +119,33 @@ public final class SXHTML
     OUTPUT_FILE_SUFFIX = "xhtml";
   }
 
-  static @Nonnull Element body()
+  static Element body()
   {
     final Element body = new Element("body", SXHTML.XHTML_URI.toString());
     return body;
   }
 
-  static @Nonnull Element bodyContainer()
+  static Element bodyContainer()
   {
     final Element e = new Element("div", SXHTML.XHTML_URI.toString());
     e.addAttribute(new Attribute("class", null, SXHTML.cssName("body")));
     return e;
   }
 
-  static @Nonnull String cssName(
-    final @Nonnull String name)
+  static String cssName(
+    final String name)
   {
     final StringBuilder b = new StringBuilder();
     b.append(SXHTML.ATTRIBUTE_PREFIX);
     b.append("_");
     b.append(name);
-    return b.toString();
+    final String r = b.toString();
+    assert r != null;
+    return r;
   }
 
-  static @Nonnull Element documentTitle(
-    final @Nonnull SADocument doc)
+  static Element documentTitle(
+    final SADocument doc)
   {
     final String[] classes = new String[1];
     classes[0] = "document_title";
@@ -156,10 +155,10 @@ public final class SXHTML
     return et;
   }
 
-  static @Nonnull Element elementWithClasses(
-    final @Nonnull String name,
-    final @Nonnull Option<String> type,
-    final @Nonnull String[] classes)
+  static Element elementWithClasses(
+    final String name,
+    final OptionType<String> type,
+    final String[] classes)
   {
     final StringBuilder cs = new StringBuilder();
     for (int index = 0; index < classes.length; ++index) {
@@ -169,9 +168,9 @@ public final class SXHTML
       }
     }
 
-    type.map(new Function<String, Unit>() {
+    type.map(new FunctionType<String, Unit>() {
       @Override public Unit call(
-        final @Nonnull String x)
+        final String x)
       {
         cs.append(" ");
         cs.append(x);
@@ -184,12 +183,11 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element footnoteBody(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SAFootnote f)
-    throws ConstraintError,
-      Exception
+  static Element footnoteBody(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SAFootnote f)
+    throws Exception
   {
     final Element e = SXHTML.footnoteContainer(link_provider, formals, f);
     final String[] classes = new String[1];
@@ -207,10 +205,10 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element footnoteContainer(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SAFootnote f)
+  static Element footnoteContainer(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SAFootnote f)
   {
     final String[] sect_classes = new String[1];
     sect_classes[0] = "footnote_container";
@@ -237,94 +235,83 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Node footnoteContent(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SAFootnoteContent c)
-    throws ConstraintError,
-      Exception
+  static Node footnoteContent(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SAFootnoteContent c)
+    throws Exception
   {
     return c.footnoteContentAccept(new SAFootnoteContentVisitor<Node>() {
       @Override public Node visitFootnote(
-        final @Nonnull SAFootnote footnote)
-        throws ConstraintError,
-          Exception
+        final SAFootnote footnote)
+        throws Exception
       {
         return SXHTML.footnoteReference(footnote);
       }
 
       @Override public Node visitImage(
-        final @Nonnull SAImage image)
-        throws ConstraintError,
-          Exception
+        final SAImage image)
+        throws Exception
       {
         return SXHTML.image(image);
       }
 
       @Override public Node visitLink(
-        final @Nonnull SALink link)
-        throws ConstraintError,
-          Exception
+        final SALink link)
+        throws Exception
       {
         return SXHTML.link(link_provider, link);
       }
 
       @Override public Node visitLinkExternal(
-        final @Nonnull SALinkExternal link)
-        throws ConstraintError,
-          Exception
+        final SALinkExternal link)
+        throws Exception
       {
         return SXHTML.linkExternal(link);
       }
 
       @Override public Node visitListOrdered(
-        final @Nonnull SAListOrdered list)
-        throws ConstraintError,
-          Exception
+        final SAListOrdered list)
+        throws Exception
       {
         return SXHTML.listOrdered(link_provider, list);
       }
 
       @Override public Node visitListUnordered(
-        final @Nonnull SAListUnordered list)
-        throws ConstraintError,
-          Exception
+        final SAListUnordered list)
+        throws Exception
       {
         return SXHTML.listUnordered(link_provider, list);
       }
 
       @Override public Node visitTerm(
-        final @Nonnull SATerm term)
-        throws ConstraintError,
-          Exception
+        final SATerm term)
+        throws Exception
       {
         return SXHTML.term(term);
       }
 
       @Override public Node visitText(
-        final @Nonnull SAText text)
-        throws ConstraintError,
-          Exception
+        final SAText text)
+        throws Exception
       {
         return SXHTML.text(text);
       }
 
       @Override public Node visitVerbatim(
-        final @Nonnull SAVerbatim text)
-        throws ConstraintError,
-          Exception
+        final SAVerbatim text)
+        throws Exception
       {
         return SXHTML.verbatim(text);
       }
     });
   }
 
-  static @Nonnull SNonEmptyList<Node> footnoteContentList(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SNonEmptyList<SAFootnoteContent> contents)
-    throws ConstraintError,
-      Exception
+  static SNonEmptyList<Node> footnoteContentList(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SNonEmptyList<SAFootnoteContent> contents)
+    throws Exception
   {
     final List<Node> nodes = new ArrayList<Node>();
     for (final SAFootnoteContent c : contents.getElements()) {
@@ -333,8 +320,8 @@ public final class SXHTML
     return SNonEmptyList.newList(nodes);
   }
 
-  static @Nonnull Element footnoteReference(
-    final @Nonnull SAFootnote footnote)
+  static Element footnoteReference(
+    final SAFootnote footnote)
   {
     final String[] classes = new String[1];
     classes[0] = "footnote_reference";
@@ -350,12 +337,11 @@ public final class SXHTML
   }
 
   static void footnotes(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull Element body)
-    throws ConstraintError,
-      Exception
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final List<SAFootnote> footnotes,
+    final Element body)
+    throws Exception
   {
     if (footnotes.size() > 0) {
       final String[] classes = new String[1];
@@ -372,12 +358,11 @@ public final class SXHTML
     }
   }
 
-  static @Nonnull Element formalItem(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SAFormalItem formal)
-    throws ConstraintError,
-      Exception
+  static Element formalItem(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SAFormalItem formal)
+    throws Exception
   {
     final String[] classes = new String[1];
     classes[0] = "formal_item";
@@ -410,70 +395,62 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element formalItemContent(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SAFormalItemContent content)
-    throws ConstraintError,
-      Exception
+  static Element formalItemContent(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SAFormalItemContent content)
+    throws Exception
   {
     return content
       .formalItemContentAccept(new SAFormalItemContentVisitor<Element>() {
         @Override public Element visitFormalItemList(
           final SAFormalItemList list)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SXHTML.formalItemList(link_provider, formals, list);
         }
 
         @Override public Element visitImage(
           final SAImage image)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SXHTML.image(image);
         }
 
         @Override public Element visitListOrdered(
           final SAListOrdered list)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SXHTML.listOrdered(link_provider, list);
         }
 
         @Override public Element visitListUnordered(
           final SAListUnordered list)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SXHTML.listUnordered(link_provider, list);
         }
 
         @Override public Element visitTable(
           final SATable e)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SXHTML.table(link_provider, e);
         }
 
         @Override public Element visitVerbatim(
           final SAVerbatim text)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return SXHTML.verbatim(text);
         }
       });
   }
 
-  static @Nonnull Element formalItemList(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SAFormalItemList list)
-    throws ConstraintError
+  static Element formalItemList(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SAFormalItemList list)
   {
     final String[] classes = new String[1];
     classes[0] = "formal_item_list";
@@ -524,19 +501,21 @@ public final class SXHTML
     return id;
   }
 
-  static @Nonnull String getPartAnchorID(
-    final @Nonnull SAPartNumber part)
+  static String getPartAnchorID(
+    final SAPartNumber part)
   {
     final StringBuilder b = new StringBuilder();
     b.append(SXHTML.ATTRIBUTE_PREFIX);
     b.append("_p");
     b.append(part.getActual());
-    return b.toString();
+    final String r = b.toString();
+    assert r != null;
+    return r;
   }
 
-  static @Nonnull Element head(
-    final @Nonnull String title,
-    final @Nonnull Option<SDocumentStyle> style)
+  static Element head(
+    final String title,
+    final OptionType<SDocumentStyle> style)
   {
     final Element e = new Element("head", SXHTML.XHTML_URI.toString());
     final Element e_title = new Element("title", SXHTML.XHTML_URI.toString());
@@ -545,7 +524,7 @@ public final class SXHTML
     e.appendChild(SXHTML.stylesheetLink(SResources.CSS_LAYOUT_NAME));
     e.appendChild(SXHTML.stylesheetLink(SResources.CSS_COLOUR_NAME));
 
-    style.map(new Function<SDocumentStyle, Unit>() {
+    style.map(new FunctionType<SDocumentStyle, Unit>() {
       @Override public Unit call(
         final SDocumentStyle x)
       {
@@ -557,9 +536,8 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element image(
-    final @Nonnull SAImage image)
-    throws ConstraintError
+  static Element image(
+    final SAImage image)
   {
     final String[] classes = new String[1];
     classes[0] = "image";
@@ -567,38 +545,33 @@ public final class SXHTML
     final Element e =
       SXHTML.elementWithClasses("img", image.getType(), classes);
 
-    image.getHeight().mapPartial(
-      new PartialFunction<Integer, Unit, ConstraintError>() {
-        @Override public Unit call(
-          final Integer x)
-          throws ConstraintError
-        {
-          e.addAttribute(new Attribute("height", null, x.toString()));
-          return Unit.unit();
-        }
-      });
+    image.getHeight().map(new FunctionType<Integer, Unit>() {
+      @Override public Unit call(
+        final Integer x)
+      {
+        e.addAttribute(new Attribute("height", null, x.toString()));
+        return Unit.unit();
+      }
+    });
 
-    image.getWidth().mapPartial(
-      new PartialFunction<Integer, Unit, ConstraintError>() {
-        @Override public Unit call(
-          final Integer x)
-          throws ConstraintError
-        {
-          e.addAttribute(new Attribute("width", null, x.toString()));
-          return Unit.unit();
-        }
-      });
+    image.getWidth().map(new FunctionType<Integer, Unit>() {
+      @Override public Unit call(
+        final Integer x)
+      {
+        e.addAttribute(new Attribute("width", null, x.toString()));
+        return Unit.unit();
+      }
+    });
 
     e.addAttribute(new Attribute("alt", null, image.getText()));
     e.addAttribute(new Attribute("src", null, image.getURI().toString()));
     return e;
   }
 
-  static @Nonnull Element link(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SALink link)
-    throws ConstraintError,
-      Exception
+  static Element link(
+    final SLinkProvider link_provider,
+    final SALink link)
+    throws Exception
   {
     final String[] classes = new String[1];
     classes[0] = "link";
@@ -617,34 +590,30 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Node linkContent(
-    final @Nonnull SALinkContent c)
-    throws ConstraintError,
-      Exception
+  static Node linkContent(
+    final SALinkContent c)
+    throws Exception
   {
     return c.linkContentAccept(new SALinkContentVisitor<Node>() {
       @Override public Node visitImage(
-        final @Nonnull SAImage image)
-        throws ConstraintError,
-          Exception
+        final SAImage image)
+        throws Exception
       {
         return SXHTML.image(image);
       }
 
       @Override public Node visitText(
-        final @Nonnull SAText text)
-        throws ConstraintError,
-          Exception
+        final SAText text)
+        throws Exception
       {
         return SXHTML.text(text);
       }
     });
   }
 
-  static @Nonnull Node linkExternal(
-    final @Nonnull SALinkExternal link)
-    throws ConstraintError,
-      Exception
+  static Node linkExternal(
+    final SALinkExternal link)
+    throws Exception
   {
     final String[] classes = new String[1];
     classes[0] = "link_external";
@@ -663,17 +632,17 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element linkRaw(
-    final @Nonnull String target)
+  static Element linkRaw(
+    final String target)
   {
     final Element e = new Element("a", SXHTML.XHTML_URI.toString());
     e.addAttribute(new Attribute("href", null, target));
     return e;
   }
 
-  static @Nonnull Element linkRawIDTarget(
-    final @Nonnull String target,
-    final @Nonnull String id)
+  static Element linkRawIDTarget(
+    final String target,
+    final String id)
   {
     final Element e = new Element("a", SXHTML.XHTML_URI.toString());
     e.addAttribute(new Attribute("id", null, id));
@@ -681,11 +650,11 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element linkRawIDWithClasses(
-    final @Nonnull String id,
-    final @Nonnull String target,
-    final @Nonnull Option<String> type,
-    final @Nonnull String[] classes)
+  static Element linkRawIDWithClasses(
+    final String id,
+    final String target,
+    final OptionType<String> type,
+    final String[] classes)
   {
     final Element e = SXHTML.elementWithClasses("a", type, classes);
     e.addAttribute(new Attribute("href", null, target));
@@ -693,20 +662,19 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element linkRawWithClasses(
-    final @Nonnull String target,
-    final @Nonnull Option<String> type,
-    final @Nonnull String[] classes)
+  static Element linkRawWithClasses(
+    final String target,
+    final OptionType<String> type,
+    final String[] classes)
   {
     final Element e = SXHTML.elementWithClasses("a", type, classes);
     e.addAttribute(new Attribute("href", null, target));
     return e;
   }
 
-  static @Nonnull SNonEmptyList<Node> linkTargetContentList(
-    final @Nonnull SNonEmptyList<SALinkContent> contents)
-    throws ConstraintError,
-      Exception
+  static SNonEmptyList<Node> linkTargetContentList(
+    final SNonEmptyList<SALinkContent> contents)
+    throws Exception
   {
     final List<Node> nodes = new ArrayList<Node>();
     for (final SALinkContent c : contents.getElements()) {
@@ -715,11 +683,10 @@ public final class SXHTML
     return SNonEmptyList.newList(nodes);
   }
 
-  static @Nonnull Element listItem(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAListItem li)
-    throws ConstraintError,
-      Exception
+  static Element listItem(
+    final SLinkProvider link_provider,
+    final SAListItem li)
+    throws Exception
   {
     final Element e = new Element("li", SXHTML.XHTML_URI.toString());
     e.addAttribute(new Attribute("class", null, SXHTML.cssName("list_item")));
@@ -733,92 +700,81 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Node listItemContent(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAListItemContent c)
-    throws ConstraintError,
-      Exception
+  static Node listItemContent(
+    final SLinkProvider link_provider,
+    final SAListItemContent c)
+    throws Exception
   {
     return c.listItemContentAccept(new SAListItemContentVisitor<Node>() {
       @Override public Node visitFootnote(
-        final @Nonnull SAFootnote footnote)
-        throws ConstraintError,
-          Exception
+        final SAFootnote footnote)
+        throws Exception
       {
         return SXHTML.footnoteReference(footnote);
       }
 
       @Override public Node visitImage(
-        final @Nonnull SAImage image)
-        throws ConstraintError,
-          Exception
+        final SAImage image)
+        throws Exception
       {
         return SXHTML.image(image);
       }
 
       @Override public Node visitLink(
-        final @Nonnull SALink link)
-        throws ConstraintError,
-          Exception
+        final SALink link)
+        throws Exception
       {
         return SXHTML.link(link_provider, link);
       }
 
       @Override public Node visitLinkExternal(
-        final @Nonnull SALinkExternal link)
-        throws ConstraintError,
-          Exception
+        final SALinkExternal link)
+        throws Exception
       {
         return SXHTML.linkExternal(link);
       }
 
       @Override public Node visitListOrdered(
-        final @Nonnull SAListOrdered list)
-        throws ConstraintError,
-          Exception
+        final SAListOrdered list)
+        throws Exception
       {
         return SXHTML.listOrdered(link_provider, list);
       }
 
       @Override public Node visitListUnordered(
-        final @Nonnull SAListUnordered list)
-        throws ConstraintError,
-          Exception
+        final SAListUnordered list)
+        throws Exception
       {
         return SXHTML.listUnordered(link_provider, list);
       }
 
       @Override public Node visitTerm(
-        final @Nonnull SATerm term)
-        throws ConstraintError,
-          Exception
+        final SATerm term)
+        throws Exception
       {
         return SXHTML.term(term);
       }
 
       @Override public Node visitText(
-        final @Nonnull SAText text)
-        throws ConstraintError,
-          Exception
+        final SAText text)
+        throws Exception
       {
         return SXHTML.text(text);
       }
 
       @Override public Node visitVerbatim(
-        final @Nonnull SAVerbatim text)
-        throws ConstraintError,
-          Exception
+        final SAVerbatim text)
+        throws Exception
       {
         return SXHTML.verbatim(text);
       }
     });
   }
 
-  static @Nonnull SNonEmptyList<Node> listItemContents(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SNonEmptyList<SAListItemContent> contents)
-    throws ConstraintError,
-      Exception
+  static SNonEmptyList<Node> listItemContents(
+    final SLinkProvider link_provider,
+    final SNonEmptyList<SAListItemContent> contents)
+    throws Exception
   {
     final List<Node> nodes = new ArrayList<Node>();
     for (final SAListItemContent c : contents.getElements()) {
@@ -827,11 +783,10 @@ public final class SXHTML
     return SNonEmptyList.newList(nodes);
   }
 
-  static @Nonnull Element listOrdered(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAListOrdered list)
-    throws ConstraintError,
-      Exception
+  static Element listOrdered(
+    final SLinkProvider link_provider,
+    final SAListOrdered list)
+    throws Exception
   {
     final Element e = new Element("ol", SXHTML.XHTML_URI.toString());
     e.addAttribute(new Attribute("class", null, SXHTML
@@ -844,11 +799,10 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element listUnordered(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAListUnordered list)
-    throws ConstraintError,
-      Exception
+  static Element listUnordered(
+    final SLinkProvider link_provider,
+    final SAListUnordered list)
+    throws Exception
   {
     final Element e = new Element("ul", SXHTML.XHTML_URI.toString());
     e.addAttribute(new Attribute("class", null, SXHTML
@@ -861,7 +815,7 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Document newDocument()
+  static Document newDocument()
   {
     final DocType dt =
       new DocType(
@@ -875,9 +829,9 @@ public final class SXHTML
     return d;
   }
 
-  static @Nonnull SXHTMLPage newPage(
-    final @Nonnull String title,
-    final @Nonnull Option<SDocumentStyle> style)
+  static SXHTMLPage newPage(
+    final String title,
+    final OptionType<SDocumentStyle> style)
   {
     final Document doc = SXHTML.newDocument();
     final Element root = doc.getRootElement();
@@ -890,12 +844,11 @@ public final class SXHTML
     return new SXHTMLPage(doc, in_head, in_body, in_body_container);
   }
 
-  static @Nonnull Element paragraph(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SAParagraph paragraph)
-    throws ConstraintError,
-      Exception
+  static Element paragraph(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SAParagraph paragraph)
+    throws Exception
   {
     final Element e =
       SXHTML.paragraphContainer(paragraph.getType(), paragraph.getNumber());
@@ -917,11 +870,10 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element paragraphContainer(
-    final @Nonnull Option<String> type,
-    final @Nonnull SAParagraphNumber number)
-    throws ConstraintError,
-      Exception
+  static Element paragraphContainer(
+    final OptionType<String> type,
+    final SAParagraphNumber number)
+    throws Exception
   {
     final String[] sect_classes = new String[1];
     sect_classes[0] = "paragraph_container";
@@ -941,110 +893,97 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Node paragraphContent(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SAParagraphContent c)
-    throws ConstraintError,
-      Exception
+  static Node paragraphContent(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SAParagraphContent c)
+    throws Exception
   {
     return c.paragraphContentAccept(new SAParagraphContentVisitor<Node>() {
       @Override public Node visitFootnote(
-        final @Nonnull SAFootnote footnote)
-        throws ConstraintError,
-          Exception
+        final SAFootnote footnote)
+        throws Exception
       {
         return SXHTML.footnoteReference(footnote);
       }
 
       @Override public Node visitFormalItemList(
-        final @Nonnull SAFormalItemList list)
-        throws ConstraintError,
-          Exception
+        final SAFormalItemList list)
+        throws Exception
       {
         return SXHTML.formalItemList(link_provider, formals, list);
       }
 
       @Override public Node visitImage(
-        final @Nonnull SAImage image)
-        throws ConstraintError,
-          Exception
+        final SAImage image)
+        throws Exception
       {
         return SXHTML.image(image);
       }
 
       @Override public Node visitLink(
-        final @Nonnull SALink link)
-        throws ConstraintError,
-          Exception
+        final SALink link)
+        throws Exception
       {
         return SXHTML.link(link_provider, link);
       }
 
       @Override public Node visitLinkExternal(
-        final @Nonnull SALinkExternal link)
-        throws ConstraintError,
-          Exception
+        final SALinkExternal link)
+        throws Exception
       {
         return SXHTML.linkExternal(link);
       }
 
       @Override public Node visitListOrdered(
-        final @Nonnull SAListOrdered list)
-        throws ConstraintError,
-          Exception
+        final SAListOrdered list)
+        throws Exception
       {
         return SXHTML.listOrdered(link_provider, list);
       }
 
       @Override public Node visitListUnordered(
-        final @Nonnull SAListUnordered list)
-        throws ConstraintError,
-          Exception
+        final SAListUnordered list)
+        throws Exception
       {
         return SXHTML.listUnordered(link_provider, list);
       }
 
       @Override public Node visitTable(
-        final @Nonnull SATable table)
-        throws ConstraintError,
-          Exception
+        final SATable table)
+        throws Exception
       {
         return SXHTML.table(link_provider, table);
       }
 
       @Override public Node visitTerm(
-        final @Nonnull SATerm term)
-        throws ConstraintError,
-          Exception
+        final SATerm term)
+        throws Exception
       {
         return SXHTML.term(term);
       }
 
       @Override public Node visitText(
-        final @Nonnull SAText text)
-        throws ConstraintError,
-          Exception
+        final SAText text)
+        throws Exception
       {
         return SXHTML.text(text);
       }
 
       @Override public Node visitVerbatim(
-        final @Nonnull SAVerbatim text)
-        throws ConstraintError,
-          Exception
+        final SAVerbatim text)
+        throws Exception
       {
         return SXHTML.verbatim(text);
       }
     });
   }
 
-  static @Nonnull SNonEmptyList<Node> paragraphContentList(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SNonEmptyList<SAParagraphContent> contents)
-    throws ConstraintError,
-      Exception
+  static SNonEmptyList<Node> paragraphContentList(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SNonEmptyList<SAParagraphContent> contents)
+    throws Exception
   {
     final List<Node> nodes = new ArrayList<Node>();
     for (final SAParagraphContent c : contents.getElements()) {
@@ -1053,8 +992,8 @@ public final class SXHTML
     return SNonEmptyList.newList(nodes);
   }
 
-  static @Nonnull Element partContainer(
-    final @Nonnull SAPartTitle title)
+  static Element partContainer(
+    final SAPartTitle title)
   {
     final Element e = new Element("div", SXHTML.XHTML_URI.toString());
     e.addAttribute(new Attribute("class", null, SXHTML
@@ -1085,10 +1024,9 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element sectionContainer(
-    final @Nonnull SASection section)
-    throws ConstraintError,
-      Exception
+  static Element sectionContainer(
+    final SASection section)
+    throws Exception
   {
     final SASectionTitle title = section.getTitle();
 
@@ -1122,8 +1060,8 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element stylesheetLink(
-    final @Nonnull String uri)
+  static Element stylesheetLink(
+    final String uri)
   {
     final Element e = new Element("link", SXHTML.XHTML_URI.toString());
     e.addAttribute(new Attribute("rel", null, "stylesheet"));
@@ -1132,12 +1070,11 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element subsection(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SASubsection ss)
-    throws ConstraintError,
-      Exception
+  static Element subsection(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SASubsection ss)
+    throws Exception
   {
     final Element e = SXHTML.subsectionContainer(ss);
 
@@ -1149,10 +1086,9 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element subsectionContainer(
-    final @Nonnull SASubsection ss)
-    throws ConstraintError,
-      Exception
+  static Element subsectionContainer(
+    final SASubsection ss)
+    throws Exception
   {
     final SASubsectionTitle title = ss.getTitle();
 
@@ -1187,38 +1123,34 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Element subsectionContent(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SASubsectionContent c)
-    throws ConstraintError,
-      Exception
+  static Element subsectionContent(
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SASubsectionContent c)
+    throws Exception
   {
     return c
       .subsectionContentAccept(new SASubsectionContentVisitor<Element>() {
         @Override public Element visitFormalItem(
-          final @Nonnull SAFormalItem formal)
-          throws ConstraintError,
-            Exception
+          final SAFormalItem formal)
+          throws Exception
         {
           return SXHTML.formalItem(link_provider, formals, formal);
         }
 
         @Override public Element visitParagraph(
-          final @Nonnull SAParagraph paragraph)
-          throws ConstraintError,
-            Exception
+          final SAParagraph paragraph)
+          throws Exception
         {
           return SXHTML.paragraph(link_provider, formals, paragraph);
         }
       });
   }
 
-  static @Nonnull Element table(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SATable table)
-    throws ConstraintError,
-      Exception
+  static Element table(
+    final SLinkProvider link_provider,
+    final SATable table)
+    throws Exception
   {
     final String[] classes = new String[1];
     classes[0] = "table";
@@ -1229,34 +1161,32 @@ public final class SXHTML
       .getSummary()
       .getText()));
 
-    table.getHeader().mapPartial(
-      new PartialFunction<SATableHead, Unit, ConstraintError>() {
-        @Override public Unit call(
-          final SATableHead th)
-          throws ConstraintError
-        {
-          final String[] eh_classes = new String[1];
-          eh_classes[0] = "table_head";
-          final Element eh =
-            SXHTML.elementWithClasses("thead", SXHTML.NO_TYPE, eh_classes);
+    table.getHeader().map(new FunctionType<SATableHead, Unit>() {
+      @Override public Unit call(
+        final SATableHead th)
+      {
+        final String[] eh_classes = new String[1];
+        eh_classes[0] = "table_head";
+        final Element eh =
+          SXHTML.elementWithClasses("thead", SXHTML.NO_TYPE, eh_classes);
 
-          final Element er = new Element("tr", SXHTML.XHTML_URI.toString());
-          eh.appendChild(er);
+        final Element er = new Element("tr", SXHTML.XHTML_URI.toString());
+        eh.appendChild(er);
 
-          for (final SATableColumnName tn : th.getHeader().getElements()) {
-            final String[] ecn_classes = new String[1];
-            ecn_classes[0] = "table_column_name";
-            final Element ecn =
-              SXHTML.elementWithClasses("th", SXHTML.NO_TYPE, ecn_classes);
+        for (final SATableColumnName tn : th.getHeader().getElements()) {
+          final String[] ecn_classes = new String[1];
+          ecn_classes[0] = "table_column_name";
+          final Element ecn =
+            SXHTML.elementWithClasses("th", SXHTML.NO_TYPE, ecn_classes);
 
-            ecn.appendChild(tn.getText());
-            er.appendChild(ecn);
-          }
-
-          e.appendChild(eh);
-          return Unit.unit();
+          ecn.appendChild(tn.getText());
+          er.appendChild(ecn);
         }
-      });
+
+        e.appendChild(eh);
+        return Unit.unit();
+      }
+    });
 
     {
       final String[] tb_classes = new String[1];
@@ -1292,92 +1222,81 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Node tableCellContent(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SATableCellContent c)
-    throws ConstraintError,
-      Exception
+  static Node tableCellContent(
+    final SLinkProvider link_provider,
+    final SATableCellContent c)
+    throws Exception
   {
     return c.tableCellContentAccept(new SATableCellContentVisitor<Node>() {
       @Override public Node visitFootnote(
         final SAFootnote footnote)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SXHTML.footnoteReference(footnote);
       }
 
       @Override public Node visitImage(
         final SAImage image)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SXHTML.image(image);
       }
 
       @Override public Node visitLink(
         final SALink link)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SXHTML.link(link_provider, link);
       }
 
       @Override public Node visitLinkExternal(
         final SALinkExternal link)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SXHTML.linkExternal(link);
       }
 
       @Override public Node visitListOrdered(
         final SAListOrdered list)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SXHTML.listOrdered(link_provider, list);
       }
 
       @Override public Node visitListUnordered(
         final SAListUnordered list)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SXHTML.listUnordered(link_provider, list);
       }
 
       @Override public Node visitTerm(
         final SATerm term)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SXHTML.term(term);
       }
 
       @Override public Node visitText(
         final SAText text)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SXHTML.text(text);
       }
 
       @Override public Node visitVerbatim(
         final SAVerbatim text)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SXHTML.verbatim(text);
       }
     });
   }
 
-  static @Nonnull SNonEmptyList<Node> tableCellContentList(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SNonEmptyList<SATableCellContent> contents)
-    throws ConstraintError,
-      Exception
+  static SNonEmptyList<Node> tableCellContentList(
+    final SLinkProvider link_provider,
+    final SNonEmptyList<SATableCellContent> contents)
+    throws Exception
   {
     final List<Node> nodes = new ArrayList<Node>();
     for (final SATableCellContent c : contents.getElements()) {
@@ -1386,8 +1305,8 @@ public final class SXHTML
     return SNonEmptyList.newList(nodes);
   }
 
-  static @Nonnull Node term(
-    final @Nonnull SATerm term)
+  static Node term(
+    final SATerm term)
   {
     final String[] classes = new String[1];
     classes[0] = "term";
@@ -1397,14 +1316,14 @@ public final class SXHTML
     return e;
   }
 
-  static @Nonnull Node text(
-    final @Nonnull SAText text)
+  static Node text(
+    final SAText text)
   {
     return new Text(text.getText());
   }
 
-  static @Nonnull Element verbatim(
-    final @Nonnull SAVerbatim text)
+  static Element verbatim(
+    final SAVerbatim text)
   {
     final String[] classes = new String[1];
     classes[0] = "verbatim";

@@ -16,18 +16,16 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A list item element.
  */
 
-@Immutable public final class SListItem
+public final class SListItem
 {
   /**
    * Construct a new list item.
@@ -35,15 +33,12 @@ import com.io7m.jaux.functional.Option;
    * @param content
    *          The list item content.
    * @return A new list item
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SListItem listItem(
-    final @Nonnull SNonEmptyList<SListItemContent> content)
-    throws ConstraintError
+  public static SListItem listItem(
+    final SNonEmptyList<SListItemContent> content)
   {
-    final Option<String> none = Option.none();
+    final OptionType<String> none = Option.none();
     return new SListItem(none, content);
   }
 
@@ -55,34 +50,30 @@ import com.io7m.jaux.functional.Option;
    * @param content
    *          The list item content.
    * @return A new list item
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SListItem listItemTyped(
-    final @Nonnull String type,
-    final @Nonnull SNonEmptyList<SListItemContent> content)
-    throws ConstraintError
+  public static SListItem listItemTyped(
+    final String type,
+    final SNonEmptyList<SListItemContent> content)
   {
-    final Option<String> some =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
+    final OptionType<String> some =
+      Option.some(NullCheck.notNull(type, "Type"));
     return new SListItem(some, content);
   }
 
-  private final @Nonnull SNonEmptyList<SListItemContent> content;
-  private final @Nonnull Option<String>                  type;
+  private final SNonEmptyList<SListItemContent> content;
+  private final OptionType<String>              type;
 
   private SListItem(
-    final @Nonnull Option<String> in_type,
-    final @Nonnull SNonEmptyList<SListItemContent> in_content)
-    throws ConstraintError
+    final OptionType<String> in_type,
+    final SNonEmptyList<SListItemContent> in_content)
   {
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.content = NullCheck.notNull(in_content, "Content");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -101,7 +92,7 @@ import com.io7m.jaux.functional.Option;
    * @return The element content
    */
 
-  public @Nonnull SNonEmptyList<SListItemContent> getContent()
+  public SNonEmptyList<SListItemContent> getContent()
   {
     return this.content;
   }
@@ -110,7 +101,7 @@ import com.io7m.jaux.functional.Option;
    * @return The type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }

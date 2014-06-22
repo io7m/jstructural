@@ -18,37 +18,33 @@ package com.io7m.jstructural.annotated;
 
 import java.net.URI;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
 
 /**
  * A link to an external resource
  */
 
-@Immutable public final class SALinkExternal implements
+public final class SALinkExternal implements
   SAParagraphContent,
   SAListItemContent,
   SAFootnoteContent,
   SATableCellContent
 {
-  private final @Nonnull SNonEmptyList<SALinkContent> content;
-  private final @Nonnull URI                          target;
+  private final SNonEmptyList<SALinkContent> content;
+  private final URI                          target;
 
   SALinkExternal(
-    final @Nonnull URI in_target,
-    final @Nonnull SNonEmptyList<SALinkContent> in_content)
-    throws ConstraintError
+    final URI in_target,
+    final SNonEmptyList<SALinkContent> in_content)
   {
-    this.target = Constraints.constrainNotNull(in_target, "Target");
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+    this.target = NullCheck.notNull(in_target, "Target");
+    this.content = NullCheck.notNull(in_content, "Content");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -65,9 +61,8 @@ import com.io7m.jstructural.core.SNonEmptyList;
   }
 
   @Override public <A> A footnoteContentAccept(
-    final @Nonnull SAFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAFootnoteContentVisitor<A> v)
+    throws Exception
   {
     return v.visitLinkExternal(this);
   }
@@ -76,7 +71,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The content of the link
    */
 
-  public @Nonnull SNonEmptyList<SALinkContent> getContent()
+  public SNonEmptyList<SALinkContent> getContent()
   {
     return this.content;
   }
@@ -85,7 +80,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The link target
    */
 
-  public @Nonnull URI getTarget()
+  public URI getTarget()
   {
     return this.target;
   }
@@ -100,25 +95,22 @@ import com.io7m.jstructural.core.SNonEmptyList;
   }
 
   @Override public <A> A listItemContentAccept(
-    final @Nonnull SAListItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAListItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitLinkExternal(this);
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SAParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitLinkExternal(this);
   }
 
   @Override public <A> A tableCellContentAccept(
-    final @Nonnull SATableCellContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SATableCellContentVisitor<A> v)
+    throws Exception
   {
     return v.visitLinkExternal(this);
   }

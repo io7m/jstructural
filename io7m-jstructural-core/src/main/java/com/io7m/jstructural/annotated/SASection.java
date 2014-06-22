@@ -18,46 +18,42 @@ package com.io7m.jstructural.annotated;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SSectionContents;
 
 /**
  * An abstract section.
  */
 
-@Immutable public abstract class SASection implements SAIDTargetContent
+public abstract class SASection implements SAIDTargetContent
 {
-  private final @Nonnull Option<SSectionContents> contents;
-  private final @Nonnull List<SAFootnote>         footnotes;
-  private final @Nonnull Option<SAID>             id;
-  private final @Nonnull SASectionNumber          number;
-  private final @Nonnull SASectionTitle           title;
-  private final @Nonnull Option<String>           type;
+  private final OptionType<SSectionContents> contents;
+  private final List<SAFootnote>             footnotes;
+  private final OptionType<SAID>             id;
+  private final SASectionNumber              number;
+  private final SASectionTitle               title;
+  private final OptionType<String>           type;
 
   protected SASection(
-    final @Nonnull SASectionNumber in_number,
-    final @Nonnull Option<String> in_type,
-    final @Nonnull Option<SAID> in_id,
-    final @Nonnull SASectionTitle in_title,
-    final @Nonnull Option<SSectionContents> in_contents,
-    final @Nonnull List<SAFootnote> in_footnotes)
-    throws ConstraintError
+    final SASectionNumber in_number,
+    final OptionType<String> in_type,
+    final OptionType<SAID> in_id,
+    final SASectionTitle in_title,
+    final OptionType<SSectionContents> in_contents,
+    final List<SAFootnote> in_footnotes)
   {
-    this.number = Constraints.constrainNotNull(in_number, "Number");
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.id = Constraints.constrainNotNull(in_id, "ID");
-    this.title = Constraints.constrainNotNull(in_title, "Title");
-    this.contents = Constraints.constrainNotNull(in_contents, "Contents");
-    this.footnotes = Constraints.constrainNotNull(in_footnotes, "Footnotes");
+    this.number = NullCheck.notNull(in_number, "Number");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.id = NullCheck.notNull(in_id, "ID");
+    this.title = NullCheck.notNull(in_title, "Title");
+    this.contents = NullCheck.notNull(in_contents, "Contents");
+    this.footnotes = NullCheck.notNull(in_footnotes, "Footnotes");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -80,7 +76,7 @@ import com.io7m.jstructural.core.SSectionContents;
    * @return The section contents
    */
 
-  public final @Nonnull Option<SSectionContents> getContents()
+  public final OptionType<SSectionContents> getContents()
   {
     return this.contents;
   }
@@ -98,7 +94,7 @@ import com.io7m.jstructural.core.SSectionContents;
    * @return The section ID
    */
 
-  public final @Nonnull Option<SAID> getID()
+  public final OptionType<SAID> getID()
   {
     return this.id;
   }
@@ -107,7 +103,7 @@ import com.io7m.jstructural.core.SSectionContents;
    * @return The section number
    */
 
-  public final @Nonnull SASectionNumber getNumber()
+  public final SASectionNumber getNumber()
   {
     return this.number;
   }
@@ -116,7 +112,7 @@ import com.io7m.jstructural.core.SSectionContents;
    * @return The section title
    */
 
-  public final @Nonnull SASectionTitle getTitle()
+  public final SASectionTitle getTitle()
   {
     return this.title;
   }
@@ -125,7 +121,7 @@ import com.io7m.jstructural.core.SSectionContents;
    * @return The section type attribute
    */
 
-  public final @Nonnull Option<String> getType()
+  public final OptionType<String> getType()
   {
     return this.type;
   }
@@ -148,8 +144,7 @@ import com.io7m.jstructural.core.SSectionContents;
    * @param v
    *          The visitor
    * @return The value returned by the visitor
-   * @throws ConstraintError
-   *           If the visitor raises {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises an {@link Exception}
    * @param <A>
@@ -157,7 +152,6 @@ import com.io7m.jstructural.core.SSectionContents;
    */
 
   public abstract <A> A sectionAccept(
-    final @Nonnull SASectionVisitor<A> v)
-    throws ConstraintError,
-      Exception;
+    final SASectionVisitor<A> v)
+    throws Exception;
 }

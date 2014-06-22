@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A part title.
  */
 
-@Immutable public final class SPartTitle
+public final class SPartTitle
 {
   /**
    * Construct a part title.
@@ -34,28 +31,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param actual
    *          The text
    * @return A new part title
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SPartTitle partTitle(
-    final @Nonnull String actual)
-    throws ConstraintError
+  public static SPartTitle partTitle(
+    final String actual)
   {
     return new SPartTitle(actual);
   }
 
-  private final @Nonnull String actual;
+  private final String actual;
 
   private SPartTitle(
-    final @Nonnull String in_actual)
-    throws ConstraintError
+    final String in_actual)
   {
-    this.actual = Constraints.constrainNotNull(in_actual, "Actual");
+    this.actual = NullCheck.notNull(in_actual, "Actual");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -74,7 +67,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The text
    */
 
-  public @Nonnull String getActual()
+  public String getActual()
   {
     return this.actual;
   }
@@ -90,6 +83,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
     builder.append("[SPartTitle ");
     builder.append(this.actual);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

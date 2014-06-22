@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A table row.
  */
 
-@Immutable public final class STableRow
+public final class STableRow
 {
   /**
    * Construct a new table row.
@@ -34,28 +31,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param columns
    *          The columns
    * @return A new table row
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull STableRow tableRow(
-    final @Nonnull SNonEmptyList<STableCell> columns)
-    throws ConstraintError
+  public static STableRow tableRow(
+    final SNonEmptyList<STableCell> columns)
   {
     return new STableRow(columns);
   }
 
-  private final @Nonnull SNonEmptyList<STableCell> columns;
+  private final SNonEmptyList<STableCell> columns;
 
   private STableRow(
-    final @Nonnull SNonEmptyList<STableCell> in_columns)
-    throws ConstraintError
+    final SNonEmptyList<STableCell> in_columns)
   {
-    this.columns = Constraints.constrainNotNull(in_columns, "Columns");
+    this.columns = NullCheck.notNull(in_columns, "Columns");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -74,7 +67,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The table columns
    */
 
-  public @Nonnull SNonEmptyList<STableCell> getColumns()
+  public SNonEmptyList<STableCell> getColumns()
   {
     return this.columns;
   }
@@ -83,5 +76,4 @@ import com.io7m.jaux.Constraints.ConstraintError;
   {
     return this.columns.hashCode();
   }
-
 }

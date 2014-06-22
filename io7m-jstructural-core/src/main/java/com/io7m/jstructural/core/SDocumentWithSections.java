@@ -16,11 +16,10 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A document with sections.
@@ -36,17 +35,14 @@ public final class SDocumentWithSections extends SDocument
    * @param in_content
    *          The sections
    * @return A new document
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SDocumentWithSections document(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull SNonEmptyList<SSection> in_content)
-    throws ConstraintError
+  public static SDocumentWithSections document(
+    final SDocumentTitle in_title,
+    final SNonEmptyList<SSection> in_content)
   {
-    final Option<SDocumentContents> some_contents = Option.none();
-    final Option<SDocumentStyle> some_style = Option.none();
+    final OptionType<SDocumentContents> some_contents = Option.none();
+    final OptionType<SDocumentStyle> some_style = Option.none();
     return new SDocumentWithSections(
       in_title,
       some_contents,
@@ -62,18 +58,15 @@ public final class SDocumentWithSections extends SDocument
    * @param in_content
    *          The sections
    * @return A new document
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SDocumentWithSections documentContents(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull SNonEmptyList<SSection> in_content)
-    throws ConstraintError
+  public static SDocumentWithSections documentContents(
+    final SDocumentTitle in_title,
+    final SNonEmptyList<SSection> in_content)
   {
-    final Option<SDocumentContents> some_contents =
+    final OptionType<SDocumentContents> some_contents =
       Option.some(SDocumentContents.get());
-    final Option<SDocumentStyle> some_style = Option.none();
+    final OptionType<SDocumentStyle> some_style = Option.none();
     return new SDocumentWithSections(
       in_title,
       some_contents,
@@ -91,19 +84,16 @@ public final class SDocumentWithSections extends SDocument
    * @param in_content
    *          The sections
    * @return A new document
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SDocumentWithSections documentStyle(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull SDocumentStyle in_style,
-    final @Nonnull SNonEmptyList<SSection> in_content)
-    throws ConstraintError
+  public static SDocumentWithSections documentStyle(
+    final SDocumentTitle in_title,
+    final SDocumentStyle in_style,
+    final SNonEmptyList<SSection> in_content)
   {
-    final Option<SDocumentContents> some_contents = Option.none();
-    final Option<SDocumentStyle> some_style =
-      Option.some(Constraints.constrainNotNull(in_style, "Style"));
+    final OptionType<SDocumentContents> some_contents = Option.none();
+    final OptionType<SDocumentStyle> some_style =
+      Option.some(NullCheck.notNull(in_style, "Style"));
     return new SDocumentWithSections(
       in_title,
       some_contents,
@@ -122,20 +112,17 @@ public final class SDocumentWithSections extends SDocument
    * @param in_content
    *          The sections
    * @return A new document
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SDocumentWithSections documentStyleContents(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull SDocumentStyle in_style,
-    final @Nonnull SNonEmptyList<SSection> in_content)
-    throws ConstraintError
+  public static SDocumentWithSections documentStyleContents(
+    final SDocumentTitle in_title,
+    final SDocumentStyle in_style,
+    final SNonEmptyList<SSection> in_content)
   {
-    final Option<SDocumentContents> some_contents =
+    final OptionType<SDocumentContents> some_contents =
       Option.some(SDocumentContents.get());
-    final Option<SDocumentStyle> some_style =
-      Option.some(Constraints.constrainNotNull(in_style, "Style"));
+    final OptionType<SDocumentStyle> some_style =
+      Option.some(NullCheck.notNull(in_style, "Style"));
     return new SDocumentWithSections(
       in_title,
       some_contents,
@@ -143,34 +130,35 @@ public final class SDocumentWithSections extends SDocument
       in_content);
   }
 
-  private final @Nonnull SNonEmptyList<SSection> sections;
+  private final SNonEmptyList<SSection> sections;
 
   private SDocumentWithSections(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull Option<SDocumentContents> in_contents,
-    final @Nonnull Option<SDocumentStyle> in_style,
-    final @Nonnull SNonEmptyList<SSection> in_content)
-    throws ConstraintError
+    final SDocumentTitle in_title,
+    final OptionType<SDocumentContents> in_contents,
+    final OptionType<SDocumentStyle> in_style,
+    final SNonEmptyList<SSection> in_content)
   {
     super(in_title, in_contents, in_style);
-    this.sections = Constraints.constrainNotNull(in_content, "Content");
+    this.sections = NullCheck.notNull(in_content, "Content");
   }
 
   @Override public <D> D documentAccept(
-    final @Nonnull SDocumentVisitor<D> v)
-    throws ConstraintError,
-      Exception
+    final SDocumentVisitor<D> v)
+    throws Exception
   {
     return v.visitDocumentWithSections(this);
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
     }
     if (!super.equals(obj)) {
+      return false;
+    }
+    if (obj == null) {
       return false;
     }
     if (this.getClass() != obj.getClass()) {
@@ -184,7 +172,7 @@ public final class SDocumentWithSections extends SDocument
    * @return The document sections
    */
 
-  public @Nonnull SNonEmptyList<SSection> getSections()
+  public SNonEmptyList<SSection> getSections()
   {
     return this.sections;
   }

@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A list of formal items of a given kind.
  */
 
-@Immutable public final class SFormalItemList implements
+public final class SFormalItemList implements
   SFormalItemContent,
   SParagraphContent
 {
@@ -36,28 +33,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param kind
    *          The kind of formal items
    * @return A new formal item list
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SFormalItemList formalItemList(
-    final @Nonnull String kind)
-    throws ConstraintError
+  public static SFormalItemList formalItemList(
+    final String kind)
   {
     return new SFormalItemList(kind);
   }
 
-  private final @Nonnull String kind;
+  private final String kind;
 
   private SFormalItemList(
-    final @Nonnull String in_kind)
-    throws ConstraintError
+    final String in_kind)
   {
-    this.kind = Constraints.constrainNotNull(in_kind, "Kind");
+    this.kind = NullCheck.notNull(in_kind, "Kind");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -73,9 +66,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
   }
 
   @Override public <A> A formalItemContentAccept(
-    final @Nonnull SFormalItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SFormalItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFormalItemList(this);
   }
@@ -84,7 +76,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The kind of formal items
    */
 
-  public @Nonnull String getKind()
+  public String getKind()
   {
     return this.kind;
   }
@@ -95,9 +87,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFormalItemList(this);
   }
@@ -108,6 +99,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
     builder.append("[SFormalItemList ");
     builder.append(this.kind);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

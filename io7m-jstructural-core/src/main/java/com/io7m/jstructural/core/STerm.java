@@ -16,18 +16,16 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A simple term.
  */
 
-@Immutable public final class STerm implements
+public final class STerm implements
   SListItemContent,
   SParagraphContent,
   SFootnoteContent,
@@ -39,15 +37,12 @@ import com.io7m.jaux.functional.Option;
    * @param text
    *          The text
    * @return A new term
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull STerm term(
-    final @Nonnull SText text)
-    throws ConstraintError
+  public static STerm term(
+    final SText text)
   {
-    final Option<String> none = Option.none();
+    final OptionType<String> none = Option.none();
     return new STerm(text, none);
   }
 
@@ -59,34 +54,30 @@ import com.io7m.jaux.functional.Option;
    * @param type
    *          The type attribute
    * @return A new term
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull STerm termTyped(
-    final @Nonnull SText text,
-    final @Nonnull String type)
-    throws ConstraintError
+  public static STerm termTyped(
+    final SText text,
+    final String type)
   {
-    final Option<String> some =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
+    final OptionType<String> some =
+      Option.some(NullCheck.notNull(type, "Type"));
     return new STerm(text, some);
   }
 
-  private final @Nonnull SText          text;
-  private final @Nonnull Option<String> type;
+  private final SText              text;
+  private final OptionType<String> type;
 
   private STerm(
-    final @Nonnull SText in_text,
-    final @Nonnull Option<String> in_type)
-    throws ConstraintError
+    final SText in_text,
+    final OptionType<String> in_type)
   {
-    this.text = Constraints.constrainNotNull(in_text, "Text");
-    this.type = Constraints.constrainNotNull(in_type, "Type");
+    this.text = NullCheck.notNull(in_text, "Text");
+    this.type = NullCheck.notNull(in_type, "Type");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -102,9 +93,8 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A footnoteContentAccept(
-    final @Nonnull SFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SFootnoteContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTerm(this);
   }
@@ -113,7 +103,7 @@ import com.io7m.jaux.functional.Option;
    * @return The term's text
    */
 
-  public @Nonnull SText getText()
+  public SText getText()
   {
     return this.text;
   }
@@ -122,7 +112,7 @@ import com.io7m.jaux.functional.Option;
    * @return The term's type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -137,25 +127,22 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A listItemContentAccept(
-    final @Nonnull SListItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SListItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTerm(this);
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTerm(this);
   }
 
   @Override public <A> A tableCellContentAccept(
-    final @Nonnull STableCellContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final STableCellContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTerm(this);
   }

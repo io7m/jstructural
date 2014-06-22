@@ -16,16 +16,13 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
 /**
  * Document contents element.
  */
 
-@Immutable public final class SDocumentContents
+public final class SDocumentContents
 {
-  private static final @Nonnull SDocumentContents INSTANCE;
+  private static final SDocumentContents INSTANCE;
 
   static {
     INSTANCE = new SDocumentContents();
@@ -35,7 +32,7 @@ import javax.annotation.concurrent.Immutable;
    * @return A document contents element
    */
 
-  public static @Nonnull SDocumentContents get()
+  public static SDocumentContents get()
   {
     return SDocumentContents.INSTANCE;
   }

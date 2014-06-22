@@ -16,26 +16,23 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
 
 /**
  * A paragraph element.
  */
 
-@Immutable public final class SAParagraph implements
+public final class SAParagraph implements
   SASubsectionContent,
   SAIDTargetContent
 {
-  private final @Nonnull SNonEmptyList<SAParagraphContent> content;
-  private final @Nonnull Option<SAID>                      id;
-  private final @Nonnull SAParagraphNumber                 number;
-  private final @Nonnull Option<String>                    type;
+  private final SNonEmptyList<SAParagraphContent> content;
+  private final OptionType<SAID>                  id;
+  private final SAParagraphNumber                 number;
+  private final OptionType<String>                type;
 
   /**
    * Construct a new paragraph.
@@ -48,25 +45,22 @@ import com.io7m.jstructural.core.SNonEmptyList;
    *          The ID
    * @param in_content
    *          The paragraph content.
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
   public SAParagraph(
-    final @Nonnull SAParagraphNumber in_number,
-    final @Nonnull Option<String> in_type,
-    final @Nonnull SNonEmptyList<SAParagraphContent> in_content,
-    final @Nonnull Option<SAID> in_id)
-    throws ConstraintError
+    final SAParagraphNumber in_number,
+    final OptionType<String> in_type,
+    final SNonEmptyList<SAParagraphContent> in_content,
+    final OptionType<SAID> in_id)
   {
-    this.number = Constraints.constrainNotNull(in_number, "Number");
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.content = Constraints.constrainNotNull(in_content, "Content");
-    this.id = Constraints.constrainNotNull(in_id, "ID");
+    this.number = NullCheck.notNull(in_number, "Number");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.content = NullCheck.notNull(in_content, "Content");
+    this.id = NullCheck.notNull(in_id, "ID");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -88,7 +82,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The element content
    */
 
-  public @Nonnull SNonEmptyList<SAParagraphContent> getContent()
+  public SNonEmptyList<SAParagraphContent> getContent()
   {
     return this.content;
   }
@@ -97,7 +91,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The paragraph's ID.
    */
 
-  public @Nonnull Option<SAID> getID()
+  public OptionType<SAID> getID()
   {
     return this.id;
   }
@@ -106,7 +100,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The paragraph number
    */
 
-  public @Nonnull SAParagraphNumber getNumber()
+  public SAParagraphNumber getNumber()
   {
     return this.number;
   }
@@ -115,7 +109,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -132,17 +126,15 @@ import com.io7m.jstructural.core.SNonEmptyList;
   }
 
   @Override public <A> A subsectionContentAccept(
-    final @Nonnull SASubsectionContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SASubsectionContentVisitor<A> v)
+    throws Exception
   {
     return v.visitParagraph(this);
   }
 
   @Override public <T> T targetContentAccept(
-    final @Nonnull SAIDTargetContentVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    final SAIDTargetContentVisitor<T> v)
+    throws Exception
   {
     return v.visitParagraph(this);
   }
@@ -159,6 +151,8 @@ import com.io7m.jstructural.core.SNonEmptyList;
     builder.append(" number=");
     builder.append(this.number);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

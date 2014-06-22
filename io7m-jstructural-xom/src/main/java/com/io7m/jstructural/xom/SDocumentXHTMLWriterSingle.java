@@ -19,16 +19,12 @@ package com.io7m.jstructural.xom;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import javax.annotation.Nonnull;
-
 import nu.xom.Document;
 import nu.xom.Element;
 
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnreachableCodeException;
-import com.io7m.jaux.functional.PartialFunction;
-import com.io7m.jaux.functional.Unit;
+import com.io7m.jfunctional.FunctionType;
+import com.io7m.jfunctional.Unit;
+import com.io7m.jnull.NullCheck;
 import com.io7m.jstructural.annotated.SADocument;
 import com.io7m.jstructural.annotated.SADocumentVisitor;
 import com.io7m.jstructural.annotated.SADocumentWithParts;
@@ -59,6 +55,7 @@ import com.io7m.jstructural.core.SDocumentContents;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.jstructural.core.SPartContents;
 import com.io7m.jstructural.core.SSectionContents;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * An XHTML writer that produces XHTML 1.0 Strict documents, as a single page.
@@ -67,10 +64,9 @@ import com.io7m.jstructural.core.SSectionContents;
 @SuppressWarnings("synthetic-access") public final class SDocumentXHTMLWriterSingle implements
   SDocumentXHTMLWriter
 {
-  private static @Nonnull String getFormalItemLinkTarget(
-    final @Nonnull SAFormalItemNumber f)
-    throws ConstraintError,
-      Exception
+  private static String getFormalItemLinkTarget(
+    final SAFormalItemNumber f)
+    throws Exception
   {
     final StringBuilder b = new StringBuilder();
     b.append("#");
@@ -78,10 +74,9 @@ import com.io7m.jstructural.core.SSectionContents;
     return b.toString();
   }
 
-  private static @Nonnull String getParagraphLinkTarget(
-    final @Nonnull SAParagraphNumber n)
-    throws ConstraintError,
-      Exception
+  private static String getParagraphLinkTarget(
+    final SAParagraphNumber n)
+    throws Exception
   {
     final StringBuilder b = new StringBuilder();
     b.append("#");
@@ -89,8 +84,8 @@ import com.io7m.jstructural.core.SSectionContents;
     return b.toString();
   }
 
-  private static @Nonnull String getPartLinkTarget(
-    final @Nonnull SAPartNumber p)
+  private static String getPartLinkTarget(
+    final SAPartNumber p)
   {
     final StringBuilder b = new StringBuilder();
     b.append("#");
@@ -98,10 +93,9 @@ import com.io7m.jstructural.core.SSectionContents;
     return b.toString();
   }
 
-  private static @Nonnull String getSectionLinkTarget(
-    final @Nonnull SASectionNumber s)
-    throws ConstraintError,
-      Exception
+  private static String getSectionLinkTarget(
+    final SASectionNumber s)
+    throws Exception
   {
     final StringBuilder b = new StringBuilder();
     b.append("#");
@@ -109,34 +103,30 @@ import com.io7m.jstructural.core.SSectionContents;
     return b.toString();
   }
 
-  private static @Nonnull String getSegmentLinkTarget(
-    final @Nonnull SASegmentNumber s)
-    throws ConstraintError,
-      Exception
+  private static String getSegmentLinkTarget(
+    final SASegmentNumber s)
+    throws Exception
   {
     return s.segmentNumberAccept(new SASegmentNumberVisitor<String>() {
       @Override public String visitPartNumber(
         final SAPartNumber n)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SDocumentXHTMLWriterSingle.getPartLinkTarget(n);
       }
 
       @Override public String visitSectionNumber(
         final SASectionNumber n)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         return SDocumentXHTMLWriterSingle.getSectionLinkTarget(n);
       }
     });
   }
 
-  private static @Nonnull String getSubsectionLinkTarget(
-    final @Nonnull SASubsectionNumber s)
-    throws ConstraintError,
-      Exception
+  private static String getSubsectionLinkTarget(
+    final SASubsectionNumber s)
+    throws Exception
   {
     final StringBuilder b = new StringBuilder();
     b.append("#");
@@ -144,32 +134,29 @@ import com.io7m.jstructural.core.SSectionContents;
     return b.toString();
   }
 
-  private static @Nonnull Element part(
-    final @Nonnull SXHTMLPartContents part_contents_writer,
-    final @Nonnull SXHTMLSectionContents section_contents_writer,
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SAPart part)
-    throws ConstraintError,
-      Exception
+  private static Element part(
+    final SXHTMLPartContents part_contents_writer,
+    final SXHTMLSectionContents section_contents_writer,
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SAPart part)
+    throws Exception
   {
     final Element e = SXHTML.partContainer(part.getTitle());
 
-    part.getContents().mapPartial(
-      new PartialFunction<SPartContents, Unit, ConstraintError>() {
-        @Override public Unit call(
-          final @Nonnull SPartContents x)
-          throws ConstraintError
-        {
-          try {
-            e.appendChild(part_contents_writer
-              .getTableOfContentsSections(part.getSections()));
-            return Unit.unit();
-          } catch (final Exception z) {
-            throw new UnreachableCodeException(z);
-          }
+    part.getContents().map(new FunctionType<SPartContents, Unit>() {
+      @Override public Unit call(
+        final SPartContents x)
+      {
+        try {
+          e.appendChild(part_contents_writer.getTableOfContentsSections(part
+            .getSections()));
+          return Unit.unit();
+        } catch (final Exception z) {
+          throw new UnreachableCodeException(z);
         }
-      });
+      }
+    });
 
     for (final SASection s : part.getSections().getElements()) {
       e.appendChild(SDocumentXHTMLWriterSingle.section(
@@ -182,21 +169,19 @@ import com.io7m.jstructural.core.SSectionContents;
     return e;
   }
 
-  private static @Nonnull Element section(
-    final @Nonnull SXHTMLSectionContents section_contents_writer,
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SASection s)
-    throws ConstraintError,
-      Exception
+  private static Element section(
+    final SXHTMLSectionContents section_contents_writer,
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SASection s)
+    throws Exception
   {
     final Element e = SXHTML.sectionContainer(s);
 
     s.sectionAccept(new SASectionVisitor<Unit>() {
       @Override public Unit visitSectionWithParagraphs(
         final SASectionWithParagraphs swp)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         SDocumentXHTMLWriterSingle.sectionWithParagraphs(
           link_provider,
@@ -208,8 +193,7 @@ import com.io7m.jstructural.core.SSectionContents;
 
       @Override public Unit visitSectionWithSubsections(
         final SASectionWithSubsections sws)
-        throws ConstraintError,
-          Exception
+        throws Exception
       {
         SDocumentXHTMLWriterSingle.sectionWithSubsections(
           section_contents_writer,
@@ -225,12 +209,11 @@ import com.io7m.jstructural.core.SSectionContents;
   }
 
   private static void sectionWithParagraphs(
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SASectionWithParagraphs swp,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      Exception
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SASectionWithParagraphs swp,
+    final Element e)
+    throws Exception
   {
     final SNonEmptyList<SASubsectionContent> content =
       swp.getSectionContent();
@@ -239,17 +222,15 @@ import com.io7m.jstructural.core.SSectionContents;
       e.appendChild(ss
         .subsectionContentAccept(new SASubsectionContentVisitor<Element>() {
           @Override public Element visitFormalItem(
-            final @Nonnull SAFormalItem formal)
-            throws ConstraintError,
-              Exception
+            final SAFormalItem formal)
+            throws Exception
           {
             return SXHTML.formalItem(link_provider, formals, formal);
           }
 
           @Override public Element visitParagraph(
-            final @Nonnull SAParagraph paragraph)
-            throws ConstraintError,
-              Exception
+            final SAParagraph paragraph)
+            throws Exception
           {
             return SXHTML.paragraph(link_provider, formals, paragraph);
           }
@@ -258,27 +239,23 @@ import com.io7m.jstructural.core.SSectionContents;
   }
 
   private static void sectionWithSubsections(
-    final @Nonnull SXHTMLSectionContents section_contents_writer,
-    final @Nonnull SLinkProvider link_provider,
-    final @Nonnull SAFormalItemsByKindReadable formals,
-    final @Nonnull SASectionWithSubsections sws,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      Exception
+    final SXHTMLSectionContents section_contents_writer,
+    final SLinkProvider link_provider,
+    final SAFormalItemsByKindReadable formals,
+    final SASectionWithSubsections sws,
+    final Element e)
+    throws Exception
   {
     final SNonEmptyList<SASubsection> subsections = sws.getSubsections();
 
-    sws.getContents().mapPartial(
-      new PartialFunction<SSectionContents, Unit, ConstraintError>() {
-        @Override public Unit call(
-          final @Nonnull SSectionContents x)
-          throws ConstraintError
-        {
-          e.appendChild(section_contents_writer
-            .getTableOfContents(subsections));
-          return Unit.unit();
-        }
-      });
+    sws.getContents().map(new FunctionType<SSectionContents, Unit>() {
+      @Override public Unit call(
+        final SSectionContents x)
+      {
+        e.appendChild(section_contents_writer.getTableOfContents(subsections));
+        return Unit.unit();
+      }
+    });
 
     for (final SASubsection ss : subsections.getElements()) {
       e.appendChild(SXHTML.subsection(link_provider, formals, ss));
@@ -295,18 +272,16 @@ import com.io7m.jstructural.core.SSectionContents;
   }
 
   @Override public SortedMap<String, Document> writeDocuments(
-    final @Nonnull SDocumentXHTMLWriterCallbacks callbacks,
-    final @Nonnull SADocument doc)
-    throws ConstraintError
+    final SDocumentXHTMLWriterCallbacks callbacks,
+    final SADocument doc)
   {
     try {
-      Constraints.constrainNotNull(callbacks, "Callbacks");
-      Constraints.constrainNotNull(doc, "Document");
+      NullCheck.notNull(callbacks, "Callbacks");
+      NullCheck.notNull(doc, "Document");
 
       final SLinkProvider link_provider = new SLinkProvider() {
         @Override public String getFormalItemLinkTarget(
-          final @Nonnull SAFormalItemNumber f)
-          throws ConstraintError
+          final SAFormalItemNumber f)
         {
           try {
             return SDocumentXHTMLWriterSingle.getFormalItemLinkTarget(f);
@@ -316,8 +291,7 @@ import com.io7m.jstructural.core.SSectionContents;
         }
 
         @Override public String getLinkTargetForID(
-          final @Nonnull SAID id)
-          throws ConstraintError
+          final SAID id)
         {
           try {
             final SAIDMapReadable map = doc.getIDMappings();
@@ -327,36 +301,32 @@ import com.io7m.jstructural.core.SSectionContents;
             return content
               .targetContentAccept(new SAIDTargetContentVisitor<String>() {
                 @Override public String visitParagraph(
-                  final @Nonnull SAParagraph paragraph)
-                  throws ConstraintError,
-                    Exception
+                  final SAParagraph paragraph)
+                  throws Exception
                 {
                   return SDocumentXHTMLWriterSingle
                     .getParagraphLinkTarget(paragraph.getNumber());
                 }
 
                 @Override public String visitPart(
-                  final @Nonnull SAPart part)
-                  throws ConstraintError,
-                    Exception
+                  final SAPart part)
+                  throws Exception
                 {
                   return SDocumentXHTMLWriterSingle.getPartLinkTarget(part
                     .getNumber());
                 }
 
                 @Override public String visitSection(
-                  final @Nonnull SASection section)
-                  throws ConstraintError,
-                    Exception
+                  final SASection section)
+                  throws Exception
                 {
                   return SDocumentXHTMLWriterSingle
                     .getSectionLinkTarget(section.getNumber());
                 }
 
                 @Override public String visitSubsection(
-                  final @Nonnull SASubsection subsection)
-                  throws ConstraintError,
-                    Exception
+                  final SASubsection subsection)
+                  throws Exception
                 {
                   return SDocumentXHTMLWriterSingle
                     .getSubsectionLinkTarget(subsection.getNumber());
@@ -368,15 +338,13 @@ import com.io7m.jstructural.core.SSectionContents;
         }
 
         @Override public String getPartLinkTarget(
-          final @Nonnull SAPartNumber p)
-          throws ConstraintError
+          final SAPartNumber p)
         {
           return SDocumentXHTMLWriterSingle.getPartLinkTarget(p);
         }
 
         @Override public String getSectionLinkTarget(
-          final @Nonnull SASectionNumber s)
-          throws ConstraintError
+          final SASectionNumber s)
         {
           try {
             return SDocumentXHTMLWriterSingle.getSectionLinkTarget(s);
@@ -386,8 +354,7 @@ import com.io7m.jstructural.core.SSectionContents;
         }
 
         @Override public String getSegmentLinkTarget(
-          final @Nonnull SASegmentNumber s)
-          throws ConstraintError
+          final SASegmentNumber s)
         {
           try {
             return SDocumentXHTMLWriterSingle.getSegmentLinkTarget(s);
@@ -397,8 +364,7 @@ import com.io7m.jstructural.core.SSectionContents;
         }
 
         @Override public String getSubsectionLinkTarget(
-          final @Nonnull SASubsectionNumber s)
-          throws ConstraintError
+          final SASubsectionNumber s)
         {
           try {
             return SDocumentXHTMLWriterSingle.getSubsectionLinkTarget(s);
@@ -427,23 +393,20 @@ import com.io7m.jstructural.core.SSectionContents;
 
       doc.documentAccept(new SADocumentVisitor<Unit>() {
         @Override public Unit visitDocumentWithParts(
-          final @Nonnull SADocumentWithParts document)
-          throws ConstraintError,
-            Exception
+          final SADocumentWithParts document)
+          throws Exception
         {
           final SNonEmptyList<SAPart> parts = document.getParts();
 
-          doc.getContents().mapPartial(
-            new PartialFunction<SDocumentContents, Unit, ConstraintError>() {
-              @Override public Unit call(
-                final @Nonnull SDocumentContents x)
-                throws ConstraintError
-              {
-                container.appendChild(doc_contents
-                  .getTableOfContentsParts(parts));
-                return Unit.unit();
-              }
-            });
+          doc.getContents().map(new FunctionType<SDocumentContents, Unit>() {
+            @Override public Unit call(
+              final SDocumentContents x)
+            {
+              container.appendChild(doc_contents
+                .getTableOfContentsParts(parts));
+              return Unit.unit();
+            }
+          });
 
           for (final SAPart part : parts.getElements()) {
             container.appendChild(SDocumentXHTMLWriterSingle.part(
@@ -457,23 +420,20 @@ import com.io7m.jstructural.core.SSectionContents;
         }
 
         @Override public Unit visitDocumentWithSections(
-          final @Nonnull SADocumentWithSections document)
-          throws ConstraintError,
-            Exception
+          final SADocumentWithSections document)
+          throws Exception
         {
           final SNonEmptyList<SASection> sections = document.getSections();
 
-          doc.getContents().mapPartial(
-            new PartialFunction<SDocumentContents, Unit, ConstraintError>() {
-              @Override public Unit call(
-                final @Nonnull SDocumentContents x)
-                throws ConstraintError
-              {
-                container.appendChild(doc_contents
-                  .getTableOfContentsSections(sections));
-                return Unit.unit();
-              }
-            });
+          doc.getContents().map(new FunctionType<SDocumentContents, Unit>() {
+            @Override public Unit call(
+              final SDocumentContents x)
+            {
+              container.appendChild(doc_contents
+                .getTableOfContentsSections(sections));
+              return Unit.unit();
+            }
+          });
 
           for (final SASection s : sections.getElements()) {
             container.appendChild(SDocumentXHTMLWriterSingle.section(

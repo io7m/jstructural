@@ -16,16 +16,16 @@
 
 package com.io7m.jstructural.xom;
 
-import java.util.Properties;
-
 import com.io7m.jlog.Log;
+import com.io7m.jlog.LogLevel;
+import com.io7m.jlog.LogPolicyAllOn;
+import com.io7m.jlog.LogUsableType;
 
 public final class TestUtilities
 {
-  public static Log getLog()
+  public static LogUsableType getLog()
   {
-    final Properties properties = new Properties();
-    return new Log(properties, "com.io7m.jstructural", "tests");
+    return Log.newLog(LogPolicyAllOn.newPolicy(LogLevel.LOG_DEBUG), "tests");
   }
 
   private TestUtilities()

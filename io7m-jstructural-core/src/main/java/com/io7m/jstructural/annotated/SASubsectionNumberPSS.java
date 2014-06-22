@@ -16,8 +16,8 @@
 
 package com.io7m.jstructural.annotated;
 
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.Nullable;
+import com.io7m.jranges.RangeCheck;
 
 /**
  * A subsection number consisting of a part, section, and subsection.
@@ -38,31 +38,35 @@ public final class SASubsectionNumberPSS extends SASubsectionNumber
    *          The section number
    * @param in_subsection
    *          The subsection number
-   * @throws ConstraintError
-   *           If any parameter is outside of the range
-   *           <code>[1, {@link Integer#MAX_VALUE}]</code>
    */
 
   public SASubsectionNumberPSS(
     final int in_part,
     final int in_section,
     final int in_subsection)
-    throws ConstraintError
   {
     this.part =
-      Constraints.constrainRange(in_part, 1, Integer.MAX_VALUE, "Part");
+      (int) RangeCheck.checkIncludedIn(
+        in_part,
+        "Part number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid part number range");
     this.section =
-      Constraints.constrainRange(in_section, 1, Integer.MAX_VALUE, "Section");
+      (int) RangeCheck.checkIncludedIn(
+        in_section,
+        "Section number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid section number range");
     this.subsection =
-      Constraints.constrainRange(
+      (int) RangeCheck.checkIncludedIn(
         in_subsection,
-        1,
-        Integer.MAX_VALUE,
-        "Subsection");
+        "Subsection number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid subsection number range");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -125,8 +129,7 @@ public final class SASubsectionNumberPSS extends SASubsectionNumber
 
   @Override public <T> T subsectionNumberAccept(
     final SASubsectionNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
     return v.visitSubsectionNumberPSS(this);
   }
@@ -135,8 +138,10 @@ public final class SASubsectionNumberPSS extends SASubsectionNumber
     String
     subsectionNumberFormat()
   {
-    return String
-      .format("%d.%d.%d", this.part, this.section, this.subsection);
+    final String r =
+      String.format("%d.%d.%d", this.part, this.section, this.subsection);
+    assert r != null;
+    return r;
   }
 
   @Override public String toString()
@@ -149,6 +154,8 @@ public final class SASubsectionNumberPSS extends SASubsectionNumber
     builder.append(" subsection=");
     builder.append(this.subsection);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * A formal item number visitor.
  * 
@@ -35,16 +31,14 @@ public interface SAFormalItemNumberVisitor<T>
    * @param f
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitFormalItemNumberPSF(
-    final @Nonnull SAFormalItemNumberPSF f)
-    throws ConstraintError,
-      Exception;
+    final SAFormalItemNumberPSF f)
+    throws Exception;
 
   /**
    * Visit a PSSF formal item number.
@@ -52,16 +46,14 @@ public interface SAFormalItemNumberVisitor<T>
    * @param f
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitFormalItemNumberPSSF(
-    final @Nonnull SAFormalItemNumberPSSF f)
-    throws ConstraintError,
-      Exception;
+    final SAFormalItemNumberPSSF f)
+    throws Exception;
 
   /**
    * Visit a SF formal item number.
@@ -69,16 +61,14 @@ public interface SAFormalItemNumberVisitor<T>
    * @param f
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitFormalItemNumberSF(
-    final @Nonnull SAFormalItemNumberSF f)
-    throws ConstraintError,
-      Exception;
+    final SAFormalItemNumberSF f)
+    throws Exception;
 
   /**
    * Visit a SSF formal item number.
@@ -86,14 +76,12 @@ public interface SAFormalItemNumberVisitor<T>
    * @param f
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitFormalItemNumberSSF(
-    final @Nonnull SAFormalItemNumberSSF f)
-    throws ConstraintError,
-      Exception;
+    final SAFormalItemNumberSSF f)
+    throws Exception;
 }

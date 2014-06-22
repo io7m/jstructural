@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A table summary.
  */
 
-@Immutable public final class STableSummary
+public final class STableSummary
 {
   /**
    * Construct a new table summary.
@@ -34,28 +31,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param text
    *          The summary text
    * @return A new table summary
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull STableSummary tableSummary(
-    final @Nonnull String text)
-    throws ConstraintError
+  public static STableSummary tableSummary(
+    final String text)
   {
     return new STableSummary(text);
   }
 
-  private final @Nonnull String text;
+  private final String text;
 
   private STableSummary(
-    final @Nonnull String in_text)
-    throws ConstraintError
+    final String in_text)
   {
-    this.text = Constraints.constrainNotNull(in_text, "Text");
+    this.text = NullCheck.notNull(in_text, "Text");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -74,7 +67,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The summary text
    */
 
-  public @Nonnull String getText()
+  public String getText()
   {
     return this.text;
   }

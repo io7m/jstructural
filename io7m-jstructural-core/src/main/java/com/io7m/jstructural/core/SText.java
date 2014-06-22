@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A text element.
  */
 
-@Immutable public final class SText implements
+public final class SText implements
   SParagraphContent,
   SLinkContent,
   SListItemContent,
@@ -39,28 +36,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param text
    *          The text
    * @return A new text element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SText text(
-    final @Nonnull String text)
-    throws ConstraintError
+  public static SText text(
+    final String text)
   {
     return new SText(text);
   }
 
-  private final @Nonnull String text;
+  private final String text;
 
   private SText(
-    final @Nonnull String in_text)
-    throws ConstraintError
+    final String in_text)
   {
-    this.text = Constraints.constrainNotNull(in_text, "Text");
+    this.text = NullCheck.notNull(in_text, "Text");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -76,9 +69,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
   }
 
   @Override public <A> A footnoteContentAccept(
-    final @Nonnull SFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SFootnoteContentVisitor<A> v)
+    throws Exception
   {
     return v.visitText(this);
   }
@@ -87,7 +79,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The term's text
    */
 
-  public @Nonnull String getText()
+  public String getText()
   {
     return this.text;
   }
@@ -98,33 +90,29 @@ import com.io7m.jaux.Constraints.ConstraintError;
   }
 
   @Override public <A> A linkContentAccept(
-    final @Nonnull SLinkContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SLinkContentVisitor<A> v)
+    throws Exception
   {
     return v.visitText(this);
   }
 
   @Override public <A> A listItemContentAccept(
-    final @Nonnull SListItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SListItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitText(this);
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitText(this);
   }
 
   @Override public <A> A tableCellContentAccept(
-    final @Nonnull STableCellContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final STableCellContentVisitor<A> v)
+    throws Exception
   {
     return v.visitText(this);
   }

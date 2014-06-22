@@ -16,32 +16,28 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A formal item title.
  */
 
-@Immutable public final class SAFormalItemTitle
+public final class SAFormalItemTitle
 {
-  private final @Nonnull String             actual;
-  private final @Nonnull SAFormalItemNumber number;
+  private final String             actual;
+  private final SAFormalItemNumber number;
 
   SAFormalItemTitle(
-    final @Nonnull SAFormalItemNumber in_number,
-    final @Nonnull String in_actual)
-    throws ConstraintError
+    final SAFormalItemNumber in_number,
+    final String in_actual)
   {
-    this.number = Constraints.constrainNotNull(in_number, "Number");
-    this.actual = Constraints.constrainNotNull(in_actual, "Actual");
+    this.number = NullCheck.notNull(in_number, "Number");
+    this.actual = NullCheck.notNull(in_actual, "Actual");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -61,7 +57,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The text
    */
 
-  public @Nonnull String getActual()
+  public String getActual()
   {
     return this.actual;
   }
@@ -71,7 +67,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    *         paragraphs)
    */
 
-  public @Nonnull SAFormalItemNumber getNumber()
+  public SAFormalItemNumber getNumber()
   {
     return this.number;
   }
@@ -93,6 +89,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
     builder.append(" number=");
     builder.append(this.number);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

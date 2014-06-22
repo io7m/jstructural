@@ -16,12 +16,9 @@
 
 package com.io7m.jstructural.xom;
 
-import javax.annotation.Nonnull;
-
 import nu.xom.Element;
 
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Unit;
+import com.io7m.jfunctional.Unit;
 import com.io7m.jstructural.annotated.SASection;
 import com.io7m.jstructural.annotated.SASectionVisitor;
 import com.io7m.jstructural.annotated.SASectionWithParagraphs;
@@ -31,18 +28,17 @@ import com.io7m.jstructural.core.SNonEmptyList;
 
 final class SXHTMLPartContents
 {
-  private final @Nonnull SLinkProvider callbacks;
+  private final SLinkProvider callbacks;
 
   public SXHTMLPartContents(
-    final @Nonnull SLinkProvider in_callbacks)
+    final SLinkProvider in_callbacks)
   {
     this.callbacks = in_callbacks;
   }
 
-  public @Nonnull Element getTableOfContentsSections(
-    final @Nonnull SNonEmptyList<SASection> sections)
-    throws ConstraintError,
-      Exception
+  public Element getTableOfContentsSections(
+    final SNonEmptyList<SASection> sections)
+    throws Exception
   {
     final SLinkProvider cb = this.callbacks;
 
@@ -73,17 +69,15 @@ final class SXHTMLPartContents
 
       s.sectionAccept(new SASectionVisitor<Unit>() {
         @Override public Unit visitSectionWithParagraphs(
-          final @Nonnull SASectionWithParagraphs swp)
-          throws ConstraintError,
-            Exception
+          final SASectionWithParagraphs swp)
+          throws Exception
         {
           return Unit.unit();
         }
 
         @Override public Unit visitSectionWithSubsections(
-          final @Nonnull SASectionWithSubsections sws)
-          throws ConstraintError,
-            Exception
+          final SASectionWithSubsections sws)
+          throws Exception
         {
           final Element sce =
             SXHTML.elementWithClasses("ul", SXHTML.NO_TYPE, new String[] {

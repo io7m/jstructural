@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A table cell.
  */
 
-@Immutable public final class STableCell
+public final class STableCell
 {
   /**
    * Construct a new table cell.
@@ -34,28 +31,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param content
    *          The table cell content
    * @return A new table cell
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull STableCell tableCell(
-    final @Nonnull SNonEmptyList<STableCellContent> content)
-    throws ConstraintError
+  public static STableCell tableCell(
+    final SNonEmptyList<STableCellContent> content)
   {
     return new STableCell(content);
   }
 
-  private final @Nonnull SNonEmptyList<STableCellContent> content;
+  private final SNonEmptyList<STableCellContent> content;
 
   private STableCell(
-    final @Nonnull SNonEmptyList<STableCellContent> in_content)
-    throws ConstraintError
+    final SNonEmptyList<STableCellContent> in_content)
   {
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+    this.content = NullCheck.notNull(in_content, "Content");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -74,7 +67,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The table cell content
    */
 
-  public @Nonnull SNonEmptyList<STableCellContent> getContent()
+  public SNonEmptyList<STableCellContent> getContent()
   {
     return this.content;
   }

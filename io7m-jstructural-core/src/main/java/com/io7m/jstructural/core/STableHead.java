@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A table header.
  */
 
-@Immutable public final class STableHead
+public final class STableHead
 {
   /**
    * Construct a new table header.
@@ -34,28 +31,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param header
    *          The header
    * @return A new table header
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull STableHead tableHead(
-    final @Nonnull SNonEmptyList<STableColumnName> header)
-    throws ConstraintError
+  public static STableHead tableHead(
+    final SNonEmptyList<STableColumnName> header)
   {
     return new STableHead(header);
   }
 
-  private final @Nonnull SNonEmptyList<STableColumnName> header;
+  private final SNonEmptyList<STableColumnName> header;
 
   private STableHead(
-    final @Nonnull SNonEmptyList<STableColumnName> in_header)
-    throws ConstraintError
+    final SNonEmptyList<STableColumnName> in_header)
   {
-    this.header = Constraints.constrainNotNull(in_header, "Header");
+    this.header = NullCheck.notNull(in_header, "Header");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -74,7 +67,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The table column names
    */
 
-  public @Nonnull SNonEmptyList<STableColumnName> getHeader()
+  public SNonEmptyList<STableColumnName> getHeader()
   {
     return this.header;
   }

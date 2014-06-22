@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.xom;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jstructural.annotated.SAFormalItemNumber;
 import com.io7m.jstructural.annotated.SAFormalItemNumberPSF;
 import com.io7m.jstructural.annotated.SAFormalItemNumberPSSF;
@@ -41,6 +37,7 @@ import com.io7m.jstructural.annotated.SASubsectionNumber;
 import com.io7m.jstructural.annotated.SASubsectionNumberPSS;
 import com.io7m.jstructural.annotated.SASubsectionNumberSS;
 import com.io7m.jstructural.annotated.SASubsectionNumberVisitor;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * XHTML anchor values.
@@ -48,16 +45,14 @@ import com.io7m.jstructural.annotated.SASubsectionNumberVisitor;
 
 final class SXHTMLAnchors
 {
-  static @Nonnull String getFormalItemAnchorID(
-    final @Nonnull SAFormalItemNumber n)
-    throws ConstraintError,
-      Exception
+  static  String getFormalItemAnchorID(
+    final  SAFormalItemNumber n)
+    throws Exception
   {
     return n.formalItemNumberAccept(new SAFormalItemNumberVisitor<String>() {
       @Override public String visitFormalItemNumberPSF(
-        final @Nonnull SAFormalItemNumberPSF p)
-        throws ConstraintError,
-          Exception
+        final  SAFormalItemNumberPSF p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -68,13 +63,14 @@ final class SXHTMLAnchors
         b.append(p.getSection());
         b.append(SXHTML.FORMAL_CODE);
         b.append(p.getFormalItem());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitFormalItemNumberPSSF(
-        final @Nonnull SAFormalItemNumberPSSF p)
-        throws ConstraintError,
-          Exception
+        final  SAFormalItemNumberPSSF p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -87,13 +83,14 @@ final class SXHTMLAnchors
         b.append(p.getSubsection());
         b.append(SXHTML.FORMAL_CODE);
         b.append(p.getFormalItem());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitFormalItemNumberSF(
-        final @Nonnull SAFormalItemNumberSF p)
-        throws ConstraintError,
-          Exception
+        final  SAFormalItemNumberSF p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -102,13 +99,14 @@ final class SXHTMLAnchors
         b.append(p.getSection());
         b.append(SXHTML.FORMAL_CODE);
         b.append(p.getFormalItem());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitFormalItemNumberSSF(
-        final @Nonnull SAFormalItemNumberSSF p)
-        throws ConstraintError,
-          Exception
+        final  SAFormalItemNumberSSF p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -119,21 +117,21 @@ final class SXHTMLAnchors
         b.append(p.getSubsection());
         b.append(SXHTML.FORMAL_CODE);
         b.append(p.getFormalItem());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
     });
   }
 
-  static @Nonnull String getFormalItemFile(
-    final @Nonnull SAFormalItemNumber n)
-    throws ConstraintError,
-      Exception
+  static  String getFormalItemFile(
+    final  SAFormalItemNumber n)
+    throws Exception
   {
     return n.formalItemNumberAccept(new SAFormalItemNumberVisitor<String>() {
       @Override public String visitFormalItemNumberPSF(
-        final @Nonnull SAFormalItemNumberPSF p)
-        throws ConstraintError,
-          Exception
+        final  SAFormalItemNumberPSF p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.PART_CODE);
@@ -142,13 +140,14 @@ final class SXHTMLAnchors
         b.append(p.getSection());
         b.append(".");
         b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitFormalItemNumberPSSF(
-        final @Nonnull SAFormalItemNumberPSSF p)
-        throws ConstraintError,
-          Exception
+        final  SAFormalItemNumberPSSF p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.PART_CODE);
@@ -157,47 +156,49 @@ final class SXHTMLAnchors
         b.append(p.getSection());
         b.append(".");
         b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitFormalItemNumberSF(
-        final @Nonnull SAFormalItemNumberSF p)
-        throws ConstraintError,
-          Exception
+        final  SAFormalItemNumberSF p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.SECTION_CODE);
         b.append(p.getSection());
         b.append(".");
         b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitFormalItemNumberSSF(
-        final @Nonnull SAFormalItemNumberSSF p)
-        throws ConstraintError,
-          Exception
+        final  SAFormalItemNumberSSF p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.SECTION_CODE);
         b.append(p.getSection());
         b.append(".");
         b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
     });
   }
 
-  static @Nonnull String getParagraphAnchorID(
-    final @Nonnull SAParagraphNumber n)
-    throws ConstraintError,
-      Exception
+  static  String getParagraphAnchorID(
+    final  SAParagraphNumber n)
+    throws Exception
   {
     return n.paragraphNumberAccept(new SAParagraphNumberVisitor<String>() {
       @Override public String visitParagraphNumberPSP(
-        final @Nonnull SAParagraphNumberPSP p)
-        throws ConstraintError,
-          Exception
+        final  SAParagraphNumberPSP p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -208,13 +209,14 @@ final class SXHTMLAnchors
         b.append(p.getSection());
         b.append(SXHTML.PARAGRAPH_CODE);
         b.append(p.getParagraph());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitParagraphNumberPSSP(
-        final @Nonnull SAParagraphNumberPSSP p)
-        throws ConstraintError,
-          Exception
+        final  SAParagraphNumberPSSP p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -227,13 +229,14 @@ final class SXHTMLAnchors
         b.append(p.getSubsection());
         b.append(SXHTML.PARAGRAPH_CODE);
         b.append(p.getParagraph());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitParagraphNumberSP(
-        final @Nonnull SAParagraphNumberSP p)
-        throws ConstraintError,
-          Exception
+        final  SAParagraphNumberSP p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -242,13 +245,14 @@ final class SXHTMLAnchors
         b.append(p.getSection());
         b.append(SXHTML.PARAGRAPH_CODE);
         b.append(p.getParagraph());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitParagraphNumberSSP(
-        final @Nonnull SAParagraphNumberSSP p)
-        throws ConstraintError,
-          Exception
+        final  SAParagraphNumberSSP p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -259,21 +263,21 @@ final class SXHTMLAnchors
         b.append(p.getSubsection());
         b.append(SXHTML.PARAGRAPH_CODE);
         b.append(p.getParagraph());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
     });
   }
 
-  static @Nonnull String getParagraphFile(
-    final @Nonnull SAParagraphNumber n)
-    throws ConstraintError,
-      Exception
+  static  String getParagraphFile(
+    final  SAParagraphNumber n)
+    throws Exception
   {
     return n.paragraphNumberAccept(new SAParagraphNumberVisitor<String>() {
       @Override public String visitParagraphNumberPSP(
-        final @Nonnull SAParagraphNumberPSP p)
-        throws ConstraintError,
-          Exception
+        final  SAParagraphNumberPSP p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.PART_CODE);
@@ -282,13 +286,14 @@ final class SXHTMLAnchors
         b.append(p.getSection());
         b.append(".");
         b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitParagraphNumberPSSP(
-        final @Nonnull SAParagraphNumberPSSP p)
-        throws ConstraintError,
-          Exception
+        final  SAParagraphNumberPSSP p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.PART_CODE);
@@ -297,81 +302,88 @@ final class SXHTMLAnchors
         b.append(p.getSection());
         b.append(".");
         b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitParagraphNumberSP(
-        final @Nonnull SAParagraphNumberSP p)
-        throws ConstraintError,
-          Exception
+        final  SAParagraphNumberSP p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.SECTION_CODE);
         b.append(p.getSection());
         b.append(".");
         b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitParagraphNumberSSP(
-        final @Nonnull SAParagraphNumberSSP p)
-        throws ConstraintError,
-          Exception
+        final  SAParagraphNumberSSP p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.SECTION_CODE);
         b.append(p.getSection());
         b.append(".");
         b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
     });
   }
 
-  static @Nonnull String getPartAnchorID(
-    final @Nonnull SAPartNumber part)
+  static  String getPartAnchorID(
+    final  SAPartNumber part)
   {
     final StringBuilder b = new StringBuilder();
     b.append(SXHTML.ATTRIBUTE_PREFIX);
     b.append("_p");
     b.append(part.getActual());
-    return b.toString();
+    final String r = b.toString();
+    assert r != null;
+    return r;
   }
 
-  static @Nonnull String getPartFile(
-    final @Nonnull SAPartNumber part)
+  static  String getPartFile(
+    final  SAPartNumber part)
   {
     final StringBuilder b = new StringBuilder();
     b.append(SXHTML.PART_CODE);
     b.append(part.getActual());
     b.append(".");
     b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-    return b.toString();
+    final String r = b.toString();
+    assert r != null;
+    return r;
   }
 
-  static @Nonnull String getSectionAnchorID(
-    final @Nonnull SASectionNumber n)
-    throws ConstraintError,
-      Exception
+  static  String getSectionAnchorID(
+    final  SASectionNumber n)
+    throws Exception
   {
     return n.sectionNumberAccept(new SASectionNumberVisitor<String>() {
       @Override public String visitSectionNumberWithoutPart(
-        final @Nonnull SASectionNumberS p)
-        throws ConstraintError,
-          Exception
+        final  SASectionNumberS p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
         b.append("_");
         b.append(SXHTML.SECTION_CODE);
         b.append(p.getSection());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitSectionNumberWithPart(
-        final @Nonnull SASectionNumberPS p)
-        throws ConstraintError,
-          Exception
+        final  SASectionNumberPS p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -380,34 +392,35 @@ final class SXHTMLAnchors
         b.append(p.getPart());
         b.append(SXHTML.SECTION_CODE);
         b.append(p.getSection());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
     });
   }
 
-  static @Nonnull String getSectionFile(
-    final @Nonnull SASectionNumber n)
-    throws ConstraintError,
-      Exception
+  static  String getSectionFile(
+    final  SASectionNumber n)
+    throws Exception
   {
     return n.sectionNumberAccept(new SASectionNumberVisitor<String>() {
       @Override public String visitSectionNumberWithoutPart(
-        final @Nonnull SASectionNumberS s)
-        throws ConstraintError,
-          Exception
+        final  SASectionNumberS s)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.SECTION_CODE);
         b.append(s.getSection());
         b.append(".");
         b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitSectionNumberWithPart(
-        final @Nonnull SASectionNumberPS sps)
-        throws ConstraintError,
-          Exception
+        final  SASectionNumberPS sps)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.PART_CODE);
@@ -416,21 +429,21 @@ final class SXHTMLAnchors
         b.append(sps.getSection());
         b.append(".");
         b.append(SXHTML.OUTPUT_FILE_SUFFIX);
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
     });
   }
 
-  static @Nonnull String getSubsectionAnchorID(
-    final @Nonnull SASubsectionNumber n)
-    throws ConstraintError,
-      Exception
+  static  String getSubsectionAnchorID(
+    final  SASubsectionNumber n)
+    throws Exception
   {
     return n.subsectionNumberAccept(new SASubsectionNumberVisitor<String>() {
       @Override public String visitSubsectionNumberPSS(
-        final @Nonnull SASubsectionNumberPSS p)
-        throws ConstraintError,
-          Exception
+        final  SASubsectionNumberPSS p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -441,13 +454,14 @@ final class SXHTMLAnchors
         b.append(p.getSection());
         b.append(SXHTML.SUBSECTION_CODE);
         b.append(p.getSubsection());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
 
       @Override public String visitSubsectionNumberSS(
-        final @Nonnull SASubsectionNumberSS p)
-        throws ConstraintError,
-          Exception
+        final  SASubsectionNumberSS p)
+        throws Exception
       {
         final StringBuilder b = new StringBuilder();
         b.append(SXHTML.ATTRIBUTE_PREFIX);
@@ -456,21 +470,21 @@ final class SXHTMLAnchors
         b.append(p.getSection());
         b.append(SXHTML.SUBSECTION_CODE);
         b.append(p.getSubsection());
-        return b.toString();
+        final String r = b.toString();
+        assert r != null;
+        return r;
       }
     });
   }
 
-  static @Nonnull String getSubsectionFile(
-    final @Nonnull SASubsectionNumber n)
-    throws ConstraintError,
-      Exception
+  static  String getSubsectionFile(
+    final  SASubsectionNumber n)
+    throws Exception
   {
     return n.subsectionNumberAccept(new SASubsectionNumberVisitor<String>() {
       @Override public String visitSubsectionNumberPSS(
-        final @Nonnull SASubsectionNumberPSS p)
-        throws ConstraintError,
-          Exception
+        final  SASubsectionNumberPSS p)
+        throws Exception
       {
         return SXHTMLAnchors.getSectionFile(new SASectionNumberPS(
           p.getPart(),
@@ -478,9 +492,8 @@ final class SXHTMLAnchors
       }
 
       @Override public String visitSubsectionNumberSS(
-        final @Nonnull SASubsectionNumberSS p)
-        throws ConstraintError,
-          Exception
+        final  SASubsectionNumberSS p)
+        throws Exception
       {
         return SXHTMLAnchors.getSectionFile(new SASectionNumberS(p
           .getSection()));

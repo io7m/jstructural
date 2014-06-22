@@ -16,18 +16,16 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A paragraph element.
  */
 
-@Immutable public final class SParagraph implements SSubsectionContent
+public final class SParagraph implements SSubsectionContent
 {
   /**
    * Construct a new paragraph.
@@ -35,16 +33,13 @@ import com.io7m.jaux.functional.Option;
    * @param content
    *          The paragraph content.
    * @return A new paragraph
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SParagraph paragraph(
-    final @Nonnull SNonEmptyList<SParagraphContent> content)
-    throws ConstraintError
+  public static SParagraph paragraph(
+    final SNonEmptyList<SParagraphContent> content)
   {
-    final Option<String> no_type = Option.none();
-    final Option<SID> no_id = Option.none();
+    final OptionType<String> no_type = Option.none();
+    final OptionType<SID> no_id = Option.none();
     return new SParagraph(no_type, content, no_id);
   }
 
@@ -56,17 +51,14 @@ import com.io7m.jaux.functional.Option;
    * @param content
    *          The paragraph content.
    * @return A new paragraph
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SParagraph paragraphID(
-    final @Nonnull SID id,
-    final @Nonnull SNonEmptyList<SParagraphContent> content)
-    throws ConstraintError
+  public static SParagraph paragraphID(
+    final SID id,
+    final SNonEmptyList<SParagraphContent> content)
   {
-    final Option<SID> some_id = Option.some(id);
-    final Option<String> no_type = Option.none();
+    final OptionType<SID> some_id = Option.some(id);
+    final OptionType<String> no_type = Option.none();
     return new SParagraph(no_type, content, some_id);
   }
 
@@ -78,18 +70,15 @@ import com.io7m.jaux.functional.Option;
    * @param content
    *          The paragraph content.
    * @return A new paragraph
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SParagraph paragraphTyped(
-    final @Nonnull String type,
-    final @Nonnull SNonEmptyList<SParagraphContent> content)
-    throws ConstraintError
+  public static SParagraph paragraphTyped(
+    final String type,
+    final SNonEmptyList<SParagraphContent> content)
   {
-    final Option<String> some =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Option<SID> none = Option.none();
+    final OptionType<String> some =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<SID> none = Option.none();
     return new SParagraph(some, content, none);
   }
 
@@ -103,39 +92,35 @@ import com.io7m.jaux.functional.Option;
    * @param content
    *          The paragraph content.
    * @return A new paragraph
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SParagraph paragraphTypedID(
-    final @Nonnull String type,
-    final @Nonnull SID id,
-    final @Nonnull SNonEmptyList<SParagraphContent> content)
-    throws ConstraintError
+  public static SParagraph paragraphTypedID(
+    final String type,
+    final SID id,
+    final SNonEmptyList<SParagraphContent> content)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Option<SID> some_id = Option.some(id);
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<SID> some_id = Option.some(id);
     return new SParagraph(some_type, content, some_id);
   }
 
-  private final @Nonnull SNonEmptyList<SParagraphContent> content;
-  private final @Nonnull Option<SID>                      id;
-  private final @Nonnull Option<String>                   type;
+  private final SNonEmptyList<SParagraphContent> content;
+  private final OptionType<SID>                  id;
+  private final OptionType<String>               type;
 
   private SParagraph(
-    final @Nonnull Option<String> in_type,
-    final @Nonnull SNonEmptyList<SParagraphContent> in_content,
-    final @Nonnull Option<SID> in_id)
-    throws ConstraintError
+    final OptionType<String> in_type,
+    final SNonEmptyList<SParagraphContent> in_content,
+    final OptionType<SID> in_id)
   {
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.content = Constraints.constrainNotNull(in_content, "Content");
-    this.id = Constraints.constrainNotNull(in_id, "ID");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.content = NullCheck.notNull(in_content, "Content");
+    this.id = NullCheck.notNull(in_id, "ID");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -156,7 +141,7 @@ import com.io7m.jaux.functional.Option;
    * @return The element content
    */
 
-  public @Nonnull SNonEmptyList<SParagraphContent> getContent()
+  public SNonEmptyList<SParagraphContent> getContent()
   {
     return this.content;
   }
@@ -165,7 +150,7 @@ import com.io7m.jaux.functional.Option;
    * @return The paragraph's ID.
    */
 
-  public @Nonnull Option<SID> getID()
+  public OptionType<SID> getID()
   {
     return this.id;
   }
@@ -174,7 +159,7 @@ import com.io7m.jaux.functional.Option;
    * @return The type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -190,9 +175,8 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A subsectionContentAccept(
-    final @Nonnull SSubsectionContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SSubsectionContentVisitor<A> v)
+    throws Exception
   {
     return v.visitParagraph(this);
   }
@@ -207,6 +191,8 @@ import com.io7m.jaux.functional.Option;
     builder.append(" type=");
     builder.append(this.type);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

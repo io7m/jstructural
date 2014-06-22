@@ -24,12 +24,9 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jlog.Level;
-import com.io7m.jlog.Log;
+import com.io7m.jlog.LogLevel;
+import com.io7m.jlog.LogUsableType;
+import com.io7m.jnull.NullCheck;
 
 /**
  * The set of formal items organized by kind.
@@ -39,15 +36,17 @@ public final class SAFormalItemsByKind implements
   SAFormalItemsByKindReadable,
   SAFormalItemsByKindWritable
 {
-  private static final @Nonnull SortedMap<SAFormalItemNumber, SAFormalItem> EMPTY;
+  private static final SortedMap<SAFormalItemNumber, SAFormalItem> EMPTY;
   static {
-    EMPTY =
+    final SortedMap<SAFormalItemNumber, SAFormalItem> um =
       Collections
         .unmodifiableSortedMap(new TreeMap<SAFormalItemNumber, SAFormalItem>());
+    assert um != null;
+    EMPTY = um;
   }
-  private final @Nonnull Log                                                log;
 
-  private final @Nonnull Map<String, Set<SAFormalItem>>                     map;
+  private final LogUsableType                                      log;
+  private final Map<String, Set<SAFormalItem>>                     map;
 
   /**
    * Construct a new empty map.
@@ -57,15 +56,14 @@ public final class SAFormalItemsByKind implements
    */
 
   public SAFormalItemsByKind(
-    final @Nonnull Log in_log)
+    final LogUsableType in_log)
   {
-    this.log = new Log(in_log, "formal-items");
+    this.log = NullCheck.notNull(in_log, "Log").with("formal-items");
     this.map = new HashMap<String, Set<SAFormalItem>>();
   }
 
   @Override public SortedMap<SAFormalItemNumber, SAFormalItem> get(
-    final @Nonnull String kind)
-    throws ConstraintError
+    final String kind)
   {
     final Set<SAFormalItem> set;
     if (this.map.containsKey(kind)) {
@@ -79,15 +77,18 @@ public final class SAFormalItemsByKind implements
     for (final SAFormalItem f : set) {
       r.put(f.getNumber(), f);
     }
-    return Collections.unmodifiableSortedMap(r);
+
+    final SortedMap<SAFormalItemNumber, SAFormalItem> rm =
+      Collections.unmodifiableSortedMap(r);
+    assert rm != null;
+    return rm;
   }
 
   @Override public void put(
-    final @Nonnull String kind,
-    final @Nonnull SAFormalItem item)
-    throws ConstraintError
+    final String kind,
+    final SAFormalItem item)
   {
-    if (this.log.enabled(Level.LOG_DEBUG)) {
+    if (this.log.wouldLog(LogLevel.LOG_DEBUG)) {
       final StringBuilder b = new StringBuilder();
       b.append("new: ");
       b.append(item.getNumber().formalItemNumberFormat());
@@ -96,7 +97,9 @@ public final class SAFormalItemsByKind implements
       b.append(" (kind ");
       b.append(item.getKind());
       b.append(")");
-      this.log.debug(b.toString());
+      final String r = b.toString();
+      assert r != null;
+      this.log.debug(r);
     }
 
     Set<SAFormalItem> set = null;
@@ -106,9 +109,10 @@ public final class SAFormalItemsByKind implements
       set = new HashSet<SAFormalItem>();
     }
 
-    Constraints.constrainArbitrary(
-      set.contains(item) == false,
-      "Item not already added to set");
+    if (set.contains(item)) {
+      throw new IllegalArgumentException("Item already added to set");
+    }
+
     set.add(item);
     this.map.put(kind, set);
   }

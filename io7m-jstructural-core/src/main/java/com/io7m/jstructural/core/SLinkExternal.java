@@ -18,17 +18,14 @@ package com.io7m.jstructural.core;
 
 import java.net.URI;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A link to an external resource
  */
 
-@Immutable public final class SLinkExternal implements
+public final class SLinkExternal implements
   SParagraphContent,
   SListItemContent,
   SFootnoteContent,
@@ -42,32 +39,28 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param content
    *          The content in the body of the link
    * @return A new link element
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SLinkExternal link(
-    final @Nonnull URI target,
-    final @Nonnull SNonEmptyList<SLinkContent> content)
-    throws ConstraintError
+  public static SLinkExternal link(
+    final URI target,
+    final SNonEmptyList<SLinkContent> content)
   {
     return new SLinkExternal(target, content);
   }
 
-  private final @Nonnull SNonEmptyList<SLinkContent> content;
-  private final @Nonnull URI                         target;
+  private final SNonEmptyList<SLinkContent> content;
+  private final URI                         target;
 
   private SLinkExternal(
-    final @Nonnull URI in_target,
-    final @Nonnull SNonEmptyList<SLinkContent> in_content)
-    throws ConstraintError
+    final URI in_target,
+    final SNonEmptyList<SLinkContent> in_content)
   {
-    this.target = Constraints.constrainNotNull(in_target, "Target");
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+    this.target = NullCheck.notNull(in_target, "Target");
+    this.content = NullCheck.notNull(in_content, "Content");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -84,9 +77,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
   }
 
   @Override public <A> A footnoteContentAccept(
-    final @Nonnull SFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SFootnoteContentVisitor<A> v)
+    throws Exception
   {
     return v.visitLinkExternal(this);
   }
@@ -95,7 +87,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The content of the link
    */
 
-  public @Nonnull SNonEmptyList<SLinkContent> getContent()
+  public SNonEmptyList<SLinkContent> getContent()
   {
     return this.content;
   }
@@ -104,7 +96,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The link target
    */
 
-  public @Nonnull URI getTarget()
+  public URI getTarget()
   {
     return this.target;
   }
@@ -119,25 +111,22 @@ import com.io7m.jaux.Constraints.ConstraintError;
   }
 
   @Override public <A> A listItemContentAccept(
-    final @Nonnull SListItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SListItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitLinkExternal(this);
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitLinkExternal(this);
   }
 
   @Override public <A> A tableCellContentAccept(
-    final @Nonnull STableCellContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final STableCellContentVisitor<A> v)
+    throws Exception
   {
     return v.visitLinkExternal(this);
   }

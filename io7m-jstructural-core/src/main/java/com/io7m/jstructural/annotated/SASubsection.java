@@ -16,25 +16,22 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
 
 /**
  * A subsection.
  */
 
-@Immutable public final class SASubsection implements SAIDTargetContent
+public final class SASubsection implements SAIDTargetContent
 {
-  private final @Nonnull SNonEmptyList<SASubsectionContent> content;
-  private final @Nonnull Option<SAID>                       id;
-  private final @Nonnull SASubsectionNumber                 number;
-  private final @Nonnull SASubsectionTitle                  title;
-  private final @Nonnull Option<String>                     type;
+  private final SNonEmptyList<SASubsectionContent> content;
+  private final OptionType<SAID>                   id;
+  private final SASubsectionNumber                 number;
+  private final SASubsectionTitle                  title;
+  private final OptionType<String>                 type;
 
   /**
    * Construct a new subsection.
@@ -49,27 +46,24 @@ import com.io7m.jstructural.core.SNonEmptyList;
    *          The title
    * @param in_content
    *          The content
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
   public SASubsection(
-    final @Nonnull SASubsectionNumber in_number,
-    final @Nonnull Option<String> in_type,
-    final @Nonnull Option<SAID> in_id,
-    final @Nonnull SASubsectionTitle in_title,
-    final @Nonnull SNonEmptyList<SASubsectionContent> in_content)
-    throws ConstraintError
+    final SASubsectionNumber in_number,
+    final OptionType<String> in_type,
+    final OptionType<SAID> in_id,
+    final SASubsectionTitle in_title,
+    final SNonEmptyList<SASubsectionContent> in_content)
   {
-    this.number = Constraints.constrainNotNull(in_number, "Number");
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.id = Constraints.constrainNotNull(in_id, "ID");
-    this.title = Constraints.constrainNotNull(in_title, "Title");
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+    this.number = NullCheck.notNull(in_number, "Number");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.id = NullCheck.notNull(in_id, "ID");
+    this.title = NullCheck.notNull(in_title, "Title");
+    this.content = NullCheck.notNull(in_content, "Content");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -92,7 +86,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The subsection content
    */
 
-  public @Nonnull SNonEmptyList<SASubsectionContent> getContent()
+  public SNonEmptyList<SASubsectionContent> getContent()
   {
     return this.content;
   }
@@ -101,7 +95,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The subsection ID
    */
 
-  public @Nonnull Option<SAID> getID()
+  public OptionType<SAID> getID()
   {
     return this.id;
   }
@@ -110,7 +104,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The subsection number
    */
 
-  public @Nonnull SASubsectionNumber getNumber()
+  public SASubsectionNumber getNumber()
   {
     return this.number;
   }
@@ -119,7 +113,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The subsection title
    */
 
-  public @Nonnull SASubsectionTitle getTitle()
+  public SASubsectionTitle getTitle()
   {
     return this.title;
   }
@@ -128,7 +122,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The subsection type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -146,9 +140,8 @@ import com.io7m.jstructural.core.SNonEmptyList;
   }
 
   @Override public <T> T targetContentAccept(
-    final @Nonnull SAIDTargetContentVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    final SAIDTargetContentVisitor<T> v)
+    throws Exception
   {
     return v.visitSubsection(this);
   }

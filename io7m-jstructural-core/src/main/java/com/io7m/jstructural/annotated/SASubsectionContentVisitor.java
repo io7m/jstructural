@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * A subsection content visitor.
  * 
@@ -35,16 +31,14 @@ public interface SASubsectionContentVisitor<A>
    * @param formal
    *          The formal item element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitFormalItem(
-    final @Nonnull SAFormalItem formal)
-    throws ConstraintError,
-      Exception;
+    final SAFormalItem formal)
+    throws Exception;
 
   /**
    * Visit a paragraph.
@@ -52,14 +46,12 @@ public interface SASubsectionContentVisitor<A>
    * @param paragraph
    *          The paragraph element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitParagraph(
-    final @Nonnull SAParagraph paragraph)
-    throws ConstraintError,
-      Exception;
+    final SAParagraph paragraph)
+    throws Exception;
 }

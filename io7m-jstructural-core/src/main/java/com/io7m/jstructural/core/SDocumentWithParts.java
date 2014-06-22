@@ -16,11 +16,10 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A document with parts.
@@ -36,17 +35,14 @@ public final class SDocumentWithParts extends SDocument
    * @param in_content
    *          The sections
    * @return A new document
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SDocumentWithParts document(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull SNonEmptyList<SPart> in_content)
-    throws ConstraintError
+  public static SDocumentWithParts document(
+    final SDocumentTitle in_title,
+    final SNonEmptyList<SPart> in_content)
   {
-    final Option<SDocumentContents> some_contents = Option.none();
-    final Option<SDocumentStyle> some_style = Option.none();
+    final OptionType<SDocumentContents> some_contents = Option.none();
+    final OptionType<SDocumentStyle> some_style = Option.none();
     return new SDocumentWithParts(
       in_title,
       some_contents,
@@ -62,18 +58,15 @@ public final class SDocumentWithParts extends SDocument
    * @param in_content
    *          The sections
    * @return A new document
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SDocumentWithParts documentContents(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull SNonEmptyList<SPart> in_content)
-    throws ConstraintError
+  public static SDocumentWithParts documentContents(
+    final SDocumentTitle in_title,
+    final SNonEmptyList<SPart> in_content)
   {
-    final Option<SDocumentContents> some_contents =
+    final OptionType<SDocumentContents> some_contents =
       Option.some(SDocumentContents.get());
-    final Option<SDocumentStyle> some_style = Option.none();
+    final OptionType<SDocumentStyle> some_style = Option.none();
     return new SDocumentWithParts(
       in_title,
       some_contents,
@@ -91,19 +84,16 @@ public final class SDocumentWithParts extends SDocument
    * @param in_content
    *          The sections
    * @return A new document
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SDocumentWithParts documentStyle(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull SDocumentStyle in_style,
-    final @Nonnull SNonEmptyList<SPart> in_content)
-    throws ConstraintError
+  public static SDocumentWithParts documentStyle(
+    final SDocumentTitle in_title,
+    final SDocumentStyle in_style,
+    final SNonEmptyList<SPart> in_content)
   {
-    final Option<SDocumentContents> some_contents = Option.none();
-    final Option<SDocumentStyle> some_style =
-      Option.some(Constraints.constrainNotNull(in_style, "Style"));
+    final OptionType<SDocumentContents> some_contents = Option.none();
+    final OptionType<SDocumentStyle> some_style =
+      Option.some(NullCheck.notNull(in_style, "Style"));
     return new SDocumentWithParts(
       in_title,
       some_contents,
@@ -122,20 +112,17 @@ public final class SDocumentWithParts extends SDocument
    * @param in_content
    *          The sections
    * @return A new document
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SDocumentWithParts documentStyleContents(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull SDocumentStyle in_style,
-    final @Nonnull SNonEmptyList<SPart> in_content)
-    throws ConstraintError
+  public static SDocumentWithParts documentStyleContents(
+    final SDocumentTitle in_title,
+    final SDocumentStyle in_style,
+    final SNonEmptyList<SPart> in_content)
   {
-    final Option<SDocumentContents> some_contents =
+    final OptionType<SDocumentContents> some_contents =
       Option.some(SDocumentContents.get());
-    final Option<SDocumentStyle> some_style =
-      Option.some(Constraints.constrainNotNull(in_style, "Style"));
+    final OptionType<SDocumentStyle> some_style =
+      Option.some(NullCheck.notNull(in_style, "Style"));
     return new SDocumentWithParts(
       in_title,
       some_contents,
@@ -143,34 +130,35 @@ public final class SDocumentWithParts extends SDocument
       in_content);
   }
 
-  private final @Nonnull SNonEmptyList<SPart> parts;
+  private final SNonEmptyList<SPart> parts;
 
   private SDocumentWithParts(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull Option<SDocumentContents> in_contents,
-    final @Nonnull Option<SDocumentStyle> in_style,
-    final @Nonnull SNonEmptyList<SPart> in_content)
-    throws ConstraintError
+    final SDocumentTitle in_title,
+    final OptionType<SDocumentContents> in_contents,
+    final OptionType<SDocumentStyle> in_style,
+    final SNonEmptyList<SPart> in_content)
   {
     super(in_title, in_contents, in_style);
-    this.parts = Constraints.constrainNotNull(in_content, "Parts");
+    this.parts = NullCheck.notNull(in_content, "Parts");
   }
 
   @Override public <D> D documentAccept(
-    final @Nonnull SDocumentVisitor<D> v)
-    throws ConstraintError,
-      Exception
+    final SDocumentVisitor<D> v)
+    throws Exception
   {
     return v.visitDocumentWithParts(this);
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
     }
     if (!super.equals(obj)) {
+      return false;
+    }
+    if (obj == null) {
       return false;
     }
     if (this.getClass() != obj.getClass()) {
@@ -184,7 +172,7 @@ public final class SDocumentWithParts extends SDocument
    * @return The document sections
    */
 
-  public @Nonnull SNonEmptyList<SPart> getParts()
+  public SNonEmptyList<SPart> getParts()
   {
     return this.parts;
   }

@@ -16,11 +16,10 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A table.
@@ -36,16 +35,13 @@ public final class STable implements SFormalItemContent, SParagraphContent
    * @param in_body
    *          The body
    * @return A new table
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull STable table(
-    final @Nonnull STableSummary in_summary,
-    final @Nonnull STableBody in_body)
-    throws ConstraintError
+  public static STable table(
+    final STableSummary in_summary,
+    final STableBody in_body)
   {
-    final Option<STableHead> no_header = Option.none();
+    final OptionType<STableHead> no_header = Option.none();
     return new STable(in_summary, no_header, in_body);
   }
 
@@ -59,38 +55,34 @@ public final class STable implements SFormalItemContent, SParagraphContent
    * @param in_body
    *          The body
    * @return A new table
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull STable tableHeader(
-    final @Nonnull STableSummary in_summary,
-    final @Nonnull STableHead in_head,
-    final @Nonnull STableBody in_body)
-    throws ConstraintError
+  public static STable tableHeader(
+    final STableSummary in_summary,
+    final STableHead in_head,
+    final STableBody in_body)
   {
-    final Option<STableHead> some_header =
-      Option.some(Constraints.constrainNotNull(in_head, "Header"));
+    final OptionType<STableHead> some_header =
+      Option.some(NullCheck.notNull(in_head, "Header"));
     return new STable(in_summary, some_header, in_body);
   }
 
-  private final @Nonnull STableBody         body;
-  private final @Nonnull Option<STableHead> header;
-  private final @Nonnull STableSummary      summary;
+  private final STableBody             body;
+  private final OptionType<STableHead> header;
+  private final STableSummary          summary;
 
   private STable(
-    final @Nonnull STableSummary in_summary,
-    final @Nonnull Option<STableHead> in_header,
-    final @Nonnull STableBody in_body)
-    throws ConstraintError
+    final STableSummary in_summary,
+    final OptionType<STableHead> in_header,
+    final STableBody in_body)
   {
-    this.summary = Constraints.constrainNotNull(in_summary, "Summary");
-    this.header = Constraints.constrainNotNull(in_header, "Header");
-    this.body = Constraints.constrainNotNull(in_body, "Body");
+    this.summary = NullCheck.notNull(in_summary, "Summary");
+    this.header = NullCheck.notNull(in_header, "Header");
+    this.body = NullCheck.notNull(in_body, "Body");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -108,9 +100,8 @@ public final class STable implements SFormalItemContent, SParagraphContent
   }
 
   @Override public <A> A formalItemContentAccept(
-    final @Nonnull SFormalItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SFormalItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTable(this);
   }
@@ -119,7 +110,7 @@ public final class STable implements SFormalItemContent, SParagraphContent
    * @return The table body
    */
 
-  public @Nonnull STableBody getBody()
+  public STableBody getBody()
   {
     return this.body;
   }
@@ -128,7 +119,7 @@ public final class STable implements SFormalItemContent, SParagraphContent
    * @return The table header
    */
 
-  public @Nonnull Option<STableHead> getHeader()
+  public OptionType<STableHead> getHeader()
   {
     return this.header;
   }
@@ -137,7 +128,7 @@ public final class STable implements SFormalItemContent, SParagraphContent
    * @return The table summary
    */
 
-  public @Nonnull STableSummary getSummary()
+  public STableSummary getSummary()
   {
     return this.summary;
   }
@@ -153,9 +144,8 @@ public final class STable implements SFormalItemContent, SParagraphContent
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTable(this);
   }

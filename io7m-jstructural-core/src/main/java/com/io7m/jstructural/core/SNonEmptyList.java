@@ -20,11 +20,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
+import com.io7m.jranges.RangeCheck;
 
 /**
  * The type of non-empty lists.
@@ -33,7 +31,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
  *          The type of elements
  */
 
-@Immutable public final class SNonEmptyList<T>
+public final class SNonEmptyList<T>
 {
   /**
    * Construct a new non-empty list from the given list
@@ -41,15 +39,13 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param elements
    *          The list of elements
    * @return A non-empty list
-   * @throws ConstraintError
-   *           If the list is empty
+   * 
    * @param <T>
    *          The type of elements
    */
 
-  public static @Nonnull <T> SNonEmptyList<T> newList(
-    final @Nonnull List<T> elements)
-    throws ConstraintError
+  public static <T> SNonEmptyList<T> newList(
+    final List<T> elements)
   {
     return new SNonEmptyList<T>(elements);
   }
@@ -60,37 +56,35 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param e
    *          A single element
    * @return A non-empty list
-   * @throws ConstraintError
-   *           If the list is empty
+   * 
    * @param <T>
    *          The type of elements
    */
 
-  public static @Nonnull <T> SNonEmptyList<T> one(
-    final @Nonnull T e)
-    throws ConstraintError
+  public static <T> SNonEmptyList<T> one(
+    final T e)
   {
     final List<T> es = new LinkedList<T>();
     es.add(e);
     return new SNonEmptyList<T>(es);
   }
 
-  private final @Nonnull List<T> elements;
+  private final List<T> elements;
 
   private SNonEmptyList(
-    final @Nonnull List<T> in_elements)
-    throws ConstraintError
+    final List<T> in_elements)
   {
-    this.elements = Constraints.constrainNotNull(in_elements, "Elements");
-    Constraints.constrainRange(
+    this.elements = NullCheck.notNull(in_elements, "Elements");
+
+    RangeCheck.checkIncludedIn(
       in_elements.size(),
-      1,
-      Integer.MAX_VALUE,
-      "List size");
+      "List size",
+      RangeCheck.POSITIVE_INTEGER,
+      "Valid list size range");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -109,9 +103,11 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return A read-only view of the list.
    */
 
-  public @Nonnull List<T> getElements()
+  public List<T> getElements()
   {
-    return Collections.unmodifiableList(this.elements);
+    final List<T> r = Collections.unmodifiableList(this.elements);
+    assert r != null;
+    return r;
   }
 
   @Override public int hashCode()
@@ -125,6 +121,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
     builder.append("[SNonEmptyList ");
     builder.append(this.elements);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

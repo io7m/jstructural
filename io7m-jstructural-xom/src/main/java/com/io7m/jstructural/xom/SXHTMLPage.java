@@ -16,23 +16,21 @@
 
 package com.io7m.jstructural.xom;
 
-import javax.annotation.Nonnull;
-
 import nu.xom.Document;
 import nu.xom.Element;
 
 final class SXHTMLPage
 {
-  private final @Nonnull Element  body;
-  private final @Nonnull Element  body_container;
-  private final @Nonnull Document document;
-  private final @Nonnull Element  head;
+  private final  Element  body;
+  private final  Element  body_container;
+  private final  Document document;
+  private final  Element  head;
 
   SXHTMLPage(
-    final @Nonnull Document doc,
-    final @Nonnull Element in_head,
-    final @Nonnull Element in_body,
-    final @Nonnull Element in_body_container)
+    final  Document doc,
+    final  Element in_head,
+    final  Element in_body,
+    final  Element in_body_container)
   {
     this.document = doc;
     this.head = in_head;
@@ -40,22 +38,22 @@ final class SXHTMLPage
     this.body_container = in_body_container;
   }
 
-  public @Nonnull Element getBody()
+  public  Element getBody()
   {
     return this.body;
   }
 
-  public @Nonnull Element getBodyContainer()
+  public  Element getBodyContainer()
   {
     return this.body_container;
   }
 
-  public @Nonnull Document getDocument()
+  public  Document getDocument()
   {
     return this.document;
   }
 
-  public @Nonnull Element getHead()
+  public  Element getHead()
   {
     return this.head;
   }

@@ -19,12 +19,10 @@ package com.io7m.jstructural.annotated;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.jstructural.core.SPartContents;
 
@@ -32,15 +30,15 @@ import com.io7m.jstructural.core.SPartContents;
  * A document part.
  */
 
-@Immutable public final class SAPart implements SAIDTargetContent
+public final class SAPart implements SAIDTargetContent
 {
-  private final @Nonnull Option<SPartContents>           contents;
-  private final @Nonnull Option<SAID>                    id;
-  private final @Nonnull SAPartNumber                    number;
-  private final @Nonnull Map<SASectionNumber, SASection> numbered_sections;
-  private final @Nonnull SNonEmptyList<SASection>        sections;
-  private final @Nonnull SAPartTitle                     title;
-  private final @Nonnull Option<String>                  type;
+  private final OptionType<SPartContents>       contents;
+  private final OptionType<SAID>                id;
+  private final SAPartNumber                    number;
+  private final Map<SASectionNumber, SASection> numbered_sections;
+  private final SNonEmptyList<SASection>        sections;
+  private final SAPartTitle                     title;
+  private final OptionType<String>              type;
 
   /**
    * Construct a new part.
@@ -57,25 +55,22 @@ import com.io7m.jstructural.core.SPartContents;
    *          The table of contents
    * @param in_sections
    *          The sections
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
   public SAPart(
-    final @Nonnull SAPartNumber in_number,
-    final @Nonnull Option<String> in_type,
-    final @Nonnull Option<SAID> in_id,
-    final @Nonnull SAPartTitle in_title,
-    final @Nonnull Option<SPartContents> in_contents,
-    final @Nonnull SNonEmptyList<SASection> in_sections)
-    throws ConstraintError
+    final SAPartNumber in_number,
+    final OptionType<String> in_type,
+    final OptionType<SAID> in_id,
+    final SAPartTitle in_title,
+    final OptionType<SPartContents> in_contents,
+    final SNonEmptyList<SASection> in_sections)
   {
-    this.number = Constraints.constrainNotNull(in_number, "Part number");
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.id = Constraints.constrainNotNull(in_id, "ID");
-    this.title = Constraints.constrainNotNull(in_title, "Title");
-    this.contents = Constraints.constrainNotNull(in_contents, "Contents");
-    this.sections = Constraints.constrainNotNull(in_sections, "Content");
+    this.number = NullCheck.notNull(in_number, "Part number");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.id = NullCheck.notNull(in_id, "ID");
+    this.title = NullCheck.notNull(in_title, "Title");
+    this.contents = NullCheck.notNull(in_contents, "Contents");
+    this.sections = NullCheck.notNull(in_sections, "Content");
 
     this.numbered_sections = new HashMap<SASectionNumber, SASection>();
     for (final SASection s : this.sections.getElements()) {
@@ -85,7 +80,7 @@ import com.io7m.jstructural.core.SPartContents;
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -109,7 +104,7 @@ import com.io7m.jstructural.core.SPartContents;
    * @return The part's table of contents
    */
 
-  public @Nonnull Option<SPartContents> getContents()
+  public OptionType<SPartContents> getContents()
   {
     return this.contents;
   }
@@ -118,7 +113,7 @@ import com.io7m.jstructural.core.SPartContents;
    * @return The part ID
    */
 
-  public @Nonnull Option<SAID> getID()
+  public OptionType<SAID> getID()
   {
     return this.id;
   }
@@ -127,7 +122,7 @@ import com.io7m.jstructural.core.SPartContents;
    * @return The part number
    */
 
-  public @Nonnull SAPartNumber getNumber()
+  public SAPartNumber getNumber()
   {
     return this.number;
   }
@@ -138,17 +133,16 @@ import com.io7m.jstructural.core.SPartContents;
    * @param n
    *          The number
    * @return The section, if any
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public @Nonnull Option<SASection> getSection(
-    final @Nonnull SASectionNumber n)
-    throws ConstraintError
+  public OptionType<SASection> getSection(
+    final SASectionNumber n)
   {
-    Constraints.constrainNotNull(n, "Number");
+    NullCheck.notNull(n, "Number");
     if (this.numbered_sections.containsKey(n)) {
-      return Option.some(this.numbered_sections.get(n));
+      final SASection r = this.numbered_sections.get(n);
+      assert r != null;
+      return Option.some(r);
     }
     return Option.none();
   }
@@ -157,7 +151,7 @@ import com.io7m.jstructural.core.SPartContents;
    * @return The part sections
    */
 
-  public @Nonnull SNonEmptyList<SASection> getSections()
+  public SNonEmptyList<SASection> getSections()
   {
     return this.sections;
   }
@@ -166,7 +160,7 @@ import com.io7m.jstructural.core.SPartContents;
    * @return The part's title
    */
 
-  public @Nonnull SAPartTitle getTitle()
+  public SAPartTitle getTitle()
   {
     return this.title;
   }
@@ -175,7 +169,7 @@ import com.io7m.jstructural.core.SPartContents;
    * @return The part's type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -195,8 +189,7 @@ import com.io7m.jstructural.core.SPartContents;
 
   @Override public <T> T targetContentAccept(
     final SAIDTargetContentVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
     return v.visitPart(this);
   }

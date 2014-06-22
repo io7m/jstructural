@@ -16,10 +16,8 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.Nullable;
+import com.io7m.jranges.RangeCheck;
 
 /**
  * A section number with no other components.
@@ -34,21 +32,21 @@ public final class SASectionNumberS extends SASectionNumber
    * 
    * @param in_section
    *          The section number
-   * @throws ConstraintError
-   *           If any parameter is outside of the range
-   *           <code>[1, {@link Integer#MAX_VALUE}]</code>
    */
 
   public SASectionNumberS(
     final int in_section)
-    throws ConstraintError
   {
     this.section =
-      Constraints.constrainRange(in_section, 1, Integer.MAX_VALUE, "Section");
+      (int) RangeCheck.checkIncludedIn(
+        in_section,
+        "Section number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid section number range");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -84,22 +82,22 @@ public final class SASectionNumberS extends SASectionNumber
   }
 
   @Override public <T> T sectionNumberAccept(
-    final @Nonnull SASectionNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    final SASectionNumberVisitor<T> v)
+    throws Exception
   {
     return v.visitSectionNumberWithoutPart(this);
   }
 
   @SuppressWarnings("boxing") @Override public String sectionNumberFormat()
   {
-    return String.format("%d", this.section);
+    final String r = String.format("%d", this.section);
+    assert r != null;
+    return r;
   }
 
   @Override public <T> T segmentNumberAccept(
-    final @Nonnull SASegmentNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    final SASegmentNumberVisitor<T> v)
+    throws Exception
   {
     return v.visitSectionNumber(this);
   }
@@ -110,6 +108,8 @@ public final class SASectionNumberS extends SASectionNumber
     builder.append("[SASectionNumberWithoutPart section=");
     builder.append(this.section);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

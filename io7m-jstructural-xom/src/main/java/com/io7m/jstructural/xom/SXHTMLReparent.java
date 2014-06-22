@@ -16,13 +16,12 @@
 
 package com.io7m.jstructural.xom;
 
-import javax.annotation.Nonnull;
-
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.ParentNode;
 
-import com.io7m.jaux.UnreachableCodeException;
+import com.io7m.jnull.Nullable;
+import com.io7m.junreachable.UnreachableCodeException;
 
 final class SXHTMLReparent
 {
@@ -31,8 +30,8 @@ final class SXHTMLReparent
     throw new UnreachableCodeException();
   }
 
-  private static @Nonnull Node getAbsoluteAncestor(
-    final @Nonnull Element rbody)
+  private static Node getAbsoluteAncestor(
+    final Element rbody)
   {
     Node n = rbody;
 
@@ -46,8 +45,8 @@ final class SXHTMLReparent
   }
 
   static void reparentBodyNode(
-    final @Nonnull Element current_body,
-    final @Nonnull Element target_body)
+    final Element current_body,
+    final @Nullable Element target_body)
   {
     if (target_body != null) {
       final Node rbody_root = SXHTMLReparent.getAbsoluteAncestor(target_body);

@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * The type of elements appearing in formal items.
  */
@@ -34,14 +30,12 @@ public interface SAFormalItemContent
    * @param <A>
    *          The type of values returned by the visitor
    * @return The value returned by the visitor.
-   * @throws ConstraintError
-   *           If the visitor raises a {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises and {@link Exception}
    */
 
   <A> A formalItemContentAccept(
-    final @Nonnull SAFormalItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception;
+    final SAFormalItemContentVisitor<A> v)
+    throws Exception;
 }

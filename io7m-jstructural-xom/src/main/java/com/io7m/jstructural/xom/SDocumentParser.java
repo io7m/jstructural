@@ -24,8 +24,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -52,12 +50,10 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnimplementedCodeException;
-import com.io7m.jaux.UnreachableCodeException;
-import com.io7m.jlog.Level;
-import com.io7m.jlog.Log;
+import com.io7m.jlog.LogLevel;
+import com.io7m.jlog.LogUsableType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentStyle;
 import com.io7m.jstructural.core.SDocumentTitle;
@@ -103,6 +99,8 @@ import com.io7m.jstructural.core.SText;
 import com.io7m.jstructural.core.SVerbatim;
 import com.io7m.jstructural.core.SXML;
 import com.io7m.jstructural.schema.SSchema;
+import com.io7m.junreachable.UnimplementedCodeException;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * A document parser that uses XOM to process documents.
@@ -112,40 +110,43 @@ public final class SDocumentParser
 {
   private static class TrivialErrorHandler implements ErrorHandler
   {
-    private @CheckForNull SAXParseException exception;
-    private final @Nonnull Log              log;
+    private @Nullable SAXParseException exception;
+    private final LogUsableType         log;
 
     public TrivialErrorHandler(
-      final @Nonnull Log in_log)
+      final LogUsableType in_log)
     {
       this.log = in_log;
     }
 
     @Override public void error(
-      final SAXParseException e)
+      final @Nullable SAXParseException e)
       throws SAXException
     {
+      assert e != null;
       this.log.error(e + ": " + e.getMessage());
       this.exception = e;
     }
 
     @Override public void fatalError(
-      final SAXParseException e)
+      final @Nullable SAXParseException e)
       throws SAXException
     {
+      assert e != null;
       this.log.critical(e + ": " + e.getMessage());
       this.exception = e;
     }
 
-    public @CheckForNull SAXParseException getException()
+    public @Nullable SAXParseException getException()
     {
       return this.exception;
     }
 
     @Override public void warning(
-      final SAXParseException e)
+      final @Nullable SAXParseException e)
       throws SAXException
     {
+      assert e != null;
       this.log.warn(e + ": " + e.getMessage());
       this.exception = e;
     }
@@ -160,20 +161,18 @@ public final class SDocumentParser
    * @param e
    *          The element
    * @return A document
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
+   * 
    * @throws URISyntaxException
    *           If parsing a URI fails, internally
    */
 
-  static @Nonnull SDocument document(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      URISyntaxException
+  static SDocument document(
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
-    Constraints.constrainNotNull(log, "Log");
-    Constraints.constrainNotNull(e, "Element");
+    NullCheck.notNull(log, "Log");
+    NullCheck.notNull(e, "Element");
 
     log.debug("document: starting");
 
@@ -193,16 +192,15 @@ public final class SDocumentParser
   }
 
   private static boolean documentContentsRoot(
-    final @Nonnull Element root)
+    final Element root)
   {
     final Element e = SDocumentParser.getElement(root, "document-contents");
     return e != null;
   }
 
-  private static @CheckForNull SDocumentStyle documentStyleRoot(
-    final @Nonnull Element root)
-    throws ConstraintError,
-      URISyntaxException
+  private static @Nullable SDocumentStyle documentStyleRoot(
+    final Element root)
+    throws URISyntaxException
   {
     final Element e = SDocumentParser.getElement(root, "document-style");
     if (e == null) {
@@ -211,22 +209,21 @@ public final class SDocumentParser
     return SDocumentStyle.documentStyle(new URI(e.getValue()));
   }
 
-  private static @Nonnull SDocumentTitle documentTitleRoot(
-    final @Nonnull Element root)
-    throws ConstraintError
+  private static SDocumentTitle documentTitleRoot(
+    final Element root)
   {
     final Element e = SDocumentParser.getElement(root, "document-title");
+    assert e != null;
     return SDocumentTitle.documentTitle(e.getValue());
   }
 
   private static SDocument documentWithParts(
-    final @Nonnull Log log,
-    final @Nonnull Element root,
-    final @Nonnull SDocumentTitle title,
-    final @CheckForNull SDocumentStyle style,
+    final LogUsableType log,
+    final Element root,
+    final SDocumentTitle title,
+    final @Nullable SDocumentStyle style,
     final boolean contents)
-    throws ConstraintError,
-      URISyntaxException
+    throws URISyntaxException
   {
     final Elements parts = SDocumentParser.getElements(root, "part");
     assert parts != null;
@@ -247,11 +244,10 @@ public final class SDocumentParser
   }
 
   private static SDocument documentWithPartsMake(
-    final @Nonnull SDocumentTitle title,
-    final @CheckForNull SDocumentStyle style,
+    final SDocumentTitle title,
+    final @Nullable SDocumentStyle style,
     final boolean contents,
-    final @Nonnull SNonEmptyList<SPart> content)
-    throws ConstraintError
+    final SNonEmptyList<SPart> content)
   {
     if (contents) {
       if (style != null) {
@@ -267,14 +263,13 @@ public final class SDocumentParser
     return SDocumentWithParts.document(title, content);
   }
 
-  private static @Nonnull SDocument documentWithSections(
-    final @Nonnull Log log,
-    final @Nonnull Element root,
-    final @Nonnull SDocumentTitle title,
-    final @CheckForNull SDocumentStyle style,
+  private static SDocument documentWithSections(
+    final LogUsableType log,
+    final Element root,
+    final SDocumentTitle title,
+    final @Nullable SDocumentStyle style,
     final boolean contents)
-    throws ConstraintError,
-      URISyntaxException
+    throws URISyntaxException
   {
     final Elements sections = SDocumentParser.getElements(root, "section");
     assert sections != null;
@@ -295,12 +290,11 @@ public final class SDocumentParser
       content);
   }
 
-  private static @Nonnull SDocumentWithSections documentWithSectionsMake(
-    final @Nonnull SDocumentTitle title,
-    final @CheckForNull SDocumentStyle style,
+  private static SDocumentWithSections documentWithSectionsMake(
+    final SDocumentTitle title,
+    final @Nullable SDocumentStyle style,
     final boolean contents,
-    final @Nonnull SNonEmptyList<SSection> content)
-    throws ConstraintError
+    final SNonEmptyList<SSection> content)
   {
     if (contents) {
       if (style != null) {
@@ -318,11 +312,10 @@ public final class SDocumentParser
     return SDocumentWithSections.document(title, content);
   }
 
-  private static @Nonnull SFootnote footnote(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws URISyntaxException,
-      ConstraintError
+  private static SFootnote footnote(
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     log.debug("footnote: starting");
 
@@ -338,11 +331,10 @@ public final class SDocumentParser
     return SFootnote.footnote(content);
   }
 
-  private static @Nonnull SFootnoteContent footnoteContent(
-    final @Nonnull Log log,
-    final @Nonnull Node c)
-    throws ConstraintError,
-      URISyntaxException
+  private static SFootnoteContent footnoteContent(
+    final LogUsableType log,
+    final Node c)
+    throws URISyntaxException
   {
     if (c instanceof Text) {
       final Text et = (Text) c;
@@ -374,14 +366,14 @@ public final class SDocumentParser
     throw new UnreachableCodeException();
   }
 
-  private static @Nonnull SFormalItem formalItem(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      URISyntaxException
+  private static SFormalItem formalItem(
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     final String type = SDocumentParser.typeAttribute(e);
     final String kind = SDocumentParser.kindAttribute(e);
+    assert kind != null;
     final SFormalItemTitle title = SDocumentParser.formalItemTitleRoot(e);
 
     final Elements children = e.getChildElements();
@@ -400,11 +392,10 @@ public final class SDocumentParser
     throw new UnreachableCodeException();
   }
 
-  private static @Nonnull SFormalItemContent formalItemContent(
-    final @Nonnull Log log,
-    final @Nonnull Element ec)
-    throws URISyntaxException,
-      ConstraintError
+  private static SFormalItemContent formalItemContent(
+    final LogUsableType log,
+    final Element ec)
+    throws URISyntaxException
   {
     if ("formal-item-list".equals(ec.getLocalName())) {
       return SDocumentParser.formalItemList(ec);
@@ -429,19 +420,18 @@ public final class SDocumentParser
   }
 
   private static SFormalItemList formalItemList(
-    final @Nonnull Element e)
-    throws ConstraintError
+    final Element e)
   {
     final String kind = SDocumentParser.kindAttribute(e);
+    assert kind != null;
     return SFormalItemList.formalItemList(kind);
   }
 
-  private static @Nonnull SFormalItem formalItemMake(
-    final @CheckForNull String type,
-    final @Nonnull String kind,
-    final @Nonnull SFormalItemTitle title,
-    final @Nonnull SFormalItemContent content)
-    throws ConstraintError
+  private static SFormalItem formalItemMake(
+    final @Nullable String type,
+    final String kind,
+    final SFormalItemTitle title,
+    final SFormalItemContent content)
   {
     if (type != null) {
       return SFormalItem.formalItemTyped(title, kind, type, content);
@@ -451,9 +441,9 @@ public final class SDocumentParser
 
   private static SFormalItemTitle formalItemTitleRoot(
     final Element e)
-    throws ConstraintError
   {
     final Element ec = SDocumentParser.getElement(e, "formal-item-title");
+    assert ec != null;
     return SFormalItemTitle.formalItemTitle(ec.getValue());
   }
 
@@ -470,8 +460,6 @@ public final class SDocumentParser
    * 
    * @throws SAXException
    *           On XML parse errors
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    * @throws ParserConfigurationException
    *           On parser configuration errors
    * @throws ValidityException
@@ -492,12 +480,11 @@ public final class SDocumentParser
    *           If an xinclude fails
    */
 
-  public static @Nonnull SDocument fromStream(
-    final @Nonnull InputStream stream,
-    final @Nonnull URI uri,
-    final @Nonnull Log log)
-    throws ConstraintError,
-      ValidityException,
+  public static SDocument fromStream(
+    final InputStream stream,
+    final URI uri,
+    final LogUsableType log)
+    throws ValidityException,
       SAXException,
       ParserConfigurationException,
       ParsingException,
@@ -508,7 +495,7 @@ public final class SDocumentParser
       NoIncludeLocationException,
       XIncludeException
   {
-    final Log lp = new Log(log, "parser");
+    final LogUsableType lp = log.with("parser");
     final Document doc = SDocumentParser.fromStreamValidate(stream, uri, log);
     final Element root = doc.getRootElement();
 
@@ -551,12 +538,12 @@ public final class SDocumentParser
    *           If an xinclude fails
    */
 
-  static @Nonnull Document fromStreamValidate(
-    final @Nonnull InputStream stream,
-    final @Nonnull URI uri,
-    final @Nonnull Log log)
+  static Document fromStreamValidate(
+    final InputStream stream,
+    final URI uri,
+    final LogUsableType log)
     throws SAXException,
-      ConstraintError,
+
       ParserConfigurationException,
       ValidityException,
       ParsingException,
@@ -566,10 +553,10 @@ public final class SDocumentParser
       NoIncludeLocationException,
       XIncludeException
   {
-    Constraints.constrainNotNull(stream, "Stream");
-    Constraints.constrainNotNull(log, "Log");
+    NullCheck.notNull(stream, "Stream");
+    NullCheck.notNull(log, "Log");
 
-    final Log log_xml = new Log(log, "xml");
+    final LogUsableType log_xml = log.with("xml");
 
     log_xml.debug("creating sax parser");
 
@@ -610,8 +597,9 @@ public final class SDocumentParser
         final Builder builder = new Builder(reader);
         final Document doc = builder.build(stream, uri.toString());
 
-        if (handler.getException() != null) {
-          throw handler.getException();
+        final SAXParseException ex = handler.getException();
+        if (ex != null) {
+          throw ex;
         }
 
         return doc;
@@ -623,22 +611,22 @@ public final class SDocumentParser
     }
   }
 
-  private static @CheckForNull Element getElement(
-    final @Nonnull Element element,
-    final @Nonnull String name)
+  private static @Nullable Element getElement(
+    final Element element,
+    final String name)
   {
     return element.getFirstChildElement(name, SXML.XML_URI.toString());
   }
 
-  private static @CheckForNull Elements getElements(
-    final @Nonnull Element element,
-    final @Nonnull String name)
+  private static @Nullable Elements getElements(
+    final Element element,
+    final String name)
   {
     return element.getChildElements(name, SXML.XML_URI.toString());
   }
 
-  private static @CheckForNull Integer heightAttribute(
-    final @Nonnull Element ec)
+  private static @Nullable Integer heightAttribute(
+    final Element ec)
   {
     final Attribute a = ec.getAttribute("height", SXML.XML_URI.toString());
     if (a == null) {
@@ -647,9 +635,8 @@ public final class SDocumentParser
     return Integer.valueOf(a.getValue());
   }
 
-  private static @CheckForNull SID idAttribute(
-    final @Nonnull Element e)
-    throws ConstraintError
+  private static @Nullable SID idAttribute(
+    final Element e)
   {
     final Attribute eid =
       e.getAttribute("id", "http://www.w3.org/XML/1998/namespace");
@@ -659,10 +646,9 @@ public final class SDocumentParser
     return SID.newID(eid.getValue());
   }
 
-  static @Nonnull SImage image(
-    final @Nonnull Element ec)
-    throws ConstraintError,
-      URISyntaxException
+  static SImage image(
+    final Element ec)
+    throws URISyntaxException
   {
     final String type = SDocumentParser.typeAttribute(ec);
     final URI source = SDocumentParser.sourceAttribute(ec);
@@ -706,20 +692,19 @@ public final class SDocumentParser
     return SImage.image(source, text);
   }
 
-  private static @CheckForNull String kindAttribute(
-    final @Nonnull Element e)
+  private static String kindAttribute(
+    final Element e)
   {
     final Attribute et = e.getAttribute("kind", SXML.XML_URI.toString());
-    if (et == null) {
-      return null;
-    }
-    return et.getValue();
+    assert et != null;
+    final String r = et.getValue();
+    assert r != null;
+    return r;
   }
 
-  static @Nonnull SLink link(
-    final @Nonnull Element ec)
-    throws URISyntaxException,
-      ConstraintError
+  static SLink link(
+    final Element ec)
+    throws URISyntaxException
   {
     final String target = SDocumentParser.targetAttribute(ec);
     final SNonEmptyList<SLinkContent> content =
@@ -727,10 +712,9 @@ public final class SDocumentParser
     return SLink.link(target, content);
   }
 
-  private static @Nonnull SNonEmptyList<SLinkContent> linkContent(
-    final @Nonnull Element ec)
-    throws ConstraintError,
-      URISyntaxException
+  private static SNonEmptyList<SLinkContent> linkContent(
+    final Element ec)
+    throws URISyntaxException
   {
     final List<SLinkContent> elements = new ArrayList<SLinkContent>();
 
@@ -755,10 +739,9 @@ public final class SDocumentParser
     return SNonEmptyList.newList(elements);
   }
 
-  static @Nonnull SLinkExternal linkExternal(
-    final @Nonnull Element ec)
-    throws URISyntaxException,
-      ConstraintError
+  static SLinkExternal linkExternal(
+    final Element ec)
+    throws URISyntaxException
   {
     final URI target = new URI(SDocumentParser.targetAttribute(ec));
     final SNonEmptyList<SLinkContent> content =
@@ -766,11 +749,10 @@ public final class SDocumentParser
     return SLinkExternal.link(target, content);
   }
 
-  private static @Nonnull SListItem listItem(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      URISyntaxException
+  private static SListItem listItem(
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     log.debug("list-item: starting");
 
@@ -789,11 +771,10 @@ public final class SDocumentParser
     return SListItem.listItem(content);
   }
 
-  private static @Nonnull SListItemContent listItemContent(
-    final @Nonnull Log log,
-    final @Nonnull Node e)
-    throws ConstraintError,
-      URISyntaxException
+  private static SListItemContent listItemContent(
+    final LogUsableType log,
+    final Node e)
+    throws URISyntaxException
   {
     if (e instanceof Text) {
       return SText.text(e.getValue());
@@ -831,11 +812,10 @@ public final class SDocumentParser
     throw new UnreachableCodeException();
   }
 
-  private static @Nonnull SListOrdered listOrdered(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      URISyntaxException
+  private static SListOrdered listOrdered(
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     log.debug("list-ordered: starting");
 
@@ -855,11 +835,10 @@ public final class SDocumentParser
     return SListOrdered.list(content);
   }
 
-  private static @Nonnull SListUnordered listUnordered(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      URISyntaxException
+  private static SListUnordered listUnordered(
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     log.debug("list-unordered: starting");
 
@@ -879,11 +858,10 @@ public final class SDocumentParser
     return SListUnordered.list(content);
   }
 
-  static @Nonnull SParagraph paragraph(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      URISyntaxException
+  static SParagraph paragraph(
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     log.debug("paragraph: starting");
 
@@ -904,10 +882,9 @@ public final class SDocumentParser
   }
 
   private static SParagraphContent paragraphContent(
-    final @Nonnull Log log,
-    final @Nonnull Node child)
-    throws URISyntaxException,
-      ConstraintError
+    final LogUsableType log,
+    final Node child)
+    throws URISyntaxException
   {
     if (child instanceof Text) {
       final Text et = (Text) child;
@@ -950,13 +927,12 @@ public final class SDocumentParser
   }
 
   private static SParagraph paragraphMake(
-    final @Nonnull Log log,
-    final @CheckForNull SID id,
-    final @CheckForNull String type,
-    final @Nonnull SNonEmptyList<SParagraphContent> content)
-    throws ConstraintError
+    final LogUsableType log,
+    final @Nullable SID id,
+    final @Nullable String type,
+    final SNonEmptyList<SParagraphContent> content)
   {
-    if (log.enabled(Level.LOG_DEBUG)) {
+    if (log.wouldLog(LogLevel.LOG_DEBUG)) {
       log.debug(String.format("paragraph: (id: %s) (type: %s)", id != null
         ? id.getActual()
         : id, type));
@@ -975,10 +951,9 @@ public final class SDocumentParser
   }
 
   private static SPart part(
-    final @Nonnull Log log,
-    final @Nonnull Element pe)
-    throws ConstraintError,
-      URISyntaxException
+    final LogUsableType log,
+    final Element pe)
+    throws URISyntaxException
   {
     log.debug("part: starting");
 
@@ -1011,22 +986,21 @@ public final class SDocumentParser
   }
 
   private static boolean partContentsRoot(
-    final @Nonnull Element r)
+    final Element r)
   {
     final Element e = SDocumentParser.getElement(r, "part-contents");
     return e != null;
   }
 
   private static SPart partMake(
-    final @Nonnull Log log,
-    final @Nonnull SPartTitle title,
+    final LogUsableType log,
+    final SPartTitle title,
     final boolean contents,
-    final @CheckForNull SID id,
-    final @CheckForNull String type,
-    final @Nonnull SNonEmptyList<SSection> sections)
-    throws ConstraintError
+    final @Nullable SID id,
+    final @Nullable String type,
+    final SNonEmptyList<SSection> sections)
   {
-    if (log.enabled(Level.LOG_DEBUG)) {
+    if (log.wouldLog(LogLevel.LOG_DEBUG)) {
       log.debug(String.format(
         "part: (title: %s) (id: %s) (type: %s) (%s)",
         title.getActual(),
@@ -1065,18 +1039,17 @@ public final class SDocumentParser
   }
 
   private static SPartTitle partTitleRoot(
-    final @Nonnull Element e)
-    throws ConstraintError
+    final Element e)
   {
     final Element r = SDocumentParser.getElement(e, "part-title");
+    assert r != null;
     return SPartTitle.partTitle(r.getValue());
   }
 
-  private static @Nonnull SSection section(
-    final @Nonnull Log log,
-    final @Nonnull Element section)
-    throws ConstraintError,
-      URISyntaxException
+  private static SSection section(
+    final LogUsableType log,
+    final Element section)
+    throws URISyntaxException
   {
     log.debug("section: starting");
 
@@ -1105,29 +1078,28 @@ public final class SDocumentParser
   }
 
   private static boolean sectionContentsRoot(
-    final @Nonnull Element root)
+    final Element root)
   {
     final Element e = SDocumentParser.getElement(root, "section-contents");
     return e != null;
   }
 
-  private static @Nonnull SSectionTitle sectionTitleRoot(
-    final @Nonnull Element root)
-    throws ConstraintError
+  private static SSectionTitle sectionTitleRoot(
+    final Element root)
   {
     final Element e = SDocumentParser.getElement(root, "section-title");
+    assert e != null;
     return SSectionTitle.sectionTitle(e.getValue());
   }
 
   private static SSectionWithParagraphs sectionWithParagraphs(
-    final @Nonnull Log log,
-    final @Nonnull Element section,
-    final @Nonnull SSectionTitle title,
-    final @CheckForNull SID id,
-    final @CheckForNull String type,
+    final LogUsableType log,
+    final Element section,
+    final SSectionTitle title,
+    final @Nullable SID id,
+    final @Nullable String type,
     final boolean contents)
-    throws ConstraintError,
-      URISyntaxException
+    throws URISyntaxException
   {
     final Elements children = section.getChildElements();
 
@@ -1160,15 +1132,14 @@ public final class SDocumentParser
   }
 
   private static SSectionWithParagraphs sectionWithParagraphsMake(
-    final @Nonnull Log log,
-    final @Nonnull SSectionTitle title,
+    final LogUsableType log,
+    final SSectionTitle title,
     final boolean contents,
-    final @CheckForNull SID id,
-    final @CheckForNull String type,
-    final @Nonnull SNonEmptyList<SSubsectionContent> content)
-    throws ConstraintError
+    final @Nullable SID id,
+    final @Nullable String type,
+    final SNonEmptyList<SSubsectionContent> content)
   {
-    if (log.enabled(Level.LOG_DEBUG)) {
+    if (log.wouldLog(LogLevel.LOG_DEBUG)) {
       log.debug(String.format(
         "section: (paragraphs) (title: %s) (id: %s) (type: %s) (%s)",
         title.getActual(),
@@ -1218,14 +1189,13 @@ public final class SDocumentParser
   }
 
   private static SSectionWithSubsections sectionWithSubsections(
-    final @Nonnull Log log,
-    final @Nonnull Element section,
-    final @Nonnull SSectionTitle title,
-    final @CheckForNull SID id,
-    final @CheckForNull String type,
+    final LogUsableType log,
+    final Element section,
+    final SSectionTitle title,
+    final @Nullable SID id,
+    final @Nullable String type,
     final boolean contents)
-    throws ConstraintError,
-      URISyntaxException
+    throws URISyntaxException
   {
     final Elements children = section.getChildElements();
 
@@ -1259,15 +1229,14 @@ public final class SDocumentParser
   }
 
   private static SSectionWithSubsections sectionWithSubsectionsMake(
-    final @Nonnull Log log,
-    final @Nonnull SSectionTitle title,
+    final LogUsableType log,
+    final SSectionTitle title,
     final boolean contents,
-    final @CheckForNull SID id,
-    final @CheckForNull String type,
-    final @Nonnull SNonEmptyList<SSubsection> content)
-    throws ConstraintError
+    final @Nullable SID id,
+    final @Nullable String type,
+    final SNonEmptyList<SSubsection> content)
   {
-    if (log.enabled(Level.LOG_DEBUG)) {
+    if (log.wouldLog(LogLevel.LOG_DEBUG)) {
       log.debug(String.format(
         "section: (subsections) (title: %s) (id: %s) (type: %s) (%s)",
         title.getActual(),
@@ -1319,8 +1288,8 @@ public final class SDocumentParser
     return SSectionWithSubsections.section(title, content);
   }
 
-  private static @Nonnull URI sourceAttribute(
-    final @Nonnull Element ec)
+  private static URI sourceAttribute(
+    final Element ec)
     throws URISyntaxException
   {
     final Attribute a = ec.getAttribute("source", SXML.XML_URI.toString());
@@ -1328,10 +1297,9 @@ public final class SDocumentParser
   }
 
   private static SSubsection subsection(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      URISyntaxException
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     log.debug("subsection: starting");
 
@@ -1361,10 +1329,9 @@ public final class SDocumentParser
   }
 
   private static SSubsectionContent subsectionContent(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws URISyntaxException,
-      ConstraintError
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     if ("paragraph".equals(e.getLocalName())) {
       return SDocumentParser.paragraph(log, e);
@@ -1375,15 +1342,14 @@ public final class SDocumentParser
     throw new UnreachableCodeException();
   }
 
-  private static @Nonnull SSubsection subsectionMake(
-    final @Nonnull Log log,
-    final @Nonnull SSubsectionTitle title,
-    final @CheckForNull SID id,
-    final @CheckForNull String type,
-    final @Nonnull SNonEmptyList<SSubsectionContent> content)
-    throws ConstraintError
+  private static SSubsection subsectionMake(
+    final LogUsableType log,
+    final SSubsectionTitle title,
+    final @Nullable SID id,
+    final @Nullable String type,
+    final SNonEmptyList<SSubsectionContent> content)
   {
-    if (log.enabled(Level.LOG_DEBUG)) {
+    if (log.wouldLog(LogLevel.LOG_DEBUG)) {
       log.debug(String.format(
         "subsection: (title: %s) (id: %s) (type: %s)",
         title.getActual(),
@@ -1407,17 +1373,16 @@ public final class SDocumentParser
 
   private static SSubsectionTitle subsectionTitleRoot(
     final Element e)
-    throws ConstraintError
   {
     final Element ec = SDocumentParser.getElement(e, "subsection-title");
+    assert ec != null;
     return SSubsectionTitle.subsectionTitle(ec.getValue());
   }
 
-  private static @Nonnull STable table(
-    final @Nonnull Log log,
-    final @Nonnull Element ec)
-    throws ConstraintError,
-      URISyntaxException
+  private static STable table(
+    final LogUsableType log,
+    final Element ec)
+    throws URISyntaxException
   {
     final STableSummary summary = SDocumentParser.tableSummary(ec);
     final STableHead head = SDocumentParser.tableHead(ec);
@@ -1428,13 +1393,13 @@ public final class SDocumentParser
     return STable.table(summary, body);
   }
 
-  private static @Nonnull STableBody tableBody(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      URISyntaxException
+  private static STableBody tableBody(
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     final Element ec = SDocumentParser.getElement(e, "table-body");
+    assert ec != null;
 
     final List<STableRow> rows = new ArrayList<STableRow>();
     final Elements ecs =
@@ -1448,10 +1413,9 @@ public final class SDocumentParser
   }
 
   private static STableCell tableCell(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      URISyntaxException
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     final List<STableCellContent> content =
       new ArrayList<STableCellContent>();
@@ -1464,11 +1428,10 @@ public final class SDocumentParser
     return STableCell.tableCell(SNonEmptyList.newList(content));
   }
 
-  private static @Nonnull STableCellContent tableCellContent(
-    final @Nonnull Log log,
-    final @Nonnull Node n)
-    throws ConstraintError,
-      URISyntaxException
+  private static STableCellContent tableCellContent(
+    final LogUsableType log,
+    final Node n)
+    throws URISyntaxException
   {
     if (n instanceof Text) {
       final Text et = (Text) n;
@@ -1506,9 +1469,8 @@ public final class SDocumentParser
     throw new UnreachableCodeException();
   }
 
-  private static @CheckForNull STableHead tableHead(
-    final @Nonnull Element e)
-    throws ConstraintError
+  private static @Nullable STableHead tableHead(
+    final Element e)
   {
     final Element ec = SDocumentParser.getElement(e, "table-head");
     if (ec != null) {
@@ -1527,10 +1489,9 @@ public final class SDocumentParser
   }
 
   private static STableRow tableRow(
-    final @Nonnull Log log,
-    final @Nonnull Element e)
-    throws ConstraintError,
-      URISyntaxException
+    final LogUsableType log,
+    final Element e)
+    throws URISyntaxException
   {
     final List<STableCell> cells = new ArrayList<STableCell>();
     final Elements ecs =
@@ -1543,24 +1504,23 @@ public final class SDocumentParser
     return STableRow.tableRow(SNonEmptyList.newList(cells));
   }
 
-  private static @Nonnull STableSummary tableSummary(
-    final @Nonnull Element e)
-    throws ConstraintError
+  private static STableSummary tableSummary(
+    final Element e)
   {
     final Element ec = SDocumentParser.getElement(e, "table-summary");
+    assert ec != null;
     return STableSummary.tableSummary(ec.getValue());
   }
 
-  private static @Nonnull String targetAttribute(
-    final @Nonnull Element ec)
+  private static String targetAttribute(
+    final Element ec)
   {
     final Attribute a = ec.getAttribute("target", SXML.XML_URI.toString());
     return a.getValue();
   }
 
-  static @Nonnull STerm term(
-    final @Nonnull Element ec)
-    throws ConstraintError
+  static STerm term(
+    final Element ec)
   {
     final String type = SDocumentParser.typeAttribute(ec);
     final SText text = SText.text(ec.getValue());
@@ -1570,8 +1530,8 @@ public final class SDocumentParser
     return STerm.term(text);
   }
 
-  private static @CheckForNull String typeAttribute(
-    final @Nonnull Element e)
+  private static @Nullable String typeAttribute(
+    final Element e)
   {
     final Attribute et = e.getAttribute("type", SXML.XML_URI.toString());
     if (et == null) {
@@ -1580,9 +1540,8 @@ public final class SDocumentParser
     return et.getValue();
   }
 
-  static @Nonnull SVerbatim verbatim(
-    final @Nonnull Element ec)
-    throws ConstraintError
+  static SVerbatim verbatim(
+    final Element ec)
   {
     final String type = SDocumentParser.typeAttribute(ec);
     final String text = ec.getValue();
@@ -1592,8 +1551,8 @@ public final class SDocumentParser
     return SVerbatim.verbatim(text);
   }
 
-  private static @CheckForNull Integer widthAttribute(
-    final @Nonnull Element ec)
+  private static @Nullable Integer widthAttribute(
+    final Element ec)
   {
     final Attribute a = ec.getAttribute("width", SXML.XML_URI.toString());
     if (a == null) {

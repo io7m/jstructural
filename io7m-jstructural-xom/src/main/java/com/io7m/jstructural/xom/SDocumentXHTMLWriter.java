@@ -18,11 +18,8 @@ package com.io7m.jstructural.xom;
 
 import java.util.SortedMap;
 
-import javax.annotation.Nonnull;
-
 import nu.xom.Document;
 
-import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jstructural.annotated.SADocument;
 
 /**
@@ -39,12 +36,9 @@ public interface SDocumentXHTMLWriter
    * @param doc
    *          The document
    * @return A list of XHTML files
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
   SortedMap<String, Document> writeDocuments(
-    final @Nonnull SDocumentXHTMLWriterCallbacks callbacks,
-    final @Nonnull SADocument doc)
-    throws ConstraintError;
+    final SDocumentXHTMLWriterCallbacks callbacks,
+    final SADocument doc);
 }

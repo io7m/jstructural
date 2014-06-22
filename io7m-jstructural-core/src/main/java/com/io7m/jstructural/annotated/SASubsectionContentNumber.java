@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * A paragraph or formal item number
  */
@@ -34,14 +30,12 @@ public interface SASubsectionContentNumber
    * @param v
    *          The visitor
    * @return The value returned by the visitor
-   * @throws ConstraintError
-   *           If the visitor raises {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises an {@link Exception}
    */
 
   <T> T subsectionContentNumberAccept(
-    final @Nonnull SASubsectionContentNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception;
+    final SASubsectionContentNumberVisitor<T> v)
+    throws Exception;
 }

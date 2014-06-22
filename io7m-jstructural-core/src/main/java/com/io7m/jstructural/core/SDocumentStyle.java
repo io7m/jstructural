@@ -18,17 +18,14 @@ package com.io7m.jstructural.core;
 
 import java.net.URI;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A document style.
  */
 
-@Immutable public final class SDocumentStyle
+public final class SDocumentStyle
 {
   /**
    * Construct a document style.
@@ -36,28 +33,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param uri
    *          The style URI
    * @return A new document style
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SDocumentStyle documentStyle(
-    final @Nonnull URI uri)
-    throws ConstraintError
+  public static SDocumentStyle documentStyle(
+    final URI uri)
   {
     return new SDocumentStyle(uri);
   }
 
-  private final @Nonnull URI uri;
+  private final URI uri;
 
   private SDocumentStyle(
-    final @Nonnull URI in_uri)
-    throws ConstraintError
+    final URI in_uri)
   {
-    this.uri = Constraints.constrainNotNull(in_uri, "URI");
+    this.uri = NullCheck.notNull(in_uri, "URI");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -76,7 +69,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The style URI
    */
 
-  public @Nonnull URI getActual()
+  public URI getActual()
   {
     return this.uri;
   }
@@ -92,6 +85,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
     builder.append("[SDocumentStyle ");
     builder.append(this.uri);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

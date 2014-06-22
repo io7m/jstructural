@@ -18,19 +18,17 @@ package com.io7m.jstructural.core;
 
 import java.net.URI;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
-import com.io7m.jaux.functional.Option.Some;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
+import com.io7m.jranges.RangeCheck;
 
 /**
  * An image.
  */
 
-@Immutable public final class SImage implements
+public final class SImage implements
   SParagraphContent,
   SLinkContent,
   SListItemContent,
@@ -46,17 +44,14 @@ import com.io7m.jaux.functional.Option.Some;
    * @param text
    *          The image text
    * @return A new image
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SImage image(
-    final @Nonnull URI uri,
-    final @Nonnull String text)
-    throws ConstraintError
+  public static SImage image(
+    final URI uri,
+    final String text)
   {
-    final Option<Integer> no_height = Option.none();
-    final Option<String> no_type = Option.none();
+    final OptionType<Integer> no_height = Option.none();
+    final OptionType<String> no_type = Option.none();
     return new SImage(uri, no_type, no_height, no_height, text);
   }
 
@@ -70,25 +65,22 @@ import com.io7m.jaux.functional.Option.Some;
    * @param text
    *          The image text
    * @return A new image
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  @SuppressWarnings("boxing") public static @Nonnull SImage imageHeight(
-    final @Nonnull URI uri,
+  @SuppressWarnings({ "boxing", "null" }) public static SImage imageHeight(
+    final URI uri,
     final int height,
-    final @Nonnull String text)
-    throws ConstraintError
+    final String text)
   {
-    final Some<Integer> some_height =
-      Option.some(Constraints.constrainRange(
+    final OptionType<Integer> some_height =
+      Option.some((int) RangeCheck.checkIncludedIn(
         height,
-        1,
-        Integer.MAX_VALUE,
-        "Height"));
+        "Height",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid height range"));
 
-    final Option<Integer> no_width = Option.none();
-    final Option<String> no_type = Option.none();
+    final OptionType<Integer> no_width = Option.none();
+    final OptionType<String> no_type = Option.none();
     return new SImage(uri, no_type, no_width, some_height, text);
   }
 
@@ -102,20 +94,17 @@ import com.io7m.jaux.functional.Option.Some;
    * @param text
    *          The image text
    * @return A new image
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SImage imageTyped(
-    final @Nonnull URI uri,
-    final @Nonnull String type,
-    final @Nonnull String text)
-    throws ConstraintError
+  public static SImage imageTyped(
+    final URI uri,
+    final String type,
+    final String text)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
 
-    final Option<Integer> no_height = Option.none();
+    final OptionType<Integer> no_height = Option.none();
     return new SImage(uri, some_type, no_height, no_height, text);
   }
 
@@ -131,27 +120,26 @@ import com.io7m.jaux.functional.Option.Some;
    * @param text
    *          The image text
    * @return A new image
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  @SuppressWarnings("boxing") public static @Nonnull SImage imageTypedHeight(
-    final @Nonnull URI uri,
-    final @Nonnull String type,
-    final int height,
-    final @Nonnull String text)
-    throws ConstraintError
+  @SuppressWarnings({ "boxing", "null" }) public static
+    SImage
+    imageTypedHeight(
+      final URI uri,
+      final String type,
+      final int height,
+      final String text)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Some<Integer> some_height =
-      Option.some(Constraints.constrainRange(
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<Integer> some_height =
+      Option.some((int) RangeCheck.checkIncludedIn(
         height,
-        1,
-        Integer.MAX_VALUE,
-        "Height"));
+        "Height",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid height range"));
 
-    final Option<Integer> no_width = Option.none();
+    final OptionType<Integer> no_width = Option.none();
     return new SImage(uri, some_type, no_width, some_height, text);
   }
 
@@ -167,27 +155,26 @@ import com.io7m.jaux.functional.Option.Some;
    * @param text
    *          The image text
    * @return A new image
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  @SuppressWarnings("boxing") public static @Nonnull SImage imageTypedWidth(
-    final @Nonnull URI uri,
-    final @Nonnull String type,
-    final int width,
-    final @Nonnull String text)
-    throws ConstraintError
+  @SuppressWarnings({ "boxing", "null" }) public static
+    SImage
+    imageTypedWidth(
+      final URI uri,
+      final String type,
+      final int width,
+      final String text)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Some<Integer> some_width =
-      Option.some(Constraints.constrainRange(
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<Integer> some_width =
+      Option.some((int) RangeCheck.checkIncludedIn(
         width,
-        1,
-        Integer.MAX_VALUE,
-        "Width"));
+        "Width",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid width range"));
 
-    final Option<Integer> no_height = Option.none();
+    final OptionType<Integer> no_height = Option.none();
     return new SImage(uri, some_type, some_width, no_height, text);
   }
 
@@ -205,34 +192,31 @@ import com.io7m.jaux.functional.Option.Some;
    * @param text
    *          The image text
    * @return A new image
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  @SuppressWarnings("boxing") public static @Nonnull
+  @SuppressWarnings({ "boxing", "null" }) public static
     SImage
     imageTypedWidthHeight(
-      final @Nonnull URI uri,
-      final @Nonnull String type,
+      final URI uri,
+      final String type,
       final int width,
       final int height,
-      final @Nonnull String text)
-      throws ConstraintError
+      final String text)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Some<Integer> some_width =
-      Option.some(Constraints.constrainRange(
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<Integer> some_width =
+      Option.some((int) RangeCheck.checkIncludedIn(
         width,
-        1,
-        Integer.MAX_VALUE,
-        "Width"));
-    final Some<Integer> some_height =
-      Option.some(Constraints.constrainRange(
+        "Width",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid width range"));
+    final OptionType<Integer> some_height =
+      Option.some((int) RangeCheck.checkIncludedIn(
         height,
-        1,
-        Integer.MAX_VALUE,
-        "Height"));
+        "Height",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid height range"));
 
     return new SImage(uri, some_type, some_width, some_height, text);
   }
@@ -247,25 +231,22 @@ import com.io7m.jaux.functional.Option.Some;
    * @param text
    *          The image text
    * @return A new image
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  @SuppressWarnings("boxing") public static @Nonnull SImage imageWidth(
-    final @Nonnull URI uri,
+  @SuppressWarnings({ "boxing", "null" }) public static SImage imageWidth(
+    final URI uri,
     final int width,
-    final @Nonnull String text)
-    throws ConstraintError
+    final String text)
   {
-    final Some<Integer> some_width =
-      Option.some(Constraints.constrainRange(
+    final OptionType<Integer> some_width =
+      Option.some((int) RangeCheck.checkIncludedIn(
         width,
-        1,
-        Integer.MAX_VALUE,
-        "Width"));
+        "Width",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid width range"));
 
-    final Option<Integer> no_height = Option.none();
-    final Option<String> no_type = Option.none();
+    final OptionType<Integer> no_height = Option.none();
+    final OptionType<String> no_type = Option.none();
     return new SImage(uri, no_type, some_width, no_height, text);
   }
 
@@ -281,59 +262,55 @@ import com.io7m.jaux.functional.Option.Some;
    * @param text
    *          The image text
    * @return A new image
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  @SuppressWarnings("boxing") public static @Nonnull SImage imageWidthHeight(
-    final @Nonnull URI uri,
-    final int width,
-    final int height,
-    final @Nonnull String text)
-    throws ConstraintError
+  @SuppressWarnings({ "boxing", "null" }) public static
+    SImage
+    imageWidthHeight(
+      final URI uri,
+      final int width,
+      final int height,
+      final String text)
   {
-    final Some<Integer> some_width =
-      Option.some(Constraints.constrainRange(
+    final OptionType<Integer> some_width =
+      Option.some((int) RangeCheck.checkIncludedIn(
         width,
-        1,
-        Integer.MAX_VALUE,
-        "Width"));
-    final Some<Integer> some_height =
-      Option.some(Constraints.constrainRange(
+        "Width",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid width range"));
+    final OptionType<Integer> some_height =
+      Option.some((int) RangeCheck.checkIncludedIn(
         height,
-        1,
-        Integer.MAX_VALUE,
-        "Height"));
+        "Height",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid height range"));
 
-    final Option<String> no_type = Option.none();
+    final OptionType<String> no_type = Option.none();
     return new SImage(uri, no_type, some_width, some_height, text);
   }
 
-  private final @Nonnull Option<Integer> height;
-
-  private final @Nonnull String          text;
-
-  private final @Nonnull Option<String>  type;
-  private final @Nonnull URI             uri;
-  private final @Nonnull Option<Integer> width;
+  private final OptionType<Integer> height;
+  private final String              text;
+  private final OptionType<String>  type;
+  private final URI                 uri;
+  private final OptionType<Integer> width;
 
   private SImage(
-    final @Nonnull URI in_uri,
-    final @Nonnull Option<String> in_type,
-    final @Nonnull Option<Integer> in_width,
-    final @Nonnull Option<Integer> in_height,
-    final @Nonnull String in_text)
-    throws ConstraintError
+    final URI in_uri,
+    final OptionType<String> in_type,
+    final OptionType<Integer> in_width,
+    final OptionType<Integer> in_height,
+    final String in_text)
   {
-    this.uri = Constraints.constrainNotNull(in_uri, "URI");
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.width = Constraints.constrainNotNull(in_width, "Width");
-    this.height = Constraints.constrainNotNull(in_height, "Height");
-    this.text = Constraints.constrainNotNull(in_text, "Text");
+    this.uri = NullCheck.notNull(in_uri, "URI");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.width = NullCheck.notNull(in_width, "Width");
+    this.height = NullCheck.notNull(in_height, "Height");
+    this.text = NullCheck.notNull(in_text, "Text");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -353,17 +330,15 @@ import com.io7m.jaux.functional.Option.Some;
   }
 
   @Override public <A> A footnoteContentAccept(
-    final @Nonnull SFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SFootnoteContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }
 
   @Override public <A> A formalItemContentAccept(
-    final @Nonnull SFormalItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SFormalItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }
@@ -372,7 +347,7 @@ import com.io7m.jaux.functional.Option.Some;
    * @return The image height specified, if any
    */
 
-  public @Nonnull Option<Integer> getHeight()
+  public OptionType<Integer> getHeight()
   {
     return this.height;
   }
@@ -381,7 +356,7 @@ import com.io7m.jaux.functional.Option.Some;
    * @return The image text
    */
 
-  public @Nonnull String getText()
+  public String getText()
   {
     return this.text;
   }
@@ -390,7 +365,7 @@ import com.io7m.jaux.functional.Option.Some;
    * @return The term's type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -399,7 +374,7 @@ import com.io7m.jaux.functional.Option.Some;
    * @return The image URI
    */
 
-  public @Nonnull URI getURI()
+  public URI getURI()
   {
     return this.uri;
   }
@@ -408,7 +383,7 @@ import com.io7m.jaux.functional.Option.Some;
    * @return The image width specified, if any
    */
 
-  public @Nonnull Option<Integer> getWidth()
+  public OptionType<Integer> getWidth()
   {
     return this.width;
   }
@@ -426,33 +401,29 @@ import com.io7m.jaux.functional.Option.Some;
   }
 
   @Override public <A> A linkContentAccept(
-    final @Nonnull SLinkContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SLinkContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }
 
   @Override public <A> A listItemContentAccept(
-    final @Nonnull SListItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SListItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }
 
   @Override public <A> A tableCellContentAccept(
-    final @Nonnull STableCellContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final STableCellContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }

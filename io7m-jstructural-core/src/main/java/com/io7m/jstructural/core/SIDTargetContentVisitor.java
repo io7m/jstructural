@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * A visitor that can visit elements that can be assigned IDs.
  * 
@@ -35,14 +31,12 @@ public interface SIDTargetContentVisitor<T>
    * @param part
    *          The part element
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitPart(
-    final @Nonnull SPart part)
-    throws ConstraintError,
-      Exception;
+    final SPart part)
+    throws Exception;
 }

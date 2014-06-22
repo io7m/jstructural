@@ -16,39 +16,35 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * An abstract section.
  */
 
-@Immutable public abstract class SSection
+public abstract class SSection
 {
-  private final @Nonnull Option<SSectionContents> contents;
-  private final @Nonnull Option<SID>              id;
-  private final @Nonnull SSectionTitle            title;
-  private final @Nonnull Option<String>           type;
+  private final OptionType<SSectionContents> contents;
+  private final OptionType<SID>              id;
+  private final SSectionTitle                title;
+  private final OptionType<String>           type;
 
   protected SSection(
-    final @Nonnull Option<String> in_type,
-    final @Nonnull Option<SID> in_id,
-    final @Nonnull SSectionTitle in_title,
-    final @Nonnull Option<SSectionContents> in_contents)
-    throws ConstraintError
+    final OptionType<String> in_type,
+    final OptionType<SID> in_id,
+    final SSectionTitle in_title,
+    final OptionType<SSectionContents> in_contents)
   {
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.id = Constraints.constrainNotNull(in_id, "ID");
-    this.title = Constraints.constrainNotNull(in_title, "Title");
-    this.contents = Constraints.constrainNotNull(in_contents, "Contents");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.id = NullCheck.notNull(in_id, "ID");
+    this.title = NullCheck.notNull(in_title, "Title");
+    this.contents = NullCheck.notNull(in_contents, "Contents");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -70,7 +66,7 @@ import com.io7m.jaux.functional.Option;
    * @return The section contents
    */
 
-  public final @Nonnull Option<SSectionContents> getContents()
+  public final OptionType<SSectionContents> getContents()
   {
     return this.contents;
   }
@@ -79,7 +75,7 @@ import com.io7m.jaux.functional.Option;
    * @return The section ID
    */
 
-  public final @Nonnull Option<SID> getID()
+  public final OptionType<SID> getID()
   {
     return this.id;
   }
@@ -88,7 +84,7 @@ import com.io7m.jaux.functional.Option;
    * @return The section title
    */
 
-  public final @Nonnull SSectionTitle getTitle()
+  public final SSectionTitle getTitle()
   {
     return this.title;
   }
@@ -97,7 +93,7 @@ import com.io7m.jaux.functional.Option;
    * @return The section type attribute
    */
 
-  public final @Nonnull Option<String> getType()
+  public final OptionType<String> getType()
   {
     return this.type;
   }
@@ -119,8 +115,7 @@ import com.io7m.jaux.functional.Option;
    * @param v
    *          The visitor
    * @return The value returned by the visitor
-   * @throws ConstraintError
-   *           If the visitor raises {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises an {@link Exception}
    * @param <S>
@@ -128,7 +123,6 @@ import com.io7m.jaux.functional.Option;
    */
 
   public abstract <S> S sectionAccept(
-    final @Nonnull SSectionVisitor<S> v)
-    throws ConstraintError,
-      Exception;
+    final SSectionVisitor<S> v)
+    throws Exception;
 }

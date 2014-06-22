@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * An abstract subsection number.
  */
@@ -34,21 +30,19 @@ public abstract class SASubsectionNumber
    * @param v
    *          The visitor
    * @return The value returned by the visitor
-   * @throws ConstraintError
-   *           If the visitor raises {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises an {@link Exception}
    */
 
   public abstract <T> T subsectionNumberAccept(
-    final @Nonnull SASubsectionNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception;
+    final SASubsectionNumberVisitor<T> v)
+    throws Exception;
 
   /**
    * @return A human-readable string representing the subsection number (such
    *         as "1.2.3")
    */
 
-  public abstract @Nonnull String subsectionNumberFormat();
+  public abstract String subsectionNumberFormat();
 }

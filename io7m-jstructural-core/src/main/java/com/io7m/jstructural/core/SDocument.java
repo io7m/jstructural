@@ -16,11 +16,9 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A document.
@@ -28,19 +26,18 @@ import com.io7m.jaux.functional.Option;
 
 public abstract class SDocument
 {
-  private final @Nonnull Option<SDocumentContents> contents;
-  private final @Nonnull Option<SDocumentStyle>    style;
-  private final @Nonnull SDocumentTitle            title;
+  private final OptionType<SDocumentContents> contents;
+  private final OptionType<SDocumentStyle>    style;
+  private final SDocumentTitle                title;
 
   protected SDocument(
-    final @Nonnull SDocumentTitle in_title,
-    final @Nonnull Option<SDocumentContents> in_contents,
-    final @Nonnull Option<SDocumentStyle> in_style)
-    throws ConstraintError
+    final SDocumentTitle in_title,
+    final OptionType<SDocumentContents> in_contents,
+    final OptionType<SDocumentStyle> in_style)
   {
-    this.title = Constraints.constrainNotNull(in_title, "Title");
-    this.contents = Constraints.constrainNotNull(in_contents, "Contents");
-    this.style = Constraints.constrainNotNull(in_style, "Style");
+    this.title = NullCheck.notNull(in_title, "Title");
+    this.contents = NullCheck.notNull(in_contents, "Contents");
+    this.style = NullCheck.notNull(in_style, "Style");
   }
 
   /**
@@ -49,8 +46,7 @@ public abstract class SDocument
    * @param v
    *          The visitor
    * @return The value returned by the visitor
-   * @throws ConstraintError
-   *           If the visitor raises {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises an {@link Exception}
    * @param <D>
@@ -58,12 +54,11 @@ public abstract class SDocument
    */
 
   public abstract <D> D documentAccept(
-    final @Nonnull SDocumentVisitor<D> v)
-    throws ConstraintError,
-      Exception;
+    final SDocumentVisitor<D> v)
+    throws Exception;
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -84,7 +79,7 @@ public abstract class SDocument
    * @return The document contents
    */
 
-  public final @Nonnull Option<SDocumentContents> getContents()
+  public final OptionType<SDocumentContents> getContents()
   {
     return this.contents;
   }
@@ -93,7 +88,7 @@ public abstract class SDocument
    * @return The document style
    */
 
-  public final @Nonnull Option<SDocumentStyle> getStyle()
+  public final OptionType<SDocumentStyle> getStyle()
   {
     return this.style;
   }
@@ -102,7 +97,7 @@ public abstract class SDocument
    * @return The document title
    */
 
-  public final @Nonnull SDocumentTitle getTitle()
+  public final SDocumentTitle getTitle()
   {
     return this.title;
   }

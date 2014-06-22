@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A document title.
  */
 
-@Immutable public final class SDocumentTitle
+public final class SDocumentTitle
 {
   /**
    * Construct a document title.
@@ -34,28 +31,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param actual
    *          The text
    * @return A new document title
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SDocumentTitle documentTitle(
-    final @Nonnull String actual)
-    throws ConstraintError
+  public static SDocumentTitle documentTitle(
+    final String actual)
   {
     return new SDocumentTitle(actual);
   }
 
-  private final @Nonnull String actual;
+  private final String actual;
 
   private SDocumentTitle(
-    final @Nonnull String in_actual)
-    throws ConstraintError
+    final String in_actual)
   {
-    this.actual = Constraints.constrainNotNull(in_actual, "Actual");
+    this.actual = NullCheck.notNull(in_actual, "Actual");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -74,7 +67,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The text
    */
 
-  public @Nonnull String getActual()
+  public String getActual()
   {
     return this.actual;
   }
@@ -90,6 +83,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
     builder.append("[SDocumentTitle ");
     builder.append(this.actual);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

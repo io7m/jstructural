@@ -24,7 +24,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.SortedMap;
 
-import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
 
 import nu.xom.Attribute;
@@ -45,15 +44,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jlog.Log;
+import com.io7m.jlog.LogUsableType;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.annotated.SADocument;
 import com.io7m.jstructural.annotated.SAnnotator;
 import com.io7m.jstructural.annotated.SAnnotatorTest;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.documentation.SDocumentation;
 
-public final class SDocumentXHTMLWriterSingleTest
+@SuppressWarnings("static-method") public final class SDocumentXHTMLWriterSingleTest
 {
   private static final class Callbacks implements
     SDocumentXHTMLWriterCallbacks
@@ -75,7 +74,7 @@ public final class SDocumentXHTMLWriterSingleTest
       this.on_body_end_called++;
     }
 
-    @Override public Element onBodyStart(
+    @Override public @Nullable Element onBodyStart(
       final Element body)
     {
       this.on_body_start_called++;
@@ -83,21 +82,20 @@ public final class SDocumentXHTMLWriterSingleTest
     }
 
     @Override public void onHead(
-      final @Nonnull Element head)
+      final Element head)
     {
       this.on_head_called++;
     }
   }
 
   private static void checkDocument(
-    final @Nonnull Document dd)
+    final Document dd)
     throws IOException,
       ValidityException,
       SAXException,
       ParserConfigurationException,
       ParsingException,
-      URISyntaxException,
-      ConstraintError
+      URISyntaxException
   {
     final ByteArrayOutputStream o = new ByteArrayOutputStream();
     final Serializer s = new Serializer(o, "UTF-8");
@@ -116,16 +114,15 @@ public final class SDocumentXHTMLWriterSingleTest
    * URL scheme in order to include other files in the test resources.
    */
 
-  @SuppressWarnings("static-method") @Before public void before()
+  @Before public void before()
   {
     System.setProperty(
       "java.protocol.handler.pkgs",
       "com.io7m.jstructural.xom");
   }
 
-  @SuppressWarnings("static-method") @Test public void testBasic_0()
-    throws ConstraintError,
-      ValidityException,
+  @Test public void testBasic_0()
+    throws ValidityException,
       IOException,
       SAXException,
       ParserConfigurationException,
@@ -146,9 +143,8 @@ public final class SDocumentXHTMLWriterSingleTest
     }
   }
 
-  @SuppressWarnings("static-method") @Test public void testBasic_2()
-    throws ConstraintError,
-      ValidityException,
+  @Test public void testBasic_2()
+    throws ValidityException,
       IOException,
       SAXException,
       ParserConfigurationException,
@@ -169,9 +165,8 @@ public final class SDocumentXHTMLWriterSingleTest
     }
   }
 
-  @SuppressWarnings("static-method") @Test public void testDocumentation_0()
-    throws ConstraintError,
-      IOException,
+  @Test public void testDocumentation_0()
+    throws IOException,
       ValidityException,
       BadParseAttributeException,
       InclusionLoopException,
@@ -185,7 +180,7 @@ public final class SDocumentXHTMLWriterSingleTest
     final URI uri = SDocumentation.getDocumentationXMLLocation();
     final InputStream s = uri.toURL().openStream();
 
-    final Log log = TestUtilities.getLog();
+    final LogUsableType log = TestUtilities.getLog();
     final SDocument d = SDocumentParser.fromStream(s, uri, log);
     s.close();
 
@@ -208,24 +203,20 @@ public final class SDocumentXHTMLWriterSingleTest
    * something that is certainly not XHTML 1.0 Strict.
    */
 
-  @SuppressWarnings("static-method") @Test(expected = SAXException.class) public
-    void
-    testFailure()
-      throws ValidityException,
-        IOException,
-        SAXException,
-        ParserConfigurationException,
-        ParsingException,
-        URISyntaxException,
-        ConstraintError
+  @Test(expected = SAXException.class) public void testFailure()
+    throws ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
   {
     SDocumentXHTMLWriterSingleTest.checkDocument(new Document(
       new Element("z")));
   }
 
-  @SuppressWarnings("static-method") @Test public void testLarge_0()
-    throws ConstraintError,
-      ValidityException,
+  @Test public void testLarge_0()
+    throws ValidityException,
       IOException,
       SAXException,
       ParserConfigurationException,
@@ -260,7 +251,7 @@ public final class SDocumentXHTMLWriterSingleTest
       // Nothing
     }
 
-    @Override public Element onBodyStart(
+    @Override public @Nullable Element onBodyStart(
       final Element body)
     {
       final Element e = new Element("div", SXHTML.XHTML_URI.toString());
@@ -289,7 +280,7 @@ public final class SDocumentXHTMLWriterSingleTest
       // Nothing
     }
 
-    @Override public Element onBodyStart(
+    @Override public @Nullable Element onBodyStart(
       final Element body)
     {
       final Element ea = new Element("div", SXHTML.XHTML_URI.toString());
@@ -309,9 +300,8 @@ public final class SDocumentXHTMLWriterSingleTest
     }
   }
 
-  @SuppressWarnings("static-method") @Test public void testBasicReparent_0()
-    throws ConstraintError,
-      ValidityException,
+  @Test public void testBasicReparent_0()
+    throws ValidityException,
       IOException,
       SAXException,
       ParserConfigurationException,
@@ -340,9 +330,8 @@ public final class SDocumentXHTMLWriterSingleTest
     }
   }
 
-  @SuppressWarnings("static-method") @Test public void testBasicReparent_1()
-    throws ConstraintError,
-      ValidityException,
+  @Test public void testBasicReparent_1()
+    throws ValidityException,
       IOException,
       SAXException,
       ParserConfigurationException,

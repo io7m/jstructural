@@ -16,30 +16,26 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
 
 /**
  * A table header.
  */
 
-@Immutable public final class SATableHead
+public final class SATableHead
 {
-  private final @Nonnull SNonEmptyList<SATableColumnName> header;
+  private final SNonEmptyList<SATableColumnName> header;
 
   SATableHead(
-    final @Nonnull SNonEmptyList<SATableColumnName> in_header)
-    throws ConstraintError
+    final SNonEmptyList<SATableColumnName> in_header)
   {
-    this.header = Constraints.constrainNotNull(in_header, "Header");
+    this.header = NullCheck.notNull(in_header, "Header");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -58,7 +54,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The table column names
    */
 
-  public @Nonnull SNonEmptyList<SATableColumnName> getHeader()
+  public SNonEmptyList<SATableColumnName> getHeader()
   {
     return this.header;
   }

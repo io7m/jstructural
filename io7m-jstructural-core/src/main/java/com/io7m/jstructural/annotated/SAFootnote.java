@@ -16,42 +16,40 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
+import com.io7m.jranges.RangeCheck;
 import com.io7m.jstructural.core.SNonEmptyList;
 
 /**
  * A footnote element.
  */
 
-@Immutable public final class SAFootnote implements
+public final class SAFootnote implements
   SAParagraphContent,
   SAListItemContent,
   SAFootnoteContent,
   SATableCellContent
 {
-  private final @Nonnull SNonEmptyList<SAFootnoteContent> content;
-  private final int                                       number;
+  private final SNonEmptyList<SAFootnoteContent> content;
+  private final int                              number;
 
   SAFootnote(
     final int in_number,
-    final @Nonnull SNonEmptyList<SAFootnoteContent> in_content)
-    throws ConstraintError
+    final SNonEmptyList<SAFootnoteContent> in_content)
   {
     this.number =
-      Constraints.constrainRange(
+      (int) RangeCheck.checkIncludedIn(
         in_number,
-        0,
-        Integer.MAX_VALUE,
-        "Footnote number");
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+        "Footnote number",
+        RangeCheck.NATURAL_INTEGER,
+        "Valid footnote number range");
+
+    this.content = NullCheck.notNull(in_content, "Content");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -73,9 +71,8 @@ import com.io7m.jstructural.core.SNonEmptyList;
   }
 
   @Override public <A> A footnoteContentAccept(
-    final @Nonnull SAFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAFootnoteContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFootnote(this);
   }
@@ -84,7 +81,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The element content
    */
 
-  public @Nonnull SNonEmptyList<SAFootnoteContent> getContent()
+  public SNonEmptyList<SAFootnoteContent> getContent()
   {
     return this.content;
   }
@@ -108,25 +105,22 @@ import com.io7m.jstructural.core.SNonEmptyList;
   }
 
   @Override public <A> A listItemContentAccept(
-    final @Nonnull SAListItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAListItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFootnote(this);
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SAParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFootnote(this);
   }
 
   @Override public <A> A tableCellContentAccept(
-    final @Nonnull SATableCellContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SATableCellContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFootnote(this);
   }

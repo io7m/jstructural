@@ -30,8 +30,6 @@ import java.net.URISyntaxException;
 import java.util.Properties;
 import java.util.SortedMap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
 import javax.xml.parsers.ParserConfigurationException;
 
 import nu.xom.Builder;
@@ -55,9 +53,14 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.xml.sax.SAXException;
 
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option.Some;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jfunctional.Some;
 import com.io7m.jlog.Log;
+import com.io7m.jlog.LogPolicyProperties;
+import com.io7m.jlog.LogPolicyType;
+import com.io7m.jlog.LogUsableType;
+import com.io7m.jnull.Nullable;
+import com.io7m.jproperties.JPropertyException;
 import com.io7m.jstructural.annotated.SADocument;
 import com.io7m.jstructural.annotated.SAnnotator;
 import com.io7m.jstructural.core.SDocument;
@@ -66,6 +69,7 @@ import com.io7m.jstructural.xom.SDocumentParser;
 import com.io7m.jstructural.xom.SDocumentXHTMLWriterCallbacks;
 import com.io7m.jstructural.xom.SDocumentXHTMLWriterMulti;
 import com.io7m.jstructural.xom.SDocumentXHTMLWriterSingle;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * The <code>jstructural</code> compiler frontend.
@@ -73,49 +77,46 @@ import com.io7m.jstructural.xom.SDocumentXHTMLWriterSingle;
 
 public final class JSCMain
 {
-  @Immutable private static final class XMLInserts
+  private static final class XMLInserts
   {
-    private final @Nonnull com.io7m.jaux.functional.Option<Element> body_end;
-    private final @Nonnull com.io7m.jaux.functional.Option<Element> body_start;
+    private final OptionType<Element> body_end;
+    private final OptionType<Element> body_start;
 
     XMLInserts(
-      final @Nonnull com.io7m.jaux.functional.Option<Element> in_bs,
-      final @Nonnull com.io7m.jaux.functional.Option<Element> in_be)
+      final OptionType<Element> in_bs,
+      final OptionType<Element> in_be)
     {
       this.body_start = in_bs;
       this.body_end = in_be;
     }
 
-    public @Nonnull com.io7m.jaux.functional.Option<Element> getBodyEnd()
+    public OptionType<Element> getBodyEnd()
     {
       return this.body_end;
     }
 
-    public @Nonnull com.io7m.jaux.functional.Option<Element> getBodyStart()
+    public OptionType<Element> getBodyStart()
     {
       return this.body_start;
     }
   }
 
-  private static final @Nonnull String  CMD_CHECK            = "check";
-  private static final @Nonnull String  CMD_XHTML_MULTI      = "xhtml-multi";
-  private static final @Nonnull String  CMD_XHTML_SINGLE     = "xhtml-single";
-  private static final @Nonnull String  OPT_DEBUG            = "debug";
-  private static final @Nonnull String  OPT_VERSION          = "version";
-  private static final @Nonnull String  OPT_XHTML_BODY_END   =
-                                                               "xhtml-body-end";
-  private static final @Nonnull String  OPT_XHTML_BODY_START =
-                                                               "xhtml-body-start";
-
-  private static final @Nonnull Options OPTIONS;
+  private static final String  CMD_CHECK            = "check";
+  private static final String  CMD_XHTML_MULTI      = "xhtml-multi";
+  private static final String  CMD_XHTML_SINGLE     = "xhtml-single";
+  private static final String  OPT_DEBUG            = "debug";
+  private static final String  OPT_VERSION          = "version";
+  private static final String  OPT_XHTML_BODY_END   = "xhtml-body-end";
+  private static final String  OPT_XHTML_BODY_START = "xhtml-body-start";
+  private static final Options OPTIONS;
 
   static {
     OPTIONS = JSCMain.makeOptions();
   }
 
   private static void copyFileStream(
-    final @Nonnull File file,
-    final @Nonnull InputStream in)
+    final File file,
+    final InputStream in)
     throws FileNotFoundException,
       IOException
   {
@@ -128,8 +129,8 @@ public final class JSCMain
   }
 
   private static void copyStreams(
-    final @Nonnull InputStream input,
-    final @Nonnull OutputStream output)
+    final InputStream input,
+    final OutputStream output)
     throws IOException
   {
     final byte[] buffer = new byte[8192];
@@ -145,7 +146,7 @@ public final class JSCMain
   }
 
   private static void createOutdir(
-    final @Nonnull File outdir)
+    final File outdir)
     throws IOException
   {
     final boolean created = outdir.mkdirs();
@@ -162,18 +163,26 @@ public final class JSCMain
    * @return The log handle used by the compiler
    */
 
-  public static @Nonnull Log getLog(
+  public static LogUsableType getLog(
     final boolean debug)
   {
-    final Properties p = new Properties();
-    p.setProperty("com.io7m.jstructural.logs.jsc", "true");
-    p.setProperty("com.io7m.jstructural.level", debug
-      ? "LOG_DEBUG"
-      : "LOG_INFO");
-    return new Log(p, "com.io7m.jstructural", "jsc");
+    try {
+      final Properties p = new Properties();
+      p.setProperty("com.io7m.jstructural.logs.jsc", "true");
+      p.setProperty("com.io7m.jstructural.level", debug
+        ? "LOG_DEBUG"
+        : "LOG_INFO");
+
+      final LogPolicyType policy =
+        LogPolicyProperties.newPolicy(p, "com.io7m.jstructural");
+
+      return Log.newLog(policy, "jsc");
+    } catch (final JPropertyException e) {
+      throw new UnreachableCodeException(e);
+    }
   }
 
-  private static @Nonnull String getVersion()
+  private static String getVersion()
   {
     final String pack = JSCMain.class.getPackage().getImplementationVersion();
     if (pack == null) {
@@ -183,62 +192,62 @@ public final class JSCMain
   }
 
   private static SDocumentXHTMLWriterCallbacks getXHTMLWriterCallbacks(
-    final @Nonnull XMLInserts inserts)
+    final XMLInserts inserts)
   {
     return new SDocumentXHTMLWriterCallbacks() {
       @Override public void onBodyEnd(
-        final @Nonnull Element body)
+        final Element body)
       {
         if (inserts.getBodyEnd().isSome()) {
           final Some<Element> some = (Some<Element>) inserts.getBodyEnd();
-          body.appendChild(some.value.copy());
+          body.appendChild(some.get().copy());
         }
       }
 
-      @Override public Element onBodyStart(
-        final @Nonnull Element body)
+      @Override public @Nullable Element onBodyStart(
+        final Element body)
       {
         if (inserts.getBodyStart().isSome()) {
           final Some<Element> some = (Some<Element>) inserts.getBodyStart();
-          body.appendChild(some.value.copy());
+          body.appendChild(some.get().copy());
         }
         return null;
       }
 
       @Override public void onHead(
-        final @Nonnull Element head)
+        final Element head)
       {
         // Nothing
       }
     };
   }
 
-  private static @Nonnull XMLInserts loadXMLInserts(
-    final @Nonnull CommandLine line)
+  private static XMLInserts loadXMLInserts(
+    final CommandLine line)
     throws ValidityException,
       ParsingException,
       IOException
   {
-    final com.io7m.jaux.functional.Option<Element> start;
+    final OptionType<Element> start;
     if (line.hasOption(JSCMain.OPT_XHTML_BODY_START)) {
       final File file =
         new File(line.getOptionValue(JSCMain.OPT_XHTML_BODY_START));
       final Builder b = new Builder();
       final Document d = b.build(file);
-      start = com.io7m.jaux.functional.Option.some(d.getRootElement());
+      start = com.io7m.jfunctional.Option.some(d.getRootElement());
     } else {
-      start = com.io7m.jaux.functional.Option.none();
+      start = com.io7m.jfunctional.Option.none();
     }
 
-    final com.io7m.jaux.functional.Option<Element> end;
+    final OptionType<Element> end;
     if (line.hasOption(JSCMain.OPT_XHTML_BODY_END)) {
       final File file =
         new File(line.getOptionValue(JSCMain.OPT_XHTML_BODY_END));
       final Builder b = new Builder();
       final Document d = b.build(file);
-      end = com.io7m.jaux.functional.Option.some(d.getRootElement());
+      end = com.io7m.jfunctional.Option.some(d.getRootElement());
     } else {
-      end = com.io7m.jaux.functional.Option.none();
+      end = com.io7m.jfunctional.Option.none();
     }
 
     return new XMLInserts(start, end);
@@ -254,7 +263,7 @@ public final class JSCMain
   public static void main(
     final String[] args)
   {
-    final Log log = JSCMain.getLog(false);
+    final LogUsableType log = JSCMain.getLog(false);
     try {
       JSCMain.run(log, args);
     } catch (final Throwable x) {
@@ -345,8 +354,8 @@ public final class JSCMain
    */
 
   public static void run(
-    final @Nonnull Log log,
-    final @Nonnull String[] args)
+    final LogUsableType log,
+    final String[] args)
     throws Throwable
   {
     try {
@@ -393,8 +402,8 @@ public final class JSCMain
   }
 
   private static void runActual(
-    final @Nonnull Log log,
-    final @Nonnull String[] args)
+    final LogUsableType log,
+    final String[] args)
     throws ParseException,
       ValidityException,
       BadParseAttributeException,
@@ -405,10 +414,9 @@ public final class JSCMain
       ParsingException,
       IOException,
       URISyntaxException,
-      XIncludeException,
-      ConstraintError
+      XIncludeException
   {
-    Log logx = log;
+    LogUsableType logx = log;
 
     if (args.length == 0) {
       JSCMain.showHelp();
@@ -438,9 +446,9 @@ public final class JSCMain
     }
   }
 
-  private static @Nonnull SADocument runCommandCheck(
-    final @Nonnull Log logx,
-    final @Nonnull CommandLine line)
+  private static SADocument runCommandCheck(
+    final LogUsableType logx,
+    final CommandLine line)
     throws ValidityException,
       BadParseAttributeException,
       InclusionLoopException,
@@ -451,7 +459,6 @@ public final class JSCMain
       IOException,
       URISyntaxException,
       XIncludeException,
-      ConstraintError,
       ParseException
   {
     final String[] args = line.getArgs();
@@ -475,8 +482,8 @@ public final class JSCMain
   }
 
   private static void runCommandCompileXHTMLMulti(
-    final @Nonnull Log logx,
-    final @Nonnull CommandLine line)
+    final LogUsableType logx,
+    final CommandLine line)
     throws ValidityException,
       BadParseAttributeException,
       InclusionLoopException,
@@ -487,8 +494,7 @@ public final class JSCMain
       IOException,
       URISyntaxException,
       XIncludeException,
-      ParseException,
-      ConstraintError
+      ParseException
   {
     final String[] args = line.getArgs();
     if (args.length < 2) {
@@ -514,8 +520,8 @@ public final class JSCMain
   }
 
   private static void runCommandCompileXHTMLSingle(
-    final @Nonnull Log logx,
-    final @Nonnull CommandLine line)
+    final LogUsableType logx,
+    final CommandLine line)
     throws ValidityException,
       BadParseAttributeException,
       InclusionLoopException,
@@ -526,7 +532,6 @@ public final class JSCMain
       IOException,
       URISyntaxException,
       XIncludeException,
-      ConstraintError,
       ParseException
   {
     final String[] args = line.getArgs();
@@ -552,8 +557,8 @@ public final class JSCMain
   }
 
   @SuppressWarnings("unused") private static void runShowVersion(
-    final @Nonnull Log logx,
-    final @Nonnull CommandLine line)
+    final LogUsableType logx,
+    final CommandLine line)
   {
     System.out.println(JSCMain.getVersion());
   }
@@ -577,8 +582,8 @@ public final class JSCMain
   }
 
   private static void writeCSS(
-    final @Nonnull Log log,
-    final @Nonnull File outdir)
+    final LogUsableType log,
+    final File outdir)
     throws IOException
   {
     final File layout = new File(outdir, "jstructural-2.0.0-layout.css");
@@ -609,9 +614,9 @@ public final class JSCMain
   }
 
   private static void writeFile(
-    final @Nonnull Log logx,
-    final @Nonnull File file,
-    final @Nonnull Document document)
+    final LogUsableType logx,
+    final File file,
+    final Document document)
     throws IOException
   {
     logx.info("writing " + file);

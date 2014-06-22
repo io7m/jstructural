@@ -19,9 +19,7 @@ package com.io7m.jstructural.core;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.UnreachableCodeException;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * Access to various resources used by processed documents.
@@ -33,25 +31,26 @@ public final class SResources
    * The CSS colour file name.
    */
 
-  public static final @Nonnull String CSS_COLOUR_NAME =
-                                                        "jstructural-2.0.0-colour.css";
+  public static final String CSS_COLOUR_NAME = "jstructural-2.0.0-colour.css";
 
   /**
    * The CSS layout file name.
    */
 
-  public static final @Nonnull String CSS_LAYOUT_NAME =
-                                                        "jstructural-2.0.0-layout.css";
+  public static final String CSS_LAYOUT_NAME = "jstructural-2.0.0-layout.css";
 
   /**
    * @return The CSS colour file
    */
 
-  public static @Nonnull URI getColourCSSLocation()
+  public static URI getColourCSSLocation()
   {
     try {
-      return SResources.class.getResource(
-        "/com/io7m/jstructural/" + SResources.CSS_COLOUR_NAME).toURI();
+      final URI r =
+        SResources.class.getResource(
+          "/com/io7m/jstructural/" + SResources.CSS_COLOUR_NAME).toURI();
+      assert r != null;
+      return r;
     } catch (final URISyntaxException e) {
       throw new UnreachableCodeException(e);
     }
@@ -61,11 +60,14 @@ public final class SResources
    * @return The CSS layout file
    */
 
-  public static @Nonnull URI getLayoutCSSLocation()
+  public static URI getLayoutCSSLocation()
   {
     try {
-      return SResources.class.getResource(
-        "/com/io7m/jstructural/" + SResources.CSS_LAYOUT_NAME).toURI();
+      final URI r =
+        SResources.class.getResource(
+          "/com/io7m/jstructural/" + SResources.CSS_LAYOUT_NAME).toURI();
+      assert r != null;
+      return r;
     } catch (final URISyntaxException e) {
       throw new UnreachableCodeException(e);
     }

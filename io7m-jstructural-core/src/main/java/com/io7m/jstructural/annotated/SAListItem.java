@@ -16,34 +16,30 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
 
 /**
  * A list item element.
  */
 
-@Immutable public final class SAListItem
+public final class SAListItem
 {
-  private final @Nonnull SNonEmptyList<SAListItemContent> content;
-  private final @Nonnull Option<String>                   type;
+  private final SNonEmptyList<SAListItemContent> content;
+  private final OptionType<String>               type;
 
   SAListItem(
-    final @Nonnull Option<String> in_type,
-    final @Nonnull SNonEmptyList<SAListItemContent> in_content)
-    throws ConstraintError
+    final OptionType<String> in_type,
+    final SNonEmptyList<SAListItemContent> in_content)
   {
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.content = NullCheck.notNull(in_content, "Content");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -62,7 +58,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The element content
    */
 
-  public @Nonnull SNonEmptyList<SAListItemContent> getContent()
+  public SNonEmptyList<SAListItemContent> getContent()
   {
     return this.content;
   }
@@ -71,7 +67,7 @@ import com.io7m.jstructural.core.SNonEmptyList;
    * @return The type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }

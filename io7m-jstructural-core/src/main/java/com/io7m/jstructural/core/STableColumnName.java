@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A table column name.
  */
 
-@Immutable public final class STableColumnName
+public final class STableColumnName
 {
   /**
    * Construct a new table column name.
@@ -34,28 +31,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param text
    *          The column name
    * @return A new table column name
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull STableColumnName tableColumnName(
-    final @Nonnull String text)
-    throws ConstraintError
+  public static STableColumnName tableColumnName(
+    final String text)
   {
     return new STableColumnName(text);
   }
 
-  private final @Nonnull String text;
+  private final String text;
 
   private STableColumnName(
-    final @Nonnull String in_text)
-    throws ConstraintError
+    final String in_text)
   {
-    this.text = Constraints.constrainNotNull(in_text, "Text");
+    this.text = NullCheck.notNull(in_text, "Text");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -74,7 +67,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The column name
    */
 
-  public @Nonnull String getText()
+  public String getText()
   {
     return this.text;
   }

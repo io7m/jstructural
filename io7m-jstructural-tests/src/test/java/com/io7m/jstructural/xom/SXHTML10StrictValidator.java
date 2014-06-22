@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -23,68 +21,70 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jlog.Log;
+import com.io7m.jlog.LogUsableType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 public final class SXHTML10StrictValidator
 {
   private static class TrivialErrorHandler implements ErrorHandler
   {
-    private @CheckForNull SAXParseException exception;
-    private final @Nonnull Log              log;
+    private @Nullable SAXParseException exception;
+    private final LogUsableType         log;
 
     public TrivialErrorHandler(
-      final @Nonnull Log in_log)
+      final LogUsableType in_log)
     {
       this.log = in_log;
     }
 
     @Override public void error(
-      final SAXParseException e)
+      final @Nullable SAXParseException e)
       throws SAXException
     {
+      assert e != null;
       this.log.error(e + ": " + e.getMessage());
       this.exception = e;
     }
 
     @Override public void fatalError(
-      final SAXParseException e)
+      final @Nullable SAXParseException e)
       throws SAXException
     {
+      assert e != null;
       this.log.critical(e + ": " + e.getMessage());
       this.exception = e;
     }
 
-    public @CheckForNull SAXParseException getException()
+    public @Nullable SAXParseException getException()
     {
       return this.exception;
     }
 
     @Override public void warning(
-      final SAXParseException e)
+      final @Nullable SAXParseException e)
       throws SAXException
     {
+      assert e != null;
       this.log.warn(e + ": " + e.getMessage());
       this.exception = e;
     }
   }
 
-  static @Nonnull Document fromStreamValidate(
-    final @Nonnull InputStream stream,
-    final @Nonnull URI uri,
-    final @Nonnull Log log)
+  static Document fromStreamValidate(
+    final InputStream stream,
+    final URI uri,
+    final LogUsableType log)
     throws SAXException,
-      ConstraintError,
       ParserConfigurationException,
       ValidityException,
       ParsingException,
       IOException
   {
-    Constraints.constrainNotNull(stream, "Stream");
-    Constraints.constrainNotNull(log, "Log");
+    NullCheck.notNull(stream, "Stream");
+    NullCheck.notNull(log, "Log");
 
-    final Log log_xml = new Log(log, "xhtml10");
+    final LogUsableType log_xml = log.with("xhtml10");
 
     log_xml.debug("creating sax parser");
 
@@ -126,8 +126,9 @@ public final class SXHTML10StrictValidator
         final Builder builder = new Builder(reader, false);
         final Document doc = builder.build(stream, uri.toString());
 
-        if (handler.getException() != null) {
-          throw handler.getException();
+        final SAXParseException ex = handler.getException();
+        if (ex != null) {
+          throw ex;
         }
 
         return doc;

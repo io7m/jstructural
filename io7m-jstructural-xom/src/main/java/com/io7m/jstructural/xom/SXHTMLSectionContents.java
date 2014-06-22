@@ -16,27 +16,23 @@
 
 package com.io7m.jstructural.xom;
 
-import javax.annotation.Nonnull;
-
 import nu.xom.Element;
 
-import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jstructural.annotated.SASubsection;
 import com.io7m.jstructural.core.SNonEmptyList;
 
 final class SXHTMLSectionContents
 {
-  private final @Nonnull SLinkProvider callbacks;
+  private final SLinkProvider callbacks;
 
   public SXHTMLSectionContents(
-    final @Nonnull SLinkProvider in_callbacks)
+    final SLinkProvider in_callbacks)
   {
     this.callbacks = in_callbacks;
   }
 
-  public @Nonnull Element getTableOfContents(
-    final @Nonnull SNonEmptyList<SASubsection> subsections)
-    throws ConstraintError
+  public Element getTableOfContents(
+    final SNonEmptyList<SASubsection> subsections)
   {
     final Element sce =
       SXHTML.elementWithClasses("ul", SXHTML.NO_TYPE, new String[] {

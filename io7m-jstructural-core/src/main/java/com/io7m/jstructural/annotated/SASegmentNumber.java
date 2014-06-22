@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * The number of a segment.
  */
@@ -34,14 +30,12 @@ public interface SASegmentNumber
    * @param v
    *          The visitor
    * @return The value returned by the visitor
-   * @throws ConstraintError
-   *           If the visitor raises {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises an {@link Exception}
    */
 
   <T> T segmentNumberAccept(
-    final @Nonnull SASegmentNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception;
+    final SASegmentNumberVisitor<T> v)
+    throws Exception;
 }

@@ -18,18 +18,15 @@ package com.io7m.jstructural.annotated;
 
 import java.net.URI;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * An image.
  */
 
-@Immutable public final class SAImage implements
+public final class SAImage implements
   SAParagraphContent,
   SALinkContent,
   SAListItemContent,
@@ -37,29 +34,28 @@ import com.io7m.jaux.functional.Option;
   SAFormalItemContent,
   SATableCellContent
 {
-  private final @Nonnull Option<Integer> height;
-  private final @Nonnull String          text;
-  private final @Nonnull Option<String>  type;
-  private final @Nonnull URI             uri;
-  private final @Nonnull Option<Integer> width;
+  private final OptionType<Integer> height;
+  private final String              text;
+  private final OptionType<String>  type;
+  private final URI                 uri;
+  private final OptionType<Integer> width;
 
   SAImage(
-    final @Nonnull URI in_uri,
-    final @Nonnull Option<String> in_type,
-    final @Nonnull Option<Integer> in_width,
-    final @Nonnull Option<Integer> in_height,
-    final @Nonnull String in_text)
-    throws ConstraintError
+    final URI in_uri,
+    final OptionType<String> in_type,
+    final OptionType<Integer> in_width,
+    final OptionType<Integer> in_height,
+    final String in_text)
   {
-    this.uri = Constraints.constrainNotNull(in_uri, "URI");
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.width = Constraints.constrainNotNull(in_width, "Width");
-    this.height = Constraints.constrainNotNull(in_height, "Height");
-    this.text = Constraints.constrainNotNull(in_text, "Text");
+    this.uri = NullCheck.notNull(in_uri, "URI");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.width = NullCheck.notNull(in_width, "Width");
+    this.height = NullCheck.notNull(in_height, "Height");
+    this.text = NullCheck.notNull(in_text, "Text");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -79,17 +75,15 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A footnoteContentAccept(
-    final @Nonnull SAFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAFootnoteContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }
 
   @Override public <A> A formalItemContentAccept(
-    final @Nonnull SAFormalItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAFormalItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }
@@ -98,7 +92,7 @@ import com.io7m.jaux.functional.Option;
    * @return The image height specified, if any
    */
 
-  public @Nonnull Option<Integer> getHeight()
+  public OptionType<Integer> getHeight()
   {
     return this.height;
   }
@@ -107,7 +101,7 @@ import com.io7m.jaux.functional.Option;
    * @return The image text
    */
 
-  public @Nonnull String getText()
+  public String getText()
   {
     return this.text;
   }
@@ -116,7 +110,7 @@ import com.io7m.jaux.functional.Option;
    * @return The term's type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -125,7 +119,7 @@ import com.io7m.jaux.functional.Option;
    * @return The image URI
    */
 
-  public @Nonnull URI getURI()
+  public URI getURI()
   {
     return this.uri;
   }
@@ -134,7 +128,7 @@ import com.io7m.jaux.functional.Option;
    * @return The image width specified, if any
    */
 
-  public @Nonnull Option<Integer> getWidth()
+  public OptionType<Integer> getWidth()
   {
     return this.width;
   }
@@ -152,33 +146,29 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A linkContentAccept(
-    final @Nonnull SALinkContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SALinkContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }
 
   @Override public <A> A listItemContentAccept(
-    final @Nonnull SAListItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAListItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SAParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }
 
   @Override public <A> A tableCellContentAccept(
-    final @Nonnull SATableCellContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SATableCellContentVisitor<A> v)
+    throws Exception
   {
     return v.visitImage(this);
   }

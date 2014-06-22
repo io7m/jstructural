@@ -16,11 +16,9 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnreachableCodeException;
+import com.io7m.jnull.Nullable;
+import com.io7m.jranges.RangeCheck;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * A paragraph number consisting of a part, section, and paragraph.
@@ -41,30 +39,34 @@ public final class SAParagraphNumberPSP extends SAParagraphNumber
    *          The section number
    * @param in_paragraph
    *          The paragraph number
-   * @throws ConstraintError
-   *           If any parameter is outside of the range
-   *           <code>[1, {@link Integer#MAX_VALUE}]</code>
    */
 
   public SAParagraphNumberPSP(
     final int in_part,
     final int in_section,
     final int in_paragraph)
-    throws ConstraintError
   {
     this.part =
-      Constraints.constrainRange(in_part, 1, Integer.MAX_VALUE, "Part");
+      (int) RangeCheck.checkIncludedIn(
+        in_part,
+        "Part number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid part number range");
     this.section =
-      Constraints.constrainRange(in_section, 1, Integer.MAX_VALUE, "Section");
+      (int) RangeCheck.checkIncludedIn(
+        in_section,
+        "Section number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid section number range");
     this.paragraph =
-      Constraints.constrainRange(
+      (int) RangeCheck.checkIncludedIn(
         in_paragraph,
-        1,
-        Integer.MAX_VALUE,
-        "Paragraph");
+        "Paragraph number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid paragraph number range");
   }
 
-  @SuppressWarnings({ "boxing", "synthetic-access" }) @Override public
+  @SuppressWarnings({ "boxing", "null", "synthetic-access" }) @Override public
     int
     compareTo(
       final SAParagraphNumber o)
@@ -72,9 +74,8 @@ public final class SAParagraphNumberPSP extends SAParagraphNumber
     try {
       return o.paragraphNumberAccept(new SAParagraphNumberVisitor<Integer>() {
         @Override public Integer visitParagraphNumberPSP(
-          final @Nonnull SAParagraphNumberPSP p)
-          throws ConstraintError,
-            Exception
+          final SAParagraphNumberPSP p)
+          throws Exception
         {
           final int rpart =
             Integer.compare(SAParagraphNumberPSP.this.part, p.part);
@@ -92,9 +93,8 @@ public final class SAParagraphNumberPSP extends SAParagraphNumber
         }
 
         @Override public Integer visitParagraphNumberPSSP(
-          final @Nonnull SAParagraphNumberPSSP p)
-          throws ConstraintError,
-            Exception
+          final SAParagraphNumberPSSP p)
+          throws Exception
         {
           final int rpart =
             Integer.compare(SAParagraphNumberPSP.this.part, p.getPart());
@@ -114,9 +114,8 @@ public final class SAParagraphNumberPSP extends SAParagraphNumber
         }
 
         @Override public Integer visitParagraphNumberSP(
-          final @Nonnull SAParagraphNumberSP p)
-          throws ConstraintError,
-            Exception
+          final SAParagraphNumberSP p)
+          throws Exception
         {
           final int rsect =
             Integer.compare(SAParagraphNumberPSP.this.section, p.getSection());
@@ -129,9 +128,8 @@ public final class SAParagraphNumberPSP extends SAParagraphNumber
         }
 
         @Override public Integer visitParagraphNumberSSP(
-          final @Nonnull SAParagraphNumberSSP p)
-          throws ConstraintError,
-            Exception
+          final SAParagraphNumberSSP p)
+          throws Exception
         {
           final int rsect =
             Integer.compare(SAParagraphNumberPSP.this.section, p.getSection());
@@ -144,15 +142,14 @@ public final class SAParagraphNumberPSP extends SAParagraphNumber
         }
       })
         .intValue();
-    } catch (final ConstraintError e) {
-      throw new UnreachableCodeException(e);
+
     } catch (final Exception e) {
       throw new UnreachableCodeException(e);
     }
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -215,15 +212,17 @@ public final class SAParagraphNumberPSP extends SAParagraphNumber
 
   @Override public <T> T paragraphNumberAccept(
     final SAParagraphNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
     return v.visitParagraphNumberPSP(this);
   }
 
   @SuppressWarnings("boxing") @Override public String paragraphNumberFormat()
   {
-    return String.format("%d.%d.%d", this.part, this.section, this.paragraph);
+    final String r =
+      String.format("%d.%d.%d", this.part, this.section, this.paragraph);
+    assert r != null;
+    return r;
   }
 
   @Override public String toString()
@@ -236,6 +235,8 @@ public final class SAParagraphNumberPSP extends SAParagraphNumber
     builder.append(" section=");
     builder.append(this.section);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

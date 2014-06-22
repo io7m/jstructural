@@ -19,9 +19,8 @@ package com.io7m.jstructural.schema;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.UnreachableCodeException;
+import com.io7m.jnull.NonNull;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * Functions involving the XML schema files.
@@ -29,7 +28,7 @@ import com.io7m.jaux.UnreachableCodeException;
 
 public final class SSchema
 {
-  public static @Nonnull URI getSchemaRNGLocation()
+  public static @NonNull URI getSchemaRNGLocation()
   {
     try {
       return SSchema.class.getResource(
@@ -39,7 +38,7 @@ public final class SSchema
     }
   }
 
-  public static @Nonnull URI getSchemaXMLXSDLocation()
+  public static @NonNull URI getSchemaXMLXSDLocation()
   {
     try {
       return SSchema.class
@@ -50,7 +49,7 @@ public final class SSchema
     }
   }
 
-  public static @Nonnull URI getSchemaXSDLocation()
+  public static @NonNull URI getSchemaXSDLocation()
   {
     try {
       return SSchema.class.getResource(

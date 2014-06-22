@@ -18,12 +18,9 @@ package com.io7m.jstructural.annotated;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.jstructural.core.SSectionContents;
 
@@ -31,9 +28,9 @@ import com.io7m.jstructural.core.SSectionContents;
  * The type of sections containing paragraphs.
  */
 
-@Immutable public final class SASectionWithSubsections extends SASection
+public final class SASectionWithSubsections extends SASection
 {
-  private final @Nonnull SNonEmptyList<SASubsection> subsections;
+  private final SNonEmptyList<SASubsection> subsections;
 
   /**
    * Construct a new section with top-level subsections.
@@ -52,32 +49,31 @@ import com.io7m.jstructural.core.SSectionContents;
    *          The subsections
    * @param in_footnotes
    *          The footnotes
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
   public SASectionWithSubsections(
-    final @Nonnull SASectionNumber in_number,
-    final @Nonnull Option<String> in_type,
-    final @Nonnull Option<SAID> in_id,
-    final @Nonnull SASectionTitle in_title,
-    final @Nonnull Option<SSectionContents> in_contents,
-    final @Nonnull SNonEmptyList<SASubsection> in_subsections,
-    final @Nonnull List<SAFootnote> in_footnotes)
-    throws ConstraintError
+    final SASectionNumber in_number,
+    final OptionType<String> in_type,
+    final OptionType<SAID> in_id,
+    final SASectionTitle in_title,
+    final OptionType<SSectionContents> in_contents,
+    final SNonEmptyList<SASubsection> in_subsections,
+    final List<SAFootnote> in_footnotes)
   {
     super(in_number, in_type, in_id, in_title, in_contents, in_footnotes);
-    this.subsections =
-      Constraints.constrainNotNull(in_subsections, "Subsections");
+    this.subsections = NullCheck.notNull(in_subsections, "Subsections");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
     }
     if (!super.equals(obj)) {
+      return false;
+    }
+    if (obj == null) {
       return false;
     }
     if (this.getClass() != obj.getClass()) {
@@ -91,7 +87,7 @@ import com.io7m.jstructural.core.SSectionContents;
    * @return The section content
    */
 
-  public @Nonnull SNonEmptyList<SASubsection> getSubsections()
+  public SNonEmptyList<SASubsection> getSubsections()
   {
     return this.subsections;
   }
@@ -105,17 +101,15 @@ import com.io7m.jstructural.core.SSectionContents;
   }
 
   @Override public <A> A sectionAccept(
-    final @Nonnull SASectionVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SASectionVisitor<A> v)
+    throws Exception
   {
     return v.visitSectionWithSubsections(this);
   }
 
   @Override public <T> T targetContentAccept(
-    final @Nonnull SAIDTargetContentVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    final SAIDTargetContentVisitor<T> v)
+    throws Exception
   {
     return v.visitSection(this);
   }

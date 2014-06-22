@@ -19,12 +19,10 @@ package com.io7m.jstructural.annotated;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jlog.Level;
-import com.io7m.jlog.Log;
+import com.io7m.jlog.LogLevel;
+import com.io7m.jlog.LogUsableType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * Mappings from IDs to content.
@@ -32,8 +30,8 @@ import com.io7m.jlog.Log;
 
 public final class SAIDMap implements SAIDMapWritable, SAIDMapReadable
 {
-  private final @Nonnull Log                          log;
-  private final @Nonnull Map<SAID, SAIDTargetContent> map;
+  private final LogUsableType                log;
+  private final Map<SAID, SAIDTargetContent> map;
 
   /**
    * Construct a new empty map.
@@ -43,44 +41,47 @@ public final class SAIDMap implements SAIDMapWritable, SAIDMapReadable
    */
 
   public SAIDMap(
-    final @Nonnull Log in_log)
+    final LogUsableType in_log)
   {
-    this.log = new Log(in_log, "id-map");
+    this.log = NullCheck.notNull(in_log, "Log").with("id-map");
     this.map = new HashMap<SAID, SAIDTargetContent>();
   }
 
-  @Override public SAIDTargetContent get(
-    final @Nonnull SAID id)
-    throws ConstraintError
+  @Override public @Nullable SAIDTargetContent get(
+    final SAID id)
   {
-    Constraints.constrainNotNull(id, "ID");
+    NullCheck.notNull(id, "ID");
 
-    if (this.log.enabled(Level.LOG_DEBUG)) {
+    if (this.log.wouldLog(LogLevel.LOG_DEBUG)) {
       final StringBuilder b = new StringBuilder();
       b.append("get: ");
       b.append(id.getActual());
-      this.log.debug(b.toString());
+      final String r = b.toString();
+      assert r != null;
+      this.log.debug(r);
     }
 
     return this.map.get(id);
   }
 
   @Override public void put(
-    final @Nonnull SAID id,
-    final @Nonnull SAIDTargetContent c)
-    throws ConstraintError
+    final SAID id,
+    final SAIDTargetContent c)
   {
-    Constraints.constrainNotNull(id, "ID");
-    Constraints.constrainNotNull(c, "Content");
-    Constraints.constrainArbitrary(
-      this.map.containsKey(id) == false,
-      "ID not already used");
+    NullCheck.notNull(id, "ID");
+    NullCheck.notNull(c, "Content");
 
-    if (this.log.enabled(Level.LOG_DEBUG)) {
+    if (this.map.containsKey(id)) {
+      throw new IllegalArgumentException("ID already used");
+    }
+
+    if (this.log.wouldLog(LogLevel.LOG_DEBUG)) {
       final StringBuilder b = new StringBuilder();
       b.append("new: ");
       b.append(id.getActual());
-      this.log.debug(b.toString());
+      final String r = b.toString();
+      assert r != null;
+      this.log.debug(r);
     }
 
     this.map.put(id, c);

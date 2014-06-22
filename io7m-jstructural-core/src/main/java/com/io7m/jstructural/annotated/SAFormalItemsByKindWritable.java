@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * Writable interface to the sets of {@link SAFormalItem}s organized by kind.
  */
@@ -33,12 +29,9 @@ public interface SAFormalItemsByKindWritable
    *          The kind
    * @param item
    *          The formal item
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
   void put(
-    final @Nonnull String kind,
-    final @Nonnull SAFormalItem item)
-    throws ConstraintError;
+    final String kind,
+    final SAFormalItem item);
 }

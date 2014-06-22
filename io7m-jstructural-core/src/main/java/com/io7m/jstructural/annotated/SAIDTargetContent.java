@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * The type of elements that can be assigned IDs.
  */
@@ -34,14 +30,12 @@ public interface SAIDTargetContent
    * @param <T>
    *          The type of values returned by the visitor
    * @return The value returned by the visitor.
-   * @throws ConstraintError
-   *           If the visitor raises a {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises and {@link Exception}
    */
 
   <T> T targetContentAccept(
-    final @Nonnull SAIDTargetContentVisitor<T> v)
-    throws ConstraintError,
-      Exception;
+    final SAIDTargetContentVisitor<T> v)
+    throws Exception;
 }

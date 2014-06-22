@@ -16,10 +16,9 @@
 
 package com.io7m.jstructural.xom;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
 import nu.xom.Element;
+
+import com.io7m.jnull.Nullable;
 
 /**
  * A set of callbacks allowing for document customisation.
@@ -35,7 +34,7 @@ public interface SDocumentXHTMLWriterCallbacks
    */
 
   void onBodyEnd(
-    final @Nonnull Element body);
+    final Element body);
 
   /**
    * Called upon creation of the XHTML body element. If the function returns
@@ -49,8 +48,8 @@ public interface SDocumentXHTMLWriterCallbacks
    *          The XHTML body element
    */
 
-  @CheckForNull Element onBodyStart(
-    final @Nonnull Element body);
+  @Nullable Element onBodyStart(
+    final Element body);
 
   /**
    * Called upon creation of the XHTML head element.
@@ -60,5 +59,5 @@ public interface SDocumentXHTMLWriterCallbacks
    */
 
   void onHead(
-    final @Nonnull Element head);
+    final Element head);
 }

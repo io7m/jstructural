@@ -16,37 +16,33 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A simple term.
  */
 
-@Immutable public final class SATerm implements
+public final class SATerm implements
   SAListItemContent,
   SAParagraphContent,
   SAFootnoteContent,
   SATableCellContent
 {
-  private final @Nonnull SAText         text;
-  private final @Nonnull Option<String> type;
+  private final SAText             text;
+  private final OptionType<String> type;
 
   SATerm(
-    final @Nonnull SAText in_text,
-    final @Nonnull Option<String> in_type)
-    throws ConstraintError
+    final SAText in_text,
+    final OptionType<String> in_type)
   {
-    this.text = Constraints.constrainNotNull(in_text, "Text");
-    this.type = Constraints.constrainNotNull(in_type, "Type");
+    this.text = NullCheck.notNull(in_text, "Text");
+    this.type = NullCheck.notNull(in_type, "Type");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -62,9 +58,8 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A footnoteContentAccept(
-    final @Nonnull SAFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAFootnoteContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTerm(this);
   }
@@ -73,7 +68,7 @@ import com.io7m.jaux.functional.Option;
    * @return The term's text
    */
 
-  public @Nonnull SAText getText()
+  public SAText getText()
   {
     return this.text;
   }
@@ -82,7 +77,7 @@ import com.io7m.jaux.functional.Option;
    * @return The term's type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -97,25 +92,22 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A listItemContentAccept(
-    final @Nonnull SAListItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAListItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTerm(this);
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SAParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTerm(this);
   }
 
   @Override public <A> A tableCellContentAccept(
-    final @Nonnull SATableCellContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SATableCellContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTerm(this);
   }

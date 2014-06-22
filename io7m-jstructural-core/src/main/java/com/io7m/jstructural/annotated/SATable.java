@@ -16,11 +16,9 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A table.
@@ -28,23 +26,22 @@ import com.io7m.jaux.functional.Option;
 
 public final class SATable implements SAFormalItemContent, SAParagraphContent
 {
-  private final @Nonnull SATableBody         body;
-  private final @Nonnull Option<SATableHead> header;
-  private final @Nonnull SATableSummary      summary;
+  private final SATableBody             body;
+  private final OptionType<SATableHead> header;
+  private final SATableSummary          summary;
 
   SATable(
-    final @Nonnull SATableSummary in_summary,
-    final @Nonnull Option<SATableHead> in_header,
-    final @Nonnull SATableBody in_body)
-    throws ConstraintError
+    final SATableSummary in_summary,
+    final OptionType<SATableHead> in_header,
+    final SATableBody in_body)
   {
-    this.summary = Constraints.constrainNotNull(in_summary, "Summary");
-    this.header = Constraints.constrainNotNull(in_header, "Header");
-    this.body = Constraints.constrainNotNull(in_body, "Body");
+    this.summary = NullCheck.notNull(in_summary, "Summary");
+    this.header = NullCheck.notNull(in_header, "Header");
+    this.body = NullCheck.notNull(in_body, "Body");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -62,9 +59,8 @@ public final class SATable implements SAFormalItemContent, SAParagraphContent
   }
 
   @Override public <A> A formalItemContentAccept(
-    final @Nonnull SAFormalItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAFormalItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTable(this);
   }
@@ -73,7 +69,7 @@ public final class SATable implements SAFormalItemContent, SAParagraphContent
    * @return The table body
    */
 
-  public @Nonnull SATableBody getBody()
+  public SATableBody getBody()
   {
     return this.body;
   }
@@ -82,7 +78,7 @@ public final class SATable implements SAFormalItemContent, SAParagraphContent
    * @return The table header
    */
 
-  public @Nonnull Option<SATableHead> getHeader()
+  public OptionType<SATableHead> getHeader()
   {
     return this.header;
   }
@@ -91,7 +87,7 @@ public final class SATable implements SAFormalItemContent, SAParagraphContent
    * @return The table summary
    */
 
-  public @Nonnull SATableSummary getSummary()
+  public SATableSummary getSummary()
   {
     return this.summary;
   }
@@ -107,9 +103,8 @@ public final class SATable implements SAFormalItemContent, SAParagraphContent
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SAParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitTable(this);
   }

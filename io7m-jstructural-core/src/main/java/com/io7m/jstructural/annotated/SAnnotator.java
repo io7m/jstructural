@@ -20,15 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnreachableCodeException;
-import com.io7m.jaux.functional.Option;
-import com.io7m.jaux.functional.PartialFunction;
-import com.io7m.jaux.functional.Unit;
-import com.io7m.jlog.Log;
+import com.io7m.jfunctional.FunctionType;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jfunctional.PartialFunctionType;
+import com.io7m.jfunctional.Unit;
+import com.io7m.jlog.LogUsableType;
+import com.io7m.jnull.NullCheck;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentVisitor;
 import com.io7m.jstructural.core.SDocumentWithParts;
@@ -74,6 +71,7 @@ import com.io7m.jstructural.core.STableSummary;
 import com.io7m.jstructural.core.STerm;
 import com.io7m.jstructural.core.SText;
 import com.io7m.jstructural.core.SVerbatim;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * A document annotator.
@@ -84,25 +82,24 @@ import com.io7m.jstructural.core.SVerbatim;
   private static final class DocumentAnnotator implements
     SDocumentVisitor<SADocument>
   {
-    private final @Nonnull List<SAFootnote>    footnotes;
-    private final @Nonnull SAFormalItemsByKind formals;
-    private final @Nonnull SAIDMap             ids;
+    private final List<SAFootnote>    footnotes;
+    private final SAFormalItemsByKind formals;
+    private final SAIDMap             ids;
 
     public DocumentAnnotator(
-      final @Nonnull Log log)
+      final LogUsableType log)
     {
       this.ids = new SAIDMap(log);
       this.footnotes = new ArrayList<SAFootnote>();
       this.formals = new SAFormalItemsByKind(log);
     }
 
-    public @Nonnull SAPart part(
-      final @Nonnull SPart p,
-      final @Nonnull SAPartNumber part_no)
-      throws ConstraintError,
-        Exception
+    public SAPart part(
+      final SPart p,
+      final SAPartNumber part_no)
+      throws Exception
     {
-      final Option<SAID> id = p.getID().mapPartial(new SAIDMapper());
+      final OptionType<SAID> id = p.getID().map(new SAIDMapper());
       final SAPartTitle title =
         new SAPartTitle(part_no, p.getTitle().getActual());
 
@@ -118,7 +115,7 @@ import com.io7m.jstructural.core.SVerbatim;
             this.footnotes,
             number));
 
-        sp.getID().mapPartial(new SAIDLinkCreator(this.ids, sp));
+        sp.getID().map(new SAIDLinkCreator(this.ids, sp));
         sections_r.add(sp);
       }
 
@@ -134,14 +131,14 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SADocument visitDocumentWithParts(
-      final @Nonnull SDocumentWithParts dp)
-      throws ConstraintError,
-        Exception
+      final SDocumentWithParts dp)
+      throws Exception
     {
       final List<SAPart> parts_r = new ArrayList<SAPart>();
       for (final SPart p : dp.getParts().getElements()) {
+        assert p != null;
         final SAPart q = this.part(p, new SAPartNumber(parts_r.size() + 1));
-        q.getID().mapPartial(new SAIDLinkCreator(this.ids, q));
+        q.getID().map(new SAIDLinkCreator(this.ids, q));
         parts_r.add(q);
       }
       final SNonEmptyList<SAPart> parts = SNonEmptyList.newList(parts_r);
@@ -160,9 +157,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SADocument visitDocumentWithSections(
-      final @Nonnull SDocumentWithSections ds)
-      throws ConstraintError,
-        Exception
+      final SDocumentWithSections ds)
+      throws Exception
     {
       final List<SASection> sections_r = new ArrayList<SASection>();
       for (final SSection s : ds.getSections().getElements()) {
@@ -173,7 +169,7 @@ import com.io7m.jstructural.core.SVerbatim;
             this.footnotes,
             sections_r.size() + 1));
 
-        ss.getID().mapPartial(new SAIDLinkCreator(this.ids, ss));
+        ss.getID().map(new SAIDLinkCreator(this.ids, ss));
         sections_r.add(ss);
       }
       final SNonEmptyList<SASection> sections =
@@ -196,14 +192,14 @@ import com.io7m.jstructural.core.SVerbatim;
   private static final class FootnoteContentAnnotator implements
     SFootnoteContentVisitor<SAFootnoteContent>
   {
-    private final @Nonnull List<SAFootnote>          footnotes;
-    private final @Nonnull SAIDMap                   ids;
-    private final @Nonnull SASubsectionContentNumber number;
+    private final List<SAFootnote>          footnotes;
+    private final SAIDMap                   ids;
+    private final SASubsectionContentNumber number;
 
     public FootnoteContentAnnotator(
-      final @Nonnull SAIDMap in_ids,
-      final @Nonnull List<SAFootnote> in_footnotes,
-      final @Nonnull SASubsectionContentNumber in_number)
+      final SAIDMap in_ids,
+      final List<SAFootnote> in_footnotes,
+      final SASubsectionContentNumber in_number)
     {
       this.ids = in_ids;
       this.footnotes = in_footnotes;
@@ -212,8 +208,7 @@ import com.io7m.jstructural.core.SVerbatim;
 
     @Override public SAFootnoteContent visitFootnote(
       final SFootnote footnote)
-      throws ConstraintError,
-        Exception
+      throws Exception
     {
       return SAnnotator.transformFootnote(
         this.ids,
@@ -224,32 +219,28 @@ import com.io7m.jstructural.core.SVerbatim;
 
     @Override public SAFootnoteContent visitImage(
       final SImage image)
-      throws ConstraintError,
-        Exception
+      throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
     @Override public SAFootnoteContent visitLink(
       final SLink link)
-      throws ConstraintError,
-        Exception
+      throws Exception
     {
       return SAnnotator.transformLink(link);
     }
 
     @Override public SAFootnoteContent visitLinkExternal(
       final SLinkExternal link)
-      throws ConstraintError,
-        Exception
+      throws Exception
     {
       return SAnnotator.transformLinkExternal(link);
     }
 
     @Override public SAFootnoteContent visitListOrdered(
       final SListOrdered list)
-      throws ConstraintError,
-        Exception
+      throws Exception
     {
       return SAnnotator.transformListOrdered(
         this.ids,
@@ -260,8 +251,7 @@ import com.io7m.jstructural.core.SVerbatim;
 
     @Override public SAFootnoteContent visitListUnordered(
       final SListUnordered list)
-      throws ConstraintError,
-        Exception
+      throws Exception
     {
       return SAnnotator.transformListUnordered(
         this.ids,
@@ -272,24 +262,21 @@ import com.io7m.jstructural.core.SVerbatim;
 
     @Override public SAFootnoteContent visitTerm(
       final STerm term)
-      throws ConstraintError,
-        Exception
+      throws Exception
     {
       return SAnnotator.transformTerm(term);
     }
 
     @Override public SAFootnoteContent visitText(
       final SText text)
-      throws ConstraintError,
-        Exception
+      throws Exception
     {
       return SAnnotator.transformText(text);
     }
 
     @Override public SAFootnoteContent visitVerbatim(
       final SVerbatim text)
-      throws ConstraintError,
-        Exception
+      throws Exception
     {
       return SAnnotator.transformVerbatim(text);
     }
@@ -298,14 +285,14 @@ import com.io7m.jstructural.core.SVerbatim;
   private static final class FormalItemContentAnnotator implements
     SFormalItemContentVisitor<SAFormalItemContent>
   {
-    private final @Nonnull List<SAFootnote>   footnotes;
-    private final @Nonnull SAIDMap            ids;
-    private final @Nonnull SAFormalItemNumber number;
+    private final List<SAFootnote>   footnotes;
+    private final SAIDMap            ids;
+    private final SAFormalItemNumber number;
 
     public FormalItemContentAnnotator(
-      final @Nonnull SAIDMap in_ids,
-      final @Nonnull List<SAFootnote> in_footnotes,
-      final @Nonnull SAFormalItemNumber in_number)
+      final SAIDMap in_ids,
+      final List<SAFootnote> in_footnotes,
+      final SAFormalItemNumber in_number)
     {
       this.ids = in_ids;
       this.footnotes = in_footnotes;
@@ -313,25 +300,22 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAFormalItemContent visitFormalItemList(
-      final @Nonnull SFormalItemList list)
-      throws ConstraintError,
-        Exception
+      final SFormalItemList list)
+      throws Exception
     {
       return SAnnotator.transformFormalItemList(list);
     }
 
     @Override public SAFormalItemContent visitImage(
-      final @Nonnull SImage image)
-      throws ConstraintError,
-        Exception
+      final SImage image)
+      throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
     @Override public SAFormalItemContent visitListOrdered(
-      final @Nonnull SListOrdered list)
-      throws ConstraintError,
-        Exception
+      final SListOrdered list)
+      throws Exception
     {
       return SAnnotator.transformListOrdered(
         this.ids,
@@ -341,9 +325,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAFormalItemContent visitListUnordered(
-      final @Nonnull SListUnordered list)
-      throws ConstraintError,
-        Exception
+      final SListUnordered list)
+      throws Exception
     {
       return SAnnotator.transformListUnordered(
         this.ids,
@@ -353,9 +336,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAFormalItemContent visitTable(
-      final @Nonnull STable t)
-      throws ConstraintError,
-        Exception
+      final STable t)
+      throws Exception
     {
       return SAnnotator.transformTable(
         this.ids,
@@ -365,9 +347,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAFormalItemContent visitVerbatim(
-      final @Nonnull SVerbatim text)
-      throws ConstraintError,
-        Exception
+      final SVerbatim text)
+      throws Exception
     {
       return SAnnotator.transformVerbatim(text);
     }
@@ -382,17 +363,15 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SALinkContent visitImage(
-      final @Nonnull SImage image)
-      throws ConstraintError,
-        Exception
+      final SImage image)
+      throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
     @Override public SALinkContent visitText(
-      final @Nonnull SText text)
-      throws ConstraintError,
-        Exception
+      final SText text)
+      throws Exception
     {
       return SAnnotator.transformText(text);
     }
@@ -401,14 +380,14 @@ import com.io7m.jstructural.core.SVerbatim;
   private static final class ListItemContentAnnotator implements
     SListItemContentVisitor<SAListItemContent>
   {
-    private final @Nonnull List<SAFootnote>          footnotes;
-    private final @Nonnull SAIDMap                   ids;
-    private final @Nonnull SASubsectionContentNumber number;
+    private final List<SAFootnote>          footnotes;
+    private final SAIDMap                   ids;
+    private final SASubsectionContentNumber number;
 
     public ListItemContentAnnotator(
-      final @Nonnull SAIDMap in_ids,
-      final @Nonnull List<SAFootnote> in_footnotes,
-      final @Nonnull SASubsectionContentNumber in_number)
+      final SAIDMap in_ids,
+      final List<SAFootnote> in_footnotes,
+      final SASubsectionContentNumber in_number)
     {
       this.ids = in_ids;
       this.footnotes = in_footnotes;
@@ -416,9 +395,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAListItemContent visitFootnote(
-      final @Nonnull SFootnote footnote)
-      throws ConstraintError,
-        Exception
+      final SFootnote footnote)
+      throws Exception
     {
       return SAnnotator.transformFootnote(
         this.ids,
@@ -428,33 +406,29 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAListItemContent visitImage(
-      final @Nonnull SImage image)
-      throws ConstraintError,
-        Exception
+      final SImage image)
+      throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
     @Override public SAListItemContent visitLink(
-      final @Nonnull SLink link)
-      throws ConstraintError,
-        Exception
+      final SLink link)
+      throws Exception
     {
       return SAnnotator.transformLink(link);
     }
 
     @Override public SAListItemContent visitLinkExternal(
-      final @Nonnull SLinkExternal link)
-      throws ConstraintError,
-        Exception
+      final SLinkExternal link)
+      throws Exception
     {
       return SAnnotator.transformLinkExternal(link);
     }
 
     @Override public SAListItemContent visitListOrdered(
-      final @Nonnull SListOrdered list)
-      throws ConstraintError,
-        Exception
+      final SListOrdered list)
+      throws Exception
     {
       return SAnnotator.transformListOrdered(
         this.ids,
@@ -464,9 +438,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAListItemContent visitListUnordered(
-      final @Nonnull SListUnordered list)
-      throws ConstraintError,
-        Exception
+      final SListUnordered list)
+      throws Exception
     {
       return SAnnotator.transformListUnordered(
         this.ids,
@@ -476,25 +449,22 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAListItemContent visitTerm(
-      final @Nonnull STerm term)
-      throws ConstraintError,
-        Exception
+      final STerm term)
+      throws Exception
     {
       return SAnnotator.transformTerm(term);
     }
 
     @Override public SAListItemContent visitText(
-      final @Nonnull SText text)
-      throws ConstraintError,
-        Exception
+      final SText text)
+      throws Exception
     {
       return SAnnotator.transformText(text);
     }
 
     @Override public SAListItemContent visitVerbatim(
-      final @Nonnull SVerbatim text)
-      throws ConstraintError,
-        Exception
+      final SVerbatim text)
+      throws Exception
     {
       return SAnnotator.transformVerbatim(text);
     }
@@ -503,17 +473,16 @@ import com.io7m.jstructural.core.SVerbatim;
   private static final class NoPartSectionAnnotator implements
     SSectionVisitor<SASection>
   {
-    private final @Nonnull List<SAFootnote>    footnotes;
-    private final @Nonnull SAFormalItemsByKind formals;
-    private final @Nonnull SAIDMap             ids;
-    private final @Nonnull SASectionNumberS    number;
+    private final List<SAFootnote>    footnotes;
+    private final SAFormalItemsByKind formals;
+    private final SAIDMap             ids;
+    private final SASectionNumberS    number;
 
     public NoPartSectionAnnotator(
-      final @Nonnull SAIDMap in_ids,
-      final @Nonnull SAFormalItemsByKind in_formals,
-      final @Nonnull List<SAFootnote> in_footnotes,
+      final SAIDMap in_ids,
+      final SAFormalItemsByKind in_formals,
+      final List<SAFootnote> in_footnotes,
       final int section_no)
-      throws ConstraintError
     {
       this.ids = in_ids;
       this.formals = in_formals;
@@ -522,9 +491,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SASection visitSectionWithParagraphs(
-      final @Nonnull SSectionWithParagraphs s)
-      throws ConstraintError,
-        Exception
+      final SSectionWithParagraphs s)
+      throws Exception
     {
       return SAnnotator.transformSectionWithParagraphs(
         this.ids,
@@ -535,9 +503,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SASection visitSectionWithSubsections(
-      final @Nonnull SSectionWithSubsections s)
-      throws ConstraintError,
-        Exception
+      final SSectionWithSubsections s)
+      throws Exception
     {
       return SAnnotator.transformSectionWithSubsections(
         this.ids,
@@ -551,14 +518,14 @@ import com.io7m.jstructural.core.SVerbatim;
   private static final class ParagraphContentAnnotator implements
     SParagraphContentVisitor<SAParagraphContent>
   {
-    private final @Nonnull List<SAFootnote>  footnotes;
-    private final @Nonnull SAIDMap           ids;
-    private final @Nonnull SAParagraphNumber number;
+    private final List<SAFootnote>  footnotes;
+    private final SAIDMap           ids;
+    private final SAParagraphNumber number;
 
     public ParagraphContentAnnotator(
-      final @Nonnull SAIDMap in_ids,
-      final @Nonnull List<SAFootnote> in_footnotes,
-      final @Nonnull SAParagraphNumber in_number)
+      final SAIDMap in_ids,
+      final List<SAFootnote> in_footnotes,
+      final SAParagraphNumber in_number)
     {
       this.ids = in_ids;
       this.footnotes = in_footnotes;
@@ -566,9 +533,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAParagraphContent visitFootnote(
-      final @Nonnull SFootnote footnote)
-      throws ConstraintError,
-        Exception
+      final SFootnote footnote)
+      throws Exception
     {
       return SAnnotator.transformFootnote(
         this.ids,
@@ -578,41 +544,36 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAParagraphContent visitFormalItemList(
-      final @Nonnull SFormalItemList list)
-      throws ConstraintError,
-        Exception
+      final SFormalItemList list)
+      throws Exception
     {
       return SAnnotator.transformFormalItemList(list);
     }
 
     @Override public SAParagraphContent visitImage(
-      final @Nonnull SImage image)
-      throws ConstraintError,
-        Exception
+      final SImage image)
+      throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
     @Override public SAParagraphContent visitLink(
-      final @Nonnull SLink link)
-      throws ConstraintError,
-        Exception
+      final SLink link)
+      throws Exception
     {
       return SAnnotator.transformLink(link);
     }
 
     @Override public SAParagraphContent visitLinkExternal(
-      final @Nonnull SLinkExternal link)
-      throws ConstraintError,
-        Exception
+      final SLinkExternal link)
+      throws Exception
     {
       return SAnnotator.transformLinkExternal(link);
     }
 
     @Override public SAParagraphContent visitListOrdered(
-      final @Nonnull SListOrdered list)
-      throws ConstraintError,
-        Exception
+      final SListOrdered list)
+      throws Exception
     {
       return SAnnotator.transformListOrdered(
         this.ids,
@@ -622,9 +583,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAParagraphContent visitListUnordered(
-      final @Nonnull SListUnordered list)
-      throws ConstraintError,
-        Exception
+      final SListUnordered list)
+      throws Exception
     {
       return SAnnotator.transformListUnordered(
         this.ids,
@@ -634,9 +594,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAParagraphContent visitTable(
-      final @Nonnull STable table)
-      throws ConstraintError,
-        Exception
+      final STable table)
+      throws Exception
     {
       return SAnnotator.transformTable(
         this.ids,
@@ -646,25 +605,22 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAParagraphContent visitTerm(
-      final @Nonnull STerm term)
-      throws ConstraintError,
-        Exception
+      final STerm term)
+      throws Exception
     {
       return SAnnotator.transformTerm(term);
     }
 
     @Override public SAParagraphContent visitText(
-      final @Nonnull SText text)
-      throws ConstraintError,
-        Exception
+      final SText text)
+      throws Exception
     {
       return SAnnotator.transformText(text);
     }
 
     @Override public SAParagraphContent visitVerbatim(
-      final @Nonnull SVerbatim text)
-      throws ConstraintError,
-        Exception
+      final SVerbatim text)
+      throws Exception
     {
       return SAnnotator.transformVerbatim(text);
     }
@@ -673,16 +629,16 @@ import com.io7m.jstructural.core.SVerbatim;
   private static final class PartSectionAnnotator implements
     SSectionVisitor<SASection>
   {
-    private final @Nonnull List<SAFootnote>    footnotes;
-    private final @Nonnull SAFormalItemsByKind formals;
-    private final @Nonnull SAIDMap             ids;
-    private final @Nonnull SASectionNumberPS   number;
+    private final List<SAFootnote>    footnotes;
+    private final SAFormalItemsByKind formals;
+    private final SAIDMap             ids;
+    private final SASectionNumberPS   number;
 
     public PartSectionAnnotator(
-      final @Nonnull SAIDMap in_ids,
-      final @Nonnull SAFormalItemsByKind in_formals,
-      final @Nonnull List<SAFootnote> in_footnotes,
-      final @Nonnull SASectionNumberPS in_number)
+      final SAIDMap in_ids,
+      final SAFormalItemsByKind in_formals,
+      final List<SAFootnote> in_footnotes,
+      final SASectionNumberPS in_number)
     {
       this.ids = in_ids;
       this.formals = in_formals;
@@ -691,9 +647,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SASection visitSectionWithParagraphs(
-      final @Nonnull SSectionWithParagraphs s)
-      throws ConstraintError,
-        Exception
+      final SSectionWithParagraphs s)
+      throws Exception
     {
       return SAnnotator.transformSectionWithParagraphs(
         this.ids,
@@ -704,9 +659,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SASection visitSectionWithSubsections(
-      final @Nonnull SSectionWithSubsections s)
-      throws ConstraintError,
-        Exception
+      final SSectionWithSubsections s)
+      throws Exception
     {
       return SAnnotator.transformSectionWithSubsections(
         this.ids,
@@ -718,14 +672,14 @@ import com.io7m.jstructural.core.SVerbatim;
   }
 
   private static final class SAIDLinkCreator implements
-    PartialFunction<SAID, Unit, ConstraintError>
+    FunctionType<SAID, Unit>
   {
-    private final @Nonnull SAIDTargetContent content;
-    private final @Nonnull SAIDMap           ids;
+    private final SAIDTargetContent content;
+    private final SAIDMap           ids;
 
     public SAIDLinkCreator(
-      final @Nonnull SAIDMap map,
-      final @Nonnull SAIDTargetContent c)
+      final SAIDMap map,
+      final SAIDTargetContent c)
     {
       this.ids = map;
       this.content = c;
@@ -733,15 +687,13 @@ import com.io7m.jstructural.core.SVerbatim;
 
     @Override public Unit call(
       final SAID x)
-      throws ConstraintError
     {
       this.ids.put(x, this.content);
       return Unit.unit();
     }
   }
 
-  private static final class SAIDMapper implements
-    PartialFunction<SID, SAID, ConstraintError>
+  private static final class SAIDMapper implements FunctionType<SID, SAID>
   {
     public SAIDMapper()
     {
@@ -749,8 +701,7 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SAID call(
-      final @Nonnull SID x)
-      throws ConstraintError
+      final SID x)
     {
       return new SAID(x.getActual());
     }
@@ -759,14 +710,14 @@ import com.io7m.jstructural.core.SVerbatim;
   private static final class TableCellContentAnnotator implements
     STableCellContentVisitor<SATableCellContent>
   {
-    private final @Nonnull List<SAFootnote>          footnotes;
-    private final @Nonnull SAIDMap                   ids;
-    private final @Nonnull SASubsectionContentNumber number;
+    private final List<SAFootnote>          footnotes;
+    private final SAIDMap                   ids;
+    private final SASubsectionContentNumber number;
 
     public TableCellContentAnnotator(
-      final @Nonnull SAIDMap in_ids,
-      final @Nonnull List<SAFootnote> in_footnotes,
-      final @Nonnull SASubsectionContentNumber in_number)
+      final SAIDMap in_ids,
+      final List<SAFootnote> in_footnotes,
+      final SASubsectionContentNumber in_number)
     {
       this.ids = in_ids;
       this.footnotes = in_footnotes;
@@ -774,9 +725,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SATableCellContent visitFootnote(
-      final @Nonnull SFootnote footnote)
-      throws ConstraintError,
-        Exception
+      final SFootnote footnote)
+      throws Exception
     {
       return SAnnotator.transformFootnote(
         this.ids,
@@ -786,33 +736,29 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SATableCellContent visitImage(
-      final @Nonnull SImage image)
-      throws ConstraintError,
-        Exception
+      final SImage image)
+      throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
     @Override public SATableCellContent visitLink(
-      final @Nonnull SLink link)
-      throws ConstraintError,
-        Exception
+      final SLink link)
+      throws Exception
     {
       return SAnnotator.transformLink(link);
     }
 
     @Override public SATableCellContent visitLinkExternal(
-      final @Nonnull SLinkExternal link)
-      throws ConstraintError,
-        Exception
+      final SLinkExternal link)
+      throws Exception
     {
       return SAnnotator.transformLinkExternal(link);
     }
 
     @Override public SATableCellContent visitListOrdered(
-      final @Nonnull SListOrdered list)
-      throws ConstraintError,
-        Exception
+      final SListOrdered list)
+      throws Exception
     {
       return SAnnotator.transformListOrdered(
         this.ids,
@@ -822,9 +768,8 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SATableCellContent visitListUnordered(
-      final @Nonnull SListUnordered list)
-      throws ConstraintError,
-        Exception
+      final SListUnordered list)
+      throws Exception
     {
       return SAnnotator.transformListUnordered(
         this.ids,
@@ -834,25 +779,22 @@ import com.io7m.jstructural.core.SVerbatim;
     }
 
     @Override public SATableCellContent visitTerm(
-      final @Nonnull STerm term)
-      throws ConstraintError,
-        Exception
+      final STerm term)
+      throws Exception
     {
       return SAnnotator.transformTerm(term);
     }
 
     @Override public SATableCellContent visitText(
-      final @Nonnull SText text)
-      throws ConstraintError,
-        Exception
+      final SText text)
+      throws Exception
     {
       return SAnnotator.transformText(text);
     }
 
     @Override public SATableCellContent visitVerbatim(
-      final @Nonnull SVerbatim text)
-      throws ConstraintError,
-        Exception
+      final SVerbatim text)
+      throws Exception
     {
       return SAnnotator.transformVerbatim(text);
     }
@@ -866,25 +808,21 @@ import com.io7m.jstructural.core.SVerbatim;
    * @param d
    *          The document
    * @return An annotated document
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SADocument document(
-    final @Nonnull Log log,
-    final @Nonnull SDocument d)
-    throws ConstraintError
+  public static SADocument document(
+    final LogUsableType log,
+    final SDocument d)
   {
     return new SAnnotator(log, d).process();
   }
 
-  private static @Nonnull SAFootnote transformFootnote(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASubsectionContentNumber number,
-    final @Nonnull SFootnote footnote)
-    throws ConstraintError,
-      Exception
+  private static SAFootnote transformFootnote(
+    final SAIDMap ids,
+    final List<SAFootnote> footnotes,
+    final SASubsectionContentNumber number,
+    final SFootnote footnote)
+    throws Exception
   {
     final List<SAFootnoteContent> content_r =
       new ArrayList<SAFootnoteContent>();
@@ -905,28 +843,25 @@ import com.io7m.jstructural.core.SVerbatim;
     return f;
   }
 
-  private static @Nonnull SAFormalItemContent transformFormalItemContent(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SFormalItem formal,
-    final @Nonnull SAFormalItemNumber f_number)
-    throws ConstraintError,
-      Exception
+  private static SAFormalItemContent transformFormalItemContent(
+    final SAIDMap ids,
+    final List<SAFootnote> footnotes,
+    final SFormalItem formal,
+    final SAFormalItemNumber f_number)
+    throws Exception
   {
     return formal.getContent().formalItemContentAccept(
       new FormalItemContentAnnotator(ids, footnotes, f_number));
   }
 
-  private static @Nonnull SAFormalItemList transformFormalItemList(
-    final @Nonnull SFormalItemList list)
-    throws ConstraintError
+  private static SAFormalItemList transformFormalItemList(
+    final SFormalItemList list)
   {
     return new SAFormalItemList(list.getKind());
   }
 
-  private static @Nonnull SAImage transformImage(
-    final @Nonnull SImage image)
-    throws ConstraintError
+  private static SAImage transformImage(
+    final SImage image)
   {
     return new SAImage(
       image.getURI(),
@@ -936,10 +871,9 @@ import com.io7m.jstructural.core.SVerbatim;
       image.getText());
   }
 
-  private static @Nonnull SALink transformLink(
-    final @Nonnull SLink link)
-    throws ConstraintError,
-      Exception
+  private static SALink transformLink(
+    final SLink link)
+    throws Exception
   {
     final List<SALinkContent> content_r = new ArrayList<SALinkContent>();
     for (final SLinkContent c : link.getContent().getElements()) {
@@ -953,10 +887,9 @@ import com.io7m.jstructural.core.SVerbatim;
     return new SALink(link.getTarget(), in_content);
   }
 
-  private static @Nonnull SALinkExternal transformLinkExternal(
-    final @Nonnull SLinkExternal link)
-    throws ConstraintError,
-      Exception
+  private static SALinkExternal transformLinkExternal(
+    final SLinkExternal link)
+    throws Exception
   {
     final List<SALinkContent> content_r = new ArrayList<SALinkContent>();
     for (final SLinkContent c : link.getContent().getElements()) {
@@ -970,13 +903,12 @@ import com.io7m.jstructural.core.SVerbatim;
     return new SALinkExternal(link.getTarget(), in_content);
   }
 
-  private static @Nonnull SAListOrdered transformListOrdered(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASubsectionContentNumber number,
-    final @Nonnull SListOrdered list)
-    throws ConstraintError,
-      Exception
+  private static SAListOrdered transformListOrdered(
+    final SAIDMap ids,
+    final List<SAFootnote> footnotes,
+    final SASubsectionContentNumber number,
+    final SListOrdered list)
+    throws Exception
   {
     final ListItemContentAnnotator lic =
       new ListItemContentAnnotator(ids, footnotes, number);
@@ -997,19 +929,18 @@ import com.io7m.jstructural.core.SVerbatim;
       items_r.add(ai);
     }
 
-    final Option<String> in_type = list.getType();
+    final OptionType<String> in_type = list.getType();
     final SNonEmptyList<SAListItem> in_items = SNonEmptyList.newList(items_r);
 
     return new SAListOrdered(in_type, in_items);
   }
 
-  private static @Nonnull SAListUnordered transformListUnordered(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASubsectionContentNumber number,
-    final @Nonnull SListUnordered list)
-    throws ConstraintError,
-      Exception
+  private static SAListUnordered transformListUnordered(
+    final SAIDMap ids,
+    final List<SAFootnote> footnotes,
+    final SASubsectionContentNumber number,
+    final SListUnordered list)
+    throws Exception
   {
     final ListItemContentAnnotator lic =
       new ListItemContentAnnotator(ids, footnotes, number);
@@ -1030,19 +961,18 @@ import com.io7m.jstructural.core.SVerbatim;
       items_r.add(ai);
     }
 
-    final Option<String> in_type = list.getType();
+    final OptionType<String> in_type = list.getType();
     final SNonEmptyList<SAListItem> in_items = SNonEmptyList.newList(items_r);
 
     return new SAListUnordered(in_type, in_items);
   }
 
   private static SNonEmptyList<SAParagraphContent> transformParagraphContent(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SParagraph paragraph,
-    final @Nonnull SAParagraphNumber p_number)
-    throws ConstraintError,
-      Exception
+    final SAIDMap ids,
+    final List<SAFootnote> footnotes,
+    final SParagraph paragraph,
+    final SAParagraphNumber p_number)
+    throws Exception
   {
     final List<SAParagraphContent> content_r =
       new ArrayList<SAParagraphContent>();
@@ -1058,22 +988,20 @@ import com.io7m.jstructural.core.SVerbatim;
     return in_content;
   }
 
-  private static @Nonnull SAFormalItem transformSectionFormalItem(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull SAFormalItemsByKind formals,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASectionNumber number,
-    final @Nonnull SFormalItem formal,
+  private static SAFormalItem transformSectionFormalItem(
+    final SAIDMap ids,
+    final SAFormalItemsByKind formals,
+    final List<SAFootnote> footnotes,
+    final SASectionNumber number,
+    final SFormalItem formal,
     final int formal_number)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
     final SAFormalItem saf =
       number.sectionNumberAccept(new SASectionNumberVisitor<SAFormalItem>() {
         @Override public SAFormalItem visitSectionNumberWithoutPart(
           final SASectionNumberS sn)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           final SAFormalItemNumber f_number =
             new SAFormalItemNumberSF(sn.getSection(), formal_number);
@@ -1093,8 +1021,7 @@ import com.io7m.jstructural.core.SVerbatim;
 
         @Override public SAFormalItem visitSectionNumberWithPart(
           final SASectionNumberPS sn)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           final SAFormalItemNumber f_number =
             new SAFormalItemNumberPSF(
@@ -1120,23 +1047,21 @@ import com.io7m.jstructural.core.SVerbatim;
     return saf;
   }
 
-  private static @Nonnull SAParagraph transformSectionParagraph(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASectionNumber number,
-    final @Nonnull SParagraph paragraph,
+  private static SAParagraph transformSectionParagraph(
+    final SAIDMap ids,
+    final List<SAFootnote> footnotes,
+    final SASectionNumber number,
+    final SParagraph paragraph,
     final int paragraph_number)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
-    final Option<SAID> id = paragraph.getID().mapPartial(new SAIDMapper());
+    final OptionType<SAID> id = paragraph.getID().map(new SAIDMapper());
 
     final SAParagraph sap =
       number.sectionNumberAccept(new SASectionNumberVisitor<SAParagraph>() {
         @Override public SAParagraph visitSectionNumberWithoutPart(
           final SASectionNumberS sn)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           final SAParagraphNumber p_number =
             new SAParagraphNumberSP(sn.getSection(), paragraph_number);
@@ -1157,8 +1082,7 @@ import com.io7m.jstructural.core.SVerbatim;
 
         @Override public SAParagraph visitSectionNumberWithPart(
           final SASectionNumberPS sn)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           final SAParagraphNumber p_number =
             new SAParagraphNumberPSP(
@@ -1181,18 +1105,17 @@ import com.io7m.jstructural.core.SVerbatim;
         }
       });
 
-    id.mapPartial(new SAIDLinkCreator(ids, sap));
+    id.map(new SAIDLinkCreator(ids, sap));
     return sap;
   }
 
   private static SASection transformSectionWithParagraphs(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull SAFormalItemsByKind formals,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SSectionWithParagraphs s,
-    final @Nonnull SASectionNumber number)
-    throws ConstraintError,
-      Exception
+    final SAIDMap ids,
+    final SAFormalItemsByKind formals,
+    final List<SAFootnote> footnotes,
+    final SSectionWithParagraphs s,
+    final SASectionNumber number)
+    throws Exception
   {
     final SASectionTitle title =
       new SASectionTitle(number, s.getTitle().getActual());
@@ -1208,9 +1131,8 @@ import com.io7m.jstructural.core.SVerbatim;
         p
           .subsectionContentAccept(new SSubsectionContentVisitor<SASubsectionContent>() {
             @Override public SASubsectionContent visitFormalItem(
-              final @Nonnull SFormalItem formal)
-              throws ConstraintError,
-                Exception
+              final SFormalItem formal)
+              throws Exception
             {
               final SAFormalItem pa =
                 SAnnotator.transformSectionFormalItem(
@@ -1224,9 +1146,8 @@ import com.io7m.jstructural.core.SVerbatim;
             }
 
             @Override public SASubsectionContent visitParagraph(
-              final @Nonnull SParagraph paragraph)
-              throws ConstraintError,
-                Exception
+              final SParagraph paragraph)
+              throws Exception
             {
               final SAParagraph pa =
                 SAnnotator.transformSectionParagraph(
@@ -1242,7 +1163,7 @@ import com.io7m.jstructural.core.SVerbatim;
       content_r.add(r);
     }
 
-    final Option<SAID> id = s.getID().mapPartial(new SAIDMapper());
+    final OptionType<SAID> id = s.getID().map(new SAIDMapper());
 
     final List<SAFootnote> footnotes_here = new ArrayList<SAFootnote>();
     final int footnotes_now = footnotes.size();
@@ -1264,14 +1185,13 @@ import com.io7m.jstructural.core.SVerbatim;
       footnotes_here);
   }
 
-  private static @Nonnull SASection transformSectionWithSubsections(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull SAFormalItemsByKind formals,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASectionNumber number,
-    final @Nonnull SSectionWithSubsections s)
-    throws ConstraintError,
-      Exception
+  private static SASection transformSectionWithSubsections(
+    final SAIDMap ids,
+    final SAFormalItemsByKind formals,
+    final List<SAFootnote> footnotes,
+    final SASectionNumber number,
+    final SSectionWithSubsections s)
+    throws Exception
   {
     final SASectionTitle title =
       new SASectionTitle(number, s.getTitle().getActual());
@@ -1279,6 +1199,7 @@ import com.io7m.jstructural.core.SVerbatim;
     final int footnotes_before = footnotes.size();
     final List<SASubsection> subsections_r = new ArrayList<SASubsection>();
     for (final SSubsection ss : s.getSubsections().getElements()) {
+      assert ss != null;
       final SASubsection sa =
         SAnnotator.transformSubsection(
           ids,
@@ -1287,7 +1208,7 @@ import com.io7m.jstructural.core.SVerbatim;
           number,
           ss,
           subsections_r.size() + 1);
-      sa.getID().mapPartial(new SAIDLinkCreator(ids, sa));
+      sa.getID().map(new SAIDLinkCreator(ids, sa));
       subsections_r.add(sa);
     }
     final SNonEmptyList<SASubsection> subsections =
@@ -1301,7 +1222,7 @@ import com.io7m.jstructural.core.SVerbatim;
       }
     }
 
-    final Option<SAID> id = s.getID().mapPartial(new SAIDMapper());
+    final OptionType<SAID> id = s.getID().map(new SAIDMapper());
     return new SASectionWithSubsections(
       number,
       s.getType(),
@@ -1313,14 +1234,13 @@ import com.io7m.jstructural.core.SVerbatim;
   }
 
   private static SASubsection transformSubsection(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull SAFormalItemsByKind formals,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASectionNumber number,
-    final @Nonnull SSubsection subsection,
+    final SAIDMap ids,
+    final SAFormalItemsByKind formals,
+    final List<SAFootnote> footnotes,
+    final SASectionNumber number,
+    final SSubsection subsection,
     final int subsection_number)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
     final SASubsectionNumber s_number =
       SAnnotator.transformSubsectionNumber(number, subsection_number);
@@ -1340,8 +1260,7 @@ import com.io7m.jstructural.core.SVerbatim;
           .subsectionContentAccept(new SSubsectionContentVisitor<SASubsectionContent>() {
             @Override public SASubsectionContent visitFormalItem(
               final SFormalItem formal)
-              throws ConstraintError,
-                Exception
+              throws Exception
             {
               return SAnnotator.transformSubsectionFormalItem(
                 ids,
@@ -1354,8 +1273,7 @@ import com.io7m.jstructural.core.SVerbatim;
 
             @Override public SASubsectionContent visitParagraph(
               final SParagraph paragraph)
-              throws ConstraintError,
-                Exception
+              throws Exception
             {
               final SAParagraph pa =
                 SAnnotator.transformSubsectionParagraph(
@@ -1373,7 +1291,7 @@ import com.io7m.jstructural.core.SVerbatim;
     final SNonEmptyList<SASubsectionContent> in_content =
       SNonEmptyList.newList(results_r);
 
-    final Option<SAID> id = subsection.getID().mapPartial(new SAIDMapper());
+    final OptionType<SAID> id = subsection.getID().map(new SAIDMapper());
     return new SASubsection(
       s_number,
       subsection.getType(),
@@ -1382,23 +1300,21 @@ import com.io7m.jstructural.core.SVerbatim;
       in_content);
   }
 
-  private static @Nonnull SAFormalItem transformSubsectionFormalItem(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull SAFormalItemsByKind formals,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASubsectionNumber s_number,
-    final @Nonnull SFormalItem formal,
+  private static SAFormalItem transformSubsectionFormalItem(
+    final SAIDMap ids,
+    final SAFormalItemsByKind formals,
+    final List<SAFootnote> footnotes,
+    final SASubsectionNumber s_number,
+    final SFormalItem formal,
     final int formal_number)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
     final SAFormalItem saf =
       s_number
         .subsectionNumberAccept(new SASubsectionNumberVisitor<SAFormalItem>() {
           @Override public SAFormalItem visitSubsectionNumberPSS(
-            final @Nonnull SASubsectionNumberPSS p)
-            throws ConstraintError,
-              Exception
+            final SASubsectionNumberPSS p)
+            throws Exception
           {
             final SAFormalItemNumber f_number =
               new SAFormalItemNumberPSSF(p.getPart(), p.getSection(), p
@@ -1418,9 +1334,8 @@ import com.io7m.jstructural.core.SVerbatim;
           }
 
           @Override public SAFormalItem visitSubsectionNumberSS(
-            final @Nonnull SASubsectionNumberSS p)
-            throws ConstraintError,
-              Exception
+            final SASubsectionNumberSS p)
+            throws Exception
           {
             final SAFormalItemNumber f_number =
               new SAFormalItemNumberSSF(
@@ -1446,26 +1361,23 @@ import com.io7m.jstructural.core.SVerbatim;
     return saf;
   }
 
-  private static @Nonnull SASubsectionNumber transformSubsectionNumber(
-    final @Nonnull SASectionNumber number,
+  private static SASubsectionNumber transformSubsectionNumber(
+    final SASectionNumber number,
     final int subsection_number)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
     return number
       .sectionNumberAccept(new SASectionNumberVisitor<SASubsectionNumber>() {
         @Override public SASubsectionNumber visitSectionNumberWithoutPart(
           final SASectionNumberS p)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return new SASubsectionNumberSS(p.getSection(), subsection_number);
         }
 
         @Override public SASubsectionNumber visitSectionNumberWithPart(
           final SASectionNumberPS p)
-          throws ConstraintError,
-            Exception
+          throws Exception
         {
           return new SASubsectionNumberPSS(
             p.getPart(),
@@ -1475,24 +1387,22 @@ import com.io7m.jstructural.core.SVerbatim;
       });
   }
 
-  private static @Nonnull SAParagraph transformSubsectionParagraph(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASubsectionNumber number,
-    final @Nonnull SParagraph paragraph,
+  private static SAParagraph transformSubsectionParagraph(
+    final SAIDMap ids,
+    final List<SAFootnote> footnotes,
+    final SASubsectionNumber number,
+    final SParagraph paragraph,
     final int paragraph_number)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
-    final Option<SAID> id = paragraph.getID().mapPartial(new SAIDMapper());
+    final OptionType<SAID> id = paragraph.getID().map(new SAIDMapper());
 
     final SAParagraph sap =
       number
         .subsectionNumberAccept(new SASubsectionNumberVisitor<SAParagraph>() {
           @Override public SAParagraph visitSubsectionNumberPSS(
             final SASubsectionNumberPSS ssn)
-            throws ConstraintError,
-              Exception
+            throws Exception
           {
             final SAParagraphNumber p_number =
               new SAParagraphNumberPSSP(ssn.getPart(), ssn.getSection(), ssn
@@ -1514,8 +1424,7 @@ import com.io7m.jstructural.core.SVerbatim;
 
           @Override public SAParagraph visitSubsectionNumberSS(
             final SASubsectionNumberSS ssn)
-            throws ConstraintError,
-              Exception
+            throws Exception
           {
             final SAParagraphNumber p_number =
               new SAParagraphNumberSSP(
@@ -1538,33 +1447,28 @@ import com.io7m.jstructural.core.SVerbatim;
           }
         });
 
-    id.mapPartial(new SAIDLinkCreator(ids, sap));
+    id.map(new SAIDLinkCreator(ids, sap));
     return sap;
   }
 
-  private static @Nonnull SATable transformTable(
-    final @Nonnull SAIDMap ids,
-    final @Nonnull List<SAFootnote> footnotes,
-    final @Nonnull SASubsectionContentNumber number,
-    final @Nonnull STable t)
-    throws ConstraintError,
-      Exception
+  private static SATable transformTable(
+    final SAIDMap ids,
+    final List<SAFootnote> footnotes,
+    final SASubsectionContentNumber number,
+    final STable t)
+    throws Exception
   {
     final SATableSummary in_summary =
       SAnnotator.transformTableSummary(t.getSummary());
 
-    final Option<SATableHead> in_header =
+    final OptionType<SATableHead> in_header =
       t.getHeader().mapPartial(
-        new PartialFunction<STableHead, SATableHead, Exception>() {
+        new PartialFunctionType<STableHead, SATableHead, Exception>() {
           @Override public SATableHead call(
             final STableHead x)
             throws Exception
           {
-            try {
-              return SAnnotator.transformTableHead(x);
-            } catch (final ConstraintError e) {
-              throw new UnreachableCodeException(e);
-            }
+            return SAnnotator.transformTableHead(x);
           }
         });
 
@@ -1573,16 +1477,16 @@ import com.io7m.jstructural.core.SVerbatim;
     return new SATable(in_summary, in_header, in_body);
   }
 
-  private static @Nonnull SATableBody transformTableBody(
-    final @Nonnull SAIDMap in_ids,
-    final @Nonnull List<SAFootnote> in_footnotes,
-    final @Nonnull SASubsectionContentNumber in_number,
-    final @Nonnull STableBody body)
-    throws ConstraintError,
-      Exception
+  private static SATableBody transformTableBody(
+    final SAIDMap in_ids,
+    final List<SAFootnote> in_footnotes,
+    final SASubsectionContentNumber in_number,
+    final STableBody body)
+    throws Exception
   {
     final List<SATableRow> rows_r = new ArrayList<SATableRow>();
     for (final STableRow r : body.getRows().getElements()) {
+      assert r != null;
       rows_r.add(SAnnotator.transformTableRow(
         in_ids,
         in_footnotes,
@@ -1594,17 +1498,17 @@ import com.io7m.jstructural.core.SVerbatim;
     return new SATableBody(rows);
   }
 
-  private static @Nonnull SATableCell transformTableCell(
-    final @Nonnull SAIDMap in_ids,
-    final @Nonnull List<SAFootnote> in_footnotes,
-    final @Nonnull SASubsectionContentNumber in_number,
-    final @Nonnull STableCell c)
-    throws ConstraintError,
-      Exception
+  private static SATableCell transformTableCell(
+    final SAIDMap in_ids,
+    final List<SAFootnote> in_footnotes,
+    final SASubsectionContentNumber in_number,
+    final STableCell c)
+    throws Exception
   {
     final List<SATableCellContent> content_r =
       new ArrayList<SATableCellContent>();
     for (final STableCellContent cc : c.getContent().getElements()) {
+      assert cc != null;
       content_r.add(SAnnotator.transformTableCellContent(
         in_ids,
         in_footnotes,
@@ -1617,13 +1521,12 @@ import com.io7m.jstructural.core.SVerbatim;
     return new SATableCell(content);
   }
 
-  private static @Nonnull SATableCellContent transformTableCellContent(
-    final @Nonnull SAIDMap in_ids,
-    final @Nonnull List<SAFootnote> in_footnotes,
-    final @Nonnull SASubsectionContentNumber in_number,
-    final @Nonnull STableCellContent cc)
-    throws ConstraintError,
-      Exception
+  private static SATableCellContent transformTableCellContent(
+    final SAIDMap in_ids,
+    final List<SAFootnote> in_footnotes,
+    final SASubsectionContentNumber in_number,
+    final STableCellContent cc)
+    throws Exception
   {
     return cc.tableCellContentAccept(new TableCellContentAnnotator(
       in_ids,
@@ -1631,20 +1534,19 @@ import com.io7m.jstructural.core.SVerbatim;
       in_number));
   }
 
-  private static @Nonnull SATableColumnName transformTableColumnName(
-    final @Nonnull STableColumnName n)
-    throws ConstraintError
+  private static SATableColumnName transformTableColumnName(
+    final STableColumnName n)
   {
     return new SATableColumnName(n.getText());
   }
 
-  private static @Nonnull SATableHead transformTableHead(
-    final @Nonnull STableHead x)
-    throws ConstraintError
+  private static SATableHead transformTableHead(
+    final STableHead x)
   {
     final List<SATableColumnName> names_r =
       new ArrayList<SATableColumnName>();
     for (final STableColumnName n : x.getHeader().getElements()) {
+      assert n != null;
       names_r.add(SAnnotator.transformTableColumnName(n));
     }
 
@@ -1653,16 +1555,16 @@ import com.io7m.jstructural.core.SVerbatim;
     return new SATableHead(names);
   }
 
-  private static @Nonnull SATableRow transformTableRow(
-    final @Nonnull SAIDMap in_ids,
-    final @Nonnull List<SAFootnote> in_footnotes,
-    final @Nonnull SASubsectionContentNumber in_number,
-    final @Nonnull STableRow r)
-    throws ConstraintError,
-      Exception
+  private static SATableRow transformTableRow(
+    final SAIDMap in_ids,
+    final List<SAFootnote> in_footnotes,
+    final SASubsectionContentNumber in_number,
+    final STableRow r)
+    throws Exception
   {
     final List<SATableCell> cells_r = new ArrayList<SATableCell>();
     for (final STableCell c : r.getColumns().getElements()) {
+      assert c != null;
       cells_r.add(SAnnotator.transformTableCell(
         in_ids,
         in_footnotes,
@@ -1674,53 +1576,46 @@ import com.io7m.jstructural.core.SVerbatim;
     return new SATableRow(cells);
   }
 
-  private static @Nonnull SATableSummary transformTableSummary(
-    final @Nonnull STableSummary summary)
-    throws ConstraintError
+  private static SATableSummary transformTableSummary(
+    final STableSummary summary)
   {
     return new SATableSummary(summary.getText());
   }
 
-  private static @Nonnull SATerm transformTerm(
-    final @Nonnull STerm term)
-    throws ConstraintError
+  private static SATerm transformTerm(
+    final STerm term)
   {
     return new SATerm(new SAText(term.getText().getText()), term.getType());
   }
 
-  private static @Nonnull SAText transformText(
-    final @Nonnull SText text)
-    throws ConstraintError
+  private static SAText transformText(
+    final SText text)
   {
     return new SAText(text.getText());
   }
 
-  private static @Nonnull SAVerbatim transformVerbatim(
-    final @Nonnull SVerbatim text)
-    throws ConstraintError
+  private static SAVerbatim transformVerbatim(
+    final SVerbatim text)
   {
     return new SAVerbatim(text.getText(), text.getType());
   }
 
-  private final @Nonnull SDocument document;
-  private final @Nonnull Log       log;
+  private final SDocument     document;
+  private final LogUsableType log;
 
   private SAnnotator(
-    final @Nonnull Log in_log,
-    final @Nonnull SDocument d)
-    throws ConstraintError
+    final LogUsableType in_log,
+    final SDocument d)
   {
-    this.document = Constraints.constrainNotNull(d, "Document");
-    this.log = new Log(in_log, "annotator");
+    this.document = NullCheck.notNull(d, "Document");
+    this.log = NullCheck.notNull(in_log, "Log").with("annotator");
   }
 
-  private @Nonnull SADocument process()
+  private SADocument process()
   {
     try {
       return this.document.documentAccept(new DocumentAnnotator(this.log));
     } catch (final Exception e) {
-      throw new UnreachableCodeException(e);
-    } catch (final ConstraintError e) {
       throw new UnreachableCodeException(e);
     }
   }

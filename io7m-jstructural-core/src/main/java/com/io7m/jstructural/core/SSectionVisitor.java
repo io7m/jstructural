@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * Section visitor.
  * 
@@ -35,16 +31,14 @@ public interface SSectionVisitor<S>
    * @param s
    *          The section element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   S visitSectionWithParagraphs(
-    final @Nonnull SSectionWithParagraphs s)
-    throws ConstraintError,
-      Exception;
+    final SSectionWithParagraphs s)
+    throws Exception;
 
   /**
    * Visit a section with top-level subsections.
@@ -52,14 +46,12 @@ public interface SSectionVisitor<S>
    * @param s
    *          The section element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   S visitSectionWithSubsections(
-    final @Nonnull SSectionWithSubsections s)
-    throws ConstraintError,
-      Exception;
+    final SSectionWithSubsections s)
+    throws Exception;
 }

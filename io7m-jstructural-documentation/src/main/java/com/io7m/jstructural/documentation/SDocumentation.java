@@ -19,13 +19,11 @@ package com.io7m.jstructural.documentation;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.UnreachableCodeException;
+import com.io7m.junreachable.UnreachableCodeException;
 
 public final class SDocumentation
 {
-  public static @Nonnull URI getDocumentationXMLLocation()
+  public static URI getDocumentationXMLLocation()
   {
     try {
       return SDocumentation.class.getResource(

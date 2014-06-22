@@ -16,18 +16,16 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A formal item.
  */
 
-@Immutable public final class SFormalItem implements SSubsectionContent
+public final class SFormalItem implements SSubsectionContent
 {
   /**
    * Construct a new formal item with the given type attribute.
@@ -39,17 +37,14 @@ import com.io7m.jaux.functional.Option;
    * @param in_content
    *          The formal item content
    * @return A new formal item
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SFormalItem formalItem(
-    final @Nonnull SFormalItemTitle in_title,
-    final @Nonnull String in_kind,
-    final @Nonnull SFormalItemContent in_content)
-    throws ConstraintError
+  public static SFormalItem formalItem(
+    final SFormalItemTitle in_title,
+    final String in_kind,
+    final SFormalItemContent in_content)
   {
-    final Option<String> no_type = Option.none();
+    final OptionType<String> no_type = Option.none();
     return new SFormalItem(in_title, in_kind, no_type, in_content);
   }
 
@@ -65,43 +60,38 @@ import com.io7m.jaux.functional.Option;
    * @param in_content
    *          The formal item content
    * @return A new formal item
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SFormalItem formalItemTyped(
-    final @Nonnull SFormalItemTitle in_title,
-    final @Nonnull String in_kind,
-    final @Nonnull String in_type,
-    final @Nonnull SFormalItemContent in_content)
-    throws ConstraintError
+  public static SFormalItem formalItemTyped(
+    final SFormalItemTitle in_title,
+    final String in_kind,
+    final String in_type,
+    final SFormalItemContent in_content)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(in_type, "Type"));
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(in_type, "Type"));
     return new SFormalItem(in_title, in_kind, some_type, in_content);
   }
 
-  private final @Nonnull SFormalItemContent content;
-
-  private final @Nonnull String             kind;
-  private final @Nonnull SFormalItemTitle   title;
-  private final @Nonnull Option<String>     type;
+  private final SFormalItemContent content;
+  private final String             kind;
+  private final SFormalItemTitle   title;
+  private final OptionType<String> type;
 
   private SFormalItem(
-    final @Nonnull SFormalItemTitle in_title,
-    final @Nonnull String in_kind,
-    final @Nonnull Option<String> in_type,
-    final @Nonnull SFormalItemContent in_content)
-    throws ConstraintError
+    final SFormalItemTitle in_title,
+    final String in_kind,
+    final OptionType<String> in_type,
+    final SFormalItemContent in_content)
   {
-    this.title = Constraints.constrainNotNull(in_title, "Title");
-    this.kind = Constraints.constrainNotNull(in_kind, "Kind");
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+    this.title = NullCheck.notNull(in_title, "Title");
+    this.kind = NullCheck.notNull(in_kind, "Kind");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.content = NullCheck.notNull(in_content, "Content");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -123,7 +113,7 @@ import com.io7m.jaux.functional.Option;
    * @return The formal item content
    */
 
-  public @Nonnull SFormalItemContent getContent()
+  public SFormalItemContent getContent()
   {
     return this.content;
   }
@@ -132,7 +122,7 @@ import com.io7m.jaux.functional.Option;
    * @return The kind of formal item
    */
 
-  public @Nonnull String getKind()
+  public String getKind()
   {
     return this.kind;
   }
@@ -141,7 +131,7 @@ import com.io7m.jaux.functional.Option;
    * @return The formal item title
    */
 
-  public @Nonnull SFormalItemTitle getTitle()
+  public SFormalItemTitle getTitle()
   {
     return this.title;
   }
@@ -150,7 +140,7 @@ import com.io7m.jaux.functional.Option;
    * @return The formal item type attribute, if specified
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -167,9 +157,8 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A subsectionContentAccept(
-    final @Nonnull SSubsectionContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SSubsectionContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFormalItem(this);
   }
@@ -186,6 +175,8 @@ import com.io7m.jaux.functional.Option;
     builder.append(" type=");
     builder.append(this.type);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

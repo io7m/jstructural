@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * Section visitor.
  * 
@@ -35,16 +31,14 @@ public interface SASectionVisitor<A>
    * @param s
    *          The section element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitSectionWithParagraphs(
-    final @Nonnull SASectionWithParagraphs s)
-    throws ConstraintError,
-      Exception;
+    final SASectionWithParagraphs s)
+    throws Exception;
 
   /**
    * Visit a section with top-level subsections.
@@ -52,14 +46,12 @@ public interface SASectionVisitor<A>
    * @param s
    *          The section element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitSectionWithSubsections(
-    final @Nonnull SASectionWithSubsections s)
-    throws ConstraintError,
-      Exception;
+    final SASectionWithSubsections s)
+    throws Exception;
 }

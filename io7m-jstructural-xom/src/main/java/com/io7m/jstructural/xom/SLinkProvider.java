@@ -16,9 +16,6 @@
 
 package com.io7m.jstructural.xom;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jstructural.annotated.SAFormalItemNumber;
 import com.io7m.jstructural.annotated.SAID;
 import com.io7m.jstructural.annotated.SAPartNumber;
@@ -28,27 +25,21 @@ import com.io7m.jstructural.annotated.SASubsectionNumber;
 
 interface SLinkProvider
 {
-  @Nonnull String getFormalItemLinkTarget(
-    final @Nonnull SAFormalItemNumber f)
-    throws ConstraintError;
+  String getFormalItemLinkTarget(
+    final SAFormalItemNumber f);
 
-  @Nonnull String getLinkTargetForID(
-    final @Nonnull SAID id)
-    throws ConstraintError;
+  String getLinkTargetForID(
+    final SAID id);
 
-  @Nonnull String getPartLinkTarget(
-    final @Nonnull SAPartNumber p)
-    throws ConstraintError;
+  String getPartLinkTarget(
+    final SAPartNumber p);
 
-  @Nonnull String getSectionLinkTarget(
-    final @Nonnull SASectionNumber s)
-    throws ConstraintError;
+  String getSectionLinkTarget(
+    final SASectionNumber s);
 
-  @Nonnull String getSegmentLinkTarget(
-    final @Nonnull SASegmentNumber segment)
-    throws ConstraintError;
+  String getSegmentLinkTarget(
+    final SASegmentNumber segment);
 
-  @Nonnull String getSubsectionLinkTarget(
-    final @Nonnull SASubsectionNumber s)
-    throws ConstraintError;
+  String getSubsectionLinkTarget(
+    final SASubsectionNumber s);
 }

@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * Link content visitor.
  * 
@@ -35,16 +31,14 @@ public interface SALinkContentVisitor<A>
    * @param image
    *          The image element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitImage(
-    final @Nonnull SAImage image)
-    throws ConstraintError,
-      Exception;
+    final SAImage image)
+    throws Exception;
 
   /**
    * Visit a text element.
@@ -52,14 +46,12 @@ public interface SALinkContentVisitor<A>
    * @param text
    *          The text element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitText(
-    final @Nonnull SAText text)
-    throws ConstraintError,
-      Exception;
+    final SAText text)
+    throws Exception;
 }

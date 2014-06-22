@@ -16,16 +16,13 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
 /**
  * Section contents element.
  */
 
-@Immutable public final class SSectionContents
+public final class SSectionContents
 {
-  private static final @Nonnull SSectionContents INSTANCE;
+  private static final SSectionContents INSTANCE;
 
   static {
     INSTANCE = new SSectionContents();
@@ -35,7 +32,7 @@ import javax.annotation.concurrent.Immutable;
    * @return A section contents element
    */
 
-  public static @Nonnull SSectionContents get()
+  public static SSectionContents get()
   {
     return SSectionContents.INSTANCE;
   }

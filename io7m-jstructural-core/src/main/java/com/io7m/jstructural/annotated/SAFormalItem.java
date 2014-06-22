@@ -16,50 +16,48 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
+import com.io7m.jranges.RangeCheck;
 
 /**
  * A formal item.
  */
 
-@Immutable public final class SAFormalItem implements SASubsectionContent
+public final class SAFormalItem implements SASubsectionContent
 {
-  private final @Nonnull SAFormalItemContent content;
-  private final int                          formal_number;
-  private final @Nonnull String              kind;
-  private final @Nonnull SAFormalItemNumber  number;
-  private final @Nonnull SAFormalItemTitle   title;
-  private final @Nonnull Option<String>      type;
+  private final SAFormalItemContent content;
+  private final int                 formal_number;
+  private final String              kind;
+  private final SAFormalItemNumber  number;
+  private final SAFormalItemTitle   title;
+  private final OptionType<String>  type;
 
   SAFormalItem(
-    final @Nonnull SAFormalItemNumber in_number,
-    final @Nonnull SAFormalItemTitle in_title,
-    final @Nonnull String in_kind,
-    final @Nonnull Option<String> in_type,
-    final @Nonnull SAFormalItemContent in_content,
+    final SAFormalItemNumber in_number,
+    final SAFormalItemTitle in_title,
+    final String in_kind,
+    final OptionType<String> in_type,
+    final SAFormalItemContent in_content,
     final int in_formal_number)
-    throws ConstraintError
   {
-    this.number = Constraints.constrainNotNull(in_number, "Number");
-    this.title = Constraints.constrainNotNull(in_title, "Title");
-    this.kind = Constraints.constrainNotNull(in_kind, "Kind");
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+    this.number = NullCheck.notNull(in_number, "Number");
+    this.title = NullCheck.notNull(in_title, "Title");
+    this.kind = NullCheck.notNull(in_kind, "Kind");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.content = NullCheck.notNull(in_content, "Content");
+
     this.formal_number =
-      Constraints.constrainRange(
+      (int) RangeCheck.checkIncludedIn(
         in_formal_number,
-        1,
-        Integer.MAX_VALUE,
-        "Formals");
+        "Formal item number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid formal item number range");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -83,7 +81,7 @@ import com.io7m.jaux.functional.Option;
    * @return The formal item content
    */
 
-  public @Nonnull SAFormalItemContent getContent()
+  public SAFormalItemContent getContent()
   {
     return this.content;
   }
@@ -101,7 +99,7 @@ import com.io7m.jaux.functional.Option;
    * @return The kind of formal item
    */
 
-  public @Nonnull String getKind()
+  public String getKind()
   {
     return this.kind;
   }
@@ -110,7 +108,7 @@ import com.io7m.jaux.functional.Option;
    * @return The formal item number
    */
 
-  public @Nonnull SAFormalItemNumber getNumber()
+  public SAFormalItemNumber getNumber()
   {
     return this.number;
   }
@@ -119,7 +117,7 @@ import com.io7m.jaux.functional.Option;
    * @return The formal item title
    */
 
-  public @Nonnull SAFormalItemTitle getTitle()
+  public SAFormalItemTitle getTitle()
   {
     return this.title;
   }
@@ -128,7 +126,7 @@ import com.io7m.jaux.functional.Option;
    * @return The formal item type attribute, if specified
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -146,9 +144,8 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A subsectionContentAccept(
-    final @Nonnull SASubsectionContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SASubsectionContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFormalItem(this);
   }
@@ -169,6 +166,8 @@ import com.io7m.jaux.functional.Option;
     builder.append(" formal_number=");
     builder.append(this.formal_number);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

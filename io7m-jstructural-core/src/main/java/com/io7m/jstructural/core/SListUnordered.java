@@ -16,18 +16,16 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * An unordered list element.
  */
 
-@Immutable public final class SListUnordered implements
+public final class SListUnordered implements
   SListItemContent,
   SFootnoteContent,
   SParagraphContent,
@@ -40,15 +38,12 @@ import com.io7m.jaux.functional.Option;
    * @param content
    *          The list content.
    * @return A new list
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SListUnordered list(
-    final @Nonnull SNonEmptyList<SListItem> content)
-    throws ConstraintError
+  public static SListUnordered list(
+    final SNonEmptyList<SListItem> content)
   {
-    final Option<String> none = Option.none();
+    final OptionType<String> none = Option.none();
     return new SListUnordered(none, content);
   }
 
@@ -60,34 +55,30 @@ import com.io7m.jaux.functional.Option;
    * @param content
    *          The list content.
    * @return A new list
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SListUnordered listTyped(
-    final @Nonnull String type,
-    final @Nonnull SNonEmptyList<SListItem> content)
-    throws ConstraintError
+  public static SListUnordered listTyped(
+    final String type,
+    final SNonEmptyList<SListItem> content)
   {
-    final Option<String> some =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
+    final OptionType<String> some =
+      Option.some(NullCheck.notNull(type, "Type"));
     return new SListUnordered(some, content);
   }
 
-  private final @Nonnull SNonEmptyList<SListItem> items;
-  private final @Nonnull Option<String>           type;
+  private final SNonEmptyList<SListItem> items;
+  private final OptionType<String>       type;
 
   private SListUnordered(
-    final @Nonnull Option<String> in_type,
-    final @Nonnull SNonEmptyList<SListItem> in_items)
-    throws ConstraintError
+    final OptionType<String> in_type,
+    final SNonEmptyList<SListItem> in_items)
   {
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.items = Constraints.constrainNotNull(in_items, "Items");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.items = NullCheck.notNull(in_items, "Items");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -103,17 +94,15 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A footnoteContentAccept(
-    final @Nonnull SFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SFootnoteContentVisitor<A> v)
+    throws Exception
   {
     return v.visitListUnordered(this);
   }
 
   @Override public <A> A formalItemContentAccept(
-    final @Nonnull SFormalItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SFormalItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitListUnordered(this);
   }
@@ -122,7 +111,7 @@ import com.io7m.jaux.functional.Option;
    * @return The list items
    */
 
-  public @Nonnull SNonEmptyList<SListItem> getItems()
+  public SNonEmptyList<SListItem> getItems()
   {
     return this.items;
   }
@@ -131,7 +120,7 @@ import com.io7m.jaux.functional.Option;
    * @return The type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }
@@ -146,25 +135,22 @@ import com.io7m.jaux.functional.Option;
   }
 
   @Override public <A> A listItemContentAccept(
-    final @Nonnull SListItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SListItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitListUnordered(this);
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitListUnordered(this);
   }
 
   @Override public <A> A tableCellContentAccept(
-    final @Nonnull STableCellContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final STableCellContentVisitor<A> v)
+    throws Exception
   {
     return v.visitListUnordered(this);
   }

@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * Formal item content visitor.
  * 
@@ -35,16 +31,14 @@ public interface SAFormalItemContentVisitor<A>
    * @param list
    *          The formal item list element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitFormalItemList(
-    final @Nonnull SAFormalItemList list)
-    throws ConstraintError,
-      Exception;
+    final SAFormalItemList list)
+    throws Exception;
 
   /**
    * Visit an image element.
@@ -52,16 +46,14 @@ public interface SAFormalItemContentVisitor<A>
    * @param image
    *          The image element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitImage(
-    final @Nonnull SAImage image)
-    throws ConstraintError,
-      Exception;
+    final SAImage image)
+    throws Exception;
 
   /**
    * Visit an ordered list element.
@@ -69,16 +61,14 @@ public interface SAFormalItemContentVisitor<A>
    * @param list
    *          The list element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitListOrdered(
-    final @Nonnull SAListOrdered list)
-    throws ConstraintError,
-      Exception;
+    final SAListOrdered list)
+    throws Exception;
 
   /**
    * Visit an unordered list element.
@@ -86,16 +76,14 @@ public interface SAFormalItemContentVisitor<A>
    * @param list
    *          The list element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitListUnordered(
-    final @Nonnull SAListUnordered list)
-    throws ConstraintError,
-      Exception;
+    final SAListUnordered list)
+    throws Exception;
 
   /**
    * Visit a table element.
@@ -103,16 +91,14 @@ public interface SAFormalItemContentVisitor<A>
    * @param e
    *          The table element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitTable(
-    final @Nonnull SATable e)
-    throws ConstraintError,
-      Exception;
+    final SATable e)
+    throws Exception;
 
   /**
    * Visit a verbatim element.
@@ -120,14 +106,12 @@ public interface SAFormalItemContentVisitor<A>
    * @param text
    *          The verbatim element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitVerbatim(
-    final @Nonnull SAVerbatim text)
-    throws ConstraintError,
-      Exception;
+    final SAVerbatim text)
+    throws Exception;
 }

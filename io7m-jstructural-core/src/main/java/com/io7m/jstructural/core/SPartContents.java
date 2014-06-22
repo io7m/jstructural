@@ -16,16 +16,13 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
 /**
  * Part contents element.
  */
 
-@Immutable public final class SPartContents
+public final class SPartContents
 {
-  private static final @Nonnull SPartContents INSTANCE;
+  private static final SPartContents INSTANCE;
 
   static {
     INSTANCE = new SPartContents();
@@ -35,7 +32,7 @@ import javax.annotation.concurrent.Immutable;
    * @return A part contents element
    */
 
-  public static @Nonnull SPartContents get()
+  public static SPartContents get()
   {
     return SPartContents.INSTANCE;
   }

@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * An abstract formal item number.
  */
@@ -36,16 +32,14 @@ public abstract class SAFormalItemNumber implements
    * @param v
    *          The visitor
    * @return The value returned by the visitor
-   * @throws ConstraintError
-   *           If the visitor raises {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises an {@link Exception}
    */
 
   public abstract <T> T formalItemNumberAccept(
-    final @Nonnull SAFormalItemNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception;
+    final SAFormalItemNumberVisitor<T> v)
+    throws Exception;
 
   /**
    * @return A human-readable string representing the formal item number (such
@@ -61,9 +55,8 @@ public abstract class SAFormalItemNumber implements
   public abstract int getFormalItem();
 
   @Override public final <T> T subsectionContentNumberAccept(
-    final @Nonnull SASubsectionContentNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    final SASubsectionContentNumberVisitor<T> v)
+    throws Exception
   {
     return v.visitFormalItemNumber(this);
   }

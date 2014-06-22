@@ -16,18 +16,16 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A document part.
  */
 
-@Immutable public final class SPart
+public final class SPart
 {
   /**
    * Create a part with the given title and content.
@@ -37,18 +35,15 @@ import com.io7m.jaux.functional.Option;
    * @param in_sections
    *          The content
    * @return A new part
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SPart part(
-    final @Nonnull SPartTitle in_title,
-    final @Nonnull SNonEmptyList<SSection> in_sections)
-    throws ConstraintError
+  public static SPart part(
+    final SPartTitle in_title,
+    final SNonEmptyList<SSection> in_sections)
   {
-    final Option<String> no_type = Option.none();
-    final Option<SID> no_id = Option.none();
-    final Option<SPartContents> no_contents = Option.none();
+    final OptionType<String> no_type = Option.none();
+    final OptionType<SID> no_id = Option.none();
+    final OptionType<SPartContents> no_contents = Option.none();
     return new SPart(no_type, no_id, in_title, no_contents, in_sections);
   }
 
@@ -62,20 +57,16 @@ import com.io7m.jaux.functional.Option;
    * @param in_sections
    *          The content
    * @return A new part
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SPart partID(
-    final @Nonnull SID id,
-    final @Nonnull SPartTitle in_title,
-    final @Nonnull SNonEmptyList<SSection> in_sections)
-    throws ConstraintError
+  public static SPart partID(
+    final SID id,
+    final SPartTitle in_title,
+    final SNonEmptyList<SSection> in_sections)
   {
-    final Option<String> no_type = Option.none();
-    final Option<SID> some_id =
-      Option.some(Constraints.constrainNotNull(id, "ID"));
-    final Option<SPartContents> no_contents = Option.none();
+    final OptionType<String> no_type = Option.none();
+    final OptionType<SID> some_id = Option.some(NullCheck.notNull(id, "ID"));
+    final OptionType<SPartContents> no_contents = Option.none();
     return new SPart(no_type, some_id, in_title, no_contents, in_sections);
   }
 
@@ -89,20 +80,17 @@ import com.io7m.jaux.functional.Option;
    * @param in_sections
    *          The content
    * @return A new part
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SPart partTyped(
-    final @Nonnull String type,
-    final @Nonnull SPartTitle in_title,
-    final @Nonnull SNonEmptyList<SSection> in_sections)
-    throws ConstraintError
+  public static SPart partTyped(
+    final String type,
+    final SPartTitle in_title,
+    final SNonEmptyList<SSection> in_sections)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Option<SID> no_id = Option.none();
-    final Option<SPartContents> no_contents = Option.none();
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<SID> no_id = Option.none();
+    final OptionType<SPartContents> no_contents = Option.none();
     return new SPart(some_type, no_id, in_title, no_contents, in_sections);
   }
 
@@ -118,22 +106,18 @@ import com.io7m.jaux.functional.Option;
    * @param in_sections
    *          The content
    * @return A new part
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SPart partTypedID(
-    final @Nonnull String type,
-    final @Nonnull SID id,
-    final @Nonnull SPartTitle in_title,
-    final @Nonnull SNonEmptyList<SSection> in_sections)
-    throws ConstraintError
+  public static SPart partTypedID(
+    final String type,
+    final SID id,
+    final SPartTitle in_title,
+    final SNonEmptyList<SSection> in_sections)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Option<SID> some_id =
-      Option.some(Constraints.constrainNotNull(id, "ID"));
-    final Option<SPartContents> no_contents = Option.none();
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<SID> some_id = Option.some(NullCheck.notNull(id, "ID"));
+    final OptionType<SPartContents> no_contents = Option.none();
     return new SPart(some_type, some_id, in_title, no_contents, in_sections);
   }
 
@@ -146,18 +130,15 @@ import com.io7m.jaux.functional.Option;
    * @param in_sections
    *          The content
    * @return A new part
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SPart partWithContents(
-    final @Nonnull SPartTitle in_title,
-    final @Nonnull SNonEmptyList<SSection> in_sections)
-    throws ConstraintError
+  public static SPart partWithContents(
+    final SPartTitle in_title,
+    final SNonEmptyList<SSection> in_sections)
   {
-    final Option<String> no_type = Option.none();
-    final Option<SID> no_id = Option.none();
-    final Option<SPartContents> some_contents =
+    final OptionType<String> no_type = Option.none();
+    final OptionType<SID> no_id = Option.none();
+    final OptionType<SPartContents> some_contents =
       Option.some(SPartContents.get());
     return new SPart(no_type, no_id, in_title, some_contents, in_sections);
   }
@@ -173,20 +154,16 @@ import com.io7m.jaux.functional.Option;
    * @param in_sections
    *          The content
    * @return A new part
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SPart partWithContentsID(
-    final @Nonnull SID id,
-    final @Nonnull SPartTitle in_title,
-    final @Nonnull SNonEmptyList<SSection> in_sections)
-    throws ConstraintError
+  public static SPart partWithContentsID(
+    final SID id,
+    final SPartTitle in_title,
+    final SNonEmptyList<SSection> in_sections)
   {
-    final Option<String> no_type = Option.none();
-    final Option<SID> some_id =
-      Option.some(Constraints.constrainNotNull(id, "ID"));
-    final Option<SPartContents> some_contents =
+    final OptionType<String> no_type = Option.none();
+    final OptionType<SID> some_id = Option.some(NullCheck.notNull(id, "ID"));
+    final OptionType<SPartContents> some_contents =
       Option.some(SPartContents.get());
     return new SPart(no_type, some_id, in_title, some_contents, in_sections);
   }
@@ -202,20 +179,17 @@ import com.io7m.jaux.functional.Option;
    * @param in_sections
    *          The content
    * @return A new part
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SPart partWithContentsTyped(
-    final @Nonnull String type,
-    final @Nonnull SPartTitle in_title,
-    final @Nonnull SNonEmptyList<SSection> in_sections)
-    throws ConstraintError
+  public static SPart partWithContentsTyped(
+    final String type,
+    final SPartTitle in_title,
+    final SNonEmptyList<SSection> in_sections)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Option<SID> no_id = Option.none();
-    final Option<SPartContents> some_contents =
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<SID> no_id = Option.none();
+    final OptionType<SPartContents> some_contents =
       Option.some(SPartContents.get());
     return new SPart(some_type, no_id, in_title, some_contents, in_sections);
   }
@@ -233,49 +207,44 @@ import com.io7m.jaux.functional.Option;
    * @param in_sections
    *          The content
    * @return A new part
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SPart partWithContentsTypedID(
-    final @Nonnull String type,
-    final @Nonnull SID id,
-    final @Nonnull SPartTitle in_title,
-    final @Nonnull SNonEmptyList<SSection> in_sections)
-    throws ConstraintError
+  public static SPart partWithContentsTypedID(
+    final String type,
+    final SID id,
+    final SPartTitle in_title,
+    final SNonEmptyList<SSection> in_sections)
   {
-    final Option<String> some_type =
-      Option.some(Constraints.constrainNotNull(type, "Type"));
-    final Option<SID> some_id =
-      Option.some(Constraints.constrainNotNull(id, "ID"));
-    final Option<SPartContents> some_contents =
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<SID> some_id = Option.some(NullCheck.notNull(id, "ID"));
+    final OptionType<SPartContents> some_contents =
       Option.some(SPartContents.get());
     return new SPart(some_type, some_id, in_title, some_contents, in_sections);
   }
 
-  private final @Nonnull Option<SPartContents>   contents;
-  private final @Nonnull Option<SID>             id;
-  private final @Nonnull SNonEmptyList<SSection> sections;
-  private final @Nonnull SPartTitle              title;
-  private final @Nonnull Option<String>          type;
+  private final OptionType<SPartContents> contents;
+  private final OptionType<SID>           id;
+  private final SNonEmptyList<SSection>   sections;
+  private final SPartTitle                title;
+  private final OptionType<String>        type;
 
   private SPart(
-    final @Nonnull Option<String> in_type,
-    final @Nonnull Option<SID> in_id,
-    final @Nonnull SPartTitle in_title,
-    final @Nonnull Option<SPartContents> in_contents,
-    final @Nonnull SNonEmptyList<SSection> in_sections)
-    throws ConstraintError
+    final OptionType<String> in_type,
+    final OptionType<SID> in_id,
+    final SPartTitle in_title,
+    final OptionType<SPartContents> in_contents,
+    final SNonEmptyList<SSection> in_sections)
   {
-    this.type = Constraints.constrainNotNull(in_type, "Type");
-    this.id = Constraints.constrainNotNull(in_id, "ID");
-    this.title = Constraints.constrainNotNull(in_title, "Title");
-    this.contents = Constraints.constrainNotNull(in_contents, "Contents");
-    this.sections = Constraints.constrainNotNull(in_sections, "Content");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.id = NullCheck.notNull(in_id, "ID");
+    this.title = NullCheck.notNull(in_title, "Title");
+    this.contents = NullCheck.notNull(in_contents, "Contents");
+    this.sections = NullCheck.notNull(in_sections, "Content");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -298,7 +267,7 @@ import com.io7m.jaux.functional.Option;
    * @return The part's table of contents
    */
 
-  public @Nonnull Option<SPartContents> getContents()
+  public OptionType<SPartContents> getContents()
   {
     return this.contents;
   }
@@ -307,7 +276,7 @@ import com.io7m.jaux.functional.Option;
    * @return The part ID
    */
 
-  public @Nonnull Option<SID> getID()
+  public OptionType<SID> getID()
   {
     return this.id;
   }
@@ -316,7 +285,7 @@ import com.io7m.jaux.functional.Option;
    * @return The part sections
    */
 
-  public @Nonnull SNonEmptyList<SSection> getSections()
+  public SNonEmptyList<SSection> getSections()
   {
     return this.sections;
   }
@@ -325,7 +294,7 @@ import com.io7m.jaux.functional.Option;
    * @return The part's title
    */
 
-  public @Nonnull SPartTitle getTitle()
+  public SPartTitle getTitle()
   {
     return this.title;
   }
@@ -334,7 +303,7 @@ import com.io7m.jaux.functional.Option;
    * @return The part's type attribute
    */
 
-  public @Nonnull Option<String> getType()
+  public OptionType<String> getType()
   {
     return this.type;
   }

@@ -19,11 +19,9 @@ package com.io7m.jstructural.annotated;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SDocumentContents;
 import com.io7m.jstructural.core.SDocumentStyle;
 
@@ -33,28 +31,27 @@ import com.io7m.jstructural.core.SDocumentStyle;
 
 public abstract class SADocument implements SASegmentsReadable
 {
-  private final @Nonnull Option<SDocumentContents> contents;
-  private final @Nonnull List<SAFootnote>          footnotes;
-  private final @Nonnull SAFormalItemsByKind       formals;
-  private final @Nonnull SAIDMap                   ids;
-  private final @Nonnull Option<SDocumentStyle>    style;
-  private final @Nonnull SADocumentTitle           title;
+  private final OptionType<SDocumentContents> contents;
+  private final List<SAFootnote>              footnotes;
+  private final SAFormalItemsByKind           formals;
+  private final SAIDMap                       ids;
+  private final OptionType<SDocumentStyle>    style;
+  private final SADocumentTitle               title;
 
   protected SADocument(
-    final @Nonnull SAIDMap in_ids,
-    final @Nonnull SADocumentTitle in_title,
-    final @Nonnull Option<SDocumentContents> in_contents,
-    final @Nonnull Option<SDocumentStyle> in_style,
-    final @Nonnull List<SAFootnote> in_footnotes,
-    final @Nonnull SAFormalItemsByKind in_formals)
-    throws ConstraintError
+    final SAIDMap in_ids,
+    final SADocumentTitle in_title,
+    final OptionType<SDocumentContents> in_contents,
+    final OptionType<SDocumentStyle> in_style,
+    final List<SAFootnote> in_footnotes,
+    final SAFormalItemsByKind in_formals)
   {
-    this.ids = Constraints.constrainNotNull(in_ids, "ID mappings");
-    this.title = Constraints.constrainNotNull(in_title, "Title");
-    this.contents = Constraints.constrainNotNull(in_contents, "Contents");
-    this.style = Constraints.constrainNotNull(in_style, "Style");
-    this.footnotes = Constraints.constrainNotNull(in_footnotes, "Footnotes");
-    this.formals = Constraints.constrainNotNull(in_formals, "Formals");
+    this.ids = NullCheck.notNull(in_ids, "ID mappings");
+    this.title = NullCheck.notNull(in_title, "Title");
+    this.contents = NullCheck.notNull(in_contents, "Contents");
+    this.style = NullCheck.notNull(in_style, "Style");
+    this.footnotes = NullCheck.notNull(in_footnotes, "Footnotes");
+    this.formals = NullCheck.notNull(in_formals, "Formals");
   }
 
   /**
@@ -63,8 +60,7 @@ public abstract class SADocument implements SASegmentsReadable
    * @param v
    *          The visitor
    * @return The value returned by the visitor
-   * @throws ConstraintError
-   *           If the visitor raises {@link ConstraintError}
+   * 
    * @throws Exception
    *           If the visitor raises an {@link Exception}
    * @param <A>
@@ -72,12 +68,11 @@ public abstract class SADocument implements SASegmentsReadable
    */
 
   public abstract <A> A documentAccept(
-    final @Nonnull SADocumentVisitor<A> v)
-    throws ConstraintError,
-      Exception;
+    final SADocumentVisitor<A> v)
+    throws Exception;
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -101,7 +96,7 @@ public abstract class SADocument implements SASegmentsReadable
    * @return The document contents
    */
 
-  public final @Nonnull Option<SDocumentContents> getContents()
+  public final OptionType<SDocumentContents> getContents()
   {
     return this.contents;
   }
@@ -110,16 +105,18 @@ public abstract class SADocument implements SASegmentsReadable
    * @return The document's footnotes
    */
 
-  public final @Nonnull List<SAFootnote> getFootnotes()
+  public final List<SAFootnote> getFootnotes()
   {
-    return Collections.unmodifiableList(this.footnotes);
+    final List<SAFootnote> r = Collections.unmodifiableList(this.footnotes);
+    assert r != null;
+    return r;
   }
 
   /**
    * @return The formal items by kind
    */
 
-  public final @Nonnull SAFormalItemsByKindReadable getFormals()
+  public final SAFormalItemsByKindReadable getFormals()
   {
     return this.formals;
   }
@@ -128,7 +125,7 @@ public abstract class SADocument implements SASegmentsReadable
    * @return The set of mappings from IDs to elements
    */
 
-  public final @Nonnull SAIDMapReadable getIDMappings()
+  public final SAIDMapReadable getIDMappings()
   {
     return this.ids;
   }
@@ -137,19 +134,16 @@ public abstract class SADocument implements SASegmentsReadable
    * @param n
    *          The section number
    * @return The section with the given section number, if any.
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public abstract Option<SASection> getSection(
-    final @Nonnull SASectionNumber n)
-    throws ConstraintError;
+  public abstract OptionType<SASection> getSection(
+    final SASectionNumber n);
 
   /**
    * @return The document style
    */
 
-  public final @Nonnull Option<SDocumentStyle> getStyle()
+  public final OptionType<SDocumentStyle> getStyle()
   {
     return this.style;
   }
@@ -158,7 +152,7 @@ public abstract class SADocument implements SASegmentsReadable
    * @return The document title
    */
 
-  public final @Nonnull SADocumentTitle getTitle()
+  public final SADocumentTitle getTitle()
   {
     return this.title;
   }

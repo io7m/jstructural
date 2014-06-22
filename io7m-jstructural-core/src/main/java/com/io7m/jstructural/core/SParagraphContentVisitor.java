@@ -16,9 +16,6 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
 
 /**
  * Paragraph content visitor.
@@ -35,16 +32,14 @@ public interface SParagraphContentVisitor<A>
    * @param footnote
    *          The footnote element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitFootnote(
-    final @Nonnull SFootnote footnote)
-    throws ConstraintError,
-      Exception;
+    final SFootnote footnote)
+    throws Exception;
 
   /**
    * Visit a formal item list element.
@@ -52,16 +47,14 @@ public interface SParagraphContentVisitor<A>
    * @param list
    *          The formal item list element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitFormalItemList(
-    final @Nonnull SFormalItemList list)
-    throws ConstraintError,
-      Exception;
+    final SFormalItemList list)
+    throws Exception;
 
   /**
    * Visit an image element.
@@ -69,16 +62,14 @@ public interface SParagraphContentVisitor<A>
    * @param image
    *          The image element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitImage(
-    final @Nonnull SImage image)
-    throws ConstraintError,
-      Exception;
+    final SImage image)
+    throws Exception;
 
   /**
    * Visit a link element.
@@ -86,16 +77,14 @@ public interface SParagraphContentVisitor<A>
    * @param link
    *          The link element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitLink(
-    final @Nonnull SLink link)
-    throws ConstraintError,
-      Exception;
+    final SLink link)
+    throws Exception;
 
   /**
    * Visit a link element.
@@ -103,16 +92,14 @@ public interface SParagraphContentVisitor<A>
    * @param link
    *          The link element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitLinkExternal(
-    final @Nonnull SLinkExternal link)
-    throws ConstraintError,
-      Exception;
+    final SLinkExternal link)
+    throws Exception;
 
   /**
    * Visit an ordered list element.
@@ -120,16 +107,14 @@ public interface SParagraphContentVisitor<A>
    * @param list
    *          The list element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitListOrdered(
-    final @Nonnull SListOrdered list)
-    throws ConstraintError,
-      Exception;
+    final SListOrdered list)
+    throws Exception;
 
   /**
    * Visit an unordered list element.
@@ -137,16 +122,14 @@ public interface SParagraphContentVisitor<A>
    * @param list
    *          The list element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitListUnordered(
-    final @Nonnull SListUnordered list)
-    throws ConstraintError,
-      Exception;
+    final SListUnordered list)
+    throws Exception;
 
   /**
    * Visit a table element.
@@ -154,16 +137,14 @@ public interface SParagraphContentVisitor<A>
    * @param table
    *          The table element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitTable(
-    final @Nonnull STable table)
-    throws ConstraintError,
-      Exception;
+    final STable table)
+    throws Exception;
 
   /**
    * Visit a term element.
@@ -171,16 +152,14 @@ public interface SParagraphContentVisitor<A>
    * @param term
    *          The term element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitTerm(
-    final @Nonnull STerm term)
-    throws ConstraintError,
-      Exception;
+    final STerm term)
+    throws Exception;
 
   /**
    * Visit a text element.
@@ -188,16 +167,14 @@ public interface SParagraphContentVisitor<A>
    * @param text
    *          The text element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitText(
-    final @Nonnull SText text)
-    throws ConstraintError,
-      Exception;
+    final SText text)
+    throws Exception;
 
   /**
    * Visit a verbatim element.
@@ -205,14 +182,12 @@ public interface SParagraphContentVisitor<A>
    * @param text
    *          The verbatim element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   A visitVerbatim(
-    final @Nonnull SVerbatim text)
-    throws ConstraintError,
-      Exception;
+    final SVerbatim text)
+    throws Exception;
 }

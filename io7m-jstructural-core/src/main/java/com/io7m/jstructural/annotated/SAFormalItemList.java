@@ -16,31 +16,27 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A list of formal items of a given kind.
  */
 
-@Immutable public final class SAFormalItemList implements
+public final class SAFormalItemList implements
   SAFormalItemContent,
   SAParagraphContent
 {
-  private final @Nonnull String kind;
+  private final String kind;
 
   SAFormalItemList(
-    final @Nonnull String in_kind)
-    throws ConstraintError
+    final String in_kind)
   {
-    this.kind = Constraints.constrainNotNull(in_kind, "Kind");
+    this.kind = NullCheck.notNull(in_kind, "Kind");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -56,9 +52,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
   }
 
   @Override public <A> A formalItemContentAccept(
-    final @Nonnull SAFormalItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAFormalItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFormalItemList(this);
   }
@@ -67,7 +62,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The kind of formal items
    */
 
-  public @Nonnull String getKind()
+  public String getKind()
   {
     return this.kind;
   }
@@ -78,9 +73,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SAParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SAParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFormalItemList(this);
   }
@@ -91,6 +85,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
     builder.append("[SAFormalItemList ");
     builder.append(this.kind);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

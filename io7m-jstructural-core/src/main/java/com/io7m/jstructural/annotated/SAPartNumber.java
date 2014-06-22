@@ -16,8 +16,8 @@
 
 package com.io7m.jstructural.annotated;
 
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.Nullable;
+import com.io7m.jranges.RangeCheck;
 
 /**
  * A part number.
@@ -29,18 +29,17 @@ public final class SAPartNumber implements SASegmentNumber
 
   SAPartNumber(
     final int in_actual)
-    throws ConstraintError
   {
     this.actual =
-      Constraints.constrainRange(
+      (int) RangeCheck.checkIncludedIn(
         in_actual,
-        1,
-        Integer.MAX_VALUE,
-        "Part number");
+        "Part number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid part number range");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -74,8 +73,7 @@ public final class SAPartNumber implements SASegmentNumber
 
   @Override public <T> T segmentNumberAccept(
     final SASegmentNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
     return v.visitPartNumber(this);
   }
@@ -86,6 +84,8 @@ public final class SAPartNumber implements SASegmentNumber
     builder.append("[SAPartNumber ");
     builder.append(this.actual);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

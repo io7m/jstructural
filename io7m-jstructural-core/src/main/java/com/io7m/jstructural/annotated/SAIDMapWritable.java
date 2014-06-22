@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * Writable interface to the ID → content mappings.
  */
@@ -33,13 +29,13 @@ public interface SAIDMapWritable
    *          The ID
    * @param c
    *          The content
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>, or the given ID is
-   *           already used
+   * 
+   * @throws IllegalArgumentException
+   *           If an element with the given ID already exists.
    */
 
   void put(
-    final @Nonnull SAID id,
-    final @Nonnull SAIDTargetContent c)
-    throws ConstraintError;
+    final SAID id,
+    final SAIDTargetContent c)
+    throws IllegalArgumentException;
 }

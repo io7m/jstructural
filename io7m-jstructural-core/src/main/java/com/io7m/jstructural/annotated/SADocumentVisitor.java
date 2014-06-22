@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * Document visitor.
  * 
@@ -35,16 +31,14 @@ public interface SADocumentVisitor<D>
    * @param document
    *          The document element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   D visitDocumentWithParts(
-    final @Nonnull SADocumentWithParts document)
-    throws ConstraintError,
-      Exception;
+    final SADocumentWithParts document)
+    throws Exception;
 
   /**
    * Visit a document with top-level sections.
@@ -52,14 +46,12 @@ public interface SADocumentVisitor<D>
    * @param document
    *          The document element
    * @return A value of type <code>A</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   D visitDocumentWithSections(
-    final @Nonnull SADocumentWithSections document)
-    throws ConstraintError,
-      Exception;
+    final SADocumentWithSections document)
+    throws Exception;
 }

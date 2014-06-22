@@ -16,17 +16,14 @@
 
 package com.io7m.jstructural.core;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A footnote element.
  */
 
-@Immutable public final class SFootnote implements
+public final class SFootnote implements
   SParagraphContent,
   SListItemContent,
   SFootnoteContent,
@@ -38,28 +35,24 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @param content
    *          The footnote content.
    * @return A new footnote
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  public static @Nonnull SFootnote footnote(
-    final @Nonnull SNonEmptyList<SFootnoteContent> content)
-    throws ConstraintError
+  public static SFootnote footnote(
+    final SNonEmptyList<SFootnoteContent> content)
   {
     return new SFootnote(content);
   }
 
-  private final @Nonnull SNonEmptyList<SFootnoteContent> content;
+  private final SNonEmptyList<SFootnoteContent> content;
 
   private SFootnote(
-    final @Nonnull SNonEmptyList<SFootnoteContent> in_content)
-    throws ConstraintError
+    final SNonEmptyList<SFootnoteContent> in_content)
   {
-    this.content = Constraints.constrainNotNull(in_content, "Content");
+    this.content = NullCheck.notNull(in_content, "Content");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -75,9 +68,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
   }
 
   @Override public <A> A footnoteContentAccept(
-    final @Nonnull SFootnoteContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SFootnoteContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFootnote(this);
   }
@@ -86,7 +78,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The element content
    */
 
-  public @Nonnull SNonEmptyList<SFootnoteContent> getContent()
+  public SNonEmptyList<SFootnoteContent> getContent()
   {
     return this.content;
   }
@@ -97,25 +89,22 @@ import com.io7m.jaux.Constraints.ConstraintError;
   }
 
   @Override public <A> A listItemContentAccept(
-    final @Nonnull SListItemContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SListItemContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFootnote(this);
   }
 
   @Override public <A> A paragraphContentAccept(
-    final @Nonnull SParagraphContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final SParagraphContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFootnote(this);
   }
 
   @Override public <A> A tableCellContentAccept(
-    final @Nonnull STableCellContentVisitor<A> v)
-    throws ConstraintError,
-      Exception
+    final STableCellContentVisitor<A> v)
+    throws Exception
   {
     return v.visitFootnote(this);
   }

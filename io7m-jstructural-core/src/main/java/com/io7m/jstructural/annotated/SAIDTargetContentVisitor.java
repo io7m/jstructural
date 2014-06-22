@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * A visitor that can visit elements that can be assigned IDs.
  * 
@@ -35,16 +31,14 @@ public interface SAIDTargetContentVisitor<T>
    * @param paragraph
    *          The paragraph element
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitParagraph(
-    final @Nonnull SAParagraph paragraph)
-    throws ConstraintError,
-      Exception;
+    final SAParagraph paragraph)
+    throws Exception;
 
   /**
    * Visit a part element.
@@ -52,16 +46,14 @@ public interface SAIDTargetContentVisitor<T>
    * @param part
    *          The part element
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitPart(
-    final @Nonnull SAPart part)
-    throws ConstraintError,
-      Exception;
+    final SAPart part)
+    throws Exception;
 
   /**
    * Visit a section element.
@@ -69,16 +61,14 @@ public interface SAIDTargetContentVisitor<T>
    * @param section
    *          The section element
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitSection(
-    final @Nonnull SASection section)
-    throws ConstraintError,
-      Exception;
+    final SASection section)
+    throws Exception;
 
   /**
    * Visit a subsection element.
@@ -86,14 +76,12 @@ public interface SAIDTargetContentVisitor<T>
    * @param subsection
    *          The subsection element
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitSubsection(
-    final @Nonnull SASubsection subsection)
-    throws ConstraintError,
-      Exception;
+    final SASubsection subsection)
+    throws Exception;
 }

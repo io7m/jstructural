@@ -16,11 +16,9 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnreachableCodeException;
+import com.io7m.jnull.Nullable;
+import com.io7m.jranges.RangeCheck;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * A formal item number consisting of a part, section, and formal item.
@@ -41,30 +39,34 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
    *          The section number
    * @param in_formal
    *          The formal item number
-   * @throws ConstraintError
-   *           If any parameter is outside of the range
-   *           <code>[1, {@link Integer#MAX_VALUE}]</code>
    */
 
   public SAFormalItemNumberPSF(
     final int in_part,
     final int in_section,
     final int in_formal)
-    throws ConstraintError
   {
     this.part =
-      Constraints.constrainRange(in_part, 1, Integer.MAX_VALUE, "Part");
+      (int) RangeCheck.checkIncludedIn(
+        in_part,
+        "Part number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid part number range");
     this.section =
-      Constraints.constrainRange(in_section, 1, Integer.MAX_VALUE, "Section");
+      (int) RangeCheck.checkIncludedIn(
+        in_section,
+        "Section number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid section number range");
     this.formal =
-      Constraints.constrainRange(
+      (int) RangeCheck.checkIncludedIn(
         in_formal,
-        1,
-        Integer.MAX_VALUE,
-        "Formal item");
+        "Formal item number",
+        RangeCheck.POSITIVE_INTEGER,
+        "Valid formal item number range");
   }
 
-  @SuppressWarnings({ "boxing", "synthetic-access" }) @Override public
+  @SuppressWarnings({ "boxing", "null", "synthetic-access" }) @Override public
     int
     compareTo(
       final SAFormalItemNumber o)
@@ -73,9 +75,8 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
       return o.formalItemNumberAccept(
         new SAFormalItemNumberVisitor<Integer>() {
           @Override public Integer visitFormalItemNumberPSF(
-            final @Nonnull SAFormalItemNumberPSF p)
-            throws ConstraintError,
-              Exception
+            final SAFormalItemNumberPSF p)
+            throws Exception
           {
             final int rpart =
               Integer.compare(SAFormalItemNumberPSF.this.part, p.part);
@@ -94,9 +95,8 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
           }
 
           @Override public Integer visitFormalItemNumberPSSF(
-            final @Nonnull SAFormalItemNumberPSSF p)
-            throws ConstraintError,
-              Exception
+            final SAFormalItemNumberPSSF p)
+            throws Exception
           {
             final int rpart =
               Integer.compare(SAFormalItemNumberPSF.this.part, p.getPart());
@@ -116,9 +116,8 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
           }
 
           @Override public Integer visitFormalItemNumberSF(
-            final @Nonnull SAFormalItemNumberSF p)
-            throws ConstraintError,
-              Exception
+            final SAFormalItemNumberSF p)
+            throws Exception
           {
             final int rsect =
               Integer.compare(
@@ -133,9 +132,8 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
           }
 
           @Override public Integer visitFormalItemNumberSSF(
-            final @Nonnull SAFormalItemNumberSSF p)
-            throws ConstraintError,
-              Exception
+            final SAFormalItemNumberSSF p)
+            throws Exception
           {
             final int rsect =
               Integer.compare(
@@ -149,15 +147,13 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
             return rsect;
           }
         }).intValue();
-    } catch (final ConstraintError e) {
-      throw new UnreachableCodeException(e);
     } catch (final Exception e) {
       throw new UnreachableCodeException(e);
     }
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -183,8 +179,7 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
 
   @Override public <T> T formalItemNumberAccept(
     final SAFormalItemNumberVisitor<T> v)
-    throws ConstraintError,
-      Exception
+    throws Exception
   {
     return v.visitFormalItemNumberPSF(this);
   }
@@ -193,7 +188,10 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
     String
     formalItemNumberFormat()
   {
-    return String.format("%d.%d.%d", this.part, this.section, this.formal);
+    final String r =
+      String.format("%d.%d.%d", this.part, this.section, this.formal);
+    assert r != null;
+    return r;
   }
 
   /**
@@ -243,6 +241,8 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
     builder.append(" section=");
     builder.append(this.section);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

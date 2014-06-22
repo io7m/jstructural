@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-
 /**
  * A paragraph number visitor.
  * 
@@ -35,16 +31,14 @@ public interface SAParagraphNumberVisitor<T>
    * @param p
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitParagraphNumberPSP(
-    final @Nonnull SAParagraphNumberPSP p)
-    throws ConstraintError,
-      Exception;
+    final SAParagraphNumberPSP p)
+    throws Exception;
 
   /**
    * Visit a PSSP paragraph number.
@@ -52,16 +46,14 @@ public interface SAParagraphNumberVisitor<T>
    * @param p
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitParagraphNumberPSSP(
-    final @Nonnull SAParagraphNumberPSSP p)
-    throws ConstraintError,
-      Exception;
+    final SAParagraphNumberPSSP p)
+    throws Exception;
 
   /**
    * Visit a SP paragraph number.
@@ -69,16 +61,14 @@ public interface SAParagraphNumberVisitor<T>
    * @param p
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitParagraphNumberSP(
-    final @Nonnull SAParagraphNumberSP p)
-    throws ConstraintError,
-      Exception;
+    final SAParagraphNumberSP p)
+    throws Exception;
 
   /**
    * Visit a SSP paragraph number.
@@ -86,14 +76,12 @@ public interface SAParagraphNumberVisitor<T>
    * @param p
    *          The number
    * @return A value of type <code>T</code>
-   * @throws ConstraintError
-   *           If required
+   * 
    * @throws Exception
    *           If required
    */
 
   T visitParagraphNumberSSP(
-    final @Nonnull SAParagraphNumberSSP p)
-    throws ConstraintError,
-      Exception;
+    final SAParagraphNumberSSP p)
+    throws Exception;
 }

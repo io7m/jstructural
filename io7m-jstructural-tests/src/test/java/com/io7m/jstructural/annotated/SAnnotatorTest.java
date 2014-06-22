@@ -18,23 +18,19 @@ package com.io7m.jstructural.annotated;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.jstructural.xom.SDocumentParserTest;
 import com.io7m.jstructural.xom.TestUtilities;
 
-public final class SAnnotatorTest
+@SuppressWarnings("static-method") public final class SAnnotatorTest
 {
-  public static @Nonnull SADocument annotate(
-    final @Nonnull String name)
-    throws ConstraintError
+  public static SADocument annotate(
+    final String name)
   {
     final SDocument d = SDocumentParserTest.roundTripParse(name);
     return SAnnotator.document(TestUtilities.getLog(), d);
@@ -45,15 +41,14 @@ public final class SAnnotatorTest
    * URL scheme in order to include other files in the test resources.
    */
 
-  @SuppressWarnings("static-method") @Before public void before()
+  @Before public void before()
   {
     System.setProperty(
       "java.protocol.handler.pkgs",
       "com.io7m.jstructural.xom");
   }
 
-  @SuppressWarnings("static-method") @Test public void testAnnotate_0()
-    throws ConstraintError
+  @Test public void testAnnotate_0()
   {
     final SADocument a = SAnnotatorTest.annotate("basic-0.xml");
     final SAIDMapReadable m = a.getIDMappings();
@@ -63,8 +58,7 @@ public final class SAnnotatorTest
     Assert.assertTrue(m.get(new SAID("paragraph_0")) instanceof SAParagraph);
   }
 
-  @SuppressWarnings("static-method") @Test public void testAnnotate_1()
-    throws ConstraintError
+  @Test public void testAnnotate_1()
   {
     final SADocument a = SAnnotatorTest.annotate("basic-1.xml");
     final SAIDMapReadable m = a.getIDMappings();
@@ -76,8 +70,7 @@ public final class SAnnotatorTest
     Assert.assertTrue(m.get(new SAID("paragraph_2")) instanceof SAParagraph);
   }
 
-  @SuppressWarnings("static-method") @Test public void testAnnotate_2()
-    throws ConstraintError
+  @Test public void testAnnotate_2()
   {
     final SADocument a = SAnnotatorTest.annotate("basic-2.xml");
     final SAIDMapReadable m = a.getIDMappings();
@@ -91,8 +84,7 @@ public final class SAnnotatorTest
     Assert.assertTrue(m.get(new SAID("paragraph_2")) instanceof SAParagraph);
   }
 
-  @SuppressWarnings("static-method") @Test public void testAnnotateLarge_0()
-    throws ConstraintError
+  @Test public void testAnnotateLarge_0()
   {
     final SADocument a = SAnnotatorTest.annotate("jaux-documentation.xml");
     final SAIDMapReadable m = a.getIDMappings();
@@ -108,10 +100,7 @@ public final class SAnnotatorTest
     Assert.assertTrue(f0c.getElements().get(2) instanceof SAText);
   }
 
-  @SuppressWarnings("static-method") @Test public
-    void
-    testAnnotateResolved_0()
-      throws ConstraintError
+  @Test public void testAnnotateResolved_0()
   {
     final SADocument a = SAnnotatorTest.annotate("resolve-0.xml");
     final SAIDMapReadable m = a.getIDMappings();

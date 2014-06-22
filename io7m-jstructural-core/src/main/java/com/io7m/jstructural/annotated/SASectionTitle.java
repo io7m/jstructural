@@ -16,20 +16,17 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
-import com.io7m.jaux.Constraints;
-import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 
 /**
  * A section title.
  */
 
-@Immutable public final class SASectionTitle
+public final class SASectionTitle
 {
-  private final @Nonnull String          actual;
-  private final @Nonnull SASectionNumber number;
+  private final String          actual;
+  private final SASectionNumber number;
 
   /**
    * Construct a new section title.
@@ -38,21 +35,18 @@ import com.io7m.jaux.Constraints.ConstraintError;
    *          The section number
    * @param in_actual
    *          The section title
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
   public SASectionTitle(
-    final @Nonnull SASectionNumber in_number,
-    final @Nonnull String in_actual)
-    throws ConstraintError
+    final SASectionNumber in_number,
+    final String in_actual)
   {
-    this.number = Constraints.constrainNotNull(in_number, "Number");
-    this.actual = Constraints.constrainNotNull(in_actual, "Actual");
+    this.number = NullCheck.notNull(in_number, "Number");
+    this.actual = NullCheck.notNull(in_actual, "Actual");
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -72,7 +66,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The text
    */
 
-  public @Nonnull String getActual()
+  public String getActual()
   {
     return this.actual;
   }
@@ -81,7 +75,7 @@ import com.io7m.jaux.Constraints.ConstraintError;
    * @return The number
    */
 
-  public @Nonnull SASectionNumber getNumber()
+  public SASectionNumber getNumber()
   {
     return this.number;
   }
@@ -103,6 +97,8 @@ import com.io7m.jaux.Constraints.ConstraintError;
     builder.append(" number=");
     builder.append(this.number);
     builder.append("]");
-    return builder.toString();
+    final String r = builder.toString();
+    assert r != null;
+    return r;
   }
 }

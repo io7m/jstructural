@@ -16,10 +16,7 @@
 
 package com.io7m.jstructural.annotated;
 
-import javax.annotation.Nonnull;
-
-import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Option;
+import com.io7m.jfunctional.OptionType;
 
 /**
  * Readable interface to the set of segments in the given document.
@@ -37,35 +34,26 @@ public interface SASegmentsReadable
    * @param n
    *          The current segment
    * @return The number of the next segment (if any)
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  Option<SASegmentNumber> segmentGetNext(
-    final @Nonnull SASegmentNumber n)
-    throws ConstraintError;
+  OptionType<SASegmentNumber> segmentGetNext(
+    final SASegmentNumber n);
 
   /**
    * @param n
    *          The current segment
    * @return The number of the previous segment (if any)
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  Option<SASegmentNumber> segmentGetPrevious(
-    final @Nonnull SASegmentNumber n)
-    throws ConstraintError;
+  OptionType<SASegmentNumber> segmentGetPrevious(
+    final SASegmentNumber n);
 
   /**
    * @param n
    *          The current segment
    * @return The number of the parent segment (if any)
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    */
 
-  Option<SASegmentNumber> segmentGetUp(
-    final @Nonnull SASegmentNumber n)
-    throws ConstraintError;
+  OptionType<SASegmentNumber> segmentGetUp(
+    final SASegmentNumber n);
 }
