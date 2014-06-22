@@ -8,6 +8,17 @@
     <c:item>
       <c:date>2014-06-22</c:date>
       <c:type-code-fix/>
+      <c:ticket>cd7bc9304c</c:ticket>
+      <c:summary>Multiple pages were not produced for documents with sections in the root.</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release c:ticket-system="com.io7m.fossil.jstructural">
+    <c:date>2014-06-22</c:date>
+    <c:version>3.0.1</c:version>
+    <c:item>
+      <c:date>2014-06-22</c:date>
+      <c:type-code-fix/>
       <c:ticket>ebbe752c4e</c:ticket>
       <c:summary>The document serializer was producing invalid documents.</c:summary>
     </c:item>

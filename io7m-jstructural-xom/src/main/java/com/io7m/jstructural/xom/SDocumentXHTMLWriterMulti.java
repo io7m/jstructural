@@ -890,6 +890,17 @@ import com.io7m.junreachable.UnreachableCodeException;
           documents.put(
             SDocumentXHTMLWriterMulti.FRONT_PAGE,
             page.getDocument());
+
+          for (final SASection s : sections.getElements()) {
+            SDocumentXHTMLWriterMulti.section(
+              documents,
+              link_provider,
+              callbacks,
+              section_contents,
+              doc,
+              s);
+          }
+
           return Unit.unit();
         }
       });

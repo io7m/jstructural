@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright © 2012 http://io7m.com
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  -->
+
+<s:document
+  xmlns:s="http://schemas.io7m.com/structural/2.0.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <s:document-title>Glow maps</s:document-title>
+  <s:document-style>dist/document.css</s:document-style>
+  <s:document-contents/>
+
+  <s:section>
+    <s:section-title>Overview</s:section-title>
+    <s:paragraph>
+      This document attempts to describe so-called <s:term s:type="subject">glow
+      maps</s:term>. An extremely simple technique used in various 3D games (notably
+      <s:link-external s:target="http://deusex.com">Deus Ex: Human Revolution</s:link-external>)
+      to provide dramatic and atmospheric lighting effects.
+    </s:paragraph>
+    <s:formal-item s:kind="example">
+      <s:formal-item-title>Deus Ex</s:formal-item-title>
+      <s:image s:source="dist/dxhr.png"/>
+    </s:formal-item>
+    <s:paragraph>
+      The technique is described by first producing the effect in
+      <s:link-external s:target="http://www.blender.org">Blender</s:link-external>, and
+      then recreating the effect with Java and OpenGL.
+    </s:paragraph>
+  </s:section>
+
+  <s:section>
+    <s:section-title>Blender implementation</s:section-title>
+    <s:section-contents/>
+
+    <s:subsection>
+      <s:subsection-title>Initial setup</s:subsection-title>
+      <s:paragraph>
+        First a simple scene is created consisting of a sphere and three cubes.
+        The sphere represents an arbitrary solid object, and the three small cubes
+        represent lights.
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Basic scene</s:formal-item-title>
+        <s:image s:source="dist/no_light_wire.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        Naturally, without any real lights in the scene, the rendered scene is
+        unimpressive:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Darkness</s:formal-item-title>
+        <s:image s:source="dist/no_light.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        The first step is to mark each light object as "emissive". An object with
+        an emissive level of <s:term s:type="constant">0.5</s:term> will always be
+        drawn at at least <s:term s:type="constant">0.5</s:term> brightness, regardless
+        of any shadows or other lack of light. This is usually how, for example, luminous
+        tube lights and neon signs are modelled. In Blender, the emissive
+        level is part of an object's material. In OpenGL, the emissive level can
+        be stored per object or per vertex. For each of the small "light" cubes,
+        an emissive material is created:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Materials</s:formal-item-title>
+        <s:image s:source="dist/emissive_mat.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        Rendering the scene demonstrates how the objects are effectively unaffected
+        by the lack of light. Note that emissive textures do not actually emit light -
+        they simply control how the object is shaded.
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Materials</s:formal-item-title>
+        <s:image s:source="dist/emissive.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        Next, it's necessary to light the scene with real lights. Because the aim
+        is to model small cubes that emit light, ideally the light sources should be
+        placed inside the cubes. The obvious problem with this approach is that the
+        cubes will not allow light to escape from inside of them. The simplest solution
+        to this problem is to place the small light cubes onto a different layer, and
+        configure the individual lights to only affect objects on their own layer. Two
+        layers are created, and the cubes are distributed between them:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Scene layer</s:formal-item-title>
+        <s:image s:source="dist/layers0.png"/>
+      </s:formal-item>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Light cubes layer</s:formal-item-title>
+        <s:image s:source="dist/layers1.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        Next, point lights are created on the same layer as the sphere, and each
+        individual light is configured to affect only that layer:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Lights</s:formal-item-title>
+        <s:image s:source="dist/lights.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        Rendering the scene (with the layer containing the light cubes disabled) shows
+        the effect of the point lights:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Lit scene</s:formal-item-title>
+        <s:image s:source="dist/lit_scene.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        The overview of the current scene:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Overview</s:formal-item-title>
+        <s:image s:source="dist/overview.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        Now that the scene is split into layers, it's necessary to use Blender's
+        compositing pipeline the combine the layers into the final image. Switching
+        to the <s:term s:type="subject">Node Editor</s:term> and combining the two
+        images using simple alpha compositing gives the expected result:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Composed image</s:formal-item-title>
+        <s:image s:source="dist/composite0.png"/>
+      </s:formal-item>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>Glow mapping</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="subject">glow map</s:term> can be thought of as a blurred
+        copy of the light sources in the scene. Producing the map is trivial and
+        simply involves passing the layer containing the light cubes through a
+        gaussian blur filter:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Blur</s:formal-item-title>
+        <s:image s:source="dist/blur.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        The blurred layer is then composed with the original image:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Blur composite</s:formal-item-title>
+        <s:image s:source="dist/blur_compose.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        Note that a darker background makes the effect more prominent:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Blur composite</s:formal-item-title>
+        <s:image s:source="dist/blur_compose_dark.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        A larger blur radius gives the effect of a dustier atmosphere:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Blur composite</s:formal-item-title>
+        <s:image s:source="dist/blur_compose_dark_fog.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        See the <s:link-external s:target="dist/glow_map.blend">completed Blender project file</s:link-external>
+        for the implementation described here.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>Alternate implementation</s:subsection-title>
+      <s:paragraph>
+        It's also possible to avoid the use of multiple layers by asking Blender
+        separate out the emissive parts of the image. The emissive sections are
+        then processed as before. Emissive data can be added to the rendered image
+        by selecting the 'Emit' option in the layer settings:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Emissive data</s:formal-item-title>
+        <s:image s:source="dist/emit_out.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        The emissive data then becomes available as a channel in the relevant
+        render layer:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Emissive source</s:formal-item-title>
+        <s:image s:source="dist/emit_source.png"/>
+      </s:formal-item>
+      <s:paragraph>
+        The downside of this approach is that the emissive data has no alpha
+        channel. It's necessary to synthesize an alpha channel using a greyscale
+        copy of the data:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Emissive alpha</s:formal-item-title>
+        <s:image s:source="dist/emit_alpha.png"/>
+      </s:formal-item>
+    </s:subsection>
+  </s:section>
+
+  <s:section>
+    <s:section-title>OpenGL implementation</s:section-title>
+
+    <s:subsection>
+      <s:subsection-title>Preamble</s:subsection-title>
+      <s:paragraph>
+        The OpenGL implementation is written in Java and OpenGL, using
+        <s:link-external s:target="http://lwjgl.org">LWJGL</s:link-external>
+        for the underlying OpenGL bindings. It does not use any Java-specific or LWJGL-specific
+        features and should be directly translatable to any language with OpenGL access.
+        The program uses the deprecated immediate mode for rendering solely because
+        to do otherwise would require more in the way of supporting code.
+      </s:paragraph>
+      <s:paragraph>
+        The program consists of two classes: <s:link-external s:target="dist/GlowMap.java">GlowMap.java</s:link-external>
+        and <s:link-external s:target="dist/Utilities.java">Utilities.java</s:link-external>.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>Implementation</s:subsection-title>
+      <s:paragraph>
+        Obviously, in OpenGL, there is no such thing as a "separate layer". However,
+        it's easy to get the required separation by rendering in multiple passes using
+        framebuffer objects. The general approach is as follows:
+      </s:paragraph>
+      <s:formal-item s:kind="spec">
+        <s:formal-item-title>Procedure</s:formal-item-title>
+        <s:list-ordered>
+          <s:list-item>Render the lit scene, including emissive objects, to a texture <s:term s:type="variable">T0</s:term>.</s:list-item>
+          <s:list-item>Render only emissive objects to a texture <s:term s:type="variable">T1</s:term>.</s:list-item>
+          <s:list-item>Blur the texture <s:term s:type="variable">T1</s:term> with a GLSL shader, writing the result to a texture <s:term s:type="variable">T2</s:term>.</s:list-item>
+          <s:list-item>Render a screen-aligned quad, textured with texture <s:term s:type="variable">T0</s:term>.</s:list-item>
+          <s:list-item>Render a screen-aligned quad, textured with texture <s:term s:type="variable">T2</s:term>, possibly with a lower level of opacity depending on the desired effect.</s:list-item>
+        </s:list-ordered>
+      </s:formal-item>
+      <s:paragraph>
+        Given that the typical gaussian blur shader requires two rendering passes,
+        the entire procedure requires five rather inexpensive passes and is therefore
+        easily achievable in real-time on modern graphics hardware. For simplicity,
+        the technique here is shown in 2D but the process is exactly the same for
+        three-dimensional objects.
+      </s:paragraph>
+      <s:paragraph>
+        The procedure for rendering is therefore:
+      </s:paragraph>
+      <s:formal-item s:kind="spec">
+        <s:formal-item-title>Render Initialization</s:formal-item-title>
+        <s:list-ordered>
+          <s:list-item>Load the necessary shading programs.</s:list-item>
+          <s:list-item>Create a framebuffer, <s:term s:type="variable">Fs</s:term>, in which to hold the scene.</s:list-item>
+          <s:list-item>Create a framebuffer, <s:term s:type="variable">FbH</s:term>, in which to hold the horizontal pass of the blur shader.</s:list-item>
+          <s:list-item>Create a framebuffer, <s:term s:type="variable">FbV</s:term>, in which to hold the vertical pass of the blur shader.</s:list-item>
+        </s:list-ordered>
+      </s:formal-item>
+      <s:formal-item s:kind="spec">
+        <s:formal-item-title>Rendering</s:formal-item-title>
+        <s:list-ordered>
+          <s:list-item>Switch to framebuffer <s:term s:type="variable">Fs</s:term> and render only the emissive objects in the scene.</s:list-item>
+          <s:list-item>Switch to framebuffer <s:term s:type="variable">FbH</s:term> and render a full-screen, screen-aligned rectangle textured using the texture that backs framebuffer <s:term s:type="variable">Fs</s:term>, and using the horizontal pass of the two-pass gaussian blur shader.</s:list-item>
+          <s:list-item>Switch to framebuffer <s:term s:type="variable">FbV</s:term> and render a full-screen, screen-aligned rectangle textured using the texture that backs framebuffer <s:term s:type="variable">FbH</s:term>, and using the vertical pass of the two-pass gaussian blur shader.</s:list-item>
+          <s:list-item>Switch to the default framebuffer (so that rendering will be visible on the screen) and render everything in the scene.</s:list-item>
+          <s:list-item>Enable normal alpha compositing with <s:term s:type="function">glBlendFunc</s:term>.</s:list-item> 
+          <s:list-item>With the default framebuffer still active, render a full-screen, screen-aligned rectangle textured using the texture that backs framebuffer <s:term s:type="variable">FbV</s:term>.</s:list-item>
+        </s:list-ordered>
+      </s:formal-item>
+      <s:paragraph>
+        The provided demonstration program, <s:link-external s:target="dist/GlowMap.java">GlowMap.java</s:link-external>,
+        is able to show each rendering pass (although the two passes of the gaussian blur shader are combined into one).
+        Use the 'R' key on the keyboard to switch between rendering passes.
+      </s:paragraph>
+      <s:formal-item s:kind="spec">
+        <s:formal-item-title>Render (emissive)</s:formal-item-title>
+        <s:image s:source="dist/render_emissive.png"/>
+      </s:formal-item>
+      <s:formal-item s:kind="spec">
+        <s:formal-item-title>Render (scene)</s:formal-item-title>
+        <s:image s:source="dist/render_scene.png"/>
+      </s:formal-item>
+      <s:formal-item s:kind="spec">
+        <s:formal-item-title>Render (glow)</s:formal-item-title>
+        <s:image s:source="dist/render_glow.png"/>
+      </s:formal-item>
+      <s:formal-item s:kind="spec">
+        <s:formal-item-title>Render (all)</s:formal-item-title>
+        <s:image s:source="dist/render_all.png"/>
+      </s:formal-item>
+    </s:subsection>
+  </s:section>
+
+</s:document>
