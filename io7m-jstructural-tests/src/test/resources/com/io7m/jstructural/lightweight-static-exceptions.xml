@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright © 2012 http://io7m.com
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  -->
+
+<s:document
+  xmlns:s="http://schemas.io7m.com/structural/2.0.0"
+	xmlns:xi="http://www.w3.org/2001/XInclude">
+	<s:document-title>Lightweight static exceptions</s:document-title>
+  <s:document-style>dist/document.css</s:document-style>
+  <s:document-contents/>
+
+	<s:section>
+		<s:section-title>Overview</s:section-title>
+		<s:paragraph>
+      Designers of new programming languages often come up against the
+      question of whether or not to include exceptions in the language
+      being designed. This document offers the argument that once a
+      language has sum types and pattern matching, it's possible to
+      implement statically checked exceptions within the language
+      without requiring any extra language features. The exceptions
+      implemented allow the programmer to statically guarantee that
+      all exception cases are handled (via the compiler enforcing
+      pattern exhaustiveness) and also to indicate the exceptions that
+      a function may raise in the type signature of the function. These
+      ideas are likely incredibly obvious to any experienced programmer
+      of statically typed functional languages. Unfortunately, the
+      overlap between those programmers and the designers of new or
+      existing languages seems to be depressingly small...
+		</s:paragraph>
+    <s:paragraph>
+      The implementation presented here is intended as a factual
+      description as opposed to code meant for direct and immediate use.
+      The implementation is given in
+      <s:link-external s:target="http://coq.inria.fr">Coq</s:link-external>,
+      but translates directly to any statically typed functional language
+      (and can probably be automatically extracted to OCaml and Haskell
+      code without much effort). Full source for the Coq development is
+      available in
+      <s:link-external s:target="dist/Procedure.v">Procedure.v</s:link-external>.
+    </s:paragraph>
+	</s:section>
+
+  <s:section>
+    <s:section-title>Implementation</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Results</s:subsection-title>
+      <s:paragraph>
+        Essentially, the intention is to model "procedures" that
+        can either succeed and return a value, or fail and return
+        an error value. An inductive type that represents either
+        a success or failure value is:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Result</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Inductive result (S F : Type) :=
+  | Success : S -> result S F
+  | Failure : F -> result S F.
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The <s:term s:type="type">result</s:term> type holds a value
+        of type <s:term s:type="type">S</s:term> when created via the
+        <s:term s:type="function">Success</s:term> constructor, or a
+         value of type <s:term s:type="type">F</s:term> when created via the
+        <s:term s:type="function">Failure</s:term> constructor. Intuitively
+        then, a value of type <s:term s:type="type">result nat bool</s:term>
+        represents the result of some computation that returns a value
+        of type <s:term s:type="type">nat</s:term> on success and a value of
+        type <s:term s:type="type">bool</s:term> on failure.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Procedures</s:subsection-title>
+      <s:paragraph>
+        Writing computer programs involves sequencing computations. Running
+        a program involves evaluating the sequenced computations in some
+        language-specific order. A computation can therefore be represented
+        by the following type:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Procedure</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Inductive unit := Unit.
+
+Inductive procedure (S F : Type) :=
+  | Procedure : (unit -> result S F) -> procedure S F.
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The <s:term s:type="type">procedure</s:term> type holds a function
+        that, when passed a value of type <s:term s:type="type">unit</s:term>
+        (of which there is only one: <s:term s:type="type">Unit</s:term>),
+        returns a value of type <s:term s:type="type">result S F</s:term>. The
+        <s:term s:type="type">unit</s:term> value solely exists to delay
+        evaluation (the body of the function will not be evaluated until
+        the function is called, as with any programming language with
+        call-by-value semantics).
+      </s:paragraph>
+      <s:paragraph>
+        Two convenience functions to define computations that trivially
+        succeed and trivially fail are:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Success and failure</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Definition succeed
+  {S F : Type}
+  (x   : S)
+: procedure S F :=
+  Procedure S F (fun _ => Success S F x).
+
+Definition fail
+  {S F : Type}
+  (x   : F)
+: procedure S F :=
+  Procedure S F (fun _ => Failure S F x).
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The <s:term s:type="function">(fun _ => ...)</s:term>
+        notation defines an anonymous function, and the _ indicates that
+        no name has been given for the function argument as the argument
+        isn't actually used in the body of the function. As an example,
+        an anonymous function that multiplied a given argument by 3 
+        would be written <s:term s:type="function">(fun x => x * 3)</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        As stated above, a procedure is executed by passing the contained
+        function a value of type <s:term s:type="type">unit</s:term>:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Execution</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Definition execute
+  {S F : Type}
+  (p   : procedure S F)
+: result S F :=
+  match p with
+  | Procedure f => f Unit
+  end.
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        For those unfamiliar with Coq, the above defines a function called
+        <s:term s:type="function">execute</s:term> that takes a procedure
+        <s:term s:type="variable">p</s:term> and then uses pattern matching to
+        extract the contained function, which is given the name
+        <s:term s:type="variable">f</s:term>, and then calls
+        <s:term s:type="variable">f</s:term> with the value
+        <s:term s:type="variable">Unit</s:term>. The 
+        <s:term s:type="function">execute</s:term> function is also
+        parameterized by two types <s:term s:type="type">S</s:term>
+        and <s:term s:type="type">F</s:term>, but the curly braces indicate
+        that the caller of the function is not expected to pass these
+        types explicitly: the compiler can infer them automatically.
+      </s:paragraph>
+      <s:paragraph>
+        Obviously, a program consisting of a single computation isn't
+        useful at all. It's possible to combine two computations
+        <s:term s:type="variable">p</s:term> and
+        <s:term s:type="variable">q</s:term> by first executing
+        <s:term s:type="variable">p</s:term> and then passing the result
+        to <s:term s:type="variable">q</s:term>. As stated before, however,
+        computations may fail! In all computer programs, a sequence of
+        computations can only execute as far as the first computation that
+        fails (unless the programmer explicitly catches the error and
+        handles it, which will be dealt with later in this document). The
+        concept of combining two computations to produce a larger computation
+        is described by the <s:term s:type="function">combine</s:term>
+        function:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Combining computations</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Definition combine
+  {S T F : Type}
+  (p     : procedure S F)
+  (f     : S -> procedure T F)
+: procedure T F :=
+  Procedure T F (fun _ =>
+    match execute p with
+    | Success x => execute (f x)
+    | Failure y => Failure T F y
+    end).
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The <s:term s:type="function">combine</s:term> function 
+        is slightly intimidating but is easy to understand if examined
+        in small pieces.  The <s:term s:type="function">combine</s:term> function
+        takes a procedure <s:term s:type="variable">p</s:term> and executes it.
+        If <s:term s:type="variable">p</s:term> is successful, the result
+        is passed to the given function <s:term s:type="variable">f</s:term>,
+        which returns a computation which is then executed. However,
+        if <s:term s:type="variable">p</s:term> returns a
+        <s:term s:type="function">Failure</s:term> value, the value is
+        simply returned and no further execution occurs. The important
+        thing to notice about the <s:term s:type="function">combine</s:term>
+        function is that it does not actually "perform" the computation, but
+        instead returns a computation that performs the above when asked. This
+        can be seen by the fact that the body of the function is wrapped
+        in an anonymous function
+        and passed to the <s:term s:type="function">Procedure</s:term>
+        constructor. The difference is subtle: The function builds computations
+        that are later "executed", as opposed to executing them immediately.
+      </s:paragraph>
+      <s:paragraph>
+        A concise notation for the above is:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Combine notation</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Notation "p >>= f" :=
+  (combine p f) (at level 50, left associativity).
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The above simply states that the notation
+        <s:term s:type="function">p >>= f</s:term> means
+        the same thing as <s:term s:type="function">combine p f</s:term>.
+      </s:paragraph> 
+      <s:paragraph>
+        Often, it's necessary to have computations that perform some
+        side effect but do not return a useful value. An example of
+        this would be <s:term s:type="function">printf</s:term> in C,
+        or <s:term s:type="function">Put_Line</s:term> in Ada: both are
+        functions that perform a side effect but do not return a value.
+        The <s:term s:type="function">order</s:term> function captures this
+        idea:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Order</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Definition order
+  {S T F : Type}
+  (p     : procedure S F)
+  (q     : procedure T F)
+: procedure T F :=
+  combine p (fun _ => q).
+
+Notation "p >> q" :=
+  (order p q) (at level 50, left associativity).
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The <s:term s:type="function">order</s:term> function combines
+        the given computations <s:term s:type="variable">p</s:term> and
+        <s:term s:type="variable">q</s:term> by passing an anonymous function
+        <s:term s:type="function">(fun _ => q)</s:term> to
+        <s:term s:type="function">combine</s:term>. In other words, the
+        function passed in simply ignores whatever argument is passed to it,
+        and then returns <s:term s:type="variable">q</s:term>. Shorthand
+        notation is also provided.
+      </s:paragraph> 
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>Exceptions</s:subsection-title>
+      <s:paragraph>
+        At this point, it's possible to write programs like the following:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Simple ordering</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Module IO.
+  Inductive error :=
+    | File_Not_Found
+    | Permission_Denied
+    | Device_Busy.
+
+  Definition file := nat.
+
+  Axiom file_open  : string -> procedure file error.
+  Axiom file_close : file -> procedure unit error.
+  Axiom file_write : file -> string -> procedure unit error.
+End IO.
+
+Definition io_example0 : procedure unit IO.error :=
+  IO.file_open "file.txt" >>= fun fd =>
+    IO.file_write fd "Line 0" >>
+    IO.file_write fd "Line 1" >>
+    IO.file_write fd "Line 2" >>
+    IO.file_close fd.
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The above procedure, when executed, returns nothing
+        on success (the <s:term s:type="variable">unit</s:term>
+        type is often used to represent "nothing"), or a
+        system-specific error code on failure.
+      </s:paragraph>
+      <s:paragraph>
+        Depending on the reader's experience, it may or may not be
+        possible to see how the type of the
+        <s:term s:type="function">combine</s:term> function provides
+        an important static guarantee. Remember that the types of
+        "success" and "failure" values are given in the types of
+        the combinations to be combined. The type signature of the
+        <s:term s:type="function">combine</s:term> function is:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Failure type equality</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Definition combine
+  {S T F : Type}
+  (p     : procedure S F)
+  (f     : S -> procedure T F)
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        From the type signature, it can be seen that the function is
+        combining a computation of type
+        <s:term s:type="type">procedure S F</s:term> and a computation
+        of type <s:term s:type="type">procedure T F</s:term>. In other
+        words, the two computations are allowed to return "success"
+        values of different types, but the "failure" type of both
+        computations is required to be the same (<s:term s:type="type">F</s:term>).
+        Any attempt to combine two computations that have different
+        failure types is rejected by the compiler:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Failure type inequality</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Inductive error_codes0 :=
+  | Error_A
+  | Error_B.
+
+Inductive error_codes1 :=
+  | Error_C
+  | Error_D.
+
+Definition type_error :=
+  fail Error_A >> fail Error_C.
+
+Error: The term "fail Error_C" has type "procedure ?310 error_codes1"
+ while it is expected to have type "procedure ?306 error_codes0".
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        Now, obviously, computations in real computer programs can fail
+        in a huge variety of interesting ways. Evaluating any arithmetic
+        expression in an Ada program can potentially raise a
+        <s:term s:type="type">Constraint_Error</s:term> exception. Executing
+        any I/O function in Java can result in the raising of any
+        subtype of <s:term s:type="type">IOException</s:term>. Requiring
+        the programmer to use one single error type for the entire universe
+        of programs would obviously not work.
+      </s:paragraph>
+      <s:paragraph>
+        Intuitively, the point that the "failure" type of a computation
+        "changes" can be thought of as the point where the programmer
+        explicitly handled or discarded the failure. Writing a function
+        to explicitly handle errors is surprisingly trivial:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Catching exceptions</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Definition catch
+  {S F G   : Type}
+  (p       : procedure S F)
+  (handler : F -> procedure S G)
+: procedure S G :=
+  match execute p with
+  | Success x => succeed x
+  | Failure f => handler f
+  end.
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The <s:term s:type="function">catch</s:term> function simply
+        executes the computation <s:term s:type="variable">p</s:term>
+        and returns the "failure" result to the given
+        <s:term s:type="variable">handler</s:term> function if
+        necessary . As an example, the <s:term s:type="function">catch</s:term>
+        function could be used to explicitly ignore any error raised
+        by the example procedural program written earlier:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Ignoring errors</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Definition io_example1 : procedure unit unit :=
+  catch (IO.file_open "file.txt" >>=
+    fun fd =>
+      IO.file_write fd "Line 0" >>
+      IO.file_write fd "Line 1" >>
+      IO.file_write fd "Line 2" >>
+      IO.file_close fd)
+    (fun r => succeed Unit).
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        Finally, it's necessary to deal with converging errors. If the
+        programmer wishes to combine two computations
+        <s:term s:type="variable">p</s:term> and
+        <s:term s:type="variable">q</s:term> and both computations have
+        completely different error types, it is trivial to define a sum type
+        that indicates the resulting set of errors that the combined
+        computation can return. 
+      </s:paragraph> 
+      <s:paragraph>
+        First, some modules that define computations that return
+        distinct errors:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Modules</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Module IO.
+  Inductive error :=
+    | File_Not_Found
+    | Permission_Denied
+    | Device_Busy.
+
+  Definition file := nat.
+  Axiom file_open : string -> procedure file error.
+  Axiom file_close : file -> procedure unit error.
+  Axiom file_write : file -> string -> procedure unit error.
+  Axiom file_read_nat : file -> procedure nat error.
+End IO.
+
+Module Motor_Control.
+  Inductive error :=
+    | Velocity_Too_Fast
+    | Velocity_Too_Slow
+    | On_Fire.
+
+  Axiom set_velocity : nat -> procedure unit error.
+  Axiom get_velocity : unit -> procedure nat error.
+End Motor_Control.
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        Then, a type that represents the sum of both error types:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Error type</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Inductive combined_error :=
+  | IO_Error    : IO.error -> combined_error
+  | Motor_Error : Motor_Control.error -> combined_error.
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        Then, a pair of functions that return a value of type
+        <s:term s:type="type">combined_error</s:term> when given
+        values of the previous error types:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Error functions</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Definition r_io
+  {S : Type}
+  (p : procedure S IO.error)
+: procedure S combined_error :=
+  catch p (fun e => fail (IO_Error e)).
+
+Definition r_motor
+  {S : Type}
+  (p : procedure S Motor_Control.error)
+: procedure S combined_error :=
+  catch p (fun e => fail (Motor_Error e)).
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        And finally, a small program written using the above
+        combinators:
+      </s:paragraph>
+      <s:formal-item s:kind="sources">
+        <s:formal-item-title>Error functions</s:formal-item-title>
+        <s:verbatim><![CDATA[
+Definition converge_example0 : procedure unit combined_error :=
+  r_io    (IO.file_open "motor-log.txt")    >>= fun file =>
+  r_motor (Motor_Control.get_velocity Unit) >>= fun v =>
+  r_io    (IO.file_write_nat file v)        >>
+  r_motor (Motor_Control.get_velocity Unit) >>= fun v =>
+  r_io    (IO.file_write_nat file v >> IO.file_close file).
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection> 
+  </s:section>
+
+  <s:section>
+    <s:section-title>Closing thoughts</s:section-title>
+    <s:paragraph>
+      As can be seen, the notational overhead of full statically
+      checked "exceptional" procedures implemented in a language with
+      no actual support for them is tolerable. Language designers
+      developing new languages could quite easily provide syntactic
+      sugar for the above to emulate imperative features. If the
+      system described here was actually baked into a general purpose
+      language, it would presumably be reasonably easy to have the
+      compiler generate functions such as
+      <s:term s:type="function">r_motor</s:term> and
+      <s:term s:type="function">r_io</s:term>. With sum types and
+      pattern matching present in the language, it suddenly becomes
+      much easier to have functions deal with a single exception type
+      as opposed to, for example, lists of checked exceptions as in
+      Java.
+    </s:paragraph>
+    <s:paragraph>
+      If your language supports polymorphic variants, it's possible
+      to extend the described system further, eliminating the need for
+      functions like <s:term s:type="function">r_motor</s:term>. See
+      <s:link-external s:target="http://www.univ-orleans.fr/lifo/Members/David.Teller/publications/ml2008.pdf">Catch me if you can</s:link-external>.
+    </s:paragraph>
+    <s:paragraph>
+      Experienced functional programmers are probably screaming
+      "monad" at the screen. The <s:term s:type="procedure">procedure</s:term>
+      abstraction is, of course, a combination of the IO and error monads.
+    </s:paragraph>
+  </s:section>
+
+  <s:section>
+    <s:section-title>Lists</s:section-title>
+    <s:paragraph>
+      <s:formal-item-list s:kind="sources"/>
+    </s:paragraph>
+  </s:section>
+
+</s:document>

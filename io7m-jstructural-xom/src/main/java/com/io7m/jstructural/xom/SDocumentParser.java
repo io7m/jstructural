@@ -897,6 +897,9 @@ public final class SDocumentParser
       if ("footnote".equals(ec.getLocalName())) {
         return SDocumentParser.footnote(log, ec);
       }
+      if ("formal-item-list".equals(ec.getLocalName())) {
+        return SDocumentParser.formalItemList(ec);
+      }
       if ("image".equals(ec.getLocalName())) {
         return SDocumentParser.image(ec);
       }

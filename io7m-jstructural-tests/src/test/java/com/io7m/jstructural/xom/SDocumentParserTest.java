@@ -806,6 +806,11 @@ import com.io7m.junreachable.UnreachableCodeException;
     SDocumentParserTest.roundTripParse("bug-ebbe752c4e.xml");
   }
 
+  @Test public void testRoundTrip_Bug_c1c7919467()
+  {
+    SDocumentParserTest.roundTripParse("lightweight-static-exceptions.xml");
+  }
+
   @Test public void testTerm0()
   {
     final Element e = new Element("s:term", SXML.XML_URI.toString());

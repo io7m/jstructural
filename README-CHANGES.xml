@@ -4,6 +4,17 @@
 
   <c:release c:ticket-system="com.io7m.fossil.jstructural">
     <c:date>2014-06-22</c:date>
+    <c:version>3.1.1</c:version>
+    <c:item>
+      <c:date>2014-06-22</c:date>
+      <c:type-code-fix/>
+      <c:ticket>c1c7919467</c:ticket>
+      <c:summary>Formal item lists were not processed in paragraphs.</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release c:ticket-system="com.io7m.fossil.jstructural">
+    <c:date>2014-06-22</c:date>
     <c:version>3.1.0</c:version>
     <c:item>
       <c:date>2014-06-22</c:date>
