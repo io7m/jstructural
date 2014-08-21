@@ -1,1 +1,1 @@
-io7m-jstructural 3.1.0
+io7m-jstructural 4.0.0
