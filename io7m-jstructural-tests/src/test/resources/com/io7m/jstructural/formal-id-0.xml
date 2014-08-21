@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:document xmlns:s="http://schemas.io7m.com/structural/2.1.0">
+  <s:document-title>Document</s:document-title>
+  <s:section xml:id="section_0">
+    <s:section-title>Section</s:section-title>
+    <s:paragraph xml:id="paragraph_0">
+      Paragraph.
+    </s:paragraph>
+    <s:formal-item xml:id="formal_0" s:kind="examples">
+      <s:formal-item-title>Formal title</s:formal-item-title>
+      <s:verbatim>Stuff.</s:verbatim>
+    </s:formal-item>
+  </s:section>
+</s:document>
