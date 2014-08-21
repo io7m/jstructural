@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -155,13 +155,13 @@ public final class SDocumentParser
   /**
    * Attempt to parse a document from the given element. The element is
    * assumed to have been validated with the <code>structural</code> schema.
-   * 
+   *
    * @param log
    *          A log handle
    * @param e
    *          The element
    * @return A document
-   * 
+   *
    * @throws URISyntaxException
    *           If parsing a URI fails, internally
    */
@@ -374,6 +374,7 @@ public final class SDocumentParser
     final String type = SDocumentParser.typeAttribute(e);
     final String kind = SDocumentParser.kindAttribute(e);
     assert kind != null;
+    final SID id = SDocumentParser.idAttribute(e);
     final SFormalItemTitle title = SDocumentParser.formalItemTitleRoot(e);
 
     final Elements children = e.getChildElements();
@@ -385,6 +386,7 @@ public final class SDocumentParser
       return SDocumentParser.formalItemMake(
         type,
         kind,
+        id,
         title,
         SDocumentParser.formalItemContent(log, ec));
     }
@@ -430,12 +432,26 @@ public final class SDocumentParser
   private static SFormalItem formalItemMake(
     final @Nullable String type,
     final String kind,
+    final @Nullable SID id,
     final SFormalItemTitle title,
     final SFormalItemContent content)
   {
     if (type != null) {
+      if (id != null) {
+        return SFormalItem.formalItemTypedWithID(
+          title,
+          kind,
+          type,
+          content,
+          id);
+      }
       return SFormalItem.formalItemTyped(title, kind, type, content);
     }
+
+    if (id != null) {
+      return SFormalItem.formalItemWithID(title, kind, content, id);
+    }
+
     return SFormalItem.formalItem(title, kind, content);
   }
 
@@ -449,7 +465,7 @@ public final class SDocumentParser
 
   /**
    * Parse a document from a validated stream.
-   * 
+   *
    * @param uri
    *          The base URI of the document
    * @param stream
@@ -457,7 +473,7 @@ public final class SDocumentParser
    * @param log
    *          A log handle
    * @return A document
-   * 
+   *
    * @throws SAXException
    *           On XML parse errors
    * @throws ParserConfigurationException
@@ -508,14 +524,14 @@ public final class SDocumentParser
 
   /**
    * Parse and validate a document from the given stream.
-   * 
+   *
    * @param stream
    *          An input stream
    * @param uri
    * @param log
    *          A log handle
    * @return A parsed and validated document
-   * 
+   *
    * @throws SAXException
    *           On XML parse errors
    * @throws ConstraintError

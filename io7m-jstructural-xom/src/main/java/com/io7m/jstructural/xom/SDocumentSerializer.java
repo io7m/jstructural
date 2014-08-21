@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -131,7 +131,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param d
    *          The element
    * @return An XML element
@@ -165,7 +165,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -182,7 +182,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -200,7 +200,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -218,7 +218,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -259,7 +259,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -300,7 +300,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -320,7 +320,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param c
    *          The element
    * @return An XML element
@@ -403,7 +403,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -416,6 +416,7 @@ public final class SDocumentSerializer
 
     final Element e = new Element("s:formal-item", SXML.XML_URI.toString());
     s.getType().map(new TypeAdder(e));
+    s.getID().map(new IDAdder(e));
 
     final Attribute ak =
       new Attribute("s:kind", SXML.XML_URI.toString(), s.getKind());
@@ -427,7 +428,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -489,7 +490,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -510,7 +511,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -529,7 +530,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -577,7 +578,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -601,7 +602,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param c
    *          The element
    * @return An XML element
@@ -635,7 +636,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -661,7 +662,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -684,7 +685,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param c
    *          The element
    * @return An XML element
@@ -765,7 +766,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -788,7 +789,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -812,7 +813,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -835,7 +836,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param c
    *          The element
    * @return An XML element
@@ -931,7 +932,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param p
    *          The element
    * @return An XML element
@@ -966,7 +967,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -983,7 +984,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1001,7 +1002,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1035,7 +1036,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1052,7 +1053,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1069,7 +1070,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1104,7 +1105,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1139,7 +1140,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1165,7 +1166,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param c
    *          The element
    * @return An XML element
@@ -1200,7 +1201,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1218,7 +1219,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1246,7 +1247,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1268,7 +1269,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param c
    *          The element
    * @return An XML element
@@ -1290,7 +1291,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param cc
    *          The element
    * @return An XML element
@@ -1373,7 +1374,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1392,7 +1393,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1413,7 +1414,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param r
    *          The element
    * @return An XML element
@@ -1435,7 +1436,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1453,7 +1454,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1471,7 +1472,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element
@@ -1486,7 +1487,7 @@ public final class SDocumentSerializer
 
   /**
    * Serialize the given element to XML.
-   * 
+   *
    * @param s
    *          The element
    * @return An XML element

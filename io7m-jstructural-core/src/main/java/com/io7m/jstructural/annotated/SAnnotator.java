@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -802,7 +802,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 
   /**
    * Annotate the given document.
-   * 
+   *
    * @param log
    *          A log handle
    * @param d
@@ -997,6 +997,8 @@ import com.io7m.junreachable.UnreachableCodeException;
     final int formal_number)
     throws Exception
   {
+    final OptionType<SAID> id = formal.getID().map(new SAIDMapper());
+
     final SAFormalItem saf =
       number.sectionNumberAccept(new SASectionNumberVisitor<SAFormalItem>() {
         @Override public SAFormalItem visitSectionNumberWithoutPart(
@@ -1016,7 +1018,7 @@ import com.io7m.junreachable.UnreachableCodeException;
               f_number);
 
           return new SAFormalItem(f_number, title, formal.getKind(), formal
-            .getType(), in_content, formal_number);
+            .getType(), in_content, formal_number, id);
         }
 
         @Override public SAFormalItem visitSectionNumberWithPart(
@@ -1039,10 +1041,11 @@ import com.io7m.junreachable.UnreachableCodeException;
               f_number);
 
           return new SAFormalItem(f_number, title, formal.getKind(), formal
-            .getType(), in_content, formal_number);
+            .getType(), in_content, formal_number, id);
         }
       });
 
+    id.map(new SAIDLinkCreator(ids, saf));
     formals.put(saf.getKind(), saf);
     return saf;
   }
@@ -1309,6 +1312,8 @@ import com.io7m.junreachable.UnreachableCodeException;
     final int formal_number)
     throws Exception
   {
+    final OptionType<SAID> id = formal.getID().map(new SAIDMapper());
+
     final SAFormalItem saf =
       s_number
         .subsectionNumberAccept(new SASubsectionNumberVisitor<SAFormalItem>() {
@@ -1330,7 +1335,7 @@ import com.io7m.junreachable.UnreachableCodeException;
                 f_number);
 
             return new SAFormalItem(f_number, title, formal.getKind(), formal
-              .getType(), in_content, formal_number);
+              .getType(), in_content, formal_number, id);
           }
 
           @Override public SAFormalItem visitSubsectionNumberSS(
@@ -1353,10 +1358,11 @@ import com.io7m.junreachable.UnreachableCodeException;
                 f_number);
 
             return new SAFormalItem(f_number, title, formal.getKind(), formal
-              .getType(), in_content, formal_number);
+              .getType(), in_content, formal_number, id);
           }
         });
 
+    id.map(new SAIDLinkCreator(ids, saf));
     formals.put(saf.getKind(), saf);
     return saf;
   }

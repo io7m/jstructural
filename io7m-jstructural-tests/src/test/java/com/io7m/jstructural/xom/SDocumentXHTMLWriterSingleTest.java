@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -361,6 +361,28 @@ import com.io7m.jstructural.documentation.SDocumentation;
       s.setIndent(2);
       s.setMaxLength(80);
       s.write(doc);
+    }
+  }
+
+  @Test public void testFormalID_0()
+    throws ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
+  {
+    final SADocument d = SAnnotatorTest.annotate("formal-id-0.xml");
+    final SDocumentXHTMLWriterSingle writer =
+      new SDocumentXHTMLWriterSingle();
+    final Callbacks cb = new Callbacks();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
+    Assert.assertEquals(1, cb.on_head_called);
+    Assert.assertEquals(1, cb.on_body_start_called);
+    Assert.assertEquals(1, cb.on_body_end_called);
+
+    for (final String name : dr.keySet()) {
+      SDocumentXHTMLWriterSingleTest.checkDocument(dr.get(name));
     }
   }
 }

@@ -17,7 +17,7 @@
 -->
 
 <s:document
-  xmlns:s="http://schemas.io7m.com/structural/2.0.0"
+  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
   <s:document-title>${project.parent.name} ${project.version} Documentation</s:document-title>
   <s:document-style>documentation.css</s:document-style>
@@ -797,7 +797,7 @@ SortedMap&lt;String, Document> pages = writer.writeDocuments(callbacks, doc);
     </s:subsection>
     <s:subsection>
       <s:subsection-title>Example</s:subsection-title>
-      <s:formal-item s:kind="diagrams">
+      <s:formal-item s:kind="diagrams" xml:id="elem_formal-item.example">
         <s:formal-item-title>Example Formal Item</s:formal-item-title>
         <s:image s:source="wheat.png" />
       </s:formal-item>
@@ -987,6 +987,12 @@ SortedMap&lt;String, Document> pages = writer.writeDocuments(callbacks, doc);
       </s:paragraph>
       <s:paragraph>
         <s:link s:target="elem_paragraph"><s:image s:source="strawberry.png"/></s:link>
+      </s:paragraph>
+      <s:paragraph>
+        The following text:
+        <s:verbatim s:type="example"><![CDATA[<s:link s:target="elem_formal-item.example">formal-item</s:link>]]></s:verbatim>
+        Produces the following output in the context of this document:
+        <s:link s:target="elem_formal-item.example">formal-item</s:link>.
       </s:paragraph>
     </s:subsection>
   </s:section>

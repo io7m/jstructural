@@ -25,8 +25,11 @@ import com.io7m.jranges.RangeCheck;
  * A formal item.
  */
 
-public final class SAFormalItem implements SASubsectionContent
+public final class SAFormalItem implements
+  SASubsectionContent,
+  SAIDTargetContent
 {
+  private final OptionType<SAID>    id;
   private final SAFormalItemContent content;
   private final int                 formal_number;
   private final String              kind;
@@ -40,13 +43,15 @@ public final class SAFormalItem implements SASubsectionContent
     final String in_kind,
     final OptionType<String> in_type,
     final SAFormalItemContent in_content,
-    final int in_formal_number)
+    final int in_formal_number,
+    final OptionType<SAID> in_id)
   {
     this.number = NullCheck.notNull(in_number, "Number");
     this.title = NullCheck.notNull(in_title, "Title");
     this.kind = NullCheck.notNull(in_kind, "Kind");
     this.type = NullCheck.notNull(in_type, "Type");
     this.content = NullCheck.notNull(in_content, "Content");
+    this.id = NullCheck.notNull(in_id, "ID");
 
     this.formal_number =
       (int) RangeCheck.checkIncludedIn(
@@ -74,6 +79,7 @@ public final class SAFormalItem implements SASubsectionContent
       && this.kind.equals(other.kind)
       && this.title.equals(other.title)
       && this.type.equals(other.type)
+      && this.id.equals(other.id)
       && (this.formal_number == other.formal_number);
   }
 
@@ -137,6 +143,7 @@ public final class SAFormalItem implements SASubsectionContent
     int result = 1;
     result = (prime * result) + this.content.hashCode();
     result = (prime * result) + this.kind.hashCode();
+    result = (prime * result) + this.id.hashCode();
     result = (prime * result) + this.title.hashCode();
     result = (prime * result) + this.type.hashCode();
     result = (prime * result) + this.formal_number;
@@ -163,11 +170,20 @@ public final class SAFormalItem implements SASubsectionContent
     builder.append(this.title);
     builder.append(" type=");
     builder.append(this.type);
+    builder.append(" id=");
+    builder.append(this.id);
     builder.append(" formal_number=");
     builder.append(this.formal_number);
     builder.append("]");
     final String r = builder.toString();
     assert r != null;
     return r;
+  }
+
+  @Override public <T> T targetContentAccept(
+    final SAIDTargetContentVisitor<T> v)
+    throws Exception
+  {
+    return v.visitFormalItem(this);
   }
 }
