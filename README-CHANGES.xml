@@ -3,6 +3,17 @@
   <c:project>io7m-jstructural</c:project>
 
   <c:release c:ticket-system="com.io7m.fossil.jstructural">
+    <c:date>2014-08-21</c:date>
+    <c:version>3.2.0</c:version>
+    <c:item>
+      <c:date>2014-08-21</c:date>
+      <c:type-code-new/>
+      <c:ticket>3d8e637f9c2</c:ticket>
+      <c:summary>Formal items may now have xml:ids.</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release c:ticket-system="com.io7m.fossil.jstructural">
     <c:date>2014-06-22</c:date>
     <c:version>3.1.1</c:version>
     <c:item>
