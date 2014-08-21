@@ -4,12 +4,12 @@
 
   <c:release c:ticket-system="com.io7m.fossil.jstructural">
     <c:date>2014-08-21</c:date>
-    <c:version>3.2.0</c:version>
+    <c:version>4.0.0</c:version>
     <c:item>
       <c:date>2014-08-21</c:date>
-      <c:type-code-new/>
+      <c:type-code-change/>
       <c:ticket>3d8e637f9c2</c:ticket>
-      <c:summary>Formal items may now have xml:ids.</c:summary>
+      <c:summary>Formal items may now have xml:ids. Noted as a backwards incompatible change as a public visitor type is affected.</c:summary>
     </c:item>
   </c:release>
 

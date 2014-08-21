@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.jstructural</groupId>
     <artifactId>io7m-jstructural</artifactId>
-    <version>3.2.0</version>
+    <version>4.0.0</version>
   </parent>
   <artifactId>io7m-jstructural-schema</artifactId>
 
