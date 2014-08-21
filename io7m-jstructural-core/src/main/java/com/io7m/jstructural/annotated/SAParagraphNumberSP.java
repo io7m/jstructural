@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -16,6 +16,7 @@
 
 package com.io7m.jstructural.annotated;
 
+import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
 import com.io7m.junreachable.UnreachableCodeException;
@@ -31,7 +32,7 @@ public final class SAParagraphNumberSP extends SAParagraphNumber
 
   /**
    * Construct a new paragraph number
-   * 
+   *
    * @param in_section
    *          The section number
    * @param in_paragraph
@@ -59,66 +60,76 @@ public final class SAParagraphNumberSP extends SAParagraphNumber
   @SuppressWarnings({ "boxing", "null", "synthetic-access" }) @Override public
     int
     compareTo(
-      final SAParagraphNumber o)
+      final @Nullable SAParagraphNumber o)
   {
     try {
-      return o.paragraphNumberAccept(new SAParagraphNumberVisitor<Integer>() {
-        @Override public Integer visitParagraphNumberPSP(
-          final SAParagraphNumberPSP p)
-          throws Exception
-        {
-          final int rsect =
-            Integer.compare(SAParagraphNumberSP.this.section, p.getSection());
-          if (rsect == 0) {
-            return Integer.compare(
-              SAParagraphNumberSP.this.paragraph,
-              p.getParagraph());
+      return NullCheck
+        .notNull(o, "Other")
+        .paragraphNumberAccept(new SAParagraphNumberVisitor<Integer>() {
+          @Override public Integer visitParagraphNumberPSP(
+            final SAParagraphNumberPSP p)
+            throws Exception
+          {
+            final int rsect =
+              Integer.compare(
+                SAParagraphNumberSP.this.section,
+                p.getSection());
+            if (rsect == 0) {
+              return Integer.compare(
+                SAParagraphNumberSP.this.paragraph,
+                p.getParagraph());
+            }
+            return rsect;
           }
-          return rsect;
-        }
 
-        @Override public Integer visitParagraphNumberPSSP(
-          final SAParagraphNumberPSSP p)
-          throws Exception
-        {
-          final int rsect =
-            Integer.compare(SAParagraphNumberSP.this.section, p.getSection());
-          if (rsect == 0) {
-            return Integer.compare(
-              SAParagraphNumberSP.this.paragraph,
-              p.getParagraph());
+          @Override public Integer visitParagraphNumberPSSP(
+            final SAParagraphNumberPSSP p)
+            throws Exception
+          {
+            final int rsect =
+              Integer.compare(
+                SAParagraphNumberSP.this.section,
+                p.getSection());
+            if (rsect == 0) {
+              return Integer.compare(
+                SAParagraphNumberSP.this.paragraph,
+                p.getParagraph());
+            }
+            return rsect;
           }
-          return rsect;
-        }
 
-        @Override public Integer visitParagraphNumberSP(
-          final SAParagraphNumberSP p)
-          throws Exception
-        {
-          final int rsect =
-            Integer.compare(SAParagraphNumberSP.this.section, p.getSection());
-          if (rsect == 0) {
-            return Integer.compare(
-              SAParagraphNumberSP.this.paragraph,
-              p.getParagraph());
+          @Override public Integer visitParagraphNumberSP(
+            final SAParagraphNumberSP p)
+            throws Exception
+          {
+            final int rsect =
+              Integer.compare(
+                SAParagraphNumberSP.this.section,
+                p.getSection());
+            if (rsect == 0) {
+              return Integer.compare(
+                SAParagraphNumberSP.this.paragraph,
+                p.getParagraph());
+            }
+            return rsect;
           }
-          return rsect;
-        }
 
-        @Override public Integer visitParagraphNumberSSP(
-          final SAParagraphNumberSSP p)
-          throws Exception
-        {
-          final int rsect =
-            Integer.compare(SAParagraphNumberSP.this.section, p.getSection());
-          if (rsect == 0) {
-            return Integer.compare(
-              SAParagraphNumberSP.this.paragraph,
-              p.getParagraph());
+          @Override public Integer visitParagraphNumberSSP(
+            final SAParagraphNumberSSP p)
+            throws Exception
+          {
+            final int rsect =
+              Integer.compare(
+                SAParagraphNumberSP.this.section,
+                p.getSection());
+            if (rsect == 0) {
+              return Integer.compare(
+                SAParagraphNumberSP.this.paragraph,
+                p.getParagraph());
+            }
+            return rsect;
           }
-          return rsect;
-        }
-      })
+        })
         .intValue();
     } catch (final Exception e) {
       throw new UnreachableCodeException(e);

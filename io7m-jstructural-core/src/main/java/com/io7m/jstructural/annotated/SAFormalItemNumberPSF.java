@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -16,6 +16,7 @@
 
 package com.io7m.jstructural.annotated;
 
+import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
 import com.io7m.junreachable.UnreachableCodeException;
@@ -32,7 +33,7 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
 
   /**
    * Construct a new formal item number
-   * 
+   *
    * @param in_part
    *          The part number
    * @param in_section
@@ -69,11 +70,12 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
   @SuppressWarnings({ "boxing", "null", "synthetic-access" }) @Override public
     int
     compareTo(
-      final SAFormalItemNumber o)
+      final @Nullable SAFormalItemNumber o)
   {
     try {
-      return o.formalItemNumberAccept(
-        new SAFormalItemNumberVisitor<Integer>() {
+      return NullCheck
+        .notNull(o, "Other")
+        .formalItemNumberAccept(new SAFormalItemNumberVisitor<Integer>() {
           @Override public Integer visitFormalItemNumberPSF(
             final SAFormalItemNumberPSF p)
             throws Exception
@@ -146,7 +148,8 @@ public final class SAFormalItemNumberPSF extends SAFormalItemNumber
             }
             return rsect;
           }
-        }).intValue();
+        })
+        .intValue();
     } catch (final Exception e) {
       throw new UnreachableCodeException(e);
     }
