@@ -45,7 +45,68 @@ import com.io7m.jstructural.annotated.SAnnotatorTest;
 
 @SuppressWarnings("static-method") public final class SDocumentXHTMLWriterMultiTest
 {
-  private static final int DOCUMENTATION_PAGES = 46;
+  private static class BodyReplacerExtra implements
+    SDocumentXHTMLWriterCallbacks
+  {
+    public BodyReplacerExtra()
+    {
+      // Nothing
+    }
+
+    @Override public void onBodyEnd(
+      final Element body)
+    {
+      // Nothing
+    }
+
+    @Override public @Nullable Element onBodyStart(
+      final Element body)
+    {
+      final Element ea = new Element("div", SXHTML.XHTML_URI.toString());
+      ea.addAttribute(new Attribute("class", null, "new_ancestor"));
+
+      final Element ep = new Element("div", SXHTML.XHTML_URI.toString());
+      ep.addAttribute(new Attribute("class", null, "new_parent"));
+
+      ea.appendChild(ep);
+      return ep;
+    }
+
+    @Override public void onHead(
+      final Element head)
+    {
+      // Nothing
+    }
+  }
+
+  private static class BodyReplacerTrivial implements
+    SDocumentXHTMLWriterCallbacks
+  {
+    public BodyReplacerTrivial()
+    {
+      // Nothing
+    }
+
+    @Override public void onBodyEnd(
+      final Element body)
+    {
+      // Nothing
+    }
+
+    @Override public @Nullable Element onBodyStart(
+      final Element body)
+    {
+      final Element e = new Element("div", SXHTML.XHTML_URI.toString());
+      e.addAttribute(new Attribute("class", null, "new_parent"));
+      return e;
+    }
+
+    @Override public void onHead(
+      final Element head)
+    {
+      // Nothing
+    }
+  }
 
   private static final class Callbacks implements
     SDocumentXHTMLWriterCallbacks
@@ -80,6 +141,8 @@ import com.io7m.jstructural.annotated.SAnnotatorTest;
       this.on_head_called++;
     }
   }
+
+  private static final int DOCUMENTATION_PAGES = 46;
 
   private static void checkDocument(
     final Document dd)
@@ -180,144 +243,6 @@ import com.io7m.jstructural.annotated.SAnnotatorTest;
     }
   }
 
-  @Test public void testDocumentation_0()
-    throws IOException,
-      ValidityException,
-      SAXException,
-      ParserConfigurationException,
-      ParsingException,
-      URISyntaxException
-  {
-    final SADocument da = SAnnotatorTest.annotate("documentation.xml");
-    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
-    final Callbacks cb = new Callbacks();
-    final SortedMap<String, Document> dr = writer.writeDocuments(cb, da);
-    Assert.assertEquals(
-      SDocumentXHTMLWriterMultiTest.DOCUMENTATION_PAGES,
-      cb.on_head_called);
-    Assert.assertEquals(
-      SDocumentXHTMLWriterMultiTest.DOCUMENTATION_PAGES,
-      cb.on_body_start_called);
-    Assert.assertEquals(
-      SDocumentXHTMLWriterMultiTest.DOCUMENTATION_PAGES,
-      cb.on_body_end_called);
-
-    for (final String name : dr.keySet()) {
-      SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
-    }
-  }
-
-  /**
-   * Ensure that validation is working in the test suite. Try to validate
-   * something that is certainly not XHTML 1.0 Strict.
-   */
-
-  @Test(expected = SAXException.class) public void testFailure()
-    throws ValidityException,
-      IOException,
-      SAXException,
-      ParserConfigurationException,
-      ParsingException,
-      URISyntaxException
-  {
-    SDocumentXHTMLWriterMultiTest
-      .checkDocument(new Document(new Element("z")));
-  }
-
-  @Test public void testLarge_0()
-    throws ValidityException,
-      IOException,
-      SAXException,
-      ParserConfigurationException,
-      ParsingException,
-      URISyntaxException
-  {
-    final SADocument d = SAnnotatorTest.annotate("jaux-documentation.xml");
-    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
-    final Callbacks cb = new Callbacks();
-    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
-    Assert.assertEquals(9, cb.on_head_called);
-    Assert.assertEquals(9, cb.on_body_start_called);
-    Assert.assertEquals(9, cb.on_body_end_called);
-
-    for (final String name : dr.keySet()) {
-      SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
-    }
-  }
-
-  @Test public void testBug_cd7bc9304c()
-  {
-    final SADocument d = SAnnotatorTest.annotate("glowmaps.xml");
-    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
-    final Callbacks cb = new Callbacks();
-    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
-
-    Assert.assertEquals(4, dr.size());
-  }
-
-  private static class BodyReplacerTrivial implements
-    SDocumentXHTMLWriterCallbacks
-  {
-    public BodyReplacerTrivial()
-    {
-      // Nothing
-    }
-
-    @Override public void onBodyEnd(
-      final Element body)
-    {
-      // Nothing
-    }
-
-    @Override public @Nullable Element onBodyStart(
-      final Element body)
-    {
-      final Element e = new Element("div", SXHTML.XHTML_URI.toString());
-      e.addAttribute(new Attribute("class", null, "new_parent"));
-      return e;
-    }
-
-    @Override public void onHead(
-      final Element head)
-    {
-      // Nothing
-    }
-  }
-
-  private static class BodyReplacerExtra implements
-    SDocumentXHTMLWriterCallbacks
-  {
-    public BodyReplacerExtra()
-    {
-      // Nothing
-    }
-
-    @Override public void onBodyEnd(
-      final Element body)
-    {
-      // Nothing
-    }
-
-    @Override public @Nullable Element onBodyStart(
-      final Element body)
-    {
-      final Element ea = new Element("div", SXHTML.XHTML_URI.toString());
-      ea.addAttribute(new Attribute("class", null, "new_ancestor"));
-
-      final Element ep = new Element("div", SXHTML.XHTML_URI.toString());
-      ep.addAttribute(new Attribute("class", null, "new_parent"));
-
-      ea.appendChild(ep);
-      return ep;
-    }
-
-    @Override public void onHead(
-      final Element head)
-    {
-      // Nothing
-    }
-  }
-
   @Test public void testBasicReparent_0()
     throws ValidityException,
       IOException,
@@ -382,6 +307,94 @@ import com.io7m.jstructural.annotated.SAnnotatorTest;
       sr.setIndent(2);
       sr.setMaxLength(80);
       sr.write(doc);
+    }
+  }
+
+  @Test public void testBug_151733738209()
+    throws Exception
+  {
+    final SADocument d = SAnnotatorTest.annotate("bug-151733738209.xml");
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    final Callbacks cb = new Callbacks();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
+
+    for (final String name : dr.keySet()) {
+      SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
+    }
+  }
+
+  @Test public void testBug_cd7bc9304c()
+  {
+    final SADocument d = SAnnotatorTest.annotate("glowmaps.xml");
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    final Callbacks cb = new Callbacks();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
+
+    Assert.assertEquals(4, dr.size());
+  }
+
+  @Test public void testDocumentation_0()
+    throws IOException,
+      ValidityException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
+  {
+    final SADocument da = SAnnotatorTest.annotate("documentation.xml");
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    final Callbacks cb = new Callbacks();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, da);
+    Assert.assertEquals(
+      SDocumentXHTMLWriterMultiTest.DOCUMENTATION_PAGES,
+      cb.on_head_called);
+    Assert.assertEquals(
+      SDocumentXHTMLWriterMultiTest.DOCUMENTATION_PAGES,
+      cb.on_body_start_called);
+    Assert.assertEquals(
+      SDocumentXHTMLWriterMultiTest.DOCUMENTATION_PAGES,
+      cb.on_body_end_called);
+
+    for (final String name : dr.keySet()) {
+      SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
+    }
+  }
+
+  /**
+   * Ensure that validation is working in the test suite. Try to validate
+   * something that is certainly not XHTML 1.0 Strict.
+   */
+
+  @Test(expected = SAXException.class) public void testFailure()
+    throws ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
+  {
+    SDocumentXHTMLWriterMultiTest
+      .checkDocument(new Document(new Element("z")));
+  }
+
+  @Test public void testLarge_0()
+    throws ValidityException,
+      IOException,
+      SAXException,
+      ParserConfigurationException,
+      ParsingException,
+      URISyntaxException
+  {
+    final SADocument d = SAnnotatorTest.annotate("jaux-documentation.xml");
+    final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
+    final Callbacks cb = new Callbacks();
+    final SortedMap<String, Document> dr = writer.writeDocuments(cb, d);
+    Assert.assertEquals(9, cb.on_head_called);
+    Assert.assertEquals(9, cb.on_body_start_called);
+    Assert.assertEquals(9, cb.on_body_end_called);
+
+    for (final String name : dr.keySet()) {
+      SDocumentXHTMLWriterMultiTest.checkDocument(dr.get(name));
     }
   }
 }

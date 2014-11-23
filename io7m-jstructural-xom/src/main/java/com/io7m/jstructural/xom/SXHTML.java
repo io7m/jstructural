@@ -1210,9 +1210,9 @@ public final class SXHTML
             SXHTML.elementWithClasses("td", SXHTML.NO_TYPE, tc_classes);
           tre.appendChild(tce);
 
-          final SNonEmptyList<Node> rc =
+          final List<Node> rc =
             SXHTML.tableCellContentList(link_provider, tc.getContent());
-          for (final Node n : rc.getElements()) {
+          for (final Node n : rc) {
             tce.appendChild(n);
           }
         }
@@ -1293,16 +1293,16 @@ public final class SXHTML
     });
   }
 
-  static SNonEmptyList<Node> tableCellContentList(
+  static List<Node> tableCellContentList(
     final SLinkProvider link_provider,
-    final SNonEmptyList<SATableCellContent> contents)
+    final List<SATableCellContent> contents)
     throws Exception
   {
     final List<Node> nodes = new ArrayList<Node>();
-    for (final SATableCellContent c : contents.getElements()) {
+    for (final SATableCellContent c : contents) {
       nodes.add(SXHTML.tableCellContent(link_provider, c));
     }
-    return SNonEmptyList.newList(nodes);
+    return nodes;
   }
 
   static Node term(

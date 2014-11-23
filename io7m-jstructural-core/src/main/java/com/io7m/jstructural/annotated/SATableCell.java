@@ -16,9 +16,10 @@
 
 package com.io7m.jstructural.annotated;
 
+import java.util.List;
+
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
-import com.io7m.jstructural.core.SNonEmptyList;
 
 /**
  * A table cell.
@@ -26,10 +27,10 @@ import com.io7m.jstructural.core.SNonEmptyList;
 
 public final class SATableCell
 {
-  private final SNonEmptyList<SATableCellContent> content;
+  private final List<SATableCellContent> content;
 
   SATableCell(
-    final SNonEmptyList<SATableCellContent> in_content)
+    final List<SATableCellContent> in_content)
   {
     this.content = NullCheck.notNull(in_content, "Content");
   }
@@ -54,7 +55,7 @@ public final class SATableCell
    * @return The table cell content
    */
 
-  public SNonEmptyList<SATableCellContent> getContent()
+  public List<SATableCellContent> getContent()
   {
     return this.content;
   }

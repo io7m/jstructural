@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -15,6 +15,8 @@
  */
 
 package com.io7m.jstructural.core;
+
+import java.util.List;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
@@ -27,22 +29,22 @@ public final class STableCell
 {
   /**
    * Construct a new table cell.
-   * 
+   *
    * @param content
    *          The table cell content
    * @return A new table cell
    */
 
   public static STableCell tableCell(
-    final SNonEmptyList<STableCellContent> content)
+    final List<STableCellContent> content)
   {
     return new STableCell(content);
   }
 
-  private final SNonEmptyList<STableCellContent> content;
+  private final List<STableCellContent> content;
 
   private STableCell(
-    final SNonEmptyList<STableCellContent> in_content)
+    final List<STableCellContent> in_content)
   {
     this.content = NullCheck.notNull(in_content, "Content");
   }
@@ -67,7 +69,7 @@ public final class STableCell
    * @return The table cell content
    */
 
-  public SNonEmptyList<STableCellContent> getContent()
+  public List<STableCellContent> getContent()
   {
     return this.content;
   }

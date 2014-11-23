@@ -58,6 +58,11 @@ import com.io7m.jstructural.xom.TestUtilities;
     Assert.assertTrue(m.get(new SAID("paragraph_0")) instanceof SAParagraph);
   }
 
+  @Test public void testAnnotateBug_151733738209()
+  {
+    SAnnotatorTest.annotate("bug-151733738209.xml");
+  }
+
   @Test public void testAnnotate_1()
   {
     final SADocument a = SAnnotatorTest.annotate("basic-1.xml");

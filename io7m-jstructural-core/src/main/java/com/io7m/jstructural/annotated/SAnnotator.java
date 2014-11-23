@@ -1513,7 +1513,7 @@ import com.io7m.junreachable.UnreachableCodeException;
   {
     final List<SATableCellContent> content_r =
       new ArrayList<SATableCellContent>();
-    for (final STableCellContent cc : c.getContent().getElements()) {
+    for (final STableCellContent cc : c.getContent()) {
       assert cc != null;
       content_r.add(SAnnotator.transformTableCellContent(
         in_ids,
@@ -1522,9 +1522,7 @@ import com.io7m.junreachable.UnreachableCodeException;
         cc));
     }
 
-    final SNonEmptyList<SATableCellContent> content =
-      SNonEmptyList.newList(content_r);
-    return new SATableCell(content);
+    return new SATableCell(content_r);
   }
 
   private static SATableCellContent transformTableCellContent(
