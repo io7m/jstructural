@@ -93,6 +93,11 @@
       <artifactId>xom</artifactId>
       <version>1.2.10</version>
     </dependency>
+    <dependency>
+      <groupId>com.thaiopensource</groupId>
+      <artifactId>jing</artifactId>
+      <version>20091111</version>
+    </dependency>
   </dependencies>
 
   <reporting>

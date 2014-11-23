@@ -37,25 +37,4 @@ public final class SSchema
       throw new UnreachableCodeException(e);
     }
   }
-
-  public static @NonNull URI getSchemaXMLXSDLocation()
-  {
-    try {
-      return SSchema.class
-        .getResource("/com/io7m/jstructural/schema/xml.xsd")
-        .toURI();
-    } catch (final URISyntaxException e) {
-      throw new UnreachableCodeException(e);
-    }
-  }
-
-  public static @NonNull URI getSchemaXSDLocation()
-  {
-    try {
-      return SSchema.class.getResource(
-        "/com/io7m/jstructural/schema/schema.xsd").toURI();
-    } catch (final URISyntaxException e) {
-      throw new UnreachableCodeException(e);
-    }
-  }
 }

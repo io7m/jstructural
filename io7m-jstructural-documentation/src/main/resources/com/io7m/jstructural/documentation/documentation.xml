@@ -33,10 +33,9 @@
       <s:paragraph>
         The <s:term s:type="package">jstructural</s:term>
         package implements a set of primitives for producing technical
-        documentation. The package provides
+        documentation. The package provides a
         <s:link-external s:target="http://relaxng.org/">RELAX-NG</s:link-external>
-        and <s:link-external s:target="http://www.w3.org/XML/Schema">XSD</s:link-external>
-        schemas describing the format of <s:term s:type="package">structural</s:term>
+        schema describing the format of <s:term s:type="package">structural</s:term>
         documents and a set of Java tools for producing XHTML 1.0 Strict output.
       </s:paragraph>
       <s:paragraph>
@@ -54,12 +53,6 @@
     </s:subsection>
     <s:subsection>
       <s:subsection-title>Portability</s:subsection-title>
-      <s:paragraph>
-        The canonical format for the <s:term s:type="package">structural</s:term>
-        schema is RELAX-NG, but an XSD schema (generated from the RELAX-NG
-        schema is also provided, for validation using tools that do not support
-        RELAX-NG).
-      </s:paragraph>
       <s:paragraph>
         The provided <s:term s:type="package">structural</s:term> to XHTML
         translator is written in pure Java and should be usable on any JVM

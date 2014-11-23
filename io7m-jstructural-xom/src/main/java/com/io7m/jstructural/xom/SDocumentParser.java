@@ -18,18 +18,16 @@ package com.io7m.jstructural.xom;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.SchemaFactory;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -44,11 +42,12 @@ import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.InclusionLoopException;
 import nu.xom.xinclude.NoIncludeLocationException;
 import nu.xom.xinclude.XIncludeException;
+import nu.xom.xinclude.XIncluder;
 
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
 
 import com.io7m.jlog.LogLevel;
 import com.io7m.jlog.LogUsableType;
@@ -101,6 +100,10 @@ import com.io7m.jstructural.core.SXML;
 import com.io7m.jstructural.schema.SSchema;
 import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
+import com.thaiopensource.util.PropertyMapBuilder;
+import com.thaiopensource.validate.ValidateProperty;
+import com.thaiopensource.validate.ValidationDriver;
+import com.thaiopensource.validate.prop.rng.RngProperty;
 
 /**
  * A document parser that uses XOM to process documents.
@@ -150,6 +153,91 @@ public final class SDocumentParser
       this.log.warn(e + ": " + e.getMessage());
       this.exception = e;
     }
+  }
+
+  /**
+   * The Jing validator helpfully closes any stream passed to it.
+   * Unfortunately, the streams need to be kept open and rewound after
+   * validation. This wrapper prevents any call to {@link InputStream#close()}
+   * from happening.
+   */
+
+  private static final class UncloseableStream extends InputStream
+  {
+    private final LogUsableType log_xml;
+    private final InputStream   stream;
+
+    UncloseableStream(
+      final LogUsableType in_log_xml,
+      final InputStream in_stream)
+    {
+      this.log_xml = NullCheck.notNull(in_log_xml);
+      this.stream = NullCheck.notNull(in_stream);
+    }
+
+    @Override public int available()
+      throws IOException
+    {
+      return this.stream.available();
+    }
+
+    @Override public void close()
+      throws IOException
+    {
+      this.log_xml.debug("prevented stream closing");
+    }
+
+    @Override public synchronized void mark(
+      final int readlimit)
+    {
+      this.stream.mark(readlimit);
+    }
+
+    @Override public boolean markSupported()
+    {
+      return this.stream.markSupported();
+    }
+
+    @Override public int read()
+      throws IOException
+    {
+      return this.stream.read();
+    }
+
+    @Override public int read(
+      final @Nullable byte[] b)
+      throws IOException
+    {
+      return this.stream.read(b);
+    }
+
+    @Override public int read(
+      final @Nullable byte[] b,
+      final int off,
+      final int len)
+      throws IOException
+    {
+      return this.stream.read(b, off, len);
+    }
+
+    @Override public synchronized void reset()
+      throws IOException
+    {
+      this.stream.reset();
+    }
+
+    @Override public long skip(
+      final long n)
+      throws IOException
+    {
+      return this.stream.skip(n);
+    }
+  }
+
+  private static final AtomicBoolean XERCES_PROPERTY_SET;
+
+  static {
+    XERCES_PROPERTY_SET = new AtomicBoolean(false);
   }
 
   /**
@@ -559,7 +647,6 @@ public final class SDocumentParser
     final URI uri,
     final LogUsableType log)
     throws SAXException,
-
       ParserConfigurationException,
       ValidityException,
       ParsingException,
@@ -574,57 +661,22 @@ public final class SDocumentParser
 
     final LogUsableType log_xml = log.with("xml");
 
-    log_xml.debug("creating sax parser");
+    final InputStream uncloseable = new UncloseableStream(log_xml, stream);
 
-    final SAXParserFactory factory = SAXParserFactory.newInstance();
-    factory.setValidating(false);
-    factory.setNamespaceAware(true);
-    factory.setXIncludeAware(true);
-    factory.setFeature("http://apache.org/xml/features/xinclude", true);
-
-    log_xml.debug("opening xml.xsd");
-
-    final InputStream xml_xsd =
-      new URL(SSchema.getSchemaXMLXSDLocation().toString()).openStream();
-
+    stream.mark(Integer.MAX_VALUE);
     try {
-      log_xml.debug("opening schema.xsd");
-
-      final InputStream schema_xsd =
-        new URL(SSchema.getSchemaXSDLocation().toString()).openStream();
-
-      try {
-        log_xml.debug("creating schema handler");
-
-        final SchemaFactory schema_factory =
-          SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-
-        final Source[] sources = new Source[2];
-        sources[0] = new StreamSource(xml_xsd);
-        sources[1] = new StreamSource(schema_xsd);
-        factory.setSchema(schema_factory.newSchema(sources));
-
-        final TrivialErrorHandler handler = new TrivialErrorHandler(log_xml);
-        final SAXParser parser = factory.newSAXParser();
-        final XMLReader reader = parser.getXMLReader();
-        reader.setErrorHandler(handler);
-
-        log_xml.debug("parsing and validating");
-        final Builder builder = new Builder(reader);
-        final Document doc = builder.build(stream, uri.toString());
-
-        final SAXParseException ex = handler.getException();
-        if (ex != null) {
-          throw ex;
-        }
-
-        return doc;
-      } finally {
-        schema_xsd.close();
-      }
+      SDocumentParser.validateJingNative(uncloseable, uri, log_xml);
+      stream.reset();
     } finally {
-      xml_xsd.close();
+      stream.mark(0);
     }
+
+    final Builder b = new Builder();
+    final Document d = b.build(stream);
+    assert d != null;
+    XIncluder.resolveInPlace(d);
+    uncloseable.close();
+    return d;
   }
 
   private static @Nullable Element getElement(
@@ -1557,6 +1609,62 @@ public final class SDocumentParser
       return null;
     }
     return et.getValue();
+  }
+
+  @SuppressWarnings("resource") private static void validateJingNative(
+    final InputStream stream,
+    final URI uri,
+    final LogUsableType log_xml)
+    throws MalformedURLException,
+      IOException,
+      SAXException
+  {
+    log_xml.debug("validating with jing native");
+
+    if (SDocumentParser.XERCES_PROPERTY_SET.compareAndSet(false, true)) {
+      final String key =
+        "org.apache.xerces.xni.parser.XMLParserConfiguration";
+      final String val =
+        "org.apache.xerces.parsers.XIncludeParserConfiguration";
+      final String message =
+        String.format("setting %s to %s for xincludes", key, val);
+      assert message != null;
+      log_xml.debug(message);
+      System.setProperty(key, val);
+    }
+
+    final TrivialErrorHandler handler = new TrivialErrorHandler(log_xml);
+
+    final PropertyMapBuilder properties = new PropertyMapBuilder();
+    properties.put(ValidateProperty.ERROR_HANDLER, handler);
+    RngProperty.CHECK_ID_IDREF.add(properties);
+
+    final ValidationDriver driver =
+      new ValidationDriver(properties.toPropertyMap());
+
+    log_xml.debug("opening schema.rng");
+    final URI schema_url = SSchema.getSchemaRNGLocation();
+    final InputStream schema_rng =
+      new URL(schema_url.toString()).openStream();
+
+    final InputSource schema_input =
+      new InputSource(new InputStreamReader(schema_rng));
+    schema_input.setSystemId(schema_url.toString());
+
+    log_xml.debug("opening document");
+    final InputSource document_input = new InputSource(stream);
+    document_input.setSystemId(uri.toString());
+
+    log_xml.debug("loading schema");
+    driver.loadSchema(schema_input);
+    log_xml.debug("validating");
+    final boolean ok = driver.validate(document_input);
+    if (ok == false) {
+      log_xml.error("document validation failed");
+      final SAXParseException e = handler.getException();
+      assert e != null;
+      throw e;
+    }
   }
 
   static SVerbatim verbatim(

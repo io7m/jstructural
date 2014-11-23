@@ -12,7 +12,7 @@
     <subsection name="jstructural">
       <p>The <var>jstructural</var> package implements a set of
       primitives for producing technical documentation. The package
-      provides RELAX-NG and XSD schemas describing the format of
+      provides a RELAX-NG schema describing the format of
       structural documents and a set of Java classes for producing
       XHTML output.</p>
       <p>In contrast to other systems such as DocBook, the structural
