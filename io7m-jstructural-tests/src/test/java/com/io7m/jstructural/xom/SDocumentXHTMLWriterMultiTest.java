@@ -19,7 +19,6 @@ package com.io7m.jstructural.xom;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.SortedMap;
@@ -34,23 +33,15 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 import nu.xom.XPathContext;
-import nu.xom.xinclude.BadParseAttributeException;
-import nu.xom.xinclude.InclusionLoopException;
-import nu.xom.xinclude.NoIncludeLocationException;
-import nu.xom.xinclude.XIncludeException;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import com.io7m.jlog.LogUsableType;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.annotated.SADocument;
-import com.io7m.jstructural.annotated.SAnnotator;
 import com.io7m.jstructural.annotated.SAnnotatorTest;
-import com.io7m.jstructural.core.SDocument;
-import com.io7m.jstructural.documentation.SDocumentation;
 
 @SuppressWarnings("static-method") public final class SDocumentXHTMLWriterMultiTest
 {
@@ -192,23 +183,12 @@ import com.io7m.jstructural.documentation.SDocumentation;
   @Test public void testDocumentation_0()
     throws IOException,
       ValidityException,
-      BadParseAttributeException,
-      InclusionLoopException,
-      NoIncludeLocationException,
       SAXException,
       ParserConfigurationException,
       ParsingException,
-      URISyntaxException,
-      XIncludeException
+      URISyntaxException
   {
-    final URI uri = SDocumentation.getDocumentationXMLLocation();
-    final InputStream s = uri.toURL().openStream();
-
-    final LogUsableType log = TestUtilities.getLog();
-    final SDocument d = SDocumentParser.fromStream(s, uri, log);
-    s.close();
-
-    final SADocument da = SAnnotator.document(log, d);
+    final SADocument da = SAnnotatorTest.annotate("documentation.xml");
     final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
     final Callbacks cb = new Callbacks();
     final SortedMap<String, Document> dr = writer.writeDocuments(cb, da);
@@ -344,19 +324,9 @@ import com.io7m.jstructural.documentation.SDocumentation;
       SAXException,
       ParserConfigurationException,
       ParsingException,
-      URISyntaxException,
-      BadParseAttributeException,
-      InclusionLoopException,
-      NoIncludeLocationException,
-      XIncludeException
+      URISyntaxException
   {
-    final URI uri = SDocumentation.getDocumentationXMLLocation();
-    final InputStream s = uri.toURL().openStream();
-    final LogUsableType log = TestUtilities.getLog();
-    final SDocument d = SDocumentParser.fromStream(s, uri, log);
-    s.close();
-
-    final SADocument da = SAnnotator.document(log, d);
+    final SADocument da = SAnnotatorTest.annotate("documentation.xml");
     final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
     final BodyReplacerTrivial cb = new BodyReplacerTrivial();
     final SortedMap<String, Document> dr = writer.writeDocuments(cb, da);
@@ -388,19 +358,9 @@ import com.io7m.jstructural.documentation.SDocumentation;
       SAXException,
       ParserConfigurationException,
       ParsingException,
-      URISyntaxException,
-      BadParseAttributeException,
-      InclusionLoopException,
-      NoIncludeLocationException,
-      XIncludeException
+      URISyntaxException
   {
-    final URI uri = SDocumentation.getDocumentationXMLLocation();
-    final InputStream s = uri.toURL().openStream();
-    final LogUsableType log = TestUtilities.getLog();
-    final SDocument d = SDocumentParser.fromStream(s, uri, log);
-    s.close();
-
-    final SADocument da = SAnnotator.document(log, d);
+    final SADocument da = SAnnotatorTest.annotate("documentation.xml");
     final SDocumentXHTMLWriterMulti writer = new SDocumentXHTMLWriterMulti();
     final BodyReplacerExtra cb = new BodyReplacerExtra();
     final SortedMap<String, Document> dr = writer.writeDocuments(cb, da);
