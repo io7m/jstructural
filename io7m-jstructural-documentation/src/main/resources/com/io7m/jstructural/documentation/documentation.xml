@@ -17,7 +17,7 @@
 -->
 
 <s:document
-  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
+  xmlns:s="${structural.schema_uri}"
   xmlns:xi="http://www.w3.org/2001/XInclude">
   <s:document-title>${project.parent.name} ${project.version} Documentation</s:document-title>
   <s:document-style>documentation.css</s:document-style>
@@ -368,7 +368,7 @@ SortedMap&lt;String, Document> pages = writer.writeDocuments(callbacks, doc);
         <s:term s:type="package">structural</s:term>
         elements
         are in the
-        <s:link-external s:target="http://schemas.io7m.com/structural/2.0.0">http://schemas.io7m.com/structural/2.0.0</s:link-external>
+        <s:link-external s:target="${structural.schema_uri}">${structural.schema_uri}</s:link-external>
         namespace.
       </s:paragraph>
     </s:subsection>
