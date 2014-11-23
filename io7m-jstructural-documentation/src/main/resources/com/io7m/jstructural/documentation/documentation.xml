@@ -582,26 +582,25 @@ SortedMap&lt;String, Document> pages = writer.writeDocuments(callbacks, doc);
         In addition to any classes specified by the
         <s:term s:type="attribute">type</s:term>
         attribute, the main XHTML structure is assigned the class
-        <s:term s:type="class">st200_document_contents</s:term>.
+        <s:term s:type="class">st200_document_contents</s:term>
+        in addition to
+        <s:term s:type="class">st200_contents</s:term>.
       </s:paragraph>
       <s:paragraph>
         Each element of the list is assigned the class
-        <s:term s:type="class">st200_document_contents_item</s:term>
+        <s:term s:type="class">st200_contents_item</s:term>
         in addition to one of
-        <s:term s:type="class">st200_document_contents_item1</s:term>,
-        <s:term s:type="class">st200_document_contents_item2</s:term>
-        or <s:term s:type="class">st200_document_contents_item3</s:term>
+        <s:term s:type="class">st200_contents_item1</s:term>,
+        <s:term s:type="class">st200_contents_item2</s:term>
+        or <s:term s:type="class">st200_contents_item3</s:term>
         depending on the depth of the item in the list.
       </s:paragraph>
       <s:paragraph>
-        The root <s:link s:target="elem_document">document</s:link>
-        element of the list is assigned the class
-        <s:term s:type="class">st200_document_contents_document</s:term>
-        and all <s:link s:target="elem_part">part</s:link> and
+        All <s:link s:target="elem_part">part</s:link> and
         <s:link s:target="elem_section">section</s:link>
         elements appearing in the list are assigned the classes
-        <s:term s:type="class">st200_document_contents_part</s:term> and
-        <s:term s:type="class">st200_document_contents_section</s:term>,
+        <s:term s:type="class">st200_contents_part</s:term> and
+        <s:term s:type="class">st200_contents_section</s:term>,
         respectively.
       </s:paragraph>
     </s:subsection>
@@ -1363,29 +1362,48 @@ SortedMap&lt;String, Document> pages = writer.writeDocuments(callbacks, doc);
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-        The CSS for
-        <s:term s:type="element">part-contents</s:term>
-        elements is slightly more complex.
         In addition to any classes specified by the
         <s:term s:type="attribute">type</s:term>
         attribute, the main list structure is assigned the class
         <s:term s:type="class">st200_part_contents</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        The XHTML lists that are generated as children of
+        the lists generated for
+        <s:link s:target="elem_document-contents">document-contents</s:link>
+        elements are assigned CSS as if they were generated
+        from <s:term s:type="element">part-contents</s:term>
+        elements. In order to correctly indent elements in CSS, it's
+        necessary to be able to distinguish
+        between lists that were generated as part of a
+        <s:term s:type="element">part-contents</s:term>
+        element, and lists that were generated as children of those 
+        generated as part of
+        a <s:link s:target="elem_document-contents">document-contents</s:link>
+        element. In other words, it's desirable to be able to indent
+        the list differently if it is the "outermost" list.
+        Therefore, the main list structure is also assigned
+        the class <s:term s:type="class">st200_part_contents_outer</s:term>
+        if it is appearing in XHTML due to a
+        <s:term s:type="element">part-contents</s:term> element.
+      </s:paragraph>
+      <s:paragraph>
         Each element of the list is assigned the class
-        <s:term s:type="class">st200_part_contents_item</s:term>
+        <s:term s:type="class">st200_contents_item</s:term>
         in addition to one of
-        <s:term s:type="class">st200_part_contents_item1</s:term>,
-        <s:term s:type="class">st200_part_contents_item2</s:term> or
-        <s:term s:type="class">st200_part_contents_item3</s:term>
+        <s:term s:type="class">st200_contents_item1</s:term>,
+        <s:term s:type="class">st200_contents_item2</s:term> or
+        <s:term s:type="class">st200_contents_item3</s:term>
         depending on the depth of the item in the list. The root
         <s:link s:target="elem_part">part</s:link>
         element of the list is assigned the class
-        <s:term s:type="class">st200_part_contents_part</s:term> and all
+        <s:term s:type="class">st200_contents_part</s:term> and all
         <s:link s:target="elem_section">section</s:link> and
         <s:link s:target="elem_subsection">subsection</s:link> elements
         appearing in the list are assigned the classes
-        <s:term s:type="class">st200_part_contents_section</s:term>
+        <s:term s:type="class">st200_contents_section</s:term>
         and
-        <s:term s:type="class">st200_part_contents_subsection</s:term>,
+        <s:term s:type="class">st200_contents_subsection</s:term>,
         respectively.
       </s:paragraph>
     </s:subsection>
@@ -1515,27 +1533,41 @@ SortedMap&lt;String, Document> pages = writer.writeDocuments(callbacks, doc);
     <s:subsection>
       <s:subsection-title>CSS</s:subsection-title>
       <s:paragraph>
-        The CSS for
-        <s:term s:type="element">section-contents</s:term>
-        elements is slightly more complex.
         In addition to any classes specified by the
         <s:term s:type="attribute">type</s:term>
         attribute, the main list structure is assigned the
-        class <s:term s:type="class">st200_section_contents</s:term>.
+        classes <s:term s:type="class">st200_section_contents</s:term>
+        and <s:term s:type="class">st200_contents</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        The XHTML lists that are generated as children of
+        the lists generated for
+        <s:link s:target="elem_part-contents">part-contents</s:link>
+        elements are assigned CSS as if they were generated
+        from <s:term s:type="element">section-contents</s:term>
+        elements. In order to correctly indent elements in CSS, it's
+        necessary to be able to distinguish
+        between lists that were generated as part of a
+        <s:term s:type="element">section-contents</s:term>
+        element, and lists that were generated as children of those
+        generated as part of
+        a <s:link s:target="elem_part-contents">part-contents</s:link>
+        element. In other words, it's desirable to be able to indent
+        the list differently if it is the "outermost" list.
+        Therefore, the main list structure is also assigned
+        the class <s:term s:type="class">st200_section_contents_outer</s:term>
+        if it is appearing in XHTML due to a
+        <s:term s:type="element">section-contents</s:term> element.
+      </s:paragraph>
+      <s:paragraph>
         Each element of the list is assigned the class
-        <s:term s:type="class">st200_section_contents_item</s:term>
-        in addition to one of
-        <s:term s:type="class">st200_section_contents_item1</s:term>,
-        <s:term s:type="class">st200_section_contents_item2</s:term> or
-        <s:term s:type="class">st200_section_contents_item3</s:term>
-        depending on the depth of the item in the list. The root
-        <s:link s:target="elem_section">section</s:link> element of the list is
-        assigned the class
-        <s:term s:type="class">st200_section_contents_section</s:term>
-        and all
+        <s:term s:type="class">st200_contents_item</s:term>
+        in addition to
+        <s:term s:type="class">st200_contents_item1</s:term>.
+        All
         <s:link s:target="elem_subsection">subsection</s:link> elements
         appearing in the list are assigned the class
-        <s:term s:type="class">st200_section_contents_subsection</s:term>.
+        <s:term s:type="class">st200_contents_subsection</s:term>.
       </s:paragraph>
     </s:subsection>
     <s:subsection>
