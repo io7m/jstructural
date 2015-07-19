@@ -15,6 +15,7 @@
   <url>http://mvn.io7m.com/${project.artifactId}/</url>
 
   <modules>
+    <module>io7m-jstructural-checkstyle</module>
     <module>io7m-jstructural-core</module>
     <module>io7m-jstructural-documentation</module>
     <module>io7m-jstructural-schema</module>
