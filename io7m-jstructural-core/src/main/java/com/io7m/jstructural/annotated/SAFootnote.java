@@ -19,14 +19,14 @@ package com.io7m.jstructural.annotated;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
+import com.io7m.jranges.Ranges;
 import com.io7m.jstructural.core.SNonEmptyList;
 
 /**
  * A footnote element.
  */
 
-public final class SAFootnote implements
-  SAParagraphContent,
+public final class SAFootnote implements SAParagraphContent,
   SAListItemContent,
   SAFootnoteContent,
   SATableCellContent
@@ -38,12 +38,11 @@ public final class SAFootnote implements
     final int in_number,
     final SNonEmptyList<SAFootnoteContent> in_content)
   {
-    this.number =
-      (int) RangeCheck.checkIncludedIn(
-        in_number,
-        "Footnote number",
-        RangeCheck.NATURAL_INTEGER,
-        "Valid footnote number range");
+    this.number = RangeCheck.checkIncludedInInteger(
+      in_number,
+      "Footnote number",
+      Ranges.NATURAL_INTEGER,
+      "Valid footnote number range");
 
     this.content = NullCheck.notNull(in_content, "Content");
   }
@@ -64,10 +63,7 @@ public final class SAFootnote implements
     if (!this.content.equals(other.content)) {
       return false;
     }
-    if (this.number != other.number) {
-      return false;
-    }
-    return true;
+    return this.number == other.number;
   }
 
   @Override public <A> A footnoteContentAccept(

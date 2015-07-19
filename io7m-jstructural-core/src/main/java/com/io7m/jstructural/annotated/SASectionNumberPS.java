@@ -18,6 +18,7 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
+import com.io7m.jranges.Ranges;
 
 /**
  * A section number consisting of a part, and section.
@@ -30,29 +31,25 @@ public final class SASectionNumberPS extends SASectionNumber
 
   /**
    * Construct a new section number
-   * 
-   * @param in_part
-   *          The part number
-   * @param in_section
-   *          The section number
+   *
+   * @param in_part    The part number
+   * @param in_section The section number
    */
 
   public SASectionNumberPS(
     final int in_part,
     final int in_section)
   {
-    this.part =
-      (int) RangeCheck.checkIncludedIn(
-        in_part,
-        "Part number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid part number range");
-    this.section =
-      (int) RangeCheck.checkIncludedIn(
-        in_section,
-        "Section number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid section number range");
+    this.part = RangeCheck.checkIncludedInInteger(
+      in_part,
+      "Part number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid part number range");
+    this.section = RangeCheck.checkIncludedInInteger(
+      in_section,
+      "Section number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid section number range");
   }
 
   @Override public boolean equals(
@@ -71,10 +68,7 @@ public final class SASectionNumberPS extends SASectionNumber
     if (this.part != other.part) {
       return false;
     }
-    if (this.section != other.section) {
-      return false;
-    }
-    return true;
+    return this.section == other.section;
   }
 
   /**

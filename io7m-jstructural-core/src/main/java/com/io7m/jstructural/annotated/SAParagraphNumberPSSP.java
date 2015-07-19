@@ -19,11 +19,11 @@ package com.io7m.jstructural.annotated;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
+import com.io7m.jranges.Ranges;
 import com.io7m.junreachable.UnreachableCodeException;
 
 /**
- * A paragraph number consisting of a part, section, subsection, and
- * paragraph.
+ * A paragraph number consisting of a part, section, subsection, and paragraph.
  */
 
 public final class SAParagraphNumberPSSP extends SAParagraphNumber
@@ -36,14 +36,10 @@ public final class SAParagraphNumberPSSP extends SAParagraphNumber
   /**
    * Construct a new paragraph number
    *
-   * @param in_part
-   *          The part number
-   * @param in_section
-   *          The section number
-   * @param in_subsection
-   *          The subsection number
-   * @param in_paragraph
-   *          The paragraph number
+   * @param in_part       The part number
+   * @param in_section    The section number
+   * @param in_subsection The subsection number
+   * @param in_paragraph  The paragraph number
    */
 
   public SAParagraphNumberPSSP(
@@ -52,41 +48,36 @@ public final class SAParagraphNumberPSSP extends SAParagraphNumber
     final int in_subsection,
     final int in_paragraph)
   {
-    this.part =
-      (int) RangeCheck.checkIncludedIn(
-        in_part,
-        "Part number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid part number range");
-    this.section =
-      (int) RangeCheck.checkIncludedIn(
-        in_section,
-        "Section number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid section number range");
-    this.subsection =
-      (int) RangeCheck.checkIncludedIn(
-        in_subsection,
-        "Subsection number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid subsection number range");
-    this.paragraph =
-      (int) RangeCheck.checkIncludedIn(
-        in_paragraph,
-        "Paragraph number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid paragraph number range");
+    this.part = RangeCheck.checkIncludedInInteger(
+      in_part,
+      "Part number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid part number range");
+    this.section = RangeCheck.checkIncludedInInteger(
+      in_section,
+      "Section number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid section number range");
+    this.subsection = RangeCheck.checkIncludedInInteger(
+      in_subsection,
+      "Subsection number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid subsection number range");
+    this.paragraph = RangeCheck.checkIncludedInInteger(
+      in_paragraph,
+      "Paragraph number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid paragraph number range");
   }
 
-  @SuppressWarnings({ "boxing", "null", "synthetic-access" }) @Override public
-    int
-    compareTo(
-      final @Nullable SAParagraphNumber o)
+  @SuppressWarnings({ "boxing", "null", "synthetic-access" }) @Override
+  public int compareTo(
+    final @Nullable SAParagraphNumber o)
   {
     try {
-      return NullCheck
-        .notNull(o, "Other")
-        .paragraphNumberAccept(new SAParagraphNumberVisitor<Integer>() {
+      return NullCheck.notNull(o, "Other").paragraphNumberAccept(
+        new SAParagraphNumberVisitor<Integer>()
+        {
           @Override public Integer visitParagraphNumberPSP(
             final SAParagraphNumberPSP p)
             throws Exception
@@ -94,14 +85,11 @@ public final class SAParagraphNumberPSSP extends SAParagraphNumber
             final int rpart =
               Integer.compare(SAParagraphNumberPSSP.this.part, p.getPart());
             if (rpart == 0) {
-              final int rsect =
-                Integer.compare(
-                  SAParagraphNumberPSSP.this.section,
-                  p.getSection());
+              final int rsect = Integer.compare(
+                SAParagraphNumberPSSP.this.section, p.getSection());
               if (rsect == 0) {
                 return Integer.compare(
-                  SAParagraphNumberPSSP.this.paragraph,
-                  p.getParagraph());
+                  SAParagraphNumberPSSP.this.paragraph, p.getParagraph());
               }
               return rsect;
             }
@@ -115,19 +103,14 @@ public final class SAParagraphNumberPSSP extends SAParagraphNumber
             final int rpart =
               Integer.compare(SAParagraphNumberPSSP.this.part, p.getPart());
             if (rpart == 0) {
-              final int rsect =
-                Integer.compare(
-                  SAParagraphNumberPSSP.this.section,
-                  p.getSection());
+              final int rsect = Integer.compare(
+                SAParagraphNumberPSSP.this.section, p.getSection());
               if (rsect == 0) {
-                final int rsubs =
-                  Integer.compare(
-                    SAParagraphNumberPSSP.this.subsection,
-                    p.subsection);
+                final int rsubs = Integer.compare(
+                  SAParagraphNumberPSSP.this.subsection, p.subsection);
                 if (rsubs == 0) {
                   return Integer.compare(
-                    SAParagraphNumberPSSP.this.paragraph,
-                    p.getParagraph());
+                    SAParagraphNumberPSSP.this.paragraph, p.getParagraph());
                 }
                 return rsubs;
               }
@@ -140,14 +123,11 @@ public final class SAParagraphNumberPSSP extends SAParagraphNumber
             final SAParagraphNumberSP p)
             throws Exception
           {
-            final int rsect =
-              Integer.compare(
-                SAParagraphNumberPSSP.this.section,
-                p.getSection());
+            final int rsect = Integer.compare(
+              SAParagraphNumberPSSP.this.section, p.getSection());
             if (rsect == 0) {
               return Integer.compare(
-                SAParagraphNumberPSSP.this.paragraph,
-                p.getParagraph());
+                SAParagraphNumberPSSP.this.paragraph, p.getParagraph());
             }
             return rsect;
           }
@@ -156,26 +136,20 @@ public final class SAParagraphNumberPSSP extends SAParagraphNumber
             final SAParagraphNumberSSP p)
             throws Exception
           {
-            final int rsect =
-              Integer.compare(
-                SAParagraphNumberPSSP.this.section,
-                p.getSection());
+            final int rsect = Integer.compare(
+              SAParagraphNumberPSSP.this.section, p.getSection());
             if (rsect == 0) {
-              final int rsubs =
-                Integer.compare(
-                  SAParagraphNumberPSSP.this.subsection,
-                  p.getSubsection());
+              final int rsubs = Integer.compare(
+                SAParagraphNumberPSSP.this.subsection, p.getSubsection());
               if (rsubs == 0) {
                 return Integer.compare(
-                  SAParagraphNumberPSSP.this.paragraph,
-                  p.getParagraph());
+                  SAParagraphNumberPSSP.this.paragraph, p.getParagraph());
               }
               return rsubs;
             }
             return rsect;
           }
-        })
-        .intValue();
+        }).intValue();
     } catch (final Exception e) {
       throw new UnreachableCodeException(e);
     }
@@ -203,10 +177,7 @@ public final class SAParagraphNumberPSSP extends SAParagraphNumber
     if (this.section != other.section) {
       return false;
     }
-    if (this.subsection != other.subsection) {
-      return false;
-    }
-    return true;
+    return this.subsection == other.subsection;
   }
 
   /**
@@ -265,13 +236,8 @@ public final class SAParagraphNumberPSSP extends SAParagraphNumber
 
   @SuppressWarnings("boxing") @Override public String paragraphNumberFormat()
   {
-    final String r =
-      String.format(
-        "%d.%d.%d.%d",
-        this.part,
-        this.section,
-        this.subsection,
-        this.paragraph);
+    final String r = String.format(
+      "%d.%d.%d.%d", this.part, this.section, this.subsection, this.paragraph);
     assert r != null;
     return r;
   }

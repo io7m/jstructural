@@ -18,6 +18,7 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
+import com.io7m.jranges.Ranges;
 
 /**
  * A part number.
@@ -30,12 +31,11 @@ public final class SAPartNumber implements SASegmentNumber
   SAPartNumber(
     final int in_actual)
   {
-    this.actual =
-      (int) RangeCheck.checkIncludedIn(
-        in_actual,
-        "Part number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid part number range");
+    this.actual = RangeCheck.checkIncludedInInteger(
+      in_actual,
+      "Part number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid part number range");
   }
 
   @Override public boolean equals(

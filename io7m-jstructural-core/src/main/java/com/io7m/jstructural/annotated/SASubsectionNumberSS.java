@@ -18,6 +18,7 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
+import com.io7m.jranges.Ranges;
 
 /**
  * A subsection number without a part.
@@ -30,29 +31,25 @@ public final class SASubsectionNumberSS extends SASubsectionNumber
 
   /**
    * Construct a new subsection number
-   * 
-   * @param in_section
-   *          The section number
-   * @param in_subsection
-   *          The subsection number
+   *
+   * @param in_section    The section number
+   * @param in_subsection The subsection number
    */
 
   public SASubsectionNumberSS(
     final int in_section,
     final int in_subsection)
   {
-    this.section =
-      (int) RangeCheck.checkIncludedIn(
-        in_section,
-        "Section number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid section number range");
-    this.subsection =
-      (int) RangeCheck.checkIncludedIn(
-        in_subsection,
-        "Subsection number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid subsection number range");
+    this.section = RangeCheck.checkIncludedInInteger(
+      in_section,
+      "Section number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid section number range");
+    this.subsection = RangeCheck.checkIncludedInInteger(
+      in_subsection,
+      "Subsection number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid subsection number range");
   }
 
   @Override public boolean equals(
@@ -71,10 +68,7 @@ public final class SASubsectionNumberSS extends SASubsectionNumber
     if (this.section != other.section) {
       return false;
     }
-    if (this.subsection != other.subsection) {
-      return false;
-    }
-    return true;
+    return this.subsection == other.subsection;
   }
 
   /**
@@ -111,9 +105,7 @@ public final class SASubsectionNumberSS extends SASubsectionNumber
     return v.visitSubsectionNumberSS(this);
   }
 
-  @SuppressWarnings("boxing") @Override public
-    String
-    subsectionNumberFormat()
+  @SuppressWarnings("boxing") @Override public String subsectionNumberFormat()
   {
     final String r = String.format("%d.%d", this.section, this.subsection);
     assert r != null;

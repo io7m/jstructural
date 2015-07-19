@@ -20,14 +20,14 @@ import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
+import com.io7m.jranges.Ranges;
 
 /**
  * A formal item.
  */
 
-public final class SAFormalItem implements
-  SASubsectionContent,
-  SAIDTargetContent
+public final class SAFormalItem
+  implements SASubsectionContent, SAIDTargetContent
 {
   private final OptionType<SAID>    id;
   private final SAFormalItemContent content;
@@ -53,12 +53,11 @@ public final class SAFormalItem implements
     this.content = NullCheck.notNull(in_content, "Content");
     this.id = NullCheck.notNull(in_id, "ID");
 
-    this.formal_number =
-      (int) RangeCheck.checkIncludedIn(
-        in_formal_number,
-        "Formal item number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid formal item number range");
+    this.formal_number = RangeCheck.checkIncludedInInteger(
+      in_formal_number,
+      "Formal item number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid formal item number range");
   }
 
   @Override public boolean equals(
@@ -75,12 +74,12 @@ public final class SAFormalItem implements
     }
     final SAFormalItem other = (SAFormalItem) obj;
     return this.content.equals(other.content)
-      && this.number.equals(other.number)
-      && this.kind.equals(other.kind)
-      && this.title.equals(other.title)
-      && this.type.equals(other.type)
-      && this.id.equals(other.id)
-      && (this.formal_number == other.formal_number);
+           && this.number.equals(other.number)
+           && this.kind.equals(other.kind)
+           && this.title.equals(other.title)
+           && this.type.equals(other.type)
+           && this.id.equals(other.id)
+           && (this.formal_number == other.formal_number);
   }
 
   /**

@@ -16,32 +16,44 @@
 
 package com.io7m.jstructural.core;
 
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
+import com.io7m.jranges.RangeCheck;
+import com.io7m.jranges.Ranges;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.io7m.jnull.NullCheck;
-import com.io7m.jnull.Nullable;
-import com.io7m.jranges.RangeCheck;
-
 /**
  * The type of non-empty lists.
- * 
- * @param <T>
- *          The type of elements
+ *
+ * @param <T> The type of elements
  */
 
 public final class SNonEmptyList<T>
 {
+  private final List<T> elements;
+
+  private SNonEmptyList(
+    final List<T> in_elements)
+  {
+    this.elements = NullCheck.notNull(in_elements, "Elements");
+
+    RangeCheck.checkIncludedInInteger(
+      in_elements.size(),
+      "List size",
+      Ranges.POSITIVE_INTEGER,
+      "Valid list size range");
+  }
+
   /**
    * Construct a new non-empty list from the given list
-   * 
-   * @param elements
-   *          The list of elements
+   *
+   * @param elements The list of elements
+   * @param <T>      The type of elements
+   *
    * @return A non-empty list
-   * 
-   * @param <T>
-   *          The type of elements
    */
 
   public static <T> SNonEmptyList<T> newList(
@@ -52,13 +64,11 @@ public final class SNonEmptyList<T>
 
   /**
    * Construct a new non-empty list from the given element
-   * 
-   * @param e
-   *          A single element
+   *
+   * @param e   A single element
+   * @param <T> The type of elements
+   *
    * @return A non-empty list
-   * 
-   * @param <T>
-   *          The type of elements
    */
 
   public static <T> SNonEmptyList<T> one(
@@ -67,20 +77,6 @@ public final class SNonEmptyList<T>
     final List<T> es = new LinkedList<T>();
     es.add(e);
     return new SNonEmptyList<T>(es);
-  }
-
-  private final List<T> elements;
-
-  private SNonEmptyList(
-    final List<T> in_elements)
-  {
-    this.elements = NullCheck.notNull(in_elements, "Elements");
-
-    RangeCheck.checkIncludedIn(
-      in_elements.size(),
-      "List size",
-      RangeCheck.POSITIVE_INTEGER,
-      "Valid list size range");
   }
 
   @Override public boolean equals(

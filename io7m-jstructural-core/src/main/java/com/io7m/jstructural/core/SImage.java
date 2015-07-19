@@ -16,279 +16,26 @@
 
 package com.io7m.jstructural.core;
 
-import java.net.URI;
-
 import com.io7m.jfunctional.Option;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
+import com.io7m.jranges.Ranges;
+
+import java.net.URI;
 
 /**
  * An image.
  */
 
-public final class SImage implements
-  SParagraphContent,
+public final class SImage implements SParagraphContent,
   SLinkContent,
   SListItemContent,
   SFootnoteContent,
   SFormalItemContent,
   STableCellContent
 {
-  /**
-   * Construct a image with the given URI.
-   * 
-   * @param uri
-   *          The URI
-   * @param text
-   *          The image text
-   * @return A new image
-   */
-
-  public static SImage image(
-    final URI uri,
-    final String text)
-  {
-    final OptionType<Integer> no_height = Option.none();
-    final OptionType<String> no_type = Option.none();
-    return new SImage(uri, no_type, no_height, no_height, text);
-  }
-
-  /**
-   * Construct a image with the given URI, type attribute, and height.
-   * 
-   * @param uri
-   *          The URI
-   * @param height
-   *          The height
-   * @param text
-   *          The image text
-   * @return A new image
-   */
-
-  @SuppressWarnings({ "boxing", "null" }) public static SImage imageHeight(
-    final URI uri,
-    final int height,
-    final String text)
-  {
-    final OptionType<Integer> some_height =
-      Option.some((int) RangeCheck.checkIncludedIn(
-        height,
-        "Height",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid height range"));
-
-    final OptionType<Integer> no_width = Option.none();
-    final OptionType<String> no_type = Option.none();
-    return new SImage(uri, no_type, no_width, some_height, text);
-  }
-
-  /**
-   * Construct a image with the given URI, type attribute.
-   * 
-   * @param uri
-   *          The URI
-   * @param type
-   *          The type attribute
-   * @param text
-   *          The image text
-   * @return A new image
-   */
-
-  public static SImage imageTyped(
-    final URI uri,
-    final String type,
-    final String text)
-  {
-    final OptionType<String> some_type =
-      Option.some(NullCheck.notNull(type, "Type"));
-
-    final OptionType<Integer> no_height = Option.none();
-    return new SImage(uri, some_type, no_height, no_height, text);
-  }
-
-  /**
-   * Construct a image with the given URI, type attribute, and height.
-   * 
-   * @param uri
-   *          The URI
-   * @param type
-   *          The type attribute
-   * @param height
-   *          The height
-   * @param text
-   *          The image text
-   * @return A new image
-   */
-
-  @SuppressWarnings({ "boxing", "null" }) public static
-    SImage
-    imageTypedHeight(
-      final URI uri,
-      final String type,
-      final int height,
-      final String text)
-  {
-    final OptionType<String> some_type =
-      Option.some(NullCheck.notNull(type, "Type"));
-    final OptionType<Integer> some_height =
-      Option.some((int) RangeCheck.checkIncludedIn(
-        height,
-        "Height",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid height range"));
-
-    final OptionType<Integer> no_width = Option.none();
-    return new SImage(uri, some_type, no_width, some_height, text);
-  }
-
-  /**
-   * Construct a image with the given URI, type attribute, and width.
-   * 
-   * @param uri
-   *          The URI
-   * @param type
-   *          The type attribute
-   * @param width
-   *          The width
-   * @param text
-   *          The image text
-   * @return A new image
-   */
-
-  @SuppressWarnings({ "boxing", "null" }) public static
-    SImage
-    imageTypedWidth(
-      final URI uri,
-      final String type,
-      final int width,
-      final String text)
-  {
-    final OptionType<String> some_type =
-      Option.some(NullCheck.notNull(type, "Type"));
-    final OptionType<Integer> some_width =
-      Option.some((int) RangeCheck.checkIncludedIn(
-        width,
-        "Width",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid width range"));
-
-    final OptionType<Integer> no_height = Option.none();
-    return new SImage(uri, some_type, some_width, no_height, text);
-  }
-
-  /**
-   * Construct a image with the given URI, type attribute, and width/height.
-   * 
-   * @param uri
-   *          The URI
-   * @param type
-   *          The type attribute
-   * @param width
-   *          The width
-   * @param height
-   *          The height
-   * @param text
-   *          The image text
-   * @return A new image
-   */
-
-  @SuppressWarnings({ "boxing", "null" }) public static
-    SImage
-    imageTypedWidthHeight(
-      final URI uri,
-      final String type,
-      final int width,
-      final int height,
-      final String text)
-  {
-    final OptionType<String> some_type =
-      Option.some(NullCheck.notNull(type, "Type"));
-    final OptionType<Integer> some_width =
-      Option.some((int) RangeCheck.checkIncludedIn(
-        width,
-        "Width",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid width range"));
-    final OptionType<Integer> some_height =
-      Option.some((int) RangeCheck.checkIncludedIn(
-        height,
-        "Height",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid height range"));
-
-    return new SImage(uri, some_type, some_width, some_height, text);
-  }
-
-  /**
-   * Construct a image with the given URI, type attribute, and width.
-   * 
-   * @param uri
-   *          The URI
-   * @param width
-   *          The width
-   * @param text
-   *          The image text
-   * @return A new image
-   */
-
-  @SuppressWarnings({ "boxing", "null" }) public static SImage imageWidth(
-    final URI uri,
-    final int width,
-    final String text)
-  {
-    final OptionType<Integer> some_width =
-      Option.some((int) RangeCheck.checkIncludedIn(
-        width,
-        "Width",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid width range"));
-
-    final OptionType<Integer> no_height = Option.none();
-    final OptionType<String> no_type = Option.none();
-    return new SImage(uri, no_type, some_width, no_height, text);
-  }
-
-  /**
-   * Construct a image with the given URI, type attribute, and width/height.
-   * 
-   * @param uri
-   *          The URI
-   * @param width
-   *          The width
-   * @param height
-   *          The height
-   * @param text
-   *          The image text
-   * @return A new image
-   */
-
-  @SuppressWarnings({ "boxing", "null" }) public static
-    SImage
-    imageWidthHeight(
-      final URI uri,
-      final int width,
-      final int height,
-      final String text)
-  {
-    final OptionType<Integer> some_width =
-      Option.some((int) RangeCheck.checkIncludedIn(
-        width,
-        "Width",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid width range"));
-    final OptionType<Integer> some_height =
-      Option.some((int) RangeCheck.checkIncludedIn(
-        height,
-        "Height",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid height range"));
-
-    final OptionType<String> no_type = Option.none();
-    return new SImage(uri, no_type, some_width, some_height, text);
-  }
-
   private final OptionType<Integer> height;
   private final String              text;
   private final OptionType<String>  type;
@@ -309,6 +56,208 @@ public final class SImage implements
     this.text = NullCheck.notNull(in_text, "Text");
   }
 
+  /**
+   * Construct a image with the given URI.
+   *
+   * @param uri  The URI
+   * @param text The image text
+   *
+   * @return A new image
+   */
+
+  public static SImage image(
+    final URI uri,
+    final String text)
+  {
+    final OptionType<Integer> no_height = Option.none();
+    final OptionType<String> no_type = Option.none();
+    return new SImage(uri, no_type, no_height, no_height, text);
+  }
+
+  /**
+   * Construct a image with the given URI, type attribute, and height.
+   *
+   * @param uri    The URI
+   * @param height The height
+   * @param text   The image text
+   *
+   * @return A new image
+   */
+
+  @SuppressWarnings({ "boxing", "null" }) public static SImage imageHeight(
+    final URI uri,
+    final int height,
+    final String text)
+  {
+    final OptionType<Integer> some_height = Option.some(
+      RangeCheck.checkIncludedInInteger(
+        height, "Height", Ranges.POSITIVE_INTEGER, "Valid height range"));
+
+    final OptionType<Integer> no_width = Option.none();
+    final OptionType<String> no_type = Option.none();
+    return new SImage(uri, no_type, no_width, some_height, text);
+  }
+
+  /**
+   * Construct a image with the given URI, type attribute.
+   *
+   * @param uri  The URI
+   * @param type The type attribute
+   * @param text The image text
+   *
+   * @return A new image
+   */
+
+  public static SImage imageTyped(
+    final URI uri,
+    final String type,
+    final String text)
+  {
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+
+    final OptionType<Integer> no_height = Option.none();
+    return new SImage(uri, some_type, no_height, no_height, text);
+  }
+
+  /**
+   * Construct a image with the given URI, type attribute, and height.
+   *
+   * @param uri    The URI
+   * @param type   The type attribute
+   * @param height The height
+   * @param text   The image text
+   *
+   * @return A new image
+   */
+
+  @SuppressWarnings({ "boxing", "null" }) public static SImage imageTypedHeight(
+    final URI uri,
+    final String type,
+    final int height,
+    final String text)
+  {
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<Integer> some_height = Option.some(
+      RangeCheck.checkIncludedInInteger(
+        height, "Height", Ranges.POSITIVE_INTEGER, "Valid height range"));
+
+    final OptionType<Integer> no_width = Option.none();
+    return new SImage(uri, some_type, no_width, some_height, text);
+  }
+
+  /**
+   * Construct a image with the given URI, type attribute, and width.
+   *
+   * @param uri   The URI
+   * @param type  The type attribute
+   * @param width The width
+   * @param text  The image text
+   *
+   * @return A new image
+   */
+
+  @SuppressWarnings({ "boxing", "null" }) public static SImage imageTypedWidth(
+    final URI uri,
+    final String type,
+    final int width,
+    final String text)
+  {
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<Integer> some_width = Option.some(
+      RangeCheck.checkIncludedInInteger(
+        width, "Width", Ranges.POSITIVE_INTEGER, "Valid width range"));
+
+    final OptionType<Integer> no_height = Option.none();
+    return new SImage(uri, some_type, some_width, no_height, text);
+  }
+
+  /**
+   * Construct a image with the given URI, type attribute, and width/height.
+   *
+   * @param uri    The URI
+   * @param type   The type attribute
+   * @param width  The width
+   * @param height The height
+   * @param text   The image text
+   *
+   * @return A new image
+   */
+
+  @SuppressWarnings({ "boxing", "null" })
+  public static SImage imageTypedWidthHeight(
+    final URI uri,
+    final String type,
+    final int width,
+    final int height,
+    final String text)
+  {
+    final OptionType<String> some_type =
+      Option.some(NullCheck.notNull(type, "Type"));
+    final OptionType<Integer> some_width = Option.some(
+      RangeCheck.checkIncludedInInteger(
+        width, "Width", Ranges.POSITIVE_INTEGER, "Valid width range"));
+    final OptionType<Integer> some_height = Option.some(
+      RangeCheck.checkIncludedInInteger(
+        height, "Height", Ranges.POSITIVE_INTEGER, "Valid height range"));
+
+    return new SImage(uri, some_type, some_width, some_height, text);
+  }
+
+  /**
+   * Construct a image with the given URI, type attribute, and width.
+   *
+   * @param uri   The URI
+   * @param width The width
+   * @param text  The image text
+   *
+   * @return A new image
+   */
+
+  @SuppressWarnings({ "boxing", "null" }) public static SImage imageWidth(
+    final URI uri,
+    final int width,
+    final String text)
+  {
+    final OptionType<Integer> some_width = Option.some(
+      RangeCheck.checkIncludedInInteger(
+        width, "Width", Ranges.POSITIVE_INTEGER, "Valid width range"));
+
+    final OptionType<Integer> no_height = Option.none();
+    final OptionType<String> no_type = Option.none();
+    return new SImage(uri, no_type, some_width, no_height, text);
+  }
+
+  /**
+   * Construct a image with the given URI, type attribute, and width/height.
+   *
+   * @param uri    The URI
+   * @param width  The width
+   * @param height The height
+   * @param text   The image text
+   *
+   * @return A new image
+   */
+
+  @SuppressWarnings({ "boxing", "null" }) public static SImage imageWidthHeight(
+    final URI uri,
+    final int width,
+    final int height,
+    final String text)
+  {
+    final OptionType<Integer> some_width = Option.some(
+      RangeCheck.checkIncludedInInteger(
+        width, "Width", Ranges.POSITIVE_INTEGER, "Valid width range"));
+    final OptionType<Integer> some_height = Option.some(
+      RangeCheck.checkIncludedInInteger(
+        height, "Height", Ranges.POSITIVE_INTEGER, "Valid height range"));
+
+    final OptionType<String> no_type = Option.none();
+    return new SImage(uri, no_type, some_width, some_height, text);
+  }
+
   @Override public boolean equals(
     final @Nullable Object obj)
   {
@@ -323,10 +272,10 @@ public final class SImage implements
     }
     final SImage other = (SImage) obj;
     return this.height.equals(other.height)
-      && this.text.equals(other.text)
-      && this.type.equals(other.type)
-      && this.uri.equals(other.uri)
-      && this.width.equals(other.width);
+           && this.text.equals(other.text)
+           && this.type.equals(other.type)
+           && this.uri.equals(other.uri)
+           && this.width.equals(other.width);
   }
 
   @Override public <A> A footnoteContentAccept(

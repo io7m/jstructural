@@ -3,6 +3,16 @@
   <c:project>io7m-jstructural</c:project>
 
   <c:release c:ticket-system="com.io7m.fossil.jstructural">
+    <c:date>2015-07-19</c:date>
+    <c:version>4.1.0</c:version>
+    <c:item>
+      <c:date>2015-07-19</c:date>
+      <c:type-code-new/>
+      <c:summary>Upgraded to io7m-jranges 2.0.0</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release c:ticket-system="com.io7m.fossil.jstructural">
     <c:date>2014-08-21</c:date>
     <c:version>4.0.0</c:version>
     <c:item>

@@ -19,6 +19,7 @@ package com.io7m.jstructural.annotated;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
+import com.io7m.jranges.Ranges;
 import com.io7m.junreachable.UnreachableCodeException;
 
 /**
@@ -36,14 +37,10 @@ public final class SAFormalItemNumberPSSF extends SAFormalItemNumber
   /**
    * Construct a new formal item number
    *
-   * @param in_part
-   *          The part number
-   * @param in_section
-   *          The section number
-   * @param in_subsection
-   *          The subsection number
-   * @param in_formal
-   *          The formal number
+   * @param in_part       The part number
+   * @param in_section    The section number
+   * @param in_subsection The subsection number
+   * @param in_formal     The formal number
    */
 
   public SAFormalItemNumberPSSF(
@@ -52,41 +49,36 @@ public final class SAFormalItemNumberPSSF extends SAFormalItemNumber
     final int in_subsection,
     final int in_formal)
   {
-    this.part =
-      (int) RangeCheck.checkIncludedIn(
-        in_part,
-        "Part number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid part number range");
-    this.section =
-      (int) RangeCheck.checkIncludedIn(
-        in_section,
-        "Section number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid section number range");
-    this.formal =
-      (int) RangeCheck.checkIncludedIn(
-        in_formal,
-        "Formal item number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid formal item number range");
-    this.subsection =
-      (int) RangeCheck.checkIncludedIn(
-        in_subsection,
-        "Subsection number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid subsection number range");
+    this.part = RangeCheck.checkIncludedInInteger(
+      in_part,
+      "Part number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid part number range");
+    this.section = RangeCheck.checkIncludedInInteger(
+      in_section,
+      "Section number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid section number range");
+    this.formal = RangeCheck.checkIncludedInInteger(
+      in_formal,
+      "Formal item number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid formal item number range");
+    this.subsection = RangeCheck.checkIncludedInInteger(
+      in_subsection,
+      "Subsection number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid subsection number range");
   }
 
-  @SuppressWarnings({ "boxing", "null", "synthetic-access" }) @Override public
-    int
-    compareTo(
-      final @Nullable SAFormalItemNumber o)
+  @SuppressWarnings({ "boxing", "null", "synthetic-access" }) @Override
+  public int compareTo(
+    final @Nullable SAFormalItemNumber o)
   {
     try {
-      return NullCheck
-        .notNull(o, "Other")
-        .formalItemNumberAccept(new SAFormalItemNumberVisitor<Integer>() {
+      return NullCheck.notNull(o, "Other").formalItemNumberAccept(
+        new SAFormalItemNumberVisitor<Integer>()
+        {
           @Override public Integer visitFormalItemNumberPSF(
             final SAFormalItemNumberPSF p)
             throws Exception
@@ -94,14 +86,11 @@ public final class SAFormalItemNumberPSSF extends SAFormalItemNumber
             final int rpart =
               Integer.compare(SAFormalItemNumberPSSF.this.part, p.getPart());
             if (rpart == 0) {
-              final int rsect =
-                Integer.compare(
-                  SAFormalItemNumberPSSF.this.section,
-                  p.getSection());
+              final int rsect = Integer.compare(
+                SAFormalItemNumberPSSF.this.section, p.getSection());
               if (rsect == 0) {
                 return Integer.compare(
-                  SAFormalItemNumberPSSF.this.formal,
-                  p.getFormalItem());
+                  SAFormalItemNumberPSSF.this.formal, p.getFormalItem());
               }
               return rsect;
             }
@@ -115,19 +104,14 @@ public final class SAFormalItemNumberPSSF extends SAFormalItemNumber
             final int rpart =
               Integer.compare(SAFormalItemNumberPSSF.this.part, p.getPart());
             if (rpart == 0) {
-              final int rsect =
-                Integer.compare(
-                  SAFormalItemNumberPSSF.this.section,
-                  p.getSection());
+              final int rsect = Integer.compare(
+                SAFormalItemNumberPSSF.this.section, p.getSection());
               if (rsect == 0) {
-                final int rsubs =
-                  Integer.compare(
-                    SAFormalItemNumberPSSF.this.subsection,
-                    p.subsection);
+                final int rsubs = Integer.compare(
+                  SAFormalItemNumberPSSF.this.subsection, p.subsection);
                 if (rsubs == 0) {
                   return Integer.compare(
-                    SAFormalItemNumberPSSF.this.formal,
-                    p.getFormalItem());
+                    SAFormalItemNumberPSSF.this.formal, p.getFormalItem());
                 }
                 return rsubs;
               }
@@ -140,14 +124,11 @@ public final class SAFormalItemNumberPSSF extends SAFormalItemNumber
             final SAFormalItemNumberSF p)
             throws Exception
           {
-            final int rsect =
-              Integer.compare(
-                SAFormalItemNumberPSSF.this.section,
-                p.getSection());
+            final int rsect = Integer.compare(
+              SAFormalItemNumberPSSF.this.section, p.getSection());
             if (rsect == 0) {
               return Integer.compare(
-                SAFormalItemNumberPSSF.this.formal,
-                p.getFormalItem());
+                SAFormalItemNumberPSSF.this.formal, p.getFormalItem());
             }
             return rsect;
           }
@@ -156,26 +137,20 @@ public final class SAFormalItemNumberPSSF extends SAFormalItemNumber
             final SAFormalItemNumberSSF p)
             throws Exception
           {
-            final int rsect =
-              Integer.compare(
-                SAFormalItemNumberPSSF.this.section,
-                p.getSection());
+            final int rsect = Integer.compare(
+              SAFormalItemNumberPSSF.this.section, p.getSection());
             if (rsect == 0) {
-              final int rsubs =
-                Integer.compare(
-                  SAFormalItemNumberPSSF.this.subsection,
-                  p.getSubsection());
+              final int rsubs = Integer.compare(
+                SAFormalItemNumberPSSF.this.subsection, p.getSubsection());
               if (rsubs == 0) {
                 return Integer.compare(
-                  SAFormalItemNumberPSSF.this.formal,
-                  p.getFormalItem());
+                  SAFormalItemNumberPSSF.this.formal, p.getFormalItem());
               }
               return rsubs;
             }
             return rsect;
           }
-        })
-        .intValue();
+        }).intValue();
     } catch (final Exception e) {
       throw new UnreachableCodeException(e);
     }
@@ -203,10 +178,7 @@ public final class SAFormalItemNumberPSSF extends SAFormalItemNumber
     if (this.section != other.section) {
       return false;
     }
-    if (this.subsection != other.subsection) {
-      return false;
-    }
-    return true;
+    return this.subsection == other.subsection;
   }
 
   @Override public <T> T formalItemNumberAccept(
@@ -216,17 +188,10 @@ public final class SAFormalItemNumberPSSF extends SAFormalItemNumber
     return v.visitFormalItemNumberPSSF(this);
   }
 
-  @SuppressWarnings("boxing") @Override public
-    String
-    formalItemNumberFormat()
+  @SuppressWarnings("boxing") @Override public String formalItemNumberFormat()
   {
-    final String r =
-      String.format(
-        "%d.%d.%d.%d",
-        this.part,
-        this.section,
-        this.subsection,
-        this.formal);
+    final String r = String.format(
+      "%d.%d.%d.%d", this.part, this.section, this.subsection, this.formal);
     assert r != null;
     return r;
   }

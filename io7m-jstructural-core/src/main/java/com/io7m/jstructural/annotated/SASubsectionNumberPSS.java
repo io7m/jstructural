@@ -18,6 +18,7 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
+import com.io7m.jranges.Ranges;
 
 /**
  * A subsection number consisting of a part, section, and subsection.
@@ -31,13 +32,10 @@ public final class SASubsectionNumberPSS extends SASubsectionNumber
 
   /**
    * Construct a new subsection number
-   * 
-   * @param in_part
-   *          The part number
-   * @param in_section
-   *          The section number
-   * @param in_subsection
-   *          The subsection number
+   *
+   * @param in_part       The part number
+   * @param in_section    The section number
+   * @param in_subsection The subsection number
    */
 
   public SASubsectionNumberPSS(
@@ -45,24 +43,21 @@ public final class SASubsectionNumberPSS extends SASubsectionNumber
     final int in_section,
     final int in_subsection)
   {
-    this.part =
-      (int) RangeCheck.checkIncludedIn(
-        in_part,
-        "Part number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid part number range");
-    this.section =
-      (int) RangeCheck.checkIncludedIn(
-        in_section,
-        "Section number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid section number range");
-    this.subsection =
-      (int) RangeCheck.checkIncludedIn(
-        in_subsection,
-        "Subsection number",
-        RangeCheck.POSITIVE_INTEGER,
-        "Valid subsection number range");
+    this.part = RangeCheck.checkIncludedInInteger(
+      in_part,
+      "Part number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid part number range");
+    this.section = RangeCheck.checkIncludedInInteger(
+      in_section,
+      "Section number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid section number range");
+    this.subsection = RangeCheck.checkIncludedInInteger(
+      in_subsection,
+      "Subsection number",
+      Ranges.POSITIVE_INTEGER,
+      "Valid subsection number range");
   }
 
   @Override public boolean equals(
@@ -84,10 +79,7 @@ public final class SASubsectionNumberPSS extends SASubsectionNumber
     if (this.section != other.section) {
       return false;
     }
-    if (this.subsection != other.subsection) {
-      return false;
-    }
-    return true;
+    return this.subsection == other.subsection;
   }
 
   /**
@@ -134,9 +126,7 @@ public final class SASubsectionNumberPSS extends SASubsectionNumber
     return v.visitSubsectionNumberPSS(this);
   }
 
-  @SuppressWarnings("boxing") @Override public
-    String
-    subsectionNumberFormat()
+  @SuppressWarnings("boxing") @Override public String subsectionNumberFormat()
   {
     final String r =
       String.format("%d.%d.%d", this.part, this.section, this.subsection);
