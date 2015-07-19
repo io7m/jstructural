@@ -673,7 +673,7 @@ import com.io7m.junreachable.UnreachableCodeException;
    * pages.
    * </p>
    * <p>
-   * Defaults to: <code>"index-m." + {@link SXHTML#OUTPUT_FILE_SUFFIX}</code>
+   * Defaults to: {@code "index-m." + {@link SXHTML#OUTPUT_FILE_SUFFIX}}
    * </p>
    *
    * @param name

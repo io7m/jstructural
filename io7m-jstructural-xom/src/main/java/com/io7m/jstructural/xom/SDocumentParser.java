@@ -154,7 +154,7 @@ public final class SDocumentParser
 
   /**
    * Attempt to parse a document from the given element. The element is
-   * assumed to have been validated with the <code>structural</code> schema.
+   * assumed to have been validated with the {@code structural} schema.
    *
    * @param log
    *          A log handle
@@ -527,15 +527,13 @@ public final class SDocumentParser
    *
    * @param stream
    *          An input stream
-   * @param uri
+   * @param uri The document URI
    * @param log
    *          A log handle
    * @return A parsed and validated document
    *
    * @throws SAXException
    *           On XML parse errors
-   * @throws ConstraintError
-   *           If any parameter is <code>null</code>
    * @throws ParserConfigurationException
    *           On parser configuration errors
    * @throws ValidityException

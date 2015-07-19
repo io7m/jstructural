@@ -30,7 +30,7 @@ public interface SALinkContentVisitor<A>
    * 
    * @param image
    *          The image element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -45,7 +45,7 @@ public interface SALinkContentVisitor<A>
    * 
    * @param text
    *          The text element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required

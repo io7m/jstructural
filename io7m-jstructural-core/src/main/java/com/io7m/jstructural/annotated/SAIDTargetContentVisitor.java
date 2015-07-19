@@ -30,7 +30,7 @@ public interface SAIDTargetContentVisitor<T>
    *
    * @param f
    *          The formal item element
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    *
    * @throws Exception
    *           If required
@@ -45,7 +45,7 @@ public interface SAIDTargetContentVisitor<T>
    *
    * @param paragraph
    *          The paragraph element
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    *
    * @throws Exception
    *           If required
@@ -60,7 +60,7 @@ public interface SAIDTargetContentVisitor<T>
    *
    * @param part
    *          The part element
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    *
    * @throws Exception
    *           If required
@@ -75,7 +75,7 @@ public interface SAIDTargetContentVisitor<T>
    *
    * @param section
    *          The section element
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    *
    * @throws Exception
    *           If required
@@ -90,7 +90,7 @@ public interface SAIDTargetContentVisitor<T>
    *
    * @param subsection
    *          The subsection element
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    *
    * @throws Exception
    *           If required

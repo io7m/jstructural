@@ -30,7 +30,7 @@ public interface SASubsectionContentVisitor<A>
    * 
    * @param formal
    *          The formal item element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -45,7 +45,7 @@ public interface SASubsectionContentVisitor<A>
    * 
    * @param paragraph
    *          The paragraph element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required

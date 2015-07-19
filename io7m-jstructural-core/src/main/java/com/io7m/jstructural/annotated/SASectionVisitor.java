@@ -30,7 +30,7 @@ public interface SASectionVisitor<A>
    * 
    * @param s
    *          The section element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -45,7 +45,7 @@ public interface SASectionVisitor<A>
    * 
    * @param s
    *          The section element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required

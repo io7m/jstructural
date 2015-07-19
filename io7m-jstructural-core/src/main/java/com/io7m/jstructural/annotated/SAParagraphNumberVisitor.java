@@ -30,7 +30,7 @@ public interface SAParagraphNumberVisitor<T>
    * 
    * @param p
    *          The number
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    * 
    * @throws Exception
    *           If required
@@ -45,7 +45,7 @@ public interface SAParagraphNumberVisitor<T>
    * 
    * @param p
    *          The number
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    * 
    * @throws Exception
    *           If required
@@ -60,7 +60,7 @@ public interface SAParagraphNumberVisitor<T>
    * 
    * @param p
    *          The number
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    * 
    * @throws Exception
    *           If required
@@ -75,7 +75,7 @@ public interface SAParagraphNumberVisitor<T>
    * 
    * @param p
    *          The number
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    * 
    * @throws Exception
    *           If required

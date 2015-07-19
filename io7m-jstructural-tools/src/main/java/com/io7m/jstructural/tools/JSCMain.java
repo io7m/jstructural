@@ -72,7 +72,7 @@ import com.io7m.jstructural.xom.SDocumentXHTMLWriterSingle;
 import com.io7m.junreachable.UnreachableCodeException;
 
 /**
- * The <code>jstructural</code> compiler frontend.
+ * The {@code jstructural} compiler frontend.
  */
 
 public final class JSCMain

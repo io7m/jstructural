@@ -30,7 +30,7 @@ public interface SASectionNumberVisitor<T>
    * 
    * @param p
    *          The number
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    * 
    * @throws Exception
    *           If required
@@ -45,7 +45,7 @@ public interface SASectionNumberVisitor<T>
    * 
    * @param p
    *          The number
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    * 
    * @throws Exception
    *           If required

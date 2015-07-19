@@ -30,7 +30,7 @@ public interface SASubsectionContentNumberVisitor<T>
    * 
    * @param n
    *          The formal item number element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -45,7 +45,7 @@ public interface SASubsectionContentNumberVisitor<T>
    * 
    * @param n
    *          The paragraph number element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required

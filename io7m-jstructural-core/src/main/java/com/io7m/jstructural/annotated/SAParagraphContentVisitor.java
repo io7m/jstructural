@@ -30,7 +30,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param footnote
    *          The footnote element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -45,7 +45,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param list
    *          The formal item list element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -60,7 +60,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param image
    *          The image element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -75,7 +75,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param link
    *          The link element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -90,7 +90,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param link
    *          The link element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -105,7 +105,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param list
    *          The list element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -120,7 +120,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param list
    *          The list element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -135,7 +135,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param table
    *          The table element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -150,7 +150,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param term
    *          The term element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -165,7 +165,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param text
    *          The text element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -180,7 +180,7 @@ public interface SAParagraphContentVisitor<A>
    * 
    * @param text
    *          The verbatim element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required

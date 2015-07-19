@@ -25,7 +25,7 @@ import com.io7m.jnull.Nullable;
 public interface SAIDMapReadable
 {
   /**
-   * Retrieve the content associated with the given ID, or <code>null</code>
+   * Retrieve the content associated with the given ID, or {@code null}
    * if there is no association.
    * 
    * @param id
