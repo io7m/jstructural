@@ -30,7 +30,7 @@ public interface SIDTargetContentVisitor<T>
    * 
    * @param part
    *          The part element
-   * @return A value of type <code>T</code>
+   * @return A value of type {@code T}
    * 
    * @throws Exception
    *           If required

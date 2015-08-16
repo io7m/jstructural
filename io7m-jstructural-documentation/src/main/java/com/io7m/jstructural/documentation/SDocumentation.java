@@ -16,10 +16,14 @@
 
 package com.io7m.jstructural.documentation;
 
+import com.io7m.junreachable.UnreachableCodeException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import com.io7m.junreachable.UnreachableCodeException;
+/**
+ * Documentation paths.
+ */
 
 public final class SDocumentation
 {
@@ -27,6 +31,10 @@ public final class SDocumentation
   {
     throw new UnreachableCodeException();
   }
+
+  /**
+   * @return The URI of the documentation
+   */
 
   public static URI getDocumentationXMLLocation()
   {

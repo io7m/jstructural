@@ -31,7 +31,7 @@ public interface SFootnoteContentVisitor<A>
    * 
    * @param footnote
    *          The footnote element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -46,7 +46,7 @@ public interface SFootnoteContentVisitor<A>
    * 
    * @param image
    *          The image element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -61,7 +61,7 @@ public interface SFootnoteContentVisitor<A>
    * 
    * @param link
    *          The link element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -76,7 +76,7 @@ public interface SFootnoteContentVisitor<A>
    * 
    * @param link
    *          The link element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -91,7 +91,7 @@ public interface SFootnoteContentVisitor<A>
    * 
    * @param list
    *          The list element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -106,7 +106,7 @@ public interface SFootnoteContentVisitor<A>
    * 
    * @param list
    *          The list element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -121,7 +121,7 @@ public interface SFootnoteContentVisitor<A>
    * 
    * @param term
    *          The term element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -136,7 +136,7 @@ public interface SFootnoteContentVisitor<A>
    * 
    * @param text
    *          The text element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -151,7 +151,7 @@ public interface SFootnoteContentVisitor<A>
    * 
    * @param text
    *          The verbatim element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required

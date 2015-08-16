@@ -16,7 +16,6 @@
 
 package com.io7m.jstructural.schema;
 
-import com.io7m.jnull.NonNull;
 import com.io7m.junreachable.UnreachableCodeException;
 
 import java.net.URI;
@@ -33,7 +32,11 @@ public final class SSchema
     throw new UnreachableCodeException();
   }
 
-  public static @NonNull URI getSchemaRNGLocation()
+  /**
+   * @return The URI of the RNG schema
+   */
+
+  public static URI getSchemaRNGLocation()
   {
     try {
       return SSchema.class.getResource(
@@ -43,7 +46,11 @@ public final class SSchema
     }
   }
 
-  public static @NonNull URI getSchemaXMLXSDLocation()
+  /**
+   * @return The URI of the RNG schema
+   */
+
+  public static URI getSchemaXMLXSDLocation()
   {
     try {
       return SSchema.class.getResource("/com/io7m/jstructural/schema/xml.xsd")
@@ -53,7 +60,11 @@ public final class SSchema
     }
   }
 
-  public static @NonNull URI getSchemaXSDLocation()
+  /**
+   * @return The URI of the XSD schema
+   */
+
+  public static URI getSchemaXSDLocation()
   {
     try {
       return SSchema.class.getResource(

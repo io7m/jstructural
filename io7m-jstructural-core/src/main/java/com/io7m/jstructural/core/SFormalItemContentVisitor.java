@@ -30,7 +30,7 @@ public interface SFormalItemContentVisitor<A>
    * 
    * @param list
    *          The formal item list element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -45,7 +45,7 @@ public interface SFormalItemContentVisitor<A>
    * 
    * @param image
    *          The image element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -60,7 +60,7 @@ public interface SFormalItemContentVisitor<A>
    * 
    * @param list
    *          The list element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -75,7 +75,7 @@ public interface SFormalItemContentVisitor<A>
    * 
    * @param list
    *          The list element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -90,7 +90,7 @@ public interface SFormalItemContentVisitor<A>
    * 
    * @param e
    *          The table element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
@@ -105,7 +105,7 @@ public interface SFormalItemContentVisitor<A>
    * 
    * @param text
    *          The verbatim element
-   * @return A value of type <code>A</code>
+   * @return A value of type {@code A}
    * 
    * @throws Exception
    *           If required
