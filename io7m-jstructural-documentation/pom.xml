@@ -211,7 +211,7 @@
             <id>javadoc-aggregate</id>
             <phase>package</phase>
             <goals>
-              <goal>javadoc</goal>
+              <goal>javadoc-no-fork</goal>
             </goals>
             <configuration>
               <bottom><![CDATA[Copyright &#169; {currentYear} &lt;code@io7m.com&gt; http://io7m.com]]></bottom>
