@@ -59,7 +59,7 @@
         <executions>
           <execution>
             <id>validate</id>
-            <phase>validate</phase>
+            <phase>package</phase>
             <configuration>
               <configLocation>com/io7m/jstructural/checkstyle/checkstyle.xml</configLocation>
               <encoding>UTF-8</encoding>
