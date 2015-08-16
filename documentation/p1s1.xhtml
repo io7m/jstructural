@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>io7m-jstructural 4.2.0 Documentation: 1.1. Orientation</title><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-layout.css"/><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-colour.css"/><link rel="stylesheet" type="text/css" href="documentation.css"/></head><body><div class="st200_body"><div class="brand">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://github.com/io7m/jstructural">io7m-jstructural</a> 4.2.0
+  </div>
+</div><div class="st200_navbar st200_navbar_top"><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_title_cell">1. Package Information</td><td class="st200_navbar_up_title_cell">1. Package Information</td><td class="st200_navbar_next_title_cell">1.2. Installation</td></tr><tr><td class="st200_navbar_prev_file_cell"><a href="p1.xhtml#st200_p1">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p1.xhtml#st200_p1">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p1s2.xhtml#st200_p1s2">Next</a></td></tr></table><hr class="st200_hr"/></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p1s1" href="#st200_p1s1">1.1</a></div><div class="st200_section_title">Orientation</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p1s1ss1" href="#st200_p1s1ss1">1.1.1</a></div><div class="st200_subsection_title">Overview</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss1pg1" href="#st200_p1s1ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term package">jstructural</span>
+        package implements a set of primitives for producing technical
+        documentation. The package provides a
+        <a class="st200_link_external" href="http://relaxng.org/">RELAX-NG</a>
+        schema describing the format of <span class="st200_term package">structural</span>
+        documents and a set of Java tools for producing XHTML 1.0 Strict output.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss1pg2" href="#st200_p1s1ss1pg2">2</a></div><div class="st200_paragraph">
+        In contrast to other systems such as
+        <a class="st200_link_external" href="http://www.docbook.org/">DocBook</a>,
+        the <span class="st200_term package">structural</span>
+        language only defines elements concerning the structure of the document
+        and not the semantics of the elements. The intention is that higher
+        level languages will produce <span class="st200_term package">structural</span>
+        documents as output and then use the provided stylesheets to get various
+        services such as table of contents generation, chapter numbering,
+        footnotes, et cetera, without having to re-implement all of those
+        features for each new language.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss1pg3" href="#st200_p1s1ss1pg3">3</a></div><div class="st200_paragraph">
+        The document you are currently reading was defined in the
+        <a class="st200_link_external" href="documentation.xml">structural</a>
+        language.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p1s1ss2" href="#st200_p1s1ss2">1.1.2</a></div><div class="st200_subsection_title">Portability</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss2pg1" href="#st200_p1s1ss2pg1">1</a></div><div class="st200_paragraph">
+        The provided <span class="st200_term package">structural</span> to XHTML
+        translator is written in pure Java and should be usable on any JVM
+        that supports Java 6 and newer.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p1s1ss3" href="#st200_p1s1ss3">1.1.3</a></div><div class="st200_subsection_title">Simplicity</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss3pg1" href="#st200_p1s1ss3pg1">1</a></div><div class="st200_paragraph">
+        As the <span class="st200_term package">structural</span>
+        language focuses only on structural elements, it is far simpler than any
+        of the other XML documentation formats. As an example,
+        <a class="st200_link_external" href="http://www.docbook.org/">DocBook</a>,
+        which mixes structural and semantic elements, defines nearly 400
+        elements as opposed to the 30 or so defined by the
+        <span class="st200_term package">structural</span> language.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss3pg2" href="#st200_p1s1ss3pg2">2</a></div><div class="st200_paragraph">
+        Given the small number of elements and the relatively strict schema, the
+        number of possible permutations of elements is low and, as a result, the
+        XHTML output is easily predictable
+        <span class="st200_footnote_reference"><a id="st200_fn_0_ref" href="#st200_fn_0">[0]</a></span>.
+      </div></div></div></div><div class="st200_footnotes"><hr/><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_0" href="#st200_fn_0_ref">0</a>]</div><div class="st200_footnote_body">There are various combinations of DocBook elements that are
+          valid according to the schema but cannot realistically be used due to
+          the resulting XHTML output.</div></div></div><div class="st200_navbar st200_navbar_bottom"><hr class="st200_hr"/><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_file_cell"><a href="p1.xhtml#st200_p1">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p1.xhtml#st200_p1">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p1s2.xhtml#st200_p1s2">Next</a></td></tr><tr><td class="st200_navbar_prev_title_cell">1. Package Information</td><td class="st200_navbar_up_title_cell">1. Package Information</td><td class="st200_navbar_next_title_cell">1.2. Installation</td></tr></table></div></div></body></html>

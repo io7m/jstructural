@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>io7m-jstructural 4.2.0 Documentation: 5.25. table</title><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-layout.css"/><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-colour.css"/><link rel="stylesheet" type="text/css" href="documentation.css"/></head><body><div class="st200_body"><div class="brand">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://github.com/io7m/jstructural">io7m-jstructural</a> 4.2.0
+  </div>
+</div><div class="st200_navbar st200_navbar_top"><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_title_cell">5.24. subsection-title</td><td class="st200_navbar_up_title_cell">5. Element Reference</td><td class="st200_navbar_next_title_cell">5.26. table-body</td></tr><tr><td class="st200_navbar_prev_file_cell"><a href="p5s24.xhtml#st200_p5s24">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p5.xhtml#st200_p5">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p5s26.xhtml#st200_p5s26">Next</a></td></tr></table><hr class="st200_hr"/></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s25" href="#st200_p5s25">5.25</a></div><div class="st200_section_title">table</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s25ss1" href="#st200_p5s25ss1">5.25.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s25ss1pg1" href="#st200_p5s25ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">table</span> element allows the
+        specification of tabular data.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s25ss2" href="#st200_p5s25ss2">5.25.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s25ss2pg1" href="#st200_p5s25ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">table</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="p5s26.xhtml#st200_p5s26">table-body</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="p5s29.xhtml#st200_p5s29">table-head</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="p5s31.xhtml#st200_p5s31">table-summary</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s25ss3" href="#st200_p5s25ss3">5.25.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s25ss3pg1" href="#st200_p5s25ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">table</span> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_table</span>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s25ss4" href="#st200_p5s25ss4">5.25.4</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s25ss4pg1" href="#st200_p5s25ss4pg1">1</a></div><div class="st200_paragraph">
+        The following text:
+        <pre class="st200_verbatim example">&lt;table&gt;
+  &lt;table-summary&gt;Summary&lt;/table-summary&gt;
+  &lt;table-head&gt;
+    &lt;table-column-name&gt;First&lt;/table-column-name&gt;
+    &lt;table-column-name&gt;Second&lt;/table-column-name&gt;
+    &lt;table-column-name&gt;Third&lt;/table-column-name&gt;
+  &lt;/table-head&gt;
+  &lt;table-body&gt;
+    &lt;table-row&gt;
+      &lt;table-cell&gt;Cell 1&lt;/table-cell&gt;
+      &lt;table-cell&gt;Cell 2&lt;/table-cell&gt;
+      &lt;table-cell&gt;Cell 3&lt;/table-cell&gt;
+    &lt;/table-row&gt;
+    &lt;table-row&gt;
+      &lt;table-cell&gt;Cell 1&lt;/table-cell&gt;
+      &lt;table-cell&gt;Cell 2&lt;/table-cell&gt;
+      &lt;table-cell&gt;Cell 3&lt;/table-cell&gt;
+    &lt;/table-row&gt;
+  &lt;/table-body&gt;
+&lt;/table&gt;</pre>
+        Produces the following output in the context of this document:
+        <table class="st200_table" summary="Summary"><thead class="st200_table_head"><tr><th class="st200_table_column_name">First</th><th class="st200_table_column_name">Second</th><th class="st200_table_column_name">Third</th></tr></thead><tbody class="st200_table_body"><tr class="st200_table_row"><td class="st200_table_cell">Cell 1</td><td class="st200_table_cell">Cell 2</td><td class="st200_table_cell">Cell 3</td></tr><tr class="st200_table_row"><td class="st200_table_cell">Cell 1</td><td class="st200_table_cell">Cell 2</td><td class="st200_table_cell">Cell 3</td></tr></tbody></table>
+      </div></div></div></div><div class="st200_navbar st200_navbar_bottom"><hr class="st200_hr"/><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_file_cell"><a href="p5s24.xhtml#st200_p5s24">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p5.xhtml#st200_p5">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p5s26.xhtml#st200_p5s26">Next</a></td></tr><tr><td class="st200_navbar_prev_title_cell">5.24. subsection-title</td><td class="st200_navbar_up_title_cell">5. Element Reference</td><td class="st200_navbar_next_title_cell">5.26. table-body</td></tr></table></div></div></body></html>

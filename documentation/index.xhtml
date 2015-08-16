@@ -1,0 +1,1164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>io7m-jstructural 4.2.0 Documentation</title><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-layout.css"/><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-colour.css"/><link rel="stylesheet" type="text/css" href="documentation.css"/></head><body><div class="st200_body"><div class="brand">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://github.com/io7m/jstructural">io7m-jstructural</a> 4.2.0
+  </div>
+</div><div class="st200_document_title">io7m-jstructural 4.2.0 Documentation</div><ul class="st200_contents st200_document_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p1">1. Package Information</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p1s1">1.1. Orientation</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p1s2">1.2. Installation</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p1s3">1.3. Platform Specific Issues</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p1s4">1.4. License</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p2">2. API Tutorial</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p2s1">2.1. API Tutorial</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p3">3. API Reference</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p3s1">3.1. Javadoc</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p4">4. Tool Reference</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p4s1">4.1. jsc</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p5">5. Element Reference</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s1">5.1. Overview</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s2">5.2. document</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s3">5.3. document-contents</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s4">5.4. document-style</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s5">5.5. document-title</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s6">5.6. footnote</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s7">5.7. formal-item</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s8">5.8. formal-item-list</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s9">5.9. formal-item-title</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s10">5.10. image</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s11">5.11. link</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s12">5.12. link-external</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s13">5.13. list-item</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s14">5.14. list-ordered</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s15">5.15. list-unordered</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s16">5.16. paragraph</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s17">5.17. part</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s18">5.18. part-contents</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s19">5.19. part-title</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s20">5.20. section</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s21">5.21. section-contents</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s22">5.22. section-title</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s23">5.23. subsection</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s24">5.24. subsection-title</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s25">5.25. table</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s26">5.26. table-body</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s27">5.27. table-cell</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s28">5.28. table-column-name</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s29">5.29. table-head</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s30">5.30. table-row</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s31">5.31. table-summary</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s32">5.32. term</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s33">5.33. verbatim</a></li></ul></li></ul><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p1" href="#st200_p1">1</a></div><div class="st200_part_title">Package Information</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p1s1">1.1. Orientation</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p1s1ss1">1.1.1. Overview</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p1s1ss2">1.1.2. Portability</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p1s1ss3">1.1.3. Simplicity</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p1s2">1.2. Installation</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p1s2ss1">1.2.1. Source compilation</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p1s2ss2">1.2.2. Command-line Tools</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p1s3">1.3. Platform Specific Issues</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p1s4">1.4. License</a></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p1s1" href="#st200_p1s1">1.1</a></div><div class="st200_section_title">Orientation</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p1s1ss1" href="#st200_p1s1ss1">1.1.1</a></div><div class="st200_subsection_title">Overview</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss1pg1" href="#st200_p1s1ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term package">jstructural</span>
+        package implements a set of primitives for producing technical
+        documentation. The package provides a
+        <a class="st200_link_external" href="http://relaxng.org/">RELAX-NG</a>
+        schema describing the format of <span class="st200_term package">structural</span>
+        documents and a set of Java tools for producing XHTML 1.0 Strict output.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss1pg2" href="#st200_p1s1ss1pg2">2</a></div><div class="st200_paragraph">
+        In contrast to other systems such as
+        <a class="st200_link_external" href="http://www.docbook.org/">DocBook</a>,
+        the <span class="st200_term package">structural</span>
+        language only defines elements concerning the structure of the document
+        and not the semantics of the elements. The intention is that higher
+        level languages will produce <span class="st200_term package">structural</span>
+        documents as output and then use the provided stylesheets to get various
+        services such as table of contents generation, chapter numbering,
+        footnotes, et cetera, without having to re-implement all of those
+        features for each new language.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss1pg3" href="#st200_p1s1ss1pg3">3</a></div><div class="st200_paragraph">
+        The document you are currently reading was defined in the
+        <a class="st200_link_external" href="documentation.xml">structural</a>
+        language.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p1s1ss2" href="#st200_p1s1ss2">1.1.2</a></div><div class="st200_subsection_title">Portability</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss2pg1" href="#st200_p1s1ss2pg1">1</a></div><div class="st200_paragraph">
+        The provided <span class="st200_term package">structural</span> to XHTML
+        translator is written in pure Java and should be usable on any JVM
+        that supports Java 6 and newer.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p1s1ss3" href="#st200_p1s1ss3">1.1.3</a></div><div class="st200_subsection_title">Simplicity</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss3pg1" href="#st200_p1s1ss3pg1">1</a></div><div class="st200_paragraph">
+        As the <span class="st200_term package">structural</span>
+        language focuses only on structural elements, it is far simpler than any
+        of the other XML documentation formats. As an example,
+        <a class="st200_link_external" href="http://www.docbook.org/">DocBook</a>,
+        which mixes structural and semantic elements, defines nearly 400
+        elements as opposed to the 30 or so defined by the
+        <span class="st200_term package">structural</span> language.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1ss3pg2" href="#st200_p1s1ss3pg2">2</a></div><div class="st200_paragraph">
+        Given the small number of elements and the relatively strict schema, the
+        number of possible permutations of elements is low and, as a result, the
+        XHTML output is easily predictable
+        <span class="st200_footnote_reference"><a id="st200_fn_0_ref" href="#st200_fn_0">[0]</a></span>.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p1s2" href="#st200_p1s2">1.2</a></div><div class="st200_section_title">Installation</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p1s2ss1" href="#st200_p1s2ss1">1.2.1</a></div><div class="st200_subsection_title">Source compilation</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s2ss1pg1" href="#st200_p1s2ss1pg1">1</a></div><div class="st200_paragraph">
+        The project can be compiled and installed with
+        <a class="st200_link_external" href="http://maven.apache.org">Maven</a>:
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s2ss1pg2" href="#st200_p1s2ss1pg2">2</a></div><div class="st200_paragraph">
+        <pre class="st200_verbatim example">$ mvn -C clean install</pre>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p1s2ss2" href="#st200_p1s2ss2">1.2.2</a></div><div class="st200_subsection_title">Command-line Tools</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s2ss2pg1" href="#st200_p1s2ss2pg1">1</a></div><div class="st200_paragraph">
+        If only the command-line <a class="st200_link" href="#st200_p4s1">jsc</a> tool
+        is required, it can be downloaded directly from 
+        <a class="st200_link_external" href="http://search.maven.org/remotecontent?filepath=com/io7m/jstructural/io7m-jstructural-tools/4.2.0/io7m-jstructural-tools-4.2.0-jsc.jar">Maven Central</a>
+        (<a class="st200_link_external" href="http://search.maven.org/remotecontent?filepath=com/io7m/jstructural/io7m-jstructural-tools/4.2.0/io7m-jstructural-tools-4.2.0-jsc.jar.asc">PGP</a>).
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p1s3" href="#st200_p1s3">1.3</a></div><div class="st200_section_title">Platform Specific Issues</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s3pg1" href="#st200_p1s3pg1">1</a></div><div class="st200_paragraph">
+      There are no known platform-specific issues.
+    </div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p1s4" href="#st200_p1s4">1.4</a></div><div class="st200_section_title">License</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s4pg1" href="#st200_p1s4pg1">1</a></div><div class="st200_paragraph">
+      All files distributed with the <span class="st200_term package">structural</span>
+      package are placed under the following license:
+      <pre class="st200_verbatim license">
+Copyright © 2014 &lt;code@io7m.com&gt; http://io7m.com
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+      </pre>
+    </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s4pg2" href="#st200_p1s4pg2">2</a></div><div class="st200_paragraph">
+      Exceptions to the above are the files:
+    </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p1s4fo1" href="#st200_p1s4fo1">1.4.1. Schema files</a></div><ul class="st200_list_unordered"><li class="st200_list_item"><span class="st200_term file">io7m-jstructural-tests/src/test/resources/com/io7m/jstructural/tests/xhtml1-strict.xsd</span></li><li class="st200_list_item"><span class="st200_term file">io7m-jstructural-tests/src/test/resources/com/io7m/jstructural/tests/xml.xsd</span></li></ul></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s4pg3" href="#st200_p1s4pg3">3</a></div><div class="st200_paragraph">
+      These files are the XSD schema for XHTML Strict 1.0
+      <span class="st200_footnote_reference"><a id="st200_fn_1_ref" href="#st200_fn_1">[1]</a></span>
+      and are used by the test suite to validate the XHTML output produced by all
+      test documents. They are included to allow the test suite to execute
+      on machines that do not have network access (and therefore cannot fetch
+      the schema files from the <span class="st200_term organization">w3</span> servers).
+      They are covered by at least one of the <span class="st200_term organization">w3</span>'s
+      many licenses
+      <span class="st200_footnote_reference"><a id="st200_fn_2_ref" href="#st200_fn_2">[2]</a></span>. Unfortunately, we're not exactly sure which. No infringement
+      is intended.
+    </div></div></div></div><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p2" href="#st200_p2">2</a></div><div class="st200_part_title">API Tutorial</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p2s1">2.1. API Tutorial</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p2s1ss1">2.1.1. Overview</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p2s1ss2">2.1.2. Usage</a></li></ul></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p2s1" href="#st200_p2s1">2.1</a></div><div class="st200_section_title">API Tutorial</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p2s1ss1" href="#st200_p2s1ss1">2.1.1</a></div><div class="st200_subsection_title">Overview</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p2s1ss1pg1" href="#st200_p2s1ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term package">jstructural</span> API is divided
+        into <span class="st200_term keyword">core</span> and <span class="st200_term keyword">annotated</span>
+        types. The <span class="st200_term keyword">core</span> types have an (almost) 1:1
+        correspondence with the elements that a document author writes in XML. The
+        <a class="st200_link_external" href="apidocs/com/io7m/jstructural/xom/SDocumentParser.html">parser</a>
+        included with the <a class="st200_link_external" href="http://xom.nu">XOM</a> backend,
+        for example, produces a document consisting of elements of the
+        <span class="st200_term keyword">core</span> types from an XML file. The
+        <span class="st200_term keyword">annotated</span> types are, unsurprisingly,
+        values of the <span class="st200_term keyword">core</span> types with additional
+        annotations and metadata required to actually produce documents in XHTML
+        format.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p2s1ss2" href="#st200_p2s1ss2">2.1.2</a></div><div class="st200_subsection_title">Usage</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p2s1ss2pg1" href="#st200_p2s1ss2pg1">1</a></div><div class="st200_paragraph">
+        Parsing documents and producing XHTML output is quite simple. First,
+        a stream representing an XML file is given to the included
+        <a class="st200_link_external" href="apidocs/com/io7m/jstructural/xom/SDocumentParser.html">parser</a>,
+        which parses and validates the document against the
+        <span class="st200_term package">structural</span> schema.
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p2s1ss2fo1" href="#st200_p2s1ss2fo1">2.1.2.1. Parsing</a></div><pre class="st200_verbatim">
+URI uri;
+Log log;
+InputStream stream;        
+
+final SDocument doc = SDocumentParser.fromStream(stream, uri, log);
+        </pre></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p2s1ss2pg2" href="#st200_p2s1ss2pg2">2</a></div><div class="st200_paragraph">
+        Then, the resulting document is annotated with the included
+        <a class="st200_link_external" href="apidocs/com/io7m/jstructural/annotated/SAnnotator.html">annotator</a>:
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p2s1ss2fo2" href="#st200_p2s1ss2fo2">2.1.2.2. Annotation</a></div><pre class="st200_verbatim">
+Log log;
+SDocument doc;       
+
+final SADocument adoc = SAnnotator.document (doc, log);
+        </pre></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p2s1ss2pg3" href="#st200_p2s1ss2pg3">3</a></div><div class="st200_paragraph">
+        Finally, either the
+        <a class="st200_link_external" href="apidocs/com/io7m/jstructural/xom/SDocumentXHTMLWriterSingle.html">single-page writer</a>
+        or
+        <a class="st200_link_external" href="apidocs/com/io7m/jstructural/xom/SDocumentXHTMLWriterMulti.html">multi-page writer</a>
+        are used to produce a set of XHTML documents that can be serialized
+        using the standard XOM serializer.
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p2s1ss2fo3" href="#st200_p2s1ss2fo3">2.1.2.3. Writing</a></div><pre class="st200_verbatim">
+Log log;
+SADocument doc;
+SDocumentXHTMLWriterCallbacks callbacks;      
+
+SDocumentXHTMLWriterSingle writer = new SDocumentXHTMLWriterSingle();
+SortedMap&lt;String, Document&gt; pages = writer.writeDocuments(callbacks, doc);
+        </pre></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p2s1ss2pg4" href="#st200_p2s1ss2pg4">4</a></div><div class="st200_paragraph">
+        The map returned by the <span class="st200_term function">writeDocuments</span>
+        function is a set of mappings from file names to documents.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p2s1ss2pg5" href="#st200_p2s1ss2pg5">5</a></div><div class="st200_paragraph">
+        The writers take a set of callbacks as arguments that can be used
+        to customize the resulting output. See the 
+        <a class="st200_link_external" href="apidocs/com/io7m/jstructural/xom/SDocumentXHTMLWriterCallbacks.html">javadoc</a>
+        for details.
+      </div></div></div></div></div><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p3" href="#st200_p3">3</a></div><div class="st200_part_title">API Reference</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p3s1">3.1. Javadoc</a></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p3s1" href="#st200_p3s1">3.1</a></div><div class="st200_section_title">Javadoc</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s1pg1" href="#st200_p3s1pg1">1</a></div><div class="st200_paragraph">
+      API documentation for the packages is provided via the
+      included <a class="st200_link_external" href="apidocs/index.html">Javadoc</a>.
+    </div></div></div></div><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p4" href="#st200_p4">4</a></div><div class="st200_part_title">Tool Reference</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p4s1">4.1. jsc</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s1ss1">4.1.1. Overview</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s1ss2">4.1.2. Packaging</a></li></ul></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p4s1" href="#st200_p4s1">4.1</a></div><div class="st200_section_title">jsc</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s1ss1" href="#st200_p4s1ss1">4.1.1</a></div><div class="st200_subsection_title">Overview</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s1ss1pg1" href="#st200_p4s1ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term command">jsc</span> tool transforms
+        <span class="st200_term package">structural</span> documents into
+        XHTML 1.0 Strict.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s1ss1pg2" href="#st200_p4s1ss1pg2">2</a></div><div class="st200_paragraph">
+        <pre class="st200_verbatim terminal">jsc: [options] --check        file
+  or [options] --xhtml-single file outdir
+  or [options] --xhtml-multi  file outdir
+  or [options] --version
+
+     --check                      Parse and validate all source files, but do not produce output
+     --debug                      Enable debugging (debug messages, exception backtraces)
+  -h,--help                       Show this help message
+     --version                    Display version
+     --xhtml-body-end &lt;file&gt;      Insert the given file into the resulting XHTML at the end of the document's body
+     --xhtml-body-start &lt;file&gt;    Insert the given file into the resulting XHTML at the start of the document's body
+     --xhtml-multi                Produce multiple XHTML files as output
+     --xhtml-single               Produce a single XHTML file as output</pre>
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s1ss1pg3" href="#st200_p4s1ss1pg3">3</a></div><div class="st200_paragraph">
+        When the <span class="st200_term command">--check</span> argument is specified,
+        the file <span class="st200_term file">file</span> is parsed and validated according
+        to the <span class="st200_term package">structural</span> schema. 
+        <a class="st200_link_external" href="http://www.w3.org/TR/xinclude">XIncludes</a>
+        are understood by <span class="st200_term command">jsc</span> and will be processed prior
+        to validation.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s1ss1pg4" href="#st200_p4s1ss1pg4">4</a></div><div class="st200_paragraph">
+        When the <span class="st200_term command">--xhtml-single</span> argument is specified,
+        the given <span class="st200_term file">file</span> is validated exactly as with 
+        <span class="st200_term command">--check</span>, and then a single XHTML 1.0 Strict
+        document is written to <span class="st200_term file">outdir/index.xhtml</span>. The
+        <span class="st200_term file">outdir</span> directory is created iff it does not
+        already exist.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s1ss1pg5" href="#st200_p4s1ss1pg5">5</a></div><div class="st200_paragraph">
+        When the <span class="st200_term command">--xhtml-multi</span> argument is specified,
+        the given <span class="st200_term file">file</span> is validated exactly as with 
+        <span class="st200_term command">--check</span>, and then a single XHTML 1.0 Strict
+        document is written to <span class="st200_term file">outdir/index-m.xhtml</span>,
+        which represents the front page of the document, and a series of files are
+        written to <span class="st200_term file">outdir/*.xhtml</span>, representing the
+        <a class="st200_link" href="#st200_p5s17">parts</a> and
+        <a class="st200_link" href="#st200_p5s20">sections</a> of the document. The
+        <span class="st200_term file">outdir</span> directory is created iff it does not
+        already exist.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s1ss1pg6" href="#st200_p4s1ss1pg6">6</a></div><div class="st200_paragraph">
+        When either <span class="st200_term command">--xhtml-multi</span> or
+        <span class="st200_term command">--xhtml-single</span> are specified, the files
+        <span class="st200_term file">outdir/jstructural-4.2.0-layout.css</span> and
+        <span class="st200_term file">outdir/jstructural-4.2.0-colour.css</span> are
+        created iff they do not already exist. These files contain CSS controlling
+        the visual presentation of the XHTML.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s1ss1pg7" href="#st200_p4s1ss1pg7">7</a></div><div class="st200_paragraph">
+        The <span class="st200_term command">--xhtml-body-start</span> option causes
+        the contents of the given XML file to be inserted as the first child of the
+        resulting XHTML <span class="st200_term element">body</span> element on each page.
+        It is the user's responsibility to ensure that the resulting document is
+        valid XHTML 1.0 Strict.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s1ss1pg8" href="#st200_p4s1ss1pg8">8</a></div><div class="st200_paragraph">
+        The <span class="st200_term command">--xhtml-body-end</span> option causes
+        the contents of the given XML file to be inserted as the last child of the
+        resulting XHTML <span class="st200_term element">body</span> element on each page.
+        It is the user's responsibility to ensure that the resulting document is
+        valid XHTML 1.0 Strict.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s1ss2" href="#st200_p4s1ss2">4.1.2</a></div><div class="st200_subsection_title">Packaging</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s1ss2pg1" href="#st200_p4s1ss2pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term command">jsc</span> tool is packaged into the
+        standalone <span class="st200_term file">io7m-jstructural-tools-4.2.0-jsc.jar</span>
+        file distributed with <span class="st200_term package">jstructural</span>.
+      </div></div></div></div></div><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p5" href="#st200_p5">5</a></div><div class="st200_part_title">Element Reference</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s1">5.1. Overview</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s1ss1">5.1.1. Namespace URI</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s1ss2">5.1.2. Attributes</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s1ss3">5.1.3. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s1ss4">5.1.4. Navigation Bar</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s2">5.2. document</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s2ss1">5.2.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s2ss2">5.2.2. Processing</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s2ss3">5.2.3. Children</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s3">5.3. document-contents</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s3ss1">5.3.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s3ss2">5.3.2. Processing</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s3ss3">5.3.3. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s4">5.4. document-style</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s4ss1">5.4.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s4ss2">5.4.2. Processing</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s4ss3">5.4.3. Children</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s5">5.5. document-title</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s5ss1">5.5.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s5ss2">5.5.2. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s6">5.6. footnote</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s6ss1">5.6.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s6ss2">5.6.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s6ss3">5.6.3. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s6ss4">5.6.4. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s7">5.7. formal-item</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s7ss1">5.7.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s7ss2">5.7.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s7ss3">5.7.3. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s7ss4">5.7.4. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s8">5.8. formal-item-list</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s8ss1">5.8.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s8ss2">5.8.2. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s8ss3">5.8.3. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s9">5.9. formal-item-title</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s9ss1">5.9.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s9ss2">5.9.2. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s9ss3">5.9.3. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s10">5.10. image</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s10ss1">5.10.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s10ss2">5.10.2. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s10ss3">5.10.3. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s11">5.11. link</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s11ss1">5.11.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s11ss2">5.11.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s11ss3">5.11.3. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s11ss4">5.11.4. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s12">5.12. link-external</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s12ss1">5.12.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s12ss2">5.12.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s12ss3">5.12.3. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s12ss4">5.12.4. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s13">5.13. list-item</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s13ss1">5.13.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s13ss2">5.13.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s13ss3">5.13.3. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s14">5.14. list-ordered</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s14ss1">5.14.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s14ss2">5.14.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s14ss3">5.14.3. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s15">5.15. list-unordered</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s15ss1">5.15.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s15ss2">5.15.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s15ss3">5.15.3. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s16">5.16. paragraph</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s16ss1">5.16.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s16ss2">5.16.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s16ss3">5.16.3. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s17">5.17. part</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s17ss1">5.17.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s17ss2">5.17.2. Processing</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s17ss3">5.17.3. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s17ss4">5.17.4. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s18">5.18. part-contents</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s18ss1">5.18.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s18ss2">5.18.2. Processing</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s18ss3">5.18.3. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s19">5.19. part-title</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s19ss1">5.19.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s19ss2">5.19.2. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s20">5.20. section</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s20ss1">5.20.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s20ss2">5.20.2. Processing</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s20ss3">5.20.3. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s20ss4">5.20.4. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s20ss5">5.20.5. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s21">5.21. section-contents</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s21ss1">5.21.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s21ss2">5.21.2. Processing</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s21ss3">5.21.3. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s21ss4">5.21.4. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s22">5.22. section-title</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s22ss1">5.22.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s22ss2">5.22.2. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s22ss3">5.22.3. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s23">5.23. subsection</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s23ss1">5.23.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s23ss2">5.23.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s23ss3">5.23.3. Example</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s23ss4">5.23.4. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s24">5.24. subsection-title</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s24ss1">5.24.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s24ss2">5.24.2. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s24ss3">5.24.3. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s25">5.25. table</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s25ss1">5.25.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s25ss2">5.25.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s25ss3">5.25.3. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s25ss4">5.25.4. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s26">5.26. table-body</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s26ss1">5.26.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s26ss2">5.26.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s26ss3">5.26.3. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s27">5.27. table-cell</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s27ss1">5.27.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s27ss2">5.27.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s27ss3">5.27.3. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s28">5.28. table-column-name</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s28ss1">5.28.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s28ss2">5.28.2. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s29">5.29. table-head</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s29ss1">5.29.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s29ss2">5.29.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s29ss3">5.29.3. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s30">5.30. table-row</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s30ss1">5.30.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s30ss2">5.30.2. Children</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s30ss3">5.30.3. CSS</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s31">5.31. table-summary</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s31ss1">5.31.1. Description</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s32">5.32. term</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s32ss1">5.32.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s32ss2">5.32.2. CSS</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s32ss3">5.32.3. Example</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s33">5.33. verbatim</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s33ss1">5.33.1. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s33ss2">5.33.2. CSS</a></li></ul></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s1" href="#st200_p5s1">5.1</a></div><div class="st200_section_title">Overview</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s1ss1" href="#st200_p5s1ss1">5.1.1</a></div><div class="st200_subsection_title">Namespace URI</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss1pg1" href="#st200_p5s1ss1pg1">1</a></div><div class="st200_paragraph">
+        All
+        <span class="st200_term package">structural</span>
+        elements
+        are in the
+        <a class="st200_link_external" href="http://schemas.io7m.com/structural/2.1.0">http://schemas.io7m.com/structural/2.1.0</a>
+        namespace.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s1ss2" href="#st200_p5s1ss2">5.1.2</a></div><div class="st200_subsection_title">Attributes</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss2pg1" href="#st200_p5s1ss2pg1">1</a></div><div class="st200_paragraph">
+        All elements may have the standard
+        <a class="st200_link_external" href="http://www.w3.org/XML/1998/namespace.html">xml:lang and xml:base</a>
+        attributes.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss2pg2" href="#st200_p5s1ss2pg2">2</a></div><div class="st200_paragraph">
+        The following elements may have a <span class="st200_term attribute">type</span>
+        attribute and an
+        <a class="st200_link_external" href="http://www.w3.org/XML/1998/namespace.html">xml:id</a>
+        attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s2">document</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s7">formal-item</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s10">image</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s13">list-item</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s14">list-ordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s15">list-unordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s16">paragraph</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s17">part</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s20">section</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s23">subsection</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s32">term</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s33">verbatim</a>
+          </li></ul>
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss2pg3" href="#st200_p5s1ss2pg3">3</a></div><div class="st200_paragraph">
+        The contents of the <span class="st200_term attribute">type</span>
+        attribute are appended to the resulting CSS <span class="st200_term attribute">class</span> attribute of the element in the
+        XHTML output.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss2pg4" href="#st200_p5s1ss2pg4">4</a></div><div class="st200_paragraph">
+        Elements with an <span class="st200_term attribute">xml:id</span>
+        attribute can be linked to using the <a class="st200_link" href="#st200_p5s11">link</a> element.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss2pg5" href="#st200_p5s1ss2pg5">5</a></div><div class="st200_paragraph">
+        When the XSLT stylesheet encounters an <span class="st200_term attribute">xml:id</span> attribute on an element, it
+        generates an XHTML anchor with an <span class="st200_term attribute">id</span> attribute consisting of the
+        original <span class="st200_term attribute">xml:id</span> attribute
+        contents prefixed with <span class="st200_term constant">"ref_"</span>.
+        This allows linking to specific elements in the resulting XHTML
+        documents from external locations. As an example, given an
+        element:
+        <pre class="st200_verbatim example">&lt;s:term s:type="something" xml:id="a_term"&gt;Hello&lt;/s:term&gt;</pre>
+        The XHTML output will be similar to:
+        <pre class="st200_verbatim example">&lt;a id="ref_a_term"&gt;&lt;/a&gt;
+&lt;span class="st200_term something"&gt;Hello&lt;/span&gt;</pre>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s1ss3" href="#st200_p5s1ss3">5.1.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss3pg1" href="#st200_p5s1ss3pg1">1</a></div><div class="st200_paragraph">
+        The XHTML elements resulting from each <span class="st200_term package">structural</span> element are assigned specific
+        CSS classes for easy styling of the output. The CSS classes are
+        documented with each element.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s1ss4" href="#st200_p5s1ss4">5.1.4</a></div><div class="st200_subsection_title">Navigation Bar</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss4pg1" href="#st200_p5s1ss4pg1">1</a></div><div class="st200_paragraph">
+        A navigation bar is placed at the top and bottom each generated page.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss4pg2" href="#st200_p5s1ss4pg2">2</a></div><div class="st200_paragraph">
+        For pages generated from <a class="st200_link" href="#st200_p5s20">section</a>
+        or <a class="st200_link" href="#st200_p5s17">part</a> elements, the navigation
+        bar contains links to the previous and next pages, and the enclosing
+        <a class="st200_link" href="#st200_p5s20">section</a> or
+        <a class="st200_link" href="#st200_p5s17">part</a>. The navigation bar also
+        displays the titles of the destination pages above each link. For pages
+        generated from <a class="st200_link" href="#st200_p5s2">document</a> elements,
+        only a link to the first <a class="st200_link" href="#st200_p5s20">section</a>
+        or <a class="st200_link" href="#st200_p5s17">part</a> element is generated.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss4pg3" href="#st200_p5s1ss4pg3">3</a></div><div class="st200_paragraph">
+        The navigation bar itself is assigned the CSS class
+        <span class="st200_term class">st200_navbar</span> in addition to the
+        class <span class="st200_term class">st200_navbar_top</span> or
+        <span class="st200_term class">st200_navbar_bottom</span> depending
+        on where the bar in question appears on the page.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1ss4pg4" href="#st200_p5s1ss4pg4">4</a></div><div class="st200_paragraph">
+        The bar is a table structure with each cell being assigned one
+        of the following CSS classes:
+        <ul class="st200_list_unordered"><li class="st200_list_item"><span class="st200_term class">st200_navbar_prev_file_cell</span></li><li class="st200_list_item"><span class="st200_term class">st200_navbar_up_file_cell</span></li><li class="st200_list_item"><span class="st200_term class">st200_navbar_next_file_cell</span></li><li class="st200_list_item"><span class="st200_term class">st200_navbar_prev_title_cell</span></li><li class="st200_list_item"><span class="st200_term class">st200_navbar_up_title_cell</span></li><li class="st200_list_item"><span class="st200_term class">st200_navbar_next_title_cell</span></li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s2" href="#st200_p5s2">5.2</a></div><div class="st200_section_title">document</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s2ss1" href="#st200_p5s2ss1">5.2.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss1pg1" href="#st200_p5s2ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">document</span>
+        element denotes a <span class="st200_term package">structural</span>
+        document. It must appear as the root node of an XML document.
+        The element may contain
+        either a series of <a class="st200_link" href="#st200_p5s20">sections</a>
+        or a series of <a class="st200_link" href="#st200_p5s17">parts</a>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss1pg2" href="#st200_p5s2ss1pg2">2</a></div><div class="st200_paragraph">
+        <span class="st200_term element">document</span>
+        elements appear in table of contents entries (usually as the root),
+        labelled with their respective
+        <a class="st200_link" href="#st200_p5s5">document-title</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s2ss2" href="#st200_p5s2ss2">5.2.2</a></div><div class="st200_subsection_title">Processing</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss2pg1" href="#st200_p5s2ss2pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">document</span>
+        element creates a new output file when encountered.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s2ss3" href="#st200_p5s2ss3">5.2.3</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss3pg1" href="#st200_p5s2ss3pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">document</span> elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s3">document-contents</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s4">document-style</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s5">document-title</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s17">part</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s20">section</a>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s3" href="#st200_p5s3">5.3</a></div><div class="st200_section_title">document-contents</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s3ss1" href="#st200_p5s3ss1">5.3.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss1pg1" href="#st200_p5s3ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">document-contents</span>
+        element specifies that a table of contents should
+        be generated for the given
+        <a class="st200_link" href="#st200_p5s2">document</a>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss1pg2" href="#st200_p5s3ss1pg2">2</a></div><div class="st200_paragraph">
+        Iff the document in question contains
+        <a class="st200_link" href="#st200_p5s17">part</a>
+        elements, <a class="st200_link" href="#st200_p5s23">subsection</a>
+        elements are omitted from the list.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s3ss2" href="#st200_p5s3ss2">5.3.2</a></div><div class="st200_subsection_title">Processing</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss2pg1" href="#st200_p5s3ss2pg1">1</a></div><div class="st200_paragraph">
+        The table of contents appears at the start of the
+        parent <a class="st200_link" href="#st200_p5s2">document</a>
+        and contains references to all the children of that
+        element.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s3ss3" href="#st200_p5s3ss3">5.3.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss3pg1" href="#st200_p5s3ss3pg1">1</a></div><div class="st200_paragraph">
+        In addition to any classes specified by the
+        <span class="st200_term attribute">type</span>
+        attribute, the main XHTML structure is assigned the class
+        <span class="st200_term class">st200_document_contents</span>
+        in addition to
+        <span class="st200_term class">st200_contents</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss3pg2" href="#st200_p5s3ss3pg2">2</a></div><div class="st200_paragraph">
+        Each element of the list is assigned the class
+        <span class="st200_term class">st200_contents_item</span>
+        in addition to one of
+        <span class="st200_term class">st200_contents_item1</span>,
+        <span class="st200_term class">st200_contents_item2</span>
+        or <span class="st200_term class">st200_contents_item3</span>
+        depending on the depth of the item in the list.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss3pg3" href="#st200_p5s3ss3pg3">3</a></div><div class="st200_paragraph">
+        All <a class="st200_link" href="#st200_p5s17">part</a> and
+        <a class="st200_link" href="#st200_p5s20">section</a>
+        elements appearing in the list are assigned the classes
+        <span class="st200_term class">st200_contents_part</span> and
+        <span class="st200_term class">st200_contents_section</span>,
+        respectively.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s4" href="#st200_p5s4">5.4</a></div><div class="st200_section_title">document-style</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s4ss1" href="#st200_p5s4ss1">5.4.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s4ss1pg1" href="#st200_p5s4ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">document-style</span>
+        element specifies an additional CSS file for the
+        given <a class="st200_link" href="#st200_p5s2">document</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s4ss2" href="#st200_p5s4ss2">5.4.2</a></div><div class="st200_subsection_title">Processing</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s4ss2pg1" href="#st200_p5s4ss2pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">document-style</span>
+        element causes a link to the given CSS file to be
+        placed in all output files generated for the given
+        document.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s4ss3" href="#st200_p5s4ss3">5.4.3</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s4ss3pg1" href="#st200_p5s4ss3pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">document-style</span>
+        element may only contain text.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s5" href="#st200_p5s5">5.5</a></div><div class="st200_section_title">document-title</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s5ss1" href="#st200_p5s5ss1">5.5.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s5ss1pg1" href="#st200_p5s5ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">document-title</span>
+        element specifies the title of the given
+        <a class="st200_link" href="#st200_p5s2">document</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s5ss2" href="#st200_p5s5ss2">5.5.2</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s5ss2pg1" href="#st200_p5s5ss2pg1">1</a></div><div class="st200_paragraph">
+        The XHTML element generated by the
+        <span class="st200_term element">document-title</span>
+        element is assigned the CSS
+        <span class="st200_term class">st200_document_title</span>
+         in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s6" href="#st200_p5s6">5.6</a></div><div class="st200_section_title">footnote</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s6ss1" href="#st200_p5s6ss1">5.6.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss1pg1" href="#st200_p5s6ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">footnote</span> element denotes
+        sections of text that will appear at the bottom of the current
+        page with numbered hyperlink references placed in the original
+        text. <span class="st200_term element">footnote</span> elements are
+        numbered relative to the ancestor <a class="st200_link" href="#st200_p5s2">document</a>. <span class="st200_term element">footnote</span> elements may themselves
+        contain footnotes.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s6ss2" href="#st200_p5s6ss2">5.6.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss2pg1" href="#st200_p5s6ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">footnote</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s6">footnote</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s10">image</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s11">link</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s12">link-external</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s14">list-ordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s15">list-unordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s25">table</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s32">term</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s33">verbatim</a>
+          </li></ul>
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss2pg2" href="#st200_p5s6ss2pg2">2</a></div><div class="st200_paragraph">
+        <span class="st200_term element">footnote</span> elements may also, obviously,
+        contain text.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s6ss3" href="#st200_p5s6ss3">5.6.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss3pg1" href="#st200_p5s6ss3pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">footnote</span> element causes a section
+        to be generated at the bottom of the page. This section is assigned the
+        class <span class="st200_term class">st200_footnotes</span>. Each footnote
+        is displayed as a form of numbered list. The number is assigned the
+        class <span class="st200_term class">st200_footnote_number</span> and
+        the body of each footnote appears in a section with the class
+        <span class="st200_term class">st200_footnote_body</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s6ss4" href="#st200_p5s6ss4">5.6.4</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss4pg1" href="#st200_p5s6ss4pg1">1</a></div><div class="st200_paragraph">
+        This paragraph contains a footnote
+        <span class="st200_footnote_reference"><a id="st200_fn_4_ref" href="#st200_fn_4">[4]</a></span>.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s7" href="#st200_p5s7">5.7</a></div><div class="st200_section_title">formal-item</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s7ss1" href="#st200_p5s7ss1">5.7.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss1pg1" href="#st200_p5s7ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">formal-item</span>
+        element provides a means to mark certain other
+        elements as significant.  <span class="st200_term element">formal-item</span>
+        elements are numbered relative to the containing 
+        <a class="st200_link" href="#st200_p5s20">section</a> or
+        <a class="st200_link" href="#st200_p5s23">subsection</a> and
+        rendered with the given
+        <a class="st200_link" href="#st200_p5s9">formal-item-title</a>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss1pg2" href="#st200_p5s7ss1pg2">2</a></div><div class="st200_paragraph">
+        <span class="st200_term element">formal-item</span>
+        elements must be classified by specifying a value for the
+        <span class="st200_term attribute">kind</span> attribute. This allows
+        rendering of lists of <span class="st200_term element">formal-item</span>
+        elements of a given kind using the
+        <a class="st200_link" href="#st200_p5s8">formal-item-list</a>
+        element.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s7ss2" href="#st200_p5s7ss2">5.7.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss2pg1" href="#st200_p5s7ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">formal-item</span> elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s8">formal-item-list</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s10">image</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s14">list-ordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s15">list-unordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s25">table</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s33">verbatim</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s7ss3" href="#st200_p5s7ss3">5.7.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss3pg1" href="#st200_p5s7ss3pg1">1</a></div><div class="st200_paragraph">
+        The XHTML elements generated by the
+        <span class="st200_term element">formal-item</span>
+        element is assigned the CSS class
+        <span class="st200_term class">st200_formal_item</span>
+        in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss3pg2" href="#st200_p5s7ss3pg2">2</a></div><div class="st200_paragraph">
+        The title element of the generated element is assigned the class
+        <span class="st200_term class">st200_formal_item_title</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s7ss4" href="#st200_p5s7ss4">5.7.4</a></div><div class="st200_subsection_title">Example</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s7ss4fo1" href="#st200_p5s7ss4fo1">5.7.4.1. Example Formal Item</a></div><img class="st200_image" alt="" src="wheat.png"/></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s8" href="#st200_p5s8">5.8</a></div><div class="st200_section_title">formal-item-list</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss1" href="#st200_p5s8ss1">5.8.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss1pg1" href="#st200_p5s8ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">formal-item-list</span>
+        element renders a list of all
+        <a class="st200_link" href="#st200_p5s7">formal-item</a>
+        elements of the kind specified by the
+        <span class="st200_term attribute">kind</span> attribute.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss2" href="#st200_p5s8ss2">5.8.2</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss2pg1" href="#st200_p5s8ss2pg1">1</a></div><div class="st200_paragraph">
+        The XHTML element generated by the
+        <span class="st200_term element">formal-item-list</span> element
+        is assigned the CSS class
+        <span class="st200_term class">st200_formal_item_list</span>
+        in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss2pg2" href="#st200_p5s8ss2pg2">2</a></div><div class="st200_paragraph">
+        Each element of the list is assigned the class
+        <span class="st200_term class">st200_formal_item_list_item</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss2pg3" href="#st200_p5s8ss2pg3">3</a></div><div class="st200_paragraph">
+        The title of the element is assigned the class
+        <span class="st200_term class">st200_formal_item_list_title</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss3" href="#st200_p5s8ss3">5.8.3</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss3pg1" href="#st200_p5s8ss3pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term element">formal-item-list</span> placed inside
+        a <a class="st200_link" href="#st200_p5s7">formal-item</a>:
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s8ss3fo1" href="#st200_p5s8ss3fo1">5.8.3.1. Example Formal Item List</a></div><div class="st200_formal_item_list"><ul><li class="st200_formal_item_list_item"><a href="#st200_p5s7ss4fo1">5.7.4.1. Example Formal Item</a></li><li class="st200_formal_item_list_item"><a href="#st200_p5s9ss3fo1">5.9.3.1. A Formal Item With An Unusual Title</a></li></ul></div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s8ss3fo2" href="#st200_p5s8ss3fo2">5.8.3.2. Example Formal Item List (Examples)</a></div><div class="st200_formal_item_list"><ul><li class="st200_formal_item_list_item"><a href="#st200_p2s1ss2fo1">2.1.2.1. Parsing</a></li><li class="st200_formal_item_list_item"><a href="#st200_p2s1ss2fo2">2.1.2.2. Annotation</a></li><li class="st200_formal_item_list_item"><a href="#st200_p2s1ss2fo3">2.1.2.3. Writing</a></li><li class="st200_formal_item_list_item"><a href="#st200_p5s8ss3fo1">5.8.3.1. Example Formal Item List</a></li><li class="st200_formal_item_list_item"><a href="#st200_p5s8ss3fo2">5.8.3.2. Example Formal Item List (Examples)</a></li></ul></div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s9" href="#st200_p5s9">5.9</a></div><div class="st200_section_title">formal-item-title</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s9ss1" href="#st200_p5s9ss1">5.9.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s9ss1pg1" href="#st200_p5s9ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">formal-item-title</span>
+        element specifies the title of the given
+        <a class="st200_link" href="#st200_p5s7">formal-item</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s9ss2" href="#st200_p5s9ss2">5.9.2</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s9ss2pg1" href="#st200_p5s9ss2pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">formal-item-title</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_formal_item_title</span>
+          </li><li class="st200_list_item">
+            <span class="st200_term class">st200_formal_item_title_number</span>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s9ss3" href="#st200_p5s9ss3">5.9.3</a></div><div class="st200_subsection_title">Example</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s9ss3fo1" href="#st200_p5s9ss3fo1">5.9.3.1. A Formal Item With An Unusual Title</a></div><img class="st200_image" alt="" src="wheat.png"/></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s10" href="#st200_p5s10">5.10</a></div><div class="st200_section_title">image</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s10ss1" href="#st200_p5s10ss1">5.10.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s10ss1pg1" href="#st200_p5s10ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">image</span> element inserts the
+        image specified by the <span class="st200_term attribute">source</span>
+        attribute into the XHTML output. The width and height may
+        optionally be specified with the <span class="st200_term attribute">width</span> and <span class="st200_term attribute">height</span> attributes, respectively. The
+        text contents of the element are used in the XHTML if the image
+        cannot be loaded<span class="st200_footnote_reference"><a id="st200_fn_5_ref" href="#st200_fn_5">[5]</a></span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s10ss2" href="#st200_p5s10ss2">5.10.2</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s10ss2pg1" href="#st200_p5s10ss2pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">image</span> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_image</span>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s10ss3" href="#st200_p5s10ss3">5.10.3</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s10ss3pg1" href="#st200_p5s10ss3pg1">1</a></div><div class="st200_paragraph">
+        <img class="st200_image" alt="" src="wheat.png"/>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s11" href="#st200_p5s11">5.11</a></div><div class="st200_section_title">link</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s11ss1" href="#st200_p5s11ss1">5.11.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s11ss1pg1" href="#st200_p5s11ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">link</span> element generates a
+        hyperlink to the element with the given <span class="st200_term attribute">xml:id</span> attribute (specified by the
+        given <span class="st200_term attribute">target</span> attribute) using
+        the text enclosed by the <span class="st200_term element">link</span>
+        element as the hyperlink text.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s11ss1pg2" href="#st200_p5s11ss1pg2">2</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">link</span> element depends on the
+        XML validator to check link integrity. The XSLT stylesheets make
+        no attempt to verify the validity or existence of link
+        targets.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s11ss2" href="#st200_p5s11ss2">5.11.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s11ss2pg1" href="#st200_p5s11ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">link</span> elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s10">image</a>
+          </li></ul>
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s11ss2pg2" href="#st200_p5s11ss2pg2">2</a></div><div class="st200_paragraph">
+        <span class="st200_term element">link</span> elements may also contain
+        text.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s11ss3" href="#st200_p5s11ss3">5.11.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s11ss3pg1" href="#st200_p5s11ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">link</span> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_link</span>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s11ss4" href="#st200_p5s11ss4">5.11.4</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s11ss4pg1" href="#st200_p5s11ss4pg1">1</a></div><div class="st200_paragraph">
+        The following text:
+        <pre class="st200_verbatim example">&lt;link s:target="elem_paragraph"&gt;paragraph&lt;/link&gt;</pre>
+        Produces the following output in the context of this document:
+        <a class="st200_link" href="#st200_p5s16">paragraph</a>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s11ss4pg2" href="#st200_p5s11ss4pg2">2</a></div><div class="st200_paragraph">
+        The following text:
+        <pre class="st200_verbatim example">&lt;paragraph&gt;&lt;link s:target="elem_paragraph"&gt;&lt;image s:source="strawberry.png"&gt;Strawberry&lt;/image&gt;&lt;/paragraph&gt;&lt;/link&gt;</pre>
+        Produces the following output in the context of this document:
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s11ss4pg3" href="#st200_p5s11ss4pg3">3</a></div><div class="st200_paragraph">
+        <a class="st200_link" href="#st200_p5s16"><img class="st200_image" alt="" src="strawberry.png"/></a>
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s11ss4pg4" href="#st200_p5s11ss4pg4">4</a></div><div class="st200_paragraph">
+        The following text:
+        <pre class="st200_verbatim example">&lt;s:link s:target="elem_formal-item.example"&gt;formal-item&lt;/s:link&gt;</pre>
+        Produces the following output in the context of this document:
+        <a class="st200_link" href="#st200_p5s7ss4fo1">formal-item</a>.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s12" href="#st200_p5s12">5.12</a></div><div class="st200_section_title">link-external</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s12ss1" href="#st200_p5s12ss1">5.12.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s12ss1pg1" href="#st200_p5s12ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">link-external</span> element
+        generates a hyperlink to an external WWW address specified by
+        the given <span class="st200_term attribute">target</span> attribute,
+        using the text enclosed by the element as the hyperlink text.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s12ss2" href="#st200_p5s12ss2">5.12.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s12ss2pg1" href="#st200_p5s12ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">link-external</span> elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s10">image</a>
+          </li></ul>
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s12ss2pg2" href="#st200_p5s12ss2pg2">2</a></div><div class="st200_paragraph">
+        <span class="st200_term element">link-external</span> elements may also contain
+        text.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s12ss3" href="#st200_p5s12ss3">5.12.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s12ss3pg1" href="#st200_p5s12ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">link-external</span> elements are
+        assigned the following CSS classes in addition to any specified
+        by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_link_external</span>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s12ss4" href="#st200_p5s12ss4">5.12.4</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s12ss4pg1" href="#st200_p5s12ss4pg1">1</a></div><div class="st200_paragraph">
+        The following text:
+        <pre class="st200_verbatim example">&lt;link-external s:target="http://www.io7m.com"&gt;io7m&lt;/link-external&gt;</pre>
+        Produces the following output in the context of this document:
+        <a class="st200_link_external" href="http://www.io7m.com">io7m</a>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s12ss4pg2" href="#st200_p5s12ss4pg2">2</a></div><div class="st200_paragraph">
+        The following text:
+        <pre class="st200_verbatim example">&lt;paragraph&gt;&lt;link-external s:target="http://www.io7m.com"&gt;&lt;image s:source="strawberry.png"&gt;Strawberry&lt;/image&gt;&lt;/paragraph&gt;&lt;/link-external&gt;</pre>
+        Produces the following output in the context of this document:
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s12ss4pg3" href="#st200_p5s12ss4pg3">3</a></div><div class="st200_paragraph">
+        <a class="st200_link_external" href="http://www.io7m.com"><img class="st200_image" alt="" src="strawberry.png"/></a>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s13" href="#st200_p5s13">5.13</a></div><div class="st200_section_title">list-item</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s13ss1" href="#st200_p5s13ss1">5.13.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s13ss1pg1" href="#st200_p5s13ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">list-item</span>
+        element denotes an item in an
+        <a class="st200_link" href="#st200_p5s14">ordered</a>
+        or <a class="st200_link" href="#st200_p5s15">unordered</a>
+        list.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s13ss2" href="#st200_p5s13ss2">5.13.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s13ss2pg1" href="#st200_p5s13ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">list-item</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s6">footnote</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s10">image</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s11">link</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s12">link-external</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s14">list-ordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s15">list-unordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s32">term</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s33">verbatim</a>
+          </li></ul>
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s13ss2pg2" href="#st200_p5s13ss2pg2">2</a></div><div class="st200_paragraph">
+        <span class="st200_term element">list-item</span>
+        elements may also contain text.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s13ss3" href="#st200_p5s13ss3">5.13.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s13ss3pg1" href="#st200_p5s13ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">list-item</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span>
+        attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_list_item</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s14" href="#st200_p5s14">5.14</a></div><div class="st200_section_title">list-ordered</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s14ss1" href="#st200_p5s14ss1">5.14.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s14ss1pg1" href="#st200_p5s14ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">list-ordered</span>
+        element denotes a list of elements. The individual
+        list items are numbered.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s14ss2" href="#st200_p5s14ss2">5.14.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s14ss2pg1" href="#st200_p5s14ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">list-ordered</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s13">list-item</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s14ss3" href="#st200_p5s14ss3">5.14.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s14ss3pg1" href="#st200_p5s14ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">list-ordered</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_list_ordered</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s15" href="#st200_p5s15">5.15</a></div><div class="st200_section_title">list-unordered</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s15ss1" href="#st200_p5s15ss1">5.15.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s15ss1pg1" href="#st200_p5s15ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">list-ordered</span>
+        element denotes a list of elements. The individual
+        list items are bulleted.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s15ss2" href="#st200_p5s15ss2">5.15.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s15ss2pg1" href="#st200_p5s15ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">list-unordered</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s13">list-item</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s15ss3" href="#st200_p5s15ss3">5.15.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s15ss3pg1" href="#st200_p5s15ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">list-unordered</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_list_unordered</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s16" href="#st200_p5s16">5.16</a></div><div class="st200_section_title">paragraph</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s16ss1" href="#st200_p5s16ss1">5.16.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s16ss1pg1" href="#st200_p5s16ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">paragraph</span>
+        element denotes sections of text within a
+        <a class="st200_link" href="#st200_p5s20">section</a>
+        or <a class="st200_link" href="#st200_p5s20">subsection</a>.
+        <span class="st200_term element">paragraph</span>
+        elements are numbered relative to the enclosing element but
+        do not have titles.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s16ss2" href="#st200_p5s16ss2">5.16.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s16ss2pg1" href="#st200_p5s16ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">paragraph</span> elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s6">footnote</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s8">formal-item-list</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s10">image</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s11">link</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s12">link-external</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s14">list-ordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s15">list-unordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s25">table</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s32">term</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s33">verbatim</a>
+          </li></ul>
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s16ss2pg2" href="#st200_p5s16ss2pg2">2</a></div><div class="st200_paragraph">
+        <span class="st200_term element">paragraph</span>
+        elements may also, obviously, contain text.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s16ss3" href="#st200_p5s16ss3">5.16.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s16ss3pg1" href="#st200_p5s16ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">paragraph</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_paragraph</span>
+          </li><li class="st200_list_item">
+            <span class="st200_term class">st200_paragraph_number</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s17" href="#st200_p5s17">5.17</a></div><div class="st200_section_title">part</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s17ss1" href="#st200_p5s17ss1">5.17.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s17ss1pg1" href="#st200_p5s17ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">part</span>
+        element denotes a significant section of a
+        <a class="st200_link" href="#st200_p5s2">document</a>
+        element, of which it may appear as a child. The element must contain
+        a series of <a class="st200_link" href="#st200_p5s20">sections</a>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s17ss1pg2" href="#st200_p5s17ss1pg2">2</a></div><div class="st200_paragraph">
+        <span class="st200_term element">part</span>
+        elements appear in table of contents entries,
+        labelled with their respective
+        <a class="st200_link" href="#st200_p5s19">part-title</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s17ss2" href="#st200_p5s17ss2">5.17.2</a></div><div class="st200_subsection_title">Processing</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s17ss2pg1" href="#st200_p5s17ss2pg1">1</a></div><div class="st200_paragraph">
+        For the multi-page stylesheets, the
+        <span class="st200_term element">part</span>
+        element creates a new output file when encountered.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s17ss3" href="#st200_p5s17ss3">5.17.3</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s17ss3pg1" href="#st200_p5s17ss3pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">part</span> elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s18">part-contents</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s19">part-title</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s20">section</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s17ss4" href="#st200_p5s17ss4">5.17.4</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s17ss4pg1" href="#st200_p5s17ss4pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">part</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_part</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s18" href="#st200_p5s18">5.18</a></div><div class="st200_section_title">part-contents</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s18ss1" href="#st200_p5s18ss1">5.18.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s18ss1pg1" href="#st200_p5s18ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">part-contents</span>
+        element specifies that a table of contents should
+        be generated for the given <a class="st200_link" href="#st200_p5s17">part</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s18ss2" href="#st200_p5s18ss2">5.18.2</a></div><div class="st200_subsection_title">Processing</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s18ss2pg1" href="#st200_p5s18ss2pg1">1</a></div><div class="st200_paragraph">
+        The table of contents appears at the start of the
+        parent <a class="st200_link" href="#st200_p5s17">part</a>
+        and contains references to all the children of that
+        element.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s18ss3" href="#st200_p5s18ss3">5.18.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s18ss3pg1" href="#st200_p5s18ss3pg1">1</a></div><div class="st200_paragraph">
+        In addition to any classes specified by the
+        <span class="st200_term attribute">type</span>
+        attribute, the main list structure is assigned the class
+        <span class="st200_term class">st200_part_contents</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s18ss3pg2" href="#st200_p5s18ss3pg2">2</a></div><div class="st200_paragraph">
+        The XHTML lists that are generated as children of
+        the lists generated for
+        <a class="st200_link" href="#st200_p5s3">document-contents</a>
+        elements are assigned CSS as if they were generated
+        from <span class="st200_term element">part-contents</span>
+        elements. In order to correctly indent elements in CSS, it's
+        necessary to be able to distinguish
+        between lists that were generated as part of a
+        <span class="st200_term element">part-contents</span>
+        element, and lists that were generated as children of those 
+        generated as part of
+        a <a class="st200_link" href="#st200_p5s3">document-contents</a>
+        element. In other words, it's desirable to be able to indent
+        the list differently if it is the "outermost" list.
+        Therefore, the main list structure is also assigned
+        the class <span class="st200_term class">st200_part_contents_outer</span>
+        if it is appearing in XHTML due to a
+        <span class="st200_term element">part-contents</span> element.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s18ss3pg3" href="#st200_p5s18ss3pg3">3</a></div><div class="st200_paragraph">
+        Each element of the list is assigned the class
+        <span class="st200_term class">st200_contents_item</span>
+        in addition to one of
+        <span class="st200_term class">st200_contents_item1</span>,
+        <span class="st200_term class">st200_contents_item2</span> or
+        <span class="st200_term class">st200_contents_item3</span>
+        depending on the depth of the item in the list. The root
+        <a class="st200_link" href="#st200_p5s17">part</a>
+        element of the list is assigned the class
+        <span class="st200_term class">st200_contents_part</span> and all
+        <a class="st200_link" href="#st200_p5s20">section</a> and
+        <a class="st200_link" href="#st200_p5s23">subsection</a> elements
+        appearing in the list are assigned the classes
+        <span class="st200_term class">st200_contents_section</span>
+        and
+        <span class="st200_term class">st200_contents_subsection</span>,
+        respectively.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s19" href="#st200_p5s19">5.19</a></div><div class="st200_section_title">part-title</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s19ss1" href="#st200_p5s19ss1">5.19.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s19ss1pg1" href="#st200_p5s19ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">part-title</span>
+        element specifies the title of the given
+        <a class="st200_link" href="#st200_p5s17">part</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s19ss2" href="#st200_p5s19ss2">5.19.2</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s19ss2pg1" href="#st200_p5s19ss2pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">part-title</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_part_title</span>
+          </li><li class="st200_list_item">
+            <span class="st200_term class">st200_part_title_number</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s20" href="#st200_p5s20">5.20</a></div><div class="st200_section_title">section</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s20ss1" href="#st200_p5s20ss1">5.20.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s20ss1pg1" href="#st200_p5s20ss1pg1">1</a></div><div class="st200_paragraph">
+        The
+        <span class="st200_term element">section</span>
+        element denotes a less significant section of the document than the
+        <a class="st200_link" href="#st200_p5s17">part</a>
+        element, of which it may appear as a child. The element may contain
+        either a series of
+        <a class="st200_link" href="#st200_p5s23">subsections</a>
+        or a series of <a class="st200_link" href="#st200_p5s16">paragraphs</a>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s20ss1pg2" href="#st200_p5s20ss1pg2">2</a></div><div class="st200_paragraph">
+        <span class="st200_term element">section</span>
+        elements appear in table of contents entries, labelled with their
+        respective <a class="st200_link" href="#st200_p5s22">section-title</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s20ss2" href="#st200_p5s20ss2">5.20.2</a></div><div class="st200_subsection_title">Processing</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s20ss2pg1" href="#st200_p5s20ss2pg1">1</a></div><div class="st200_paragraph">
+        For the multi-page stylesheets, the
+        <span class="st200_term element">section</span>
+        element creates a new output file when encountered.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s20ss3" href="#st200_p5s20ss3">5.20.3</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s20ss3pg1" href="#st200_p5s20ss3pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">section</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s16">paragraph</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s21">section-contents</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s22">section-title</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s23">subsection</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s20ss4" href="#st200_p5s20ss4">5.20.4</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s20ss4pg1" href="#st200_p5s20ss4pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">section</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_section</span>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s20ss5" href="#st200_p5s20ss5">5.20.5</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s20ss5pg1" href="#st200_p5s20ss5pg1">1</a></div><div class="st200_paragraph">
+        This page is contained within one
+        <span class="st200_term element">section</span> element.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s21" href="#st200_p5s21">5.21</a></div><div class="st200_section_title">section-contents</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s21ss1">5.21.1. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s21ss2">5.21.2. Processing</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s21ss3">5.21.3. CSS</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s21ss4">5.21.4. Example</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s21ss1" href="#st200_p5s21ss1">5.21.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s21ss1pg1" href="#st200_p5s21ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">section-contents</span>
+        element specifies that a table of contents should
+        be generated for the given
+        <a class="st200_link" href="#st200_p5s20">section</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s21ss2" href="#st200_p5s21ss2">5.21.2</a></div><div class="st200_subsection_title">Processing</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s21ss2pg1" href="#st200_p5s21ss2pg1">1</a></div><div class="st200_paragraph">
+        The table of contents appears at the start of the
+        parent <a class="st200_link" href="#st200_p5s20">section</a>
+        and contains references to all the children of that
+        element.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s21ss3" href="#st200_p5s21ss3">5.21.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s21ss3pg1" href="#st200_p5s21ss3pg1">1</a></div><div class="st200_paragraph">
+        In addition to any classes specified by the
+        <span class="st200_term attribute">type</span>
+        attribute, the main list structure is assigned the
+        classes <span class="st200_term class">st200_section_contents</span>
+        and <span class="st200_term class">st200_contents</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s21ss3pg2" href="#st200_p5s21ss3pg2">2</a></div><div class="st200_paragraph">
+        The XHTML lists that are generated as children of
+        the lists generated for
+        <a class="st200_link" href="#st200_p5s18">part-contents</a>
+        elements are assigned CSS as if they were generated
+        from <span class="st200_term element">section-contents</span>
+        elements. In order to correctly indent elements in CSS, it's
+        necessary to be able to distinguish
+        between lists that were generated as part of a
+        <span class="st200_term element">section-contents</span>
+        element, and lists that were generated as children of those
+        generated as part of
+        a <a class="st200_link" href="#st200_p5s18">part-contents</a>
+        element. In other words, it's desirable to be able to indent
+        the list differently if it is the "outermost" list.
+        Therefore, the main list structure is also assigned
+        the class <span class="st200_term class">st200_section_contents_outer</span>
+        if it is appearing in XHTML due to a
+        <span class="st200_term element">section-contents</span> element.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s21ss3pg3" href="#st200_p5s21ss3pg3">3</a></div><div class="st200_paragraph">
+        Each element of the list is assigned the class
+        <span class="st200_term class">st200_contents_item</span>
+        in addition to
+        <span class="st200_term class">st200_contents_item1</span>.
+        All
+        <a class="st200_link" href="#st200_p5s23">subsection</a> elements
+        appearing in the list are assigned the class
+        <span class="st200_term class">st200_contents_subsection</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s21ss4" href="#st200_p5s21ss4">5.21.4</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s21ss4pg1" href="#st200_p5s21ss4pg1">1</a></div><div class="st200_paragraph">
+        The table of contents above was generated by adding a
+        <span class="st200_term element">section-contents</span>
+        element at the beginning of the section.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s22" href="#st200_p5s22">5.22</a></div><div class="st200_section_title">section-title</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s22ss1" href="#st200_p5s22ss1">5.22.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s22ss1pg1" href="#st200_p5s22ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">section-title</span>
+        element specifies the title of the given
+        <a class="st200_link" href="#st200_p5s20">section</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s22ss2" href="#st200_p5s22ss2">5.22.2</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s22ss2pg1" href="#st200_p5s22ss2pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">section-title</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_section_title</span>
+          </li><li class="st200_list_item">
+            <span class="st200_term class">st200_section_title_number</span>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s22ss3" href="#st200_p5s22ss3">5.22.3</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s22ss3pg1" href="#st200_p5s22ss3pg1">1</a></div><div class="st200_paragraph">
+        The 'section-title' text above was specified with the
+        <span class="st200_term element">section-title</span>
+        element.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s23" href="#st200_p5s23">5.23</a></div><div class="st200_section_title">subsection</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s23ss1" href="#st200_p5s23ss1">5.23.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s23ss1pg1" href="#st200_p5s23ss1pg1">1</a></div><div class="st200_paragraph">
+        The
+        <span class="st200_term element">subsection</span>
+        element denotes a less significant section of
+        the document than the
+        <a class="st200_link" href="#st200_p5s20">section</a>
+        element, of which it may appear as a child.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s23ss1pg2" href="#st200_p5s23ss1pg2">2</a></div><div class="st200_paragraph">
+        <span class="st200_term element">subsection</span>
+        elements appear in table of contents entries,
+        labelled with their respective
+        <a class="st200_link" href="#st200_p5s24">subsection-title</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s23ss2" href="#st200_p5s23ss2">5.23.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s23ss2pg1" href="#st200_p5s23ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">subsection</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s16">paragraph</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s24">subsection-title</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s23ss3" href="#st200_p5s23ss3">5.23.3</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s23ss3pg1" href="#st200_p5s23ss3pg1">1</a></div><div class="st200_paragraph">
+        This 'Example' section is a subsection containing one paragraph.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s23ss4" href="#st200_p5s23ss4">5.23.4</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s23ss4pg1" href="#st200_p5s23ss4pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">subsection</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_subsection</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s24" href="#st200_p5s24">5.24</a></div><div class="st200_section_title">subsection-title</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s24ss1" href="#st200_p5s24ss1">5.24.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s24ss1pg1" href="#st200_p5s24ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">subsection-title</span>
+        element specifies the title of the given
+        <a class="st200_link" href="#st200_p5s23">subsection</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s24ss2" href="#st200_p5s24ss2">5.24.2</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s24ss2pg1" href="#st200_p5s24ss2pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">subsection-title</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_subsection_title</span>
+          </li><li class="st200_list_item">
+            <span class="st200_term class">st200_subsection_title_number</span>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s24ss3" href="#st200_p5s24ss3">5.24.3</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s24ss3pg1" href="#st200_p5s24ss3pg1">1</a></div><div class="st200_paragraph">
+        The 'Example' title of this subsection was specified with:
+        <pre class="st200_verbatim example">&lt;s:subsection-title&gt;Example&lt;/s:subsection-title&gt;</pre>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s25" href="#st200_p5s25">5.25</a></div><div class="st200_section_title">table</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s25ss1" href="#st200_p5s25ss1">5.25.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s25ss1pg1" href="#st200_p5s25ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">table</span> element allows the
+        specification of tabular data.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s25ss2" href="#st200_p5s25ss2">5.25.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s25ss2pg1" href="#st200_p5s25ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">table</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s26">table-body</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s29">table-head</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s31">table-summary</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s25ss3" href="#st200_p5s25ss3">5.25.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s25ss3pg1" href="#st200_p5s25ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">table</span> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_table</span>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s25ss4" href="#st200_p5s25ss4">5.25.4</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s25ss4pg1" href="#st200_p5s25ss4pg1">1</a></div><div class="st200_paragraph">
+        The following text:
+        <pre class="st200_verbatim example">&lt;table&gt;
+  &lt;table-summary&gt;Summary&lt;/table-summary&gt;
+  &lt;table-head&gt;
+    &lt;table-column-name&gt;First&lt;/table-column-name&gt;
+    &lt;table-column-name&gt;Second&lt;/table-column-name&gt;
+    &lt;table-column-name&gt;Third&lt;/table-column-name&gt;
+  &lt;/table-head&gt;
+  &lt;table-body&gt;
+    &lt;table-row&gt;
+      &lt;table-cell&gt;Cell 1&lt;/table-cell&gt;
+      &lt;table-cell&gt;Cell 2&lt;/table-cell&gt;
+      &lt;table-cell&gt;Cell 3&lt;/table-cell&gt;
+    &lt;/table-row&gt;
+    &lt;table-row&gt;
+      &lt;table-cell&gt;Cell 1&lt;/table-cell&gt;
+      &lt;table-cell&gt;Cell 2&lt;/table-cell&gt;
+      &lt;table-cell&gt;Cell 3&lt;/table-cell&gt;
+    &lt;/table-row&gt;
+  &lt;/table-body&gt;
+&lt;/table&gt;</pre>
+        Produces the following output in the context of this document:
+        <table class="st200_table" summary="Summary"><thead class="st200_table_head"><tr><th class="st200_table_column_name">First</th><th class="st200_table_column_name">Second</th><th class="st200_table_column_name">Third</th></tr></thead><tbody class="st200_table_body"><tr class="st200_table_row"><td class="st200_table_cell">Cell 1</td><td class="st200_table_cell">Cell 2</td><td class="st200_table_cell">Cell 3</td></tr><tr class="st200_table_row"><td class="st200_table_cell">Cell 1</td><td class="st200_table_cell">Cell 2</td><td class="st200_table_cell">Cell 3</td></tr></tbody></table>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s26" href="#st200_p5s26">5.26</a></div><div class="st200_section_title">table-body</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s26ss1" href="#st200_p5s26ss1">5.26.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s26ss1pg1" href="#st200_p5s26ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">table-body</span> element denotes
+        the rows and cells of the parent
+        <a class="st200_link" href="#st200_p5s25">table</a> element.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s26ss2" href="#st200_p5s26ss2">5.26.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s26ss2pg1" href="#st200_p5s26ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">table-body</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s30">table-row</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s26ss3" href="#st200_p5s26ss3">5.26.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s26ss3pg1" href="#st200_p5s26ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">table-body</span> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_table_body</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s27" href="#st200_p5s27">5.27</a></div><div class="st200_section_title">table-cell</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s27ss1" href="#st200_p5s27ss1">5.27.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s27ss1pg1" href="#st200_p5s27ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">table-cell</span> element denotes
+        a cell in a row of a <a class="st200_link" href="#st200_p5s25">table</a>
+        element.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s27ss2" href="#st200_p5s27ss2">5.27.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s27ss2pg1" href="#st200_p5s27ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">table-cell</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s6">footnote</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s10">image</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s11">link</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s12">link-external</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s14">list-ordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s15">list-unordered</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s32">term</a>
+          </li><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s33">verbatim</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s27ss3" href="#st200_p5s27ss3">5.27.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s27ss3pg1" href="#st200_p5s27ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">table-cell</span> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_table_cell</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s28" href="#st200_p5s28">5.28</a></div><div class="st200_section_title">table-column-name</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s28ss1" href="#st200_p5s28ss1">5.28.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s28ss1pg1" href="#st200_p5s28ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">table-column-name</span> element allows
+        the specification of column names for
+        <a class="st200_link" href="#st200_p5s25">table</a> elements.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s28ss2" href="#st200_p5s28ss2">5.28.2</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s28ss2pg1" href="#st200_p5s28ss2pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">table-column-name</span> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_table_column_name</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s29" href="#st200_p5s29">5.29</a></div><div class="st200_section_title">table-head</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s29ss1" href="#st200_p5s29ss1">5.29.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s29ss1pg1" href="#st200_p5s29ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">table-head</span> element allows the
+        optional specification of column names for
+        <a class="st200_link" href="#st200_p5s25">table</a> elements.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s29ss2" href="#st200_p5s29ss2">5.29.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s29ss2pg1" href="#st200_p5s29ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">table-head</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s28">table-column-name</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s29ss3" href="#st200_p5s29ss3">5.29.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s29ss3pg1" href="#st200_p5s29ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">table-head</span> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_table_head</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s30" href="#st200_p5s30">5.30</a></div><div class="st200_section_title">table-row</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s30ss1" href="#st200_p5s30ss1">5.30.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s30ss1pg1" href="#st200_p5s30ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">table-row</span> element denotes
+        a row of cells in a <a class="st200_link" href="#st200_p5s25">table</a>
+        element.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s30ss2" href="#st200_p5s30ss2">5.30.2</a></div><div class="st200_subsection_title">Children</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s30ss2pg1" href="#st200_p5s30ss2pg1">1</a></div><div class="st200_paragraph">
+        The following elements may occur as children of
+        <span class="st200_term element">table-row</span>
+        elements:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <a class="st200_link" href="#st200_p5s27">table-cell</a>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s30ss3" href="#st200_p5s30ss3">5.30.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s30ss3pg1" href="#st200_p5s30ss3pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">table-row</span> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_table_row</span>
+          </li></ul>
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s31" href="#st200_p5s31">5.31</a></div><div class="st200_section_title">table-summary</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s31ss1" href="#st200_p5s31ss1">5.31.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s31ss1pg1" href="#st200_p5s31ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">table-summary</span> element allows
+        the specification of a summary for
+        <a class="st200_link" href="#st200_p5s25">table</a> elements.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s31ss1pg2" href="#st200_p5s31ss1pg2">2</a></div><div class="st200_paragraph">
+        The summary is required to pass XHTML Strict validity checks;
+        it is otherwise invisible in the output.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s32" href="#st200_p5s32">5.32</a></div><div class="st200_section_title">term</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s32ss1" href="#st200_p5s32ss1">5.32.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s32ss1pg1" href="#st200_p5s32ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">term</span> element denotes a
+        significant element of a section of text. It is usually used to
+        highlight or mark individual words in order to assign them a
+        particular CSS class.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s32ss2" href="#st200_p5s32ss2">5.32.2</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s32ss2pg1" href="#st200_p5s32ss2pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">term</span> elements are assigned the
+        following CSS classes in addition to any specified by the
+        <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_term</span>
+          </li></ul>
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s32ss3" href="#st200_p5s32ss3">5.32.3</a></div><div class="st200_subsection_title">Example</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s32ss3pg1" href="#st200_p5s32ss3pg1">1</a></div><div class="st200_paragraph">
+        The following text:
+        <pre class="st200_verbatim example">&lt;term s:type="element"&gt;ELEMENT&lt;/term&gt;</pre>
+        Produces the following output in the context of this document:
+        <span class="st200_term element">ELEMENT</span>.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s33" href="#st200_p5s33">5.33</a></div><div class="st200_section_title">verbatim</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s33ss1" href="#st200_p5s33ss1">5.33.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s33ss1pg1" href="#st200_p5s33ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">verbatim</span>
+        element denotes a section of text in which whitespace
+        should be preserved exactly as it was written. It is
+        analogous to the XHTML <span class="st200_term element">pre</span>
+        element.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s33ss1pg2" href="#st200_p5s33ss1pg2">2</a></div><div class="st200_paragraph">
+        For best results, the contents of the
+        <span class="st200_term element">verbatim</span>
+        element should be contained within an XML
+        <span class="st200_term element">&lt;![CDATA[...]]&gt;</span>
+        element to prevent possible interference from the XML processor.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s33ss2" href="#st200_p5s33ss2">5.33.2</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s33ss2pg1" href="#st200_p5s33ss2pg1">1</a></div><div class="st200_paragraph">
+        <span class="st200_term element">verbatim</span>
+        elements are assigned the following CSS classes in addition to any
+        specified by the <span class="st200_term attribute">type</span> attribute:
+        <ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term class">st200_verbatim</span>
+          </li></ul>
+      </div></div></div></div></div><div class="st200_footnotes"><hr/><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_0" href="#st200_fn_0_ref">0</a>]</div><div class="st200_footnote_body">There are various combinations of DocBook elements that are
+          valid according to the schema but cannot realistically be used due to
+          the resulting XHTML output.</div></div><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_1" href="#st200_fn_1_ref">1</a>]</div><div class="st200_footnote_body">
+        <a class="st200_link_external" href="http://www.w3.org/TR/xhtml1-schema/">http://www.w3.org/TR/xhtml1-schema/</a>
+      </div></div><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_2" href="#st200_fn_2_ref">2</a>]</div><div class="st200_footnote_body">
+        <a class="st200_link_external" href="http://www.w3.org/Consortium/Legal/">http://www.w3.org/Consortium/Legal/</a>
+      </div></div><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_3" href="#st200_fn_3_ref">3</a>]</div><div class="st200_footnote_body">This footnote does not contain a footnote.</div></div><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_4" href="#st200_fn_4_ref">4</a>]</div><div class="st200_footnote_body">
+          This footnote also contains a footnote
+          <span class="st200_footnote_reference"><a id="st200_fn_3_ref" href="#st200_fn_3">[3]</a></span>.
+        </div></div><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_5" href="#st200_fn_5_ref">5</a>]</div><div class="st200_footnote_body">In the <span class="st200_term attribute">alt</span>
+        attribute of the resulting <span class="st200_term element">img</span>.</div></div></div></div></body></html>

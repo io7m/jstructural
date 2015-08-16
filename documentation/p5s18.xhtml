@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>io7m-jstructural 4.2.0 Documentation: 5.18. part-contents</title><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-layout.css"/><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-colour.css"/><link rel="stylesheet" type="text/css" href="documentation.css"/></head><body><div class="st200_body"><div class="brand">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://github.com/io7m/jstructural">io7m-jstructural</a> 4.2.0
+  </div>
+</div><div class="st200_navbar st200_navbar_top"><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_title_cell">5.17. part</td><td class="st200_navbar_up_title_cell">5. Element Reference</td><td class="st200_navbar_next_title_cell">5.19. part-title</td></tr><tr><td class="st200_navbar_prev_file_cell"><a href="p5s17.xhtml#st200_p5s17">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p5.xhtml#st200_p5">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p5s19.xhtml#st200_p5s19">Next</a></td></tr></table><hr class="st200_hr"/></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s18" href="#st200_p5s18">5.18</a></div><div class="st200_section_title">part-contents</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s18ss1" href="#st200_p5s18ss1">5.18.1</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s18ss1pg1" href="#st200_p5s18ss1pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term element">part-contents</span>
+        element specifies that a table of contents should
+        be generated for the given <a class="st200_link" href="p5s17.xhtml#st200_p5s17">part</a>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s18ss2" href="#st200_p5s18ss2">5.18.2</a></div><div class="st200_subsection_title">Processing</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s18ss2pg1" href="#st200_p5s18ss2pg1">1</a></div><div class="st200_paragraph">
+        The table of contents appears at the start of the
+        parent <a class="st200_link" href="p5s17.xhtml#st200_p5s17">part</a>
+        and contains references to all the children of that
+        element.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s18ss3" href="#st200_p5s18ss3">5.18.3</a></div><div class="st200_subsection_title">CSS</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s18ss3pg1" href="#st200_p5s18ss3pg1">1</a></div><div class="st200_paragraph">
+        In addition to any classes specified by the
+        <span class="st200_term attribute">type</span>
+        attribute, the main list structure is assigned the class
+        <span class="st200_term class">st200_part_contents</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s18ss3pg2" href="#st200_p5s18ss3pg2">2</a></div><div class="st200_paragraph">
+        The XHTML lists that are generated as children of
+        the lists generated for
+        <a class="st200_link" href="p5s3.xhtml#st200_p5s3">document-contents</a>
+        elements are assigned CSS as if they were generated
+        from <span class="st200_term element">part-contents</span>
+        elements. In order to correctly indent elements in CSS, it's
+        necessary to be able to distinguish
+        between lists that were generated as part of a
+        <span class="st200_term element">part-contents</span>
+        element, and lists that were generated as children of those 
+        generated as part of
+        a <a class="st200_link" href="p5s3.xhtml#st200_p5s3">document-contents</a>
+        element. In other words, it's desirable to be able to indent
+        the list differently if it is the "outermost" list.
+        Therefore, the main list structure is also assigned
+        the class <span class="st200_term class">st200_part_contents_outer</span>
+        if it is appearing in XHTML due to a
+        <span class="st200_term element">part-contents</span> element.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s18ss3pg3" href="#st200_p5s18ss3pg3">3</a></div><div class="st200_paragraph">
+        Each element of the list is assigned the class
+        <span class="st200_term class">st200_contents_item</span>
+        in addition to one of
+        <span class="st200_term class">st200_contents_item1</span>,
+        <span class="st200_term class">st200_contents_item2</span> or
+        <span class="st200_term class">st200_contents_item3</span>
+        depending on the depth of the item in the list. The root
+        <a class="st200_link" href="p5s17.xhtml#st200_p5s17">part</a>
+        element of the list is assigned the class
+        <span class="st200_term class">st200_contents_part</span> and all
+        <a class="st200_link" href="p5s20.xhtml#st200_p5s20">section</a> and
+        <a class="st200_link" href="p5s23.xhtml#st200_p5s23">subsection</a> elements
+        appearing in the list are assigned the classes
+        <span class="st200_term class">st200_contents_section</span>
+        and
+        <span class="st200_term class">st200_contents_subsection</span>,
+        respectively.
+      </div></div></div></div><div class="st200_navbar st200_navbar_bottom"><hr class="st200_hr"/><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_file_cell"><a href="p5s17.xhtml#st200_p5s17">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p5.xhtml#st200_p5">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p5s19.xhtml#st200_p5s19">Next</a></td></tr><tr><td class="st200_navbar_prev_title_cell">5.17. part</td><td class="st200_navbar_up_title_cell">5. Element Reference</td><td class="st200_navbar_next_title_cell">5.19. part-title</td></tr></table></div></div></body></html>
