@@ -269,9 +269,7 @@ import java.util.concurrent.atomic.AtomicInteger;
       content_r.add(ca);
     }
 
-    final SNonEmptyList<SAParagraphContent> in_content =
-      SNonEmptyList.newList(content_r);
-    return in_content;
+    return SNonEmptyList.newList(content_r);
   }
 
   private static SAFormalItem transformSectionFormalItem(
@@ -413,27 +411,25 @@ import java.util.concurrent.atomic.AtomicInteger;
             final SFormalItem formal)
             throws Exception
           {
-            final SAFormalItem pa = SAnnotator.transformSectionFormalItem(
+            return SAnnotator.transformSectionFormalItem(
               ids,
               formals,
               footnotes,
               number,
               formal,
               formal_no.getAndIncrement());
-            return pa;
           }
 
           @Override public SASubsectionContent visitParagraph(
             final SParagraph paragraph)
             throws Exception
           {
-            final SAParagraph pa = SAnnotator.transformSectionParagraph(
+            return SAnnotator.transformSectionParagraph(
               ids,
               footnotes,
               number,
               paragraph,
               paragraph_no.getAndIncrement());
-            return pa;
           }
         });
 
@@ -540,13 +536,12 @@ import java.util.concurrent.atomic.AtomicInteger;
             final SParagraph paragraph)
             throws Exception
           {
-            final SAParagraph pa = SAnnotator.transformSubsectionParagraph(
+            return SAnnotator.transformSubsectionParagraph(
               ids,
               footnotes,
               s_number,
               paragraph,
               paragraph_no.getAndIncrement());
-            return pa;
           }
         });
       results_r.add(ca);

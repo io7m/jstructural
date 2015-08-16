@@ -175,9 +175,7 @@ public final class SDocumentSerializer
     final SDocumentContents s)
   {
     NullCheck.notNull(s, "Document contents");
-    final Element e =
-      new Element("s:document-contents", SXML.XML_URI.toString());
-    return e;
+    return new Element("s:document-contents", SXML.XML_URI.toString());
   }
 
   /**
@@ -978,8 +976,7 @@ public final class SDocumentSerializer
   {
     NullCheck.notNull(s, "Contents");
 
-    final Element e = new Element("s:part-contents", SXML.XML_URI.toString());
-    return e;
+    return new Element("s:part-contents", SXML.XML_URI.toString());
   }
 
   /**
@@ -1046,9 +1043,7 @@ public final class SDocumentSerializer
     final SSectionContents s)
   {
     NullCheck.notNull(s, "Section contents");
-    final Element e =
-      new Element("s:section-contents", SXML.XML_URI.toString());
-    return e;
+    return new Element("s:section-contents", SXML.XML_URI.toString());
   }
 
   /**

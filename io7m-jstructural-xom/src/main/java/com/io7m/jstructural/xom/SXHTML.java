@@ -125,8 +125,7 @@ public final class SXHTML
 
   static Element body()
   {
-    final Element body = new Element("body", SXHTML.XHTML_URI.toString());
-    return body;
+    return new Element("body", SXHTML.XHTML_URI.toString());
   }
 
   static Element bodyContainer()
@@ -505,8 +504,7 @@ public final class SXHTML
     idb.append("_");
     idb.append(footnote.getNumber());
 
-    final String id = idb.toString();
-    return id;
+    return idb.toString();
   }
 
   static String getPartAnchorID(
