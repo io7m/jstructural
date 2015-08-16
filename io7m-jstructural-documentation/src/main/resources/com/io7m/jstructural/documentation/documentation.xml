@@ -33,10 +33,9 @@
       <s:paragraph>
         The <s:term s:type="package">jstructural</s:term>
         package implements a set of primitives for producing technical
-        documentation. The package provides
+        documentation. The package provides a
         <s:link-external s:target="http://relaxng.org/">RELAX-NG</s:link-external>
-        and <s:link-external s:target="http://www.w3.org/XML/Schema">XSD</s:link-external>
-        schemas describing the format of <s:term s:type="package">structural</s:term>
+        schema describing the format of <s:term s:type="package">structural</s:term>
         documents and a set of Java tools for producing XHTML 1.0 Strict output.
       </s:paragraph>
       <s:paragraph>
@@ -51,15 +50,14 @@
         footnotes, et cetera, without having to re-implement all of those
         features for each new language.
       </s:paragraph>
+      <s:paragraph>
+        The document you are currently reading was defined in the
+        <s:link-external s:target="documentation.xml">structural</s:link-external>
+        language.
+      </s:paragraph>
     </s:subsection>
     <s:subsection>
       <s:subsection-title>Portability</s:subsection-title>
-      <s:paragraph>
-        The canonical format for the <s:term s:type="package">structural</s:term>
-        schema is RELAX-NG, but an XSD schema (generated from the RELAX-NG
-        schema is also provided, for validation using tools that do not support
-        RELAX-NG).
-      </s:paragraph>
       <s:paragraph>
         The provided <s:term s:type="package">structural</s:term> to XHTML
         translator is written in pure Java and should be usable on any JVM
@@ -142,8 +140,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
     <s:formal-item s:kind="files">
       <s:formal-item-title>Schema files</s:formal-item-title>
       <s:list-unordered>
-        <s:list-item><s:term s:type="file">io7m-jstructural-tests/src/test/resources/com/io7m/jstructural/xhtml1-strict.xsd</s:term></s:list-item>
-        <s:list-item><s:term s:type="file">io7m-jstructural-tests/src/test/resources/com/io7m/jstructural/xml.xsd</s:term></s:list-item>
+        <s:list-item><s:term s:type="file">io7m-jstructural-tests/src/test/resources/com/io7m/jstructural/tests/xhtml1-strict.xsd</s:term></s:list-item>
+        <s:list-item><s:term s:type="file">io7m-jstructural-tests/src/test/resources/com/io7m/jstructural/tests/xml.xsd</s:term></s:list-item>
       </s:list-unordered>
     </s:formal-item>
     <s:paragraph>

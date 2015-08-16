@@ -16,40 +16,6 @@
 
 package com.io7m.jstructural.xom;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.SchemaFactory;
-
-import nu.xom.Attribute;
-import nu.xom.Builder;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Elements;
-import nu.xom.Node;
-import nu.xom.ParsingException;
-import nu.xom.Text;
-import nu.xom.ValidityException;
-import nu.xom.xinclude.BadParseAttributeException;
-import nu.xom.xinclude.InclusionLoopException;
-import nu.xom.xinclude.NoIncludeLocationException;
-import nu.xom.xinclude.XIncludeException;
-
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-
 import com.io7m.jlog.LogLevel;
 import com.io7m.jlog.LogUsableType;
 import com.io7m.jnull.NullCheck;
@@ -101,69 +67,62 @@ import com.io7m.jstructural.core.SXML;
 import com.io7m.jstructural.schema.SSchema;
 import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
+import nu.xom.Attribute;
+import nu.xom.Builder;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Elements;
+import nu.xom.Node;
+import nu.xom.ParsingException;
+import nu.xom.Text;
+import nu.xom.ValidityException;
+import nu.xom.xinclude.BadParseAttributeException;
+import nu.xom.xinclude.InclusionLoopException;
+import nu.xom.xinclude.NoIncludeLocationException;
+import nu.xom.xinclude.XIncludeException;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A document parser that uses XOM to process documents.
+ * <p>A document parser that uses XOM to process documents.</p>
+ *
+ * <p>Note: This is not a public API and is subject to change without
+ * warning.</p>
  */
 
 public final class SDocumentParser
 {
-  private static class TrivialErrorHandler implements ErrorHandler
+  private SDocumentParser()
   {
-    private @Nullable SAXParseException exception;
-    private final LogUsableType         log;
 
-    public TrivialErrorHandler(
-      final LogUsableType in_log)
-    {
-      this.log = in_log;
-    }
-
-    @Override public void error(
-      final @Nullable SAXParseException e)
-      throws SAXException
-    {
-      assert e != null;
-      this.log.error(e + ": " + e.getMessage());
-      this.exception = e;
-    }
-
-    @Override public void fatalError(
-      final @Nullable SAXParseException e)
-      throws SAXException
-    {
-      assert e != null;
-      this.log.critical(e + ": " + e.getMessage());
-      this.exception = e;
-    }
-
-    public @Nullable SAXParseException getException()
-    {
-      return this.exception;
-    }
-
-    @Override public void warning(
-      final @Nullable SAXParseException e)
-      throws SAXException
-    {
-      assert e != null;
-      this.log.warn(e + ": " + e.getMessage());
-      this.exception = e;
-    }
   }
 
   /**
-   * Attempt to parse a document from the given element. The element is
-   * assumed to have been validated with the {@code structural} schema.
+   * Attempt to parse a document from the given element. The element is assumed
+   * to have been validated with the {@code structural} schema.
    *
-   * @param log
-   *          A log handle
-   * @param e
-   *          The element
+   * @param log A log handle
+   * @param e   The element
+   *
    * @return A document
    *
-   * @throws URISyntaxException
-   *           If parsing a URI fails, internally
+   * @throws URISyntaxException If parsing a URI fails, internally
    */
 
   static SDocument document(
@@ -182,11 +141,7 @@ public final class SDocumentParser
     final Element esect = SDocumentParser.getElement(e, "section");
     if (esect != null) {
       return SDocumentParser.documentWithSections(
-        log,
-        e,
-        title,
-        style,
-        contents);
+        log, e, title, style, contents);
     }
     return SDocumentParser.documentWithParts(log, e, title, style, contents);
   }
@@ -237,10 +192,7 @@ public final class SDocumentParser
 
     final SNonEmptyList<SPart> content = SNonEmptyList.newList(elements);
     return SDocumentParser.documentWithPartsMake(
-      title,
-      style,
-      contents,
-      content);
+      title, style, contents, content);
   }
 
   private static SDocument documentWithPartsMake(
@@ -251,8 +203,7 @@ public final class SDocumentParser
   {
     if (contents) {
       if (style != null) {
-        return SDocumentWithParts
-          .documentStyleContents(title, style, content);
+        return SDocumentWithParts.documentStyleContents(title, style, content);
       }
       return SDocumentWithParts.documentContents(title, content);
     }
@@ -284,10 +235,7 @@ public final class SDocumentParser
 
     final SNonEmptyList<SSection> content = SNonEmptyList.newList(elements);
     return SDocumentParser.documentWithSectionsMake(
-      title,
-      style,
-      contents,
-      content);
+      title, style, contents, content);
   }
 
   private static SDocumentWithSections documentWithSectionsMake(
@@ -299,9 +247,7 @@ public final class SDocumentParser
     if (contents) {
       if (style != null) {
         return SDocumentWithSections.documentStyleContents(
-          title,
-          style,
-          content);
+          title, style, content);
       }
       return SDocumentWithSections.documentContents(title, content);
     }
@@ -384,11 +330,7 @@ public final class SDocumentParser
         continue;
       }
       return SDocumentParser.formalItemMake(
-        type,
-        kind,
-        id,
-        title,
-        SDocumentParser.formalItemContent(log, ec));
+        type, kind, id, title, SDocumentParser.formalItemContent(log, ec));
     }
 
     throw new UnreachableCodeException();
@@ -439,11 +381,7 @@ public final class SDocumentParser
     if (type != null) {
       if (id != null) {
         return SFormalItem.formalItemTypedWithID(
-          title,
-          kind,
-          type,
-          content,
-          id);
+          title, kind, type, content, id);
       }
       return SFormalItem.formalItemTyped(title, kind, type, content);
     }
@@ -466,50 +404,39 @@ public final class SDocumentParser
   /**
    * Parse a document from a validated stream.
    *
-   * @param uri
-   *          The base URI of the document
-   * @param stream
-   *          The stream
-   * @param log
-   *          A log handle
+   * @param uri    The base URI of the document
+   * @param stream The stream
+   * @param log    A log handle
+   *
    * @return A document
    *
-   * @throws SAXException
-   *           On XML parse errors
-   * @throws ParserConfigurationException
-   *           On parser configuration errors
-   * @throws ValidityException
-   *           On XML validation errors
-   * @throws ParsingException
-   *           On parser errors
-   * @throws IOException
-   *           On I/O errors
-   * @throws URISyntaxException
-   *           On failing to parse a URI
-   * @throws XIncludeException
-   *           If an xinclude fails
-   * @throws NoIncludeLocationException
-   *           If an xinclude fails
-   * @throws InclusionLoopException
-   *           If an xinclude fails
-   * @throws BadParseAttributeException
-   *           If an xinclude fails
+   * @throws SAXException                 On XML parse errors
+   * @throws ParserConfigurationException On parser configuration errors
+   * @throws ValidityException            On XML validation errors
+   * @throws ParsingException             On parser errors
+   * @throws IOException                  On I/O errors
+   * @throws URISyntaxException           On failing to parse a URI
+   * @throws XIncludeException            If an xinclude fails
+   * @throws NoIncludeLocationException   If an xinclude fails
+   * @throws InclusionLoopException       If an xinclude fails
+   * @throws BadParseAttributeException   If an xinclude fails
    */
 
   public static SDocument fromStream(
     final InputStream stream,
     final URI uri,
     final LogUsableType log)
-    throws ValidityException,
-      SAXException,
-      ParserConfigurationException,
-      ParsingException,
-      IOException,
-      URISyntaxException,
-      BadParseAttributeException,
-      InclusionLoopException,
-      NoIncludeLocationException,
-      XIncludeException
+    throws
+    ValidityException,
+    SAXException,
+    ParserConfigurationException,
+    ParsingException,
+    IOException,
+    URISyntaxException,
+    BadParseAttributeException,
+    InclusionLoopException,
+    NoIncludeLocationException,
+    XIncludeException
   {
     final LogUsableType lp = log.with("parser");
     final Document doc = SDocumentParser.fromStreamValidate(stream, uri, log);
@@ -525,47 +452,38 @@ public final class SDocumentParser
   /**
    * Parse and validate a document from the given stream.
    *
-   * @param stream
-   *          An input stream
-   * @param uri The document URI
-   * @param log
-   *          A log handle
+   * @param stream An input stream
+   * @param uri    The document URI
+   * @param log    A log handle
+   *
    * @return A parsed and validated document
    *
-   * @throws SAXException
-   *           On XML parse errors
-   * @throws ParserConfigurationException
-   *           On parser configuration errors
-   * @throws ValidityException
-   *           On XML validation errors
-   * @throws ParsingException
-   *           On parser errors
-   * @throws IOException
-   *           On I/O errors
-   * @throws XIncludeException
-   *           If an xinclude fails
-   * @throws NoIncludeLocationException
-   *           If an xinclude fails
-   * @throws InclusionLoopException
-   *           If an xinclude fails
-   * @throws BadParseAttributeException
-   *           If an xinclude fails
+   * @throws SAXException                 On XML parse errors
+   * @throws ParserConfigurationException On parser configuration errors
+   * @throws ValidityException            On XML validation errors
+   * @throws ParsingException             On parser errors
+   * @throws IOException                  On I/O errors
+   * @throws XIncludeException            If an xinclude fails
+   * @throws NoIncludeLocationException   If an xinclude fails
+   * @throws InclusionLoopException       If an xinclude fails
+   * @throws BadParseAttributeException   If an xinclude fails
    */
 
   static Document fromStreamValidate(
     final InputStream stream,
     final URI uri,
     final LogUsableType log)
-    throws SAXException,
+    throws
+    SAXException,
 
-      ParserConfigurationException,
-      ValidityException,
-      ParsingException,
-      IOException,
-      BadParseAttributeException,
-      InclusionLoopException,
-      NoIncludeLocationException,
-      XIncludeException
+    ParserConfigurationException,
+    ValidityException,
+    ParsingException,
+    IOException,
+    BadParseAttributeException,
+    InclusionLoopException,
+    NoIncludeLocationException,
+    XIncludeException
   {
     NullCheck.notNull(stream, "Stream");
     NullCheck.notNull(log, "Log");
@@ -660,10 +578,22 @@ public final class SDocumentParser
     return SID.newID(eid.getValue());
   }
 
-  static SImage image(
+  /**
+   * Parse an image element.
+   *
+   * @param ec The raw element
+   *
+   * @return An image element
+   *
+   * @throws URISyntaxException On malformed URIs
+   */
+
+  public static SImage image(
     final Element ec)
     throws URISyntaxException
   {
+    NullCheck.notNull(ec);
+
     final String type = SDocumentParser.typeAttribute(ec);
     final URI source = SDocumentParser.sourceAttribute(ec);
     final Integer width = SDocumentParser.widthAttribute(ec);
@@ -674,11 +604,7 @@ public final class SDocumentParser
       if (width != null) {
         if (height != null) {
           return SImage.imageTypedWidthHeight(
-            source,
-            type,
-            width.intValue(),
-            height.intValue(),
-            text);
+            source, type, width.intValue(), height.intValue(), text);
         }
         return SImage.imageTypedWidth(source, type, width.intValue(), text);
       }
@@ -691,10 +617,7 @@ public final class SDocumentParser
     if (width != null) {
       if (height != null) {
         return SImage.imageWidthHeight(
-          source,
-          width.intValue(),
-          height.intValue(),
-          text);
+          source, width.intValue(), height.intValue(), text);
       }
       return SImage.imageWidth(source, width.intValue(), text);
     }
@@ -716,13 +639,24 @@ public final class SDocumentParser
     return r;
   }
 
-  static SLink link(
+  /**
+   * Parse a link element.
+   *
+   * @param ec The raw element
+   *
+   * @return A link element
+   *
+   * @throws URISyntaxException On malformed URIs
+   */
+
+  public static SLink link(
     final Element ec)
     throws URISyntaxException
   {
+    NullCheck.notNull(ec);
+
     final String target = SDocumentParser.targetAttribute(ec);
-    final SNonEmptyList<SLinkContent> content =
-      SDocumentParser.linkContent(ec);
+    final SNonEmptyList<SLinkContent> content = SDocumentParser.linkContent(ec);
     return SLink.link(target, content);
   }
 
@@ -753,13 +687,22 @@ public final class SDocumentParser
     return SNonEmptyList.newList(elements);
   }
 
-  static SLinkExternal linkExternal(
+  /**
+   * Parse an external link.
+   *
+   * @param ec The raw element
+   *
+   * @return An external link
+   *
+   * @throws URISyntaxException On malformed URIs
+   */
+
+  public static SLinkExternal linkExternal(
     final Element ec)
     throws URISyntaxException
   {
     final URI target = new URI(SDocumentParser.targetAttribute(ec));
-    final SNonEmptyList<SLinkContent> content =
-      SDocumentParser.linkContent(ec);
+    final SNonEmptyList<SLinkContent> content = SDocumentParser.linkContent(ec);
     return SLinkExternal.link(target, content);
   }
 
@@ -872,7 +815,18 @@ public final class SDocumentParser
     return SListUnordered.list(content);
   }
 
-  static SParagraph paragraph(
+  /**
+   * Parse a paragraph element.
+   *
+   * @param log A log handle
+   * @param e   The raw element
+   *
+   * @return A paragraph element
+   *
+   * @throws URISyntaxException On malformed URIs
+   */
+
+  public static SParagraph paragraph(
     final LogUsableType log,
     final Element e)
     throws URISyntaxException
@@ -882,8 +836,7 @@ public final class SDocumentParser
     final SID id = SDocumentParser.idAttribute(e);
     final String type = SDocumentParser.typeAttribute(e);
 
-    final List<SParagraphContent> elements =
-      new ArrayList<SParagraphContent>();
+    final List<SParagraphContent> elements = new ArrayList<SParagraphContent>();
 
     for (int index = 0; index < e.getChildCount(); ++index) {
       final Node child = e.getChild(index);
@@ -950,9 +903,11 @@ public final class SDocumentParser
     final SNonEmptyList<SParagraphContent> content)
   {
     if (log.wouldLog(LogLevel.LOG_DEBUG)) {
-      log.debug(String.format("paragraph: (id: %s) (type: %s)", id != null
-        ? id.getActual()
-        : id, type));
+      log.debug(
+        String.format(
+          "paragraph: (id: %s) (type: %s)",
+          id != null ? id.getActual() : id,
+          type));
     }
 
     if (id != null) {
@@ -1018,12 +973,13 @@ public final class SDocumentParser
     final SNonEmptyList<SSection> sections)
   {
     if (log.wouldLog(LogLevel.LOG_DEBUG)) {
-      log.debug(String.format(
-        "part: (title: %s) (id: %s) (type: %s) (%s)",
-        title.getActual(),
-        id != null ? id.getActual() : id,
-        type,
-        contents ? "contents" : "no contents"));
+      log.debug(
+        String.format(
+          "part: (title: %s) (id: %s) (type: %s) (%s)",
+          title.getActual(),
+          id != null ? id.getActual() : id,
+          type,
+          contents ? "contents" : "no contents"));
     }
 
     if (contents) {
@@ -1078,20 +1034,10 @@ public final class SDocumentParser
     final Element esect = SDocumentParser.getElement(section, "subsection");
     if (esect != null) {
       return SDocumentParser.sectionWithSubsections(
-        log,
-        section,
-        title,
-        id,
-        type,
-        contents);
+        log, section, title, id, type, contents);
     }
     return SDocumentParser.sectionWithParagraphs(
-      log,
-      section,
-      title,
-      id,
-      type,
-      contents);
+      log, section, title, id, type, contents);
   }
 
   private static boolean sectionContentsRoot(
@@ -1140,12 +1086,7 @@ public final class SDocumentParser
       SNonEmptyList.newList(elements);
 
     return SDocumentParser.sectionWithParagraphsMake(
-      log,
-      title,
-      contents,
-      id,
-      type,
-      content);
+      log, title, contents, id, type, content);
   }
 
   private static SSectionWithParagraphs sectionWithParagraphsMake(
@@ -1157,34 +1098,28 @@ public final class SDocumentParser
     final SNonEmptyList<SSubsectionContent> content)
   {
     if (log.wouldLog(LogLevel.LOG_DEBUG)) {
-      log.debug(String.format(
-        "section: (paragraphs) (title: %s) (id: %s) (type: %s) (%s)",
-        title.getActual(),
-        id != null ? id.getActual() : id,
-        type,
-        contents ? "contents" : "no contents"));
+      log.debug(
+        String.format(
+          "section: (paragraphs) (title: %s) (id: %s) (type: %s) (%s)",
+          title.getActual(),
+          id != null ? id.getActual() : id,
+          type,
+          contents ? "contents" : "no contents"));
     }
 
     if (contents) {
       if (id != null) {
         if (type != null) {
           return SSectionWithParagraphs.sectionWithContentsTypedID(
-            type,
-            id,
-            title,
-            content);
+            type, id, title, content);
         }
         return SSectionWithParagraphs.sectionWithContentsID(
-          id,
-          title,
-          content);
+          id, title, content);
       }
 
       if (type != null) {
         return SSectionWithParagraphs.sectionWithContentsTyped(
-          type,
-          title,
-          content);
+          type, title, content);
       }
 
       return SSectionWithParagraphs.sectionWithContents(title, content);
@@ -1192,8 +1127,7 @@ public final class SDocumentParser
 
     if (id != null) {
       if (type != null) {
-        return SSectionWithParagraphs
-          .sectionTypedID(type, id, title, content);
+        return SSectionWithParagraphs.sectionTypedID(type, id, title, content);
       }
       return SSectionWithParagraphs.sectionID(id, title, content);
     }
@@ -1233,16 +1167,10 @@ public final class SDocumentParser
       throw new UnreachableCodeException();
     }
 
-    final SNonEmptyList<SSubsection> content =
-      SNonEmptyList.newList(elements);
+    final SNonEmptyList<SSubsection> content = SNonEmptyList.newList(elements);
 
     return SDocumentParser.sectionWithSubsectionsMake(
-      log,
-      title,
-      contents,
-      id,
-      type,
-      content);
+      log, title, contents, id, type, content);
   }
 
   private static SSectionWithSubsections sectionWithSubsectionsMake(
@@ -1254,34 +1182,28 @@ public final class SDocumentParser
     final SNonEmptyList<SSubsection> content)
   {
     if (log.wouldLog(LogLevel.LOG_DEBUG)) {
-      log.debug(String.format(
-        "section: (subsections) (title: %s) (id: %s) (type: %s) (%s)",
-        title.getActual(),
-        id != null ? id.getActual() : id,
-        type,
-        contents ? "contents" : "no contents"));
+      log.debug(
+        String.format(
+          "section: (subsections) (title: %s) (id: %s) (type: %s) (%s)",
+          title.getActual(),
+          id != null ? id.getActual() : id,
+          type,
+          contents ? "contents" : "no contents"));
     }
 
     if (contents) {
       if (id != null) {
         if (type != null) {
           return SSectionWithSubsections.sectionWithContentsTypedID(
-            type,
-            id,
-            title,
-            content);
+            type, id, title, content);
         }
         return SSectionWithSubsections.sectionWithContentsID(
-          id,
-          title,
-          content);
+          id, title, content);
       }
 
       if (type != null) {
         return SSectionWithSubsections.sectionWithContentsTyped(
-          type,
-          title,
-          content);
+          type, title, content);
       }
 
       return SSectionWithSubsections.sectionWithContents(title, content);
@@ -1290,10 +1212,7 @@ public final class SDocumentParser
     if (id != null) {
       if (type != null) {
         return SSectionWithSubsections.sectionTypedID(
-          type,
-          id,
-          title,
-          content);
+          type, id, title, content);
       }
       return SSectionWithSubsections.sectionID(id, title, content);
     }
@@ -1367,11 +1286,12 @@ public final class SDocumentParser
     final SNonEmptyList<SSubsectionContent> content)
   {
     if (log.wouldLog(LogLevel.LOG_DEBUG)) {
-      log.debug(String.format(
-        "subsection: (title: %s) (id: %s) (type: %s)",
-        title.getActual(),
-        id != null ? id.getActual() : id,
-        type));
+      log.debug(
+        String.format(
+          "subsection: (title: %s) (id: %s) (type: %s)",
+          title.getActual(),
+          id != null ? id.getActual() : id,
+          type));
     }
 
     if (id != null) {
@@ -1434,8 +1354,7 @@ public final class SDocumentParser
     final Element e)
     throws URISyntaxException
   {
-    final List<STableCellContent> content =
-      new ArrayList<STableCellContent>();
+    final List<STableCellContent> content = new ArrayList<STableCellContent>();
 
     for (int index = 0; index < e.getChildCount(); ++index) {
       final Node n = e.getChild(index);
@@ -1536,9 +1455,19 @@ public final class SDocumentParser
     return a.getValue();
   }
 
-  static STerm term(
+  /**
+   * Parse a term element.
+   *
+   * @param ec The raw element
+   *
+   * @return A term element
+   */
+
+  public static STerm term(
     final Element ec)
   {
+    NullCheck.notNull(ec);
+
     final String type = SDocumentParser.typeAttribute(ec);
     final SText text = SText.text(ec.getValue());
     if (type != null) {
@@ -1557,9 +1486,19 @@ public final class SDocumentParser
     return et.getValue();
   }
 
-  static SVerbatim verbatim(
+  /**
+   * Parse a verbatim element.
+   *
+   * @param ec The raw element
+   *
+   * @return A verbatim element
+   */
+
+  public static SVerbatim verbatim(
     final Element ec)
   {
+    NullCheck.notNull(ec);
+
     final String type = SDocumentParser.typeAttribute(ec);
     final String text = ec.getValue();
     if (type != null) {
@@ -1578,8 +1517,47 @@ public final class SDocumentParser
     return Integer.valueOf(a.getValue());
   }
 
-  private SDocumentParser()
+  private static class TrivialErrorHandler implements ErrorHandler
   {
+    private final     LogUsableType     log;
+    private @Nullable SAXParseException exception;
 
+    public TrivialErrorHandler(
+      final LogUsableType in_log)
+    {
+      this.log = in_log;
+    }
+
+    @Override public void error(
+      final @Nullable SAXParseException e)
+      throws SAXException
+    {
+      assert e != null;
+      this.log.error(e + ": " + e.getMessage());
+      this.exception = e;
+    }
+
+    @Override public void fatalError(
+      final @Nullable SAXParseException e)
+      throws SAXException
+    {
+      assert e != null;
+      this.log.critical(e + ": " + e.getMessage());
+      this.exception = e;
+    }
+
+    public @Nullable SAXParseException getException()
+    {
+      return this.exception;
+    }
+
+    @Override public void warning(
+      final @Nullable SAXParseException e)
+      throws SAXException
+    {
+      assert e != null;
+      this.log.warn(e + ": " + e.getMessage());
+      this.exception = e;
+    }
   }
 }

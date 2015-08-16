@@ -16,19 +16,6 @@
 
 package com.io7m.jstructural.xom;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-
-import nu.xom.Attribute;
-import nu.xom.DocType;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Node;
-import nu.xom.Text;
-
 import com.io7m.jfunctional.FunctionType;
 import com.io7m.jfunctional.Option;
 import com.io7m.jfunctional.OptionType;
@@ -80,6 +67,18 @@ import com.io7m.jstructural.core.SDocumentStyle;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.jstructural.core.SResources;
 import com.io7m.junreachable.UnreachableCodeException;
+import nu.xom.Attribute;
+import nu.xom.DocType;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Node;
+import nu.xom.Text;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
 
 /**
  * XHTML utility functions.
@@ -96,7 +95,12 @@ public final class SXHTML
   static final String             PART_CODE;
   static final String             SECTION_CODE;
   static final String             SUBSECTION_CODE;
-  static final URI                XHTML_URI;
+
+  /**
+   * The XML namespace URI for XHTML.
+   */
+
+  public static final URI XHTML_URI;
 
   static {
     try {
@@ -168,15 +172,17 @@ public final class SXHTML
       }
     }
 
-    type.map(new FunctionType<String, Unit>() {
-      @Override public Unit call(
-        final String x)
+    type.map(
+      new FunctionType<String, Unit>()
       {
-        cs.append(" ");
-        cs.append(x);
-        return Unit.unit();
-      }
-    });
+        @Override public Unit call(
+          final String x)
+        {
+          cs.append(" ");
+          cs.append(x);
+          return Unit.unit();
+        }
+      });
 
     final Element e = new Element(name, SXHTML.XHTML_URI.toString());
     e.addAttribute(new Attribute("class", null, cs.toString()));
@@ -241,30 +247,32 @@ public final class SXHTML
     final SAFootnoteContent c)
     throws Exception
   {
-    return c.footnoteContentAccept(new SAFootnoteContentVisitor<Node>() {
-      @Override public Node visitFootnote(
-        final SAFootnote footnote)
-        throws Exception
+    return c.footnoteContentAccept(
+      new SAFootnoteContentVisitor<Node>()
       {
-        return SXHTML.footnoteReference(footnote);
-      }
+        @Override public Node visitFootnote(
+          final SAFootnote footnote)
+          throws Exception
+        {
+          return SXHTML.footnoteReference(footnote);
+        }
 
-      @Override public Node visitImage(
-        final SAImage image)
-        throws Exception
-      {
-        return SXHTML.image(image);
-      }
+        @Override public Node visitImage(
+          final SAImage image)
+          throws Exception
+        {
+          return SXHTML.image(image);
+        }
 
-      @Override public Node visitLink(
-        final SALink link)
-        throws Exception
-      {
-        return SXHTML.link(link_provider, link);
-      }
+        @Override public Node visitLink(
+          final SALink link)
+          throws Exception
+        {
+          return SXHTML.link(link_provider, link);
+        }
 
-      @Override public Node visitLinkExternal(
-        final SALinkExternal link)
+        @Override public Node visitLinkExternal(
+          final SALinkExternal link)
         throws Exception
       {
         return SXHTML.linkExternal(link);
