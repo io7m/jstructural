@@ -8,6 +8,11 @@
     <c:item>
       <c:date>2015-08-16</c:date>
       <c:type-code-new/>
+      <c:summary>Add JCIP @Immutable annotations.</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2015-08-16</c:date>
+      <c:type-code-new/>
       <c:summary>Migrate to GitHub.</c:summary>
     </c:item>
   </c:release>
