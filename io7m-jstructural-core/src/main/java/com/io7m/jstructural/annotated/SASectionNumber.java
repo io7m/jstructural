@@ -16,23 +16,23 @@
 
 package com.io7m.jstructural.annotated;
 
+import net.jcip.annotations.Immutable;
+
 /**
  * An abstract section number.
  */
 
-public abstract class SASectionNumber implements SASegmentNumber
+@Immutable public abstract class SASectionNumber implements SASegmentNumber
 {
   /**
    * Accept a section number visitor.
-   * 
-   * @param <T>
-   *          The type of values returned by the visitor
-   * @param v
-   *          The visitor
+   *
+   * @param <T> The type of values returned by the visitor
+   * @param v   The visitor
+   *
    * @return The value returned by the visitor
-   * 
-   * @throws Exception
-   *           If the visitor raises an {@link Exception}
+   *
+   * @throws Exception If the visitor raises an {@link Exception}
    */
 
   public abstract <T> T sectionNumberAccept(
@@ -41,7 +41,7 @@ public abstract class SASectionNumber implements SASegmentNumber
 
   /**
    * @return A human-readable string representing the section number (such as
-   *         "1.2")
+   * "1.2")
    */
 
   public abstract String sectionNumberFormat();

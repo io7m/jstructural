@@ -19,12 +19,14 @@ package com.io7m.jstructural.annotated;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A table.
  */
 
-public final class SATable implements SAFormalItemContent, SAParagraphContent
+@Immutable public final class SATable
+  implements SAFormalItemContent, SAParagraphContent
 {
   private final SATableBody             body;
   private final OptionType<SATableHead> header;
@@ -54,8 +56,8 @@ public final class SATable implements SAFormalItemContent, SAParagraphContent
     }
     final SATable other = (SATable) obj;
     return this.body.equals(other.body)
-      && this.header.equals(other.header)
-      && this.summary.equals(other.summary);
+           && this.header.equals(other.header)
+           && this.summary.equals(other.summary);
   }
 
   @Override public <A> A formalItemContentAccept(

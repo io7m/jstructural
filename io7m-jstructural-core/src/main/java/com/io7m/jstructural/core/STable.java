@@ -20,12 +20,13 @@ import com.io7m.jfunctional.Option;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A table.
  */
 
-public final class STable implements SFormalItemContent, SParagraphContent
+@Immutable public final class STable implements SFormalItemContent, SParagraphContent
 {
   /**
    * Construct a new table with the given summary and body.

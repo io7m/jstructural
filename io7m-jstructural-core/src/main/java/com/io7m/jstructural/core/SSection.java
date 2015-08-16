@@ -19,12 +19,13 @@ package com.io7m.jstructural.core;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * An abstract section.
  */
 
-public abstract class SSection
+@Immutable public abstract class SSection
 {
   private final OptionType<SSectionContents> contents;
   private final OptionType<SID>              id;

@@ -18,18 +18,27 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A document title.
  */
 
-public final class SADocumentTitle
+@Immutable public final class SADocumentTitle
 {
+  private final String actual;
+
+  private SADocumentTitle(
+    final String in_actual)
+  {
+    this.actual = NullCheck.notNull(in_actual, "Actual");
+  }
+
   /**
    * Construct a document title.
-   * 
-   * @param actual
-   *          The text
+   *
+   * @param actual The text
+   *
    * @return A new document title
    */
 
@@ -37,14 +46,6 @@ public final class SADocumentTitle
     final String actual)
   {
     return new SADocumentTitle(actual);
-  }
-
-  private final String actual;
-
-  private SADocumentTitle(
-    final String in_actual)
-  {
-    this.actual = NullCheck.notNull(in_actual, "Actual");
   }
 
   @Override public boolean equals(

@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * Paragraph content visitor.
- * 
- * @param <A>
- *          The type of values returned by the visitor
+ *
+ * @param <A> The type of values returned by the visitor
  */
 
 public interface SAParagraphContentVisitor<A>
 {
   /**
    * Visit a footnote element.
-   * 
-   * @param footnote
-   *          The footnote element
+   *
+   * @param footnote The footnote element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitFootnote(
@@ -42,13 +40,12 @@ public interface SAParagraphContentVisitor<A>
 
   /**
    * Visit a formal item list element.
-   * 
-   * @param list
-   *          The formal item list element
+   *
+   * @param list The formal item list element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitFormalItemList(
@@ -57,13 +54,12 @@ public interface SAParagraphContentVisitor<A>
 
   /**
    * Visit an image element.
-   * 
-   * @param image
-   *          The image element
+   *
+   * @param image The image element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitImage(
@@ -72,13 +68,12 @@ public interface SAParagraphContentVisitor<A>
 
   /**
    * Visit a link element.
-   * 
-   * @param link
-   *          The link element
+   *
+   * @param link The link element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitLink(
@@ -87,13 +82,12 @@ public interface SAParagraphContentVisitor<A>
 
   /**
    * Visit a link element.
-   * 
-   * @param link
-   *          The link element
+   *
+   * @param link The link element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitLinkExternal(
@@ -102,13 +96,12 @@ public interface SAParagraphContentVisitor<A>
 
   /**
    * Visit an ordered list element.
-   * 
-   * @param list
-   *          The list element
+   *
+   * @param list The list element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitListOrdered(
@@ -117,13 +110,12 @@ public interface SAParagraphContentVisitor<A>
 
   /**
    * Visit an unordered list element.
-   * 
-   * @param list
-   *          The list element
+   *
+   * @param list The list element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitListUnordered(
@@ -132,13 +124,12 @@ public interface SAParagraphContentVisitor<A>
 
   /**
    * Visit a table element.
-   * 
-   * @param table
-   *          The table element
+   *
+   * @param table The table element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitTable(
@@ -147,13 +138,12 @@ public interface SAParagraphContentVisitor<A>
 
   /**
    * Visit a term element.
-   * 
-   * @param term
-   *          The term element
+   *
+   * @param term The term element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitTerm(
@@ -162,13 +152,12 @@ public interface SAParagraphContentVisitor<A>
 
   /**
    * Visit a text element.
-   * 
-   * @param text
-   *          The text element
+   *
+   * @param text The text element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitText(
@@ -177,13 +166,12 @@ public interface SAParagraphContentVisitor<A>
 
   /**
    * Visit a verbatim element.
-   * 
-   * @param text
-   *          The verbatim element
+   *
+   * @param text The verbatim element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitVerbatim(

@@ -16,18 +16,19 @@
 
 package com.io7m.jstructural.annotated;
 
-import java.util.List;
-
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SSectionContents;
+import net.jcip.annotations.Immutable;
+
+import java.util.List;
 
 /**
  * An abstract section.
  */
 
-public abstract class SASection implements SAIDTargetContent
+@Immutable public abstract class SASection implements SAIDTargetContent
 {
   private final OptionType<SSectionContents> contents;
   private final List<SAFootnote>             footnotes;
@@ -66,10 +67,10 @@ public abstract class SASection implements SAIDTargetContent
     }
     final SASection other = (SASection) obj;
     return this.contents.equals(other.contents)
-      && this.number.equals(other.number)
-      && this.id.equals(other.id)
-      && this.title.equals(other.title)
-      && this.type.equals(other.type);
+           && this.number.equals(other.number)
+           && this.id.equals(other.id)
+           && this.title.equals(other.title)
+           && this.type.equals(other.type);
   }
 
   /**
@@ -140,15 +141,13 @@ public abstract class SASection implements SAIDTargetContent
 
   /**
    * Accept a section visitor.
-   * 
-   * @param v
-   *          The visitor
+   *
+   * @param v   The visitor
+   * @param <A> The type of values returned by the visitor
+   *
    * @return The value returned by the visitor
-   * 
-   * @throws Exception
-   *           If the visitor raises an {@link Exception}
-   * @param <A>
-   *          The type of values returned by the visitor
+   *
+   * @throws Exception If the visitor raises an {@link Exception}
    */
 
   public abstract <A> A sectionAccept(

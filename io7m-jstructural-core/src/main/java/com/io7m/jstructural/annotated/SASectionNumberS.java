@@ -19,12 +19,13 @@ package com.io7m.jstructural.annotated;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
 import com.io7m.jranges.Ranges;
+import net.jcip.annotations.Immutable;
 
 /**
  * A section number with no other components.
  */
 
-public final class SASectionNumberS extends SASectionNumber
+@Immutable public final class SASectionNumberS extends SASectionNumber
 {
   private final int section;
 

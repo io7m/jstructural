@@ -31,8 +31,8 @@ public interface SASegmentsReadable
   SASegmentNumber segmentGetFirst();
 
   /**
-   * @param n
-   *          The current segment
+   * @param n The current segment
+   *
    * @return The number of the next segment (if any)
    */
 
@@ -40,8 +40,8 @@ public interface SASegmentsReadable
     final SASegmentNumber n);
 
   /**
-   * @param n
-   *          The current segment
+   * @param n The current segment
+   *
    * @return The number of the previous segment (if any)
    */
 
@@ -49,8 +49,8 @@ public interface SASegmentsReadable
     final SASegmentNumber n);
 
   /**
-   * @param n
-   *          The current segment
+   * @param n The current segment
+   *
    * @return The number of the parent segment (if any)
    */
 

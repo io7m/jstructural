@@ -20,6 +20,7 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
 import com.io7m.jranges.Ranges;
+import net.jcip.annotations.Immutable;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -31,7 +32,7 @@ import java.util.List;
  * @param <T> The type of elements
  */
 
-public final class SNonEmptyList<T>
+@Immutable public final class SNonEmptyList<T>
 {
   private final List<T> elements;
 

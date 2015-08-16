@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.io7m.jfunctional.Option;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
@@ -28,33 +24,31 @@ import com.io7m.jstructural.core.SDocumentContents;
 import com.io7m.jstructural.core.SDocumentStyle;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.junreachable.UnreachableCodeException;
+import net.jcip.annotations.Immutable;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A document with sections.
  */
 
-public final class SADocumentWithSections extends SADocument
+@Immutable public final class SADocumentWithSections extends SADocument
 {
   private final Map<SASectionNumber, SASection> numbered_sections;
   private final SNonEmptyList<SASection>        sections;
 
   /**
    * Construct a new document with sections.
-   * 
-   * @param in_ids
-   *          The set of mappings from IDs to elements
-   * @param in_title
-   *          The title
-   * @param in_contents
-   *          Whether or not the document has a table of contents
-   * @param in_style
-   *          The style
-   * @param in_content
-   *          The list of sections
-   * @param in_footnotes
-   *          The list of footnotes
-   * @param in_formals
-   *          The formal items
+   *
+   * @param in_ids       The set of mappings from IDs to elements
+   * @param in_title     The title
+   * @param in_contents  Whether or not the document has a table of contents
+   * @param in_style     The style
+   * @param in_content   The list of sections
+   * @param in_footnotes The list of footnotes
+   * @param in_formals   The formal items
    */
 
   public SADocumentWithSections(
@@ -142,8 +136,9 @@ public final class SADocumentWithSections extends SADocument
     try {
       final List<SASection> section_list = this.sections.getElements();
 
-      return n
-        .segmentNumberAccept(new SASegmentNumberVisitor<OptionType<SASegmentNumber>>() {
+      return n.segmentNumberAccept(
+        new SASegmentNumberVisitor<OptionType<SASegmentNumber>>()
+        {
           @Override public OptionType<SASegmentNumber> visitPartNumber(
             final SAPartNumber pn)
             throws Exception
@@ -155,13 +150,14 @@ public final class SADocumentWithSections extends SADocument
             final SASectionNumber pn)
             throws Exception
           {
-            return pn
-              .sectionNumberAccept(new SASectionNumberVisitor<OptionType<SASegmentNumber>>() {
-                @Override public
-                  OptionType<SASegmentNumber>
-                  visitSectionNumberWithoutPart(
-                    final SASectionNumberS p)
-                    throws Exception
+            return pn.sectionNumberAccept(
+              new SASectionNumberVisitor<OptionType<SASegmentNumber>>()
+              {
+                @Override
+                public OptionType<SASegmentNumber>
+                visitSectionNumberWithoutPart(
+                  final SASectionNumberS p)
+                  throws Exception
                 {
                   if (p.getSection() >= section_list.size()) {
                     return Option.none();
@@ -172,11 +168,10 @@ public final class SADocumentWithSections extends SADocument
                   return Option.some((SASegmentNumber) next);
                 }
 
-                @Override public
-                  OptionType<SASegmentNumber>
-                  visitSectionNumberWithPart(
-                    final SASectionNumberPS p)
-                    throws Exception
+                @Override
+                public OptionType<SASegmentNumber> visitSectionNumberWithPart(
+                  final SASectionNumberPS p)
+                  throws Exception
                 {
                   throw new UnreachableCodeException();
                 }
@@ -192,8 +187,9 @@ public final class SADocumentWithSections extends SADocument
     final SASegmentNumber n)
   {
     try {
-      return n
-        .segmentNumberAccept(new SASegmentNumberVisitor<OptionType<SASegmentNumber>>() {
+      return n.segmentNumberAccept(
+        new SASegmentNumberVisitor<OptionType<SASegmentNumber>>()
+        {
           @Override public OptionType<SASegmentNumber> visitPartNumber(
             final SAPartNumber pn)
             throws Exception
@@ -205,13 +201,14 @@ public final class SADocumentWithSections extends SADocument
             final SASectionNumber pn)
             throws Exception
           {
-            return pn
-              .sectionNumberAccept(new SASectionNumberVisitor<OptionType<SASegmentNumber>>() {
-                @Override public
-                  OptionType<SASegmentNumber>
-                  visitSectionNumberWithoutPart(
-                    final SASectionNumberS p)
-                    throws Exception
+            return pn.sectionNumberAccept(
+              new SASectionNumberVisitor<OptionType<SASegmentNumber>>()
+              {
+                @Override
+                public OptionType<SASegmentNumber>
+                visitSectionNumberWithoutPart(
+                  final SASectionNumberS p)
+                  throws Exception
                 {
                   if (p.getSection() == 1) {
                     return Option.none();
@@ -223,11 +220,10 @@ public final class SADocumentWithSections extends SADocument
 
                 }
 
-                @Override public
-                  OptionType<SASegmentNumber>
-                  visitSectionNumberWithPart(
-                    final SASectionNumberPS p)
-                    throws Exception
+                @Override
+                public OptionType<SASegmentNumber> visitSectionNumberWithPart(
+                  final SASectionNumberPS p)
+                  throws Exception
                 {
                   throw new UnreachableCodeException();
                 }

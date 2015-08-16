@@ -24,11 +24,9 @@ public interface SAFormalItemsByKindWritable
 {
   /**
    * Remember that the given formal item is of the given kind.
-   * 
-   * @param kind
-   *          The kind
-   * @param item
-   *          The formal item
+   *
+   * @param kind The kind
+   * @param item The formal item
    */
 
   void put(

@@ -18,13 +18,13 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A text element.
  */
 
-public final class SAText implements
-  SAParagraphContent,
+@Immutable public final class SAText implements SAParagraphContent,
   SALinkContent,
   SAListItemContent,
   SAFootnoteContent,
@@ -34,9 +34,8 @@ public final class SAText implements
 
   /**
    * Construct text.
-   * 
-   * @param in_text
-   *          The text
+   *
+   * @param in_text The text
    */
 
   public SAText(

@@ -16,11 +16,13 @@
 
 package com.io7m.jstructural.core;
 
+import net.jcip.annotations.Immutable;
+
 /**
  * Section contents element.
  */
 
-public final class SSectionContents
+@Immutable public final class SSectionContents
 {
   private static final SSectionContents INSTANCE;
 

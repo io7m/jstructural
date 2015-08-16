@@ -16,21 +16,22 @@
 
 package com.io7m.jstructural.annotated;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.io7m.jfunctional.Option;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.jstructural.core.SPartContents;
+import net.jcip.annotations.Immutable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A document part.
  */
 
-public final class SAPart implements SAIDTargetContent
+@Immutable public final class SAPart implements SAIDTargetContent
 {
   private final OptionType<SPartContents>       contents;
   private final OptionType<SAID>                id;
@@ -42,19 +43,13 @@ public final class SAPart implements SAIDTargetContent
 
   /**
    * Construct a new part.
-   * 
-   * @param in_number
-   *          The part number
-   * @param in_type
-   *          The type attribute
-   * @param in_id
-   *          The part ID
-   * @param in_title
-   *          The part title
-   * @param in_contents
-   *          The table of contents
-   * @param in_sections
-   *          The sections
+   *
+   * @param in_number   The part number
+   * @param in_type     The type attribute
+   * @param in_id       The part ID
+   * @param in_title    The part title
+   * @param in_contents The table of contents
+   * @param in_sections The sections
    */
 
   public SAPart(
@@ -93,11 +88,11 @@ public final class SAPart implements SAIDTargetContent
     }
     final SAPart other = (SAPart) obj;
     return this.number.equals(other.number)
-      && this.contents.equals(other.contents)
-      && this.id.equals(other.id)
-      && this.sections.equals(other.sections)
-      && this.title.equals(other.title)
-      && this.type.equals(other.type);
+           && this.contents.equals(other.contents)
+           && this.id.equals(other.id)
+           && this.sections.equals(other.sections)
+           && this.title.equals(other.title)
+           && this.type.equals(other.type);
   }
 
   /**
@@ -129,9 +124,9 @@ public final class SAPart implements SAIDTargetContent
 
   /**
    * The section with the given number.
-   * 
-   * @param n
-   *          The number
+   *
+   * @param n The number
+   *
    * @return The section, if any
    */
 

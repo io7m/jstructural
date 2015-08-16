@@ -16,20 +16,21 @@
 
 package com.io7m.jstructural.annotated;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SDocumentContents;
 import com.io7m.jstructural.core.SDocumentStyle;
+import net.jcip.annotations.Immutable;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A document.
  */
 
-public abstract class SADocument implements SASegmentsReadable
+@Immutable public abstract class SADocument implements SASegmentsReadable
 {
   private final OptionType<SDocumentContents> contents;
   private final List<SAFootnote>              footnotes;
@@ -56,15 +57,13 @@ public abstract class SADocument implements SASegmentsReadable
 
   /**
    * Accept a document visitor.
-   * 
-   * @param v
-   *          The visitor
+   *
+   * @param v   The visitor
+   * @param <A> The type of values returned by the visitor
+   *
    * @return The value returned by the visitor
-   * 
-   * @throws Exception
-   *           If the visitor raises an {@link Exception}
-   * @param <A>
-   *          The type of values returned by the visitor
+   *
+   * @throws Exception If the visitor raises an {@link Exception}
    */
 
   public abstract <A> A documentAccept(
@@ -85,11 +84,11 @@ public abstract class SADocument implements SASegmentsReadable
     }
     final SADocument other = (SADocument) obj;
     return this.contents.equals(other.contents)
-      && this.footnotes.equals(other.footnotes)
-      && this.formals.equals(other.formals)
-      && this.ids.equals(other.ids)
-      && this.style.equals(other.style)
-      && this.title.equals(other.title);
+           && this.footnotes.equals(other.footnotes)
+           && this.formals.equals(other.formals)
+           && this.ids.equals(other.ids)
+           && this.style.equals(other.style)
+           && this.title.equals(other.title);
   }
 
   /**
@@ -131,8 +130,8 @@ public abstract class SADocument implements SASegmentsReadable
   }
 
   /**
-   * @param n
-   *          The section number
+   * @param n The section number
+   *
    * @return The section with the given section number, if any.
    */
 

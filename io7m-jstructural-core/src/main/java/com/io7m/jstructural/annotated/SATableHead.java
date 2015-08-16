@@ -19,12 +19,13 @@ package com.io7m.jstructural.annotated;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
+import net.jcip.annotations.Immutable;
 
 /**
  * A table header.
  */
 
-public final class SATableHead
+@Immutable public final class SATableHead
 {
   private final SNonEmptyList<SATableColumnName> header;
 

@@ -16,11 +16,13 @@
 
 package com.io7m.jstructural.core;
 
+import net.jcip.annotations.Immutable;
+
 /**
  * Part contents element.
  */
 
-public final class SPartContents
+@Immutable public final class SPartContents
 {
   private static final SPartContents INSTANCE;
 

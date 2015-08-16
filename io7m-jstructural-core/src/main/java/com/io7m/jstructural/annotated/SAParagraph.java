@@ -20,14 +20,14 @@ import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
+import net.jcip.annotations.Immutable;
 
 /**
  * A paragraph element.
  */
 
-public final class SAParagraph implements
-  SASubsectionContent,
-  SAIDTargetContent
+@Immutable public final class SAParagraph
+  implements SASubsectionContent, SAIDTargetContent
 {
   private final SNonEmptyList<SAParagraphContent> content;
   private final OptionType<SAID>                  id;
@@ -36,15 +36,11 @@ public final class SAParagraph implements
 
   /**
    * Construct a new paragraph.
-   * 
-   * @param in_number
-   *          The paragraph number
-   * @param in_type
-   *          The type attribute
-   * @param in_id
-   *          The ID
-   * @param in_content
-   *          The paragraph content.
+   *
+   * @param in_number  The paragraph number
+   * @param in_type    The type attribute
+   * @param in_id      The ID
+   * @param in_content The paragraph content.
    */
 
   public SAParagraph(
@@ -73,9 +69,9 @@ public final class SAParagraph implements
     }
     final SAParagraph other = (SAParagraph) obj;
     return this.content.equals(other.content)
-      && this.number.equals(other.number)
-      && this.id.equals(other.id)
-      && this.type.equals(other.type);
+           && this.number.equals(other.number)
+           && this.id.equals(other.id)
+           && this.type.equals(other.type);
   }
 
   /**

@@ -20,12 +20,13 @@ import com.io7m.jfunctional.Option;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A simple term.
  */
 
-public final class STerm implements
+@Immutable public final class STerm implements
   SListItemContent,
   SParagraphContent,
   SFootnoteContent,

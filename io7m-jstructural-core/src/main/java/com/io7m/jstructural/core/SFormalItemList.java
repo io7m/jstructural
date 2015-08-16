@@ -18,12 +18,13 @@ package com.io7m.jstructural.core;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A list of formal items of a given kind.
  */
 
-public final class SFormalItemList implements
+@Immutable public final class SFormalItemList implements
   SFormalItemContent,
   SParagraphContent
 {

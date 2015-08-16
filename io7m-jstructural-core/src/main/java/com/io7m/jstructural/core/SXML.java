@@ -16,16 +16,17 @@
 
 package com.io7m.jstructural.core;
 
+import com.io7m.junreachable.UnreachableCodeException;
+import net.jcip.annotations.Immutable;
+
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * XML schema details.
  */
 
-public final class SXML
+@Immutable public final class SXML
 {
   /**
    * The XML URI for structural documents.

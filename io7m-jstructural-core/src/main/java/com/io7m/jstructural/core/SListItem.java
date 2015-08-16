@@ -20,12 +20,13 @@ import com.io7m.jfunctional.Option;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A list item element.
  */
 
-public final class SListItem
+@Immutable public final class SListItem
 {
   /**
    * Construct a new list item.

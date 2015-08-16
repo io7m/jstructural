@@ -16,18 +16,18 @@
 
 package com.io7m.jstructural.annotated;
 
-import java.net.URI;
-
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
+import net.jcip.annotations.Immutable;
+
+import java.net.URI;
 
 /**
  * A link to an external resource
  */
 
-public final class SALinkExternal implements
-  SAParagraphContent,
+@Immutable public final class SALinkExternal implements SAParagraphContent,
   SAListItemContent,
   SAFootnoteContent,
   SATableCellContent
@@ -57,7 +57,7 @@ public final class SALinkExternal implements
     }
     final SALinkExternal other = (SALinkExternal) obj;
     return this.content.equals(other.content)
-      && this.target.equals(other.target);
+           && this.target.equals(other.target);
   }
 
   @Override public <A> A footnoteContentAccept(

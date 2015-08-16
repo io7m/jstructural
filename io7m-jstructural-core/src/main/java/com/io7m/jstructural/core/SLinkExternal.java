@@ -16,16 +16,17 @@
 
 package com.io7m.jstructural.core;
 
-import java.net.URI;
-
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
+
+import java.net.URI;
 
 /**
  * A link to an external resource
  */
 
-public final class SLinkExternal implements
+@Immutable public final class SLinkExternal implements
   SParagraphContent,
   SListItemContent,
   SFootnoteContent,

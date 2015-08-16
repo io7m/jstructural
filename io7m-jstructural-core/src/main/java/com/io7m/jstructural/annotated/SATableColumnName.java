@@ -18,12 +18,13 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A table column name.
  */
 
-public final class SATableColumnName
+@Immutable public final class SATableColumnName
 {
   private final String text;
 

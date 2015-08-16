@@ -16,28 +16,29 @@
 
 package com.io7m.jstructural.annotated;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.io7m.jlog.LogLevel;
 import com.io7m.jlog.LogUsableType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Mappings from IDs to content.
  */
 
-public final class SAIDMap implements SAIDMapWritable, SAIDMapReadable
+@Immutable public final class SAIDMap
+  implements SAIDMapWritable, SAIDMapReadable
 {
   private final LogUsableType                log;
   private final Map<SAID, SAIDTargetContent> map;
 
   /**
    * Construct a new empty map.
-   * 
-   * @param in_log
-   *          The log handle
+   *
+   * @param in_log The log handle
    */
 
   public SAIDMap(

@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * A paragraph number visitor.
- * 
- * @param <T>
- *          The type of transformed paragraph numbers
+ *
+ * @param <T> The type of transformed paragraph numbers
  */
 
 public interface SAParagraphNumberVisitor<T>
 {
   /**
    * Visit a PSP paragraph number.
-   * 
-   * @param p
-   *          The number
+   *
+   * @param p The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitParagraphNumberPSP(
@@ -42,13 +40,12 @@ public interface SAParagraphNumberVisitor<T>
 
   /**
    * Visit a PSSP paragraph number.
-   * 
-   * @param p
-   *          The number
+   *
+   * @param p The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitParagraphNumberPSSP(
@@ -57,13 +54,12 @@ public interface SAParagraphNumberVisitor<T>
 
   /**
    * Visit a SP paragraph number.
-   * 
-   * @param p
-   *          The number
+   *
+   * @param p The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitParagraphNumberSP(
@@ -72,13 +68,12 @@ public interface SAParagraphNumberVisitor<T>
 
   /**
    * Visit a SSP paragraph number.
-   * 
-   * @param p
-   *          The number
+   *
+   * @param p The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitParagraphNumberSSP(

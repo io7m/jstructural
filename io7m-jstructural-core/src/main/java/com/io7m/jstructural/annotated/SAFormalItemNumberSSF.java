@@ -21,12 +21,13 @@ import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
 import com.io7m.jranges.Ranges;
 import com.io7m.junreachable.UnreachableCodeException;
+import net.jcip.annotations.Immutable;
 
 /**
  * A formal item number consisting of a section, subsection, and formal item.
  */
 
-public final class SAFormalItemNumberSSF extends SAFormalItemNumber
+@Immutable public final class SAFormalItemNumberSSF extends SAFormalItemNumber
 {
   private final int formal;
   private final int section;

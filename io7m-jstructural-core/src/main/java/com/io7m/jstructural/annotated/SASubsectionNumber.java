@@ -16,23 +16,23 @@
 
 package com.io7m.jstructural.annotated;
 
+import net.jcip.annotations.Immutable;
+
 /**
  * An abstract subsection number.
  */
 
-public abstract class SASubsectionNumber
+@Immutable public abstract class SASubsectionNumber
 {
   /**
    * Accept a subsection number visitor.
-   * 
-   * @param <T>
-   *          The type of values returned by the visitor
-   * @param v
-   *          The visitor
+   *
+   * @param <T> The type of values returned by the visitor
+   * @param v   The visitor
+   *
    * @return The value returned by the visitor
-   * 
-   * @throws Exception
-   *           If the visitor raises an {@link Exception}
+   *
+   * @throws Exception If the visitor raises an {@link Exception}
    */
 
   public abstract <T> T subsectionNumberAccept(
@@ -40,8 +40,8 @@ public abstract class SASubsectionNumber
     throws Exception;
 
   /**
-   * @return A human-readable string representing the subsection number (such
-   *         as "1.2.3")
+   * @return A human-readable string representing the subsection number (such as
+   * "1.2.3")
    */
 
   public abstract String subsectionNumberFormat();

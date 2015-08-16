@@ -18,12 +18,13 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A formal item title.
  */
 
-public final class SAFormalItemTitle
+@Immutable public final class SAFormalItemTitle
 {
   private final String             actual;
   private final SAFormalItemNumber number;
@@ -49,8 +50,7 @@ public final class SAFormalItemTitle
       return false;
     }
     final SAFormalItemTitle other = (SAFormalItemTitle) obj;
-    return this.actual.equals(other.actual)
-      && this.number.equals(other.number);
+    return this.actual.equals(other.actual) && this.number.equals(other.number);
   }
 
   /**
@@ -64,7 +64,7 @@ public final class SAFormalItemTitle
 
   /**
    * @return The formal item number (note that formal items share numbers with
-   *         paragraphs)
+   * paragraphs)
    */
 
   public SAFormalItemNumber getNumber()

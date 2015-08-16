@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * A segment number visitor.
- * 
- * @param <T>
- *          The type of values returned by the visitor
+ *
+ * @param <T> The type of values returned by the visitor
  */
 
 public interface SASegmentNumberVisitor<T>
 {
   /**
    * Visit a part number.
-   * 
-   * @param n
-   *          The number
+   *
+   * @param n The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitPartNumber(
@@ -42,13 +40,12 @@ public interface SASegmentNumberVisitor<T>
 
   /**
    * Visit a section number.
-   * 
-   * @param n
-   *          The number
+   *
+   * @param n The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitSectionNumber(

@@ -21,12 +21,13 @@ import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
 import com.io7m.jranges.Ranges;
 import com.io7m.jstructural.core.SNonEmptyList;
+import net.jcip.annotations.Immutable;
 
 /**
  * A footnote element.
  */
 
-public final class SAFootnote implements SAParagraphContent,
+@Immutable public final class SAFootnote implements SAParagraphContent,
   SAListItemContent,
   SAFootnoteContent,
   SATableCellContent

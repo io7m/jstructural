@@ -22,6 +22,7 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
 import com.io7m.jranges.Ranges;
+import net.jcip.annotations.Immutable;
 
 import java.net.URI;
 
@@ -29,7 +30,7 @@ import java.net.URI;
  * An image.
  */
 
-public final class SImage implements SParagraphContent,
+@Immutable public final class SImage implements SParagraphContent,
   SLinkContent,
   SListItemContent,
   SFootnoteContent,

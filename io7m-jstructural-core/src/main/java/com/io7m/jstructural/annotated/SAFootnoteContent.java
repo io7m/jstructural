@@ -24,15 +24,13 @@ public interface SAFootnoteContent
 {
   /**
    * Accept a footnote content visitor.
-   * 
-   * @param v
-   *          The visitor
-   * @param <A>
-   *          The type of values returned by the visitor
+   *
+   * @param v   The visitor
+   * @param <A> The type of values returned by the visitor
+   *
    * @return The value returned by the visitor.
-   * 
-   * @throws Exception
-   *           If the visitor raises and {@link Exception}
+   *
+   * @throws Exception If the visitor raises and {@link Exception}
    */
 
   <A> A footnoteContentAccept(

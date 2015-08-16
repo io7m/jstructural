@@ -26,10 +26,9 @@ public interface SAFormalItemsByKindReadable
 {
   /**
    * Retrieve the set of formal items that are of the given kind.
-   * 
-   * @param kind
-   *          The kind
-   * 
+   *
+   * @param kind The kind
+   *
    * @return The associated set of formal items
    */
 

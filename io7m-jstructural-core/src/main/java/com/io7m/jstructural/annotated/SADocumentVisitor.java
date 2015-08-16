@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * Document visitor.
- * 
- * @param <D>
- *          The type of transformed {@link SADocument}s.
+ *
+ * @param <D> The type of transformed {@link SADocument}s.
  */
 
 public interface SADocumentVisitor<D>
 {
   /**
    * Visit a document with top-level parts.
-   * 
-   * @param document
-   *          The document element
+   *
+   * @param document The document element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   D visitDocumentWithParts(
@@ -42,13 +40,12 @@ public interface SADocumentVisitor<D>
 
   /**
    * Visit a document with top-level sections.
-   * 
-   * @param document
-   *          The document element
+   *
+   * @param document The document element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   D visitDocumentWithSections(

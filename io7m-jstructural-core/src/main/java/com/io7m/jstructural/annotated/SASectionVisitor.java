@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * Section visitor.
- * 
- * @param <A>
- *          The type of values returned by the visitor
+ *
+ * @param <A> The type of values returned by the visitor
  */
 
 public interface SASectionVisitor<A>
 {
   /**
    * Visit a section with top-level paragraphs.
-   * 
-   * @param s
-   *          The section element
+   *
+   * @param s The section element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitSectionWithParagraphs(
@@ -42,13 +40,12 @@ public interface SASectionVisitor<A>
 
   /**
    * Visit a section with top-level subsections.
-   * 
-   * @param s
-   *          The section element
+   *
+   * @param s The section element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitSectionWithSubsections(

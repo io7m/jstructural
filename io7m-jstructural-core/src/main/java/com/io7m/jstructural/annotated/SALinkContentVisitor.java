@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * Link content visitor.
- * 
- * @param <A>
- *          The type of values returned by the visitor
+ *
+ * @param <A> The type of values returned by the visitor
  */
 
 public interface SALinkContentVisitor<A>
 {
   /**
    * Visit an image element.
-   * 
-   * @param image
-   *          The image element
+   *
+   * @param image The image element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitImage(
@@ -42,13 +40,12 @@ public interface SALinkContentVisitor<A>
 
   /**
    * Visit a text element.
-   * 
-   * @param text
-   *          The text element
+   *
+   * @param text The text element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitText(

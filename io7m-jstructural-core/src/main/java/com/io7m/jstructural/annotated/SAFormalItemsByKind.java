@@ -16,6 +16,11 @@
 
 package com.io7m.jstructural.annotated;
 
+import com.io7m.jlog.LogLevel;
+import com.io7m.jlog.LogUsableType;
+import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,35 +29,30 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.io7m.jlog.LogLevel;
-import com.io7m.jlog.LogUsableType;
-import com.io7m.jnull.NullCheck;
-
 /**
  * The set of formal items organized by kind.
  */
 
-public final class SAFormalItemsByKind implements
-  SAFormalItemsByKindReadable,
-  SAFormalItemsByKindWritable
+@Immutable public final class SAFormalItemsByKind
+  implements SAFormalItemsByKindReadable, SAFormalItemsByKindWritable
 {
   private static final SortedMap<SAFormalItemNumber, SAFormalItem> EMPTY;
+
   static {
     final SortedMap<SAFormalItemNumber, SAFormalItem> um =
-      Collections
-        .unmodifiableSortedMap(new TreeMap<SAFormalItemNumber, SAFormalItem>());
+      Collections.unmodifiableSortedMap(new TreeMap<SAFormalItemNumber,
+                                          SAFormalItem>());
     assert um != null;
     EMPTY = um;
   }
 
-  private final LogUsableType                                      log;
-  private final Map<String, Set<SAFormalItem>>                     map;
+  private final LogUsableType                  log;
+  private final Map<String, Set<SAFormalItem>> map;
 
   /**
    * Construct a new empty map.
-   * 
-   * @param in_log
-   *          A log handle
+   *
+   * @param in_log A log handle
    */
 
   public SAFormalItemsByKind(

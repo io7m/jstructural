@@ -19,8 +19,7 @@ package com.io7m.jstructural.annotated;
 /**
  * A visitor that can visit elements that can be assigned IDs.
  *
- * @param <T>
- *          The type of values returned by the visitor
+ * @param <T> The type of values returned by the visitor
  */
 
 public interface SAIDTargetContentVisitor<T>
@@ -28,12 +27,11 @@ public interface SAIDTargetContentVisitor<T>
   /**
    * Visit a formal item element.
    *
-   * @param f
-   *          The formal item element
+   * @param f The formal item element
+   *
    * @return A value of type {@code T}
    *
-   * @throws Exception
-   *           If required
+   * @throws Exception If required
    */
 
   T visitFormalItem(
@@ -43,12 +41,11 @@ public interface SAIDTargetContentVisitor<T>
   /**
    * Visit a paragraph element.
    *
-   * @param paragraph
-   *          The paragraph element
+   * @param paragraph The paragraph element
+   *
    * @return A value of type {@code T}
    *
-   * @throws Exception
-   *           If required
+   * @throws Exception If required
    */
 
   T visitParagraph(
@@ -58,12 +55,11 @@ public interface SAIDTargetContentVisitor<T>
   /**
    * Visit a part element.
    *
-   * @param part
-   *          The part element
+   * @param part The part element
+   *
    * @return A value of type {@code T}
    *
-   * @throws Exception
-   *           If required
+   * @throws Exception If required
    */
 
   T visitPart(
@@ -73,12 +69,11 @@ public interface SAIDTargetContentVisitor<T>
   /**
    * Visit a section element.
    *
-   * @param section
-   *          The section element
+   * @param section The section element
+   *
    * @return A value of type {@code T}
    *
-   * @throws Exception
-   *           If required
+   * @throws Exception If required
    */
 
   T visitSection(
@@ -88,12 +83,11 @@ public interface SAIDTargetContentVisitor<T>
   /**
    * Visit a subsection element.
    *
-   * @param subsection
-   *          The subsection element
+   * @param subsection The subsection element
+   *
    * @return A value of type {@code T}
    *
-   * @throws Exception
-   *           If required
+   * @throws Exception If required
    */
 
   T visitSubsection(

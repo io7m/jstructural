@@ -21,12 +21,13 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
 import com.io7m.jranges.Ranges;
+import net.jcip.annotations.Immutable;
 
 /**
  * A formal item.
  */
 
-public final class SAFormalItem
+@Immutable public final class SAFormalItem
   implements SASubsectionContent, SAIDTargetContent
 {
   private final OptionType<SAID>    id;

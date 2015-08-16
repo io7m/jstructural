@@ -18,12 +18,13 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A table summary.
  */
 
-public final class SATableSummary
+@Immutable public final class SATableSummary
 {
   private final String text;
 

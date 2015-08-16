@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * Formal item content visitor.
- * 
- * @param <A>
- *          The type of values returned by the visitor
+ *
+ * @param <A> The type of values returned by the visitor
  */
 
 public interface SAFormalItemContentVisitor<A>
 {
   /**
    * Visit a formal item list element.
-   * 
-   * @param list
-   *          The formal item list element
+   *
+   * @param list The formal item list element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitFormalItemList(
@@ -42,13 +40,12 @@ public interface SAFormalItemContentVisitor<A>
 
   /**
    * Visit an image element.
-   * 
-   * @param image
-   *          The image element
+   *
+   * @param image The image element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitImage(
@@ -57,13 +54,12 @@ public interface SAFormalItemContentVisitor<A>
 
   /**
    * Visit an ordered list element.
-   * 
-   * @param list
-   *          The list element
+   *
+   * @param list The list element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitListOrdered(
@@ -72,13 +68,12 @@ public interface SAFormalItemContentVisitor<A>
 
   /**
    * Visit an unordered list element.
-   * 
-   * @param list
-   *          The list element
+   *
+   * @param list The list element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitListUnordered(
@@ -87,13 +82,12 @@ public interface SAFormalItemContentVisitor<A>
 
   /**
    * Visit a table element.
-   * 
-   * @param e
-   *          The table element
+   *
+   * @param e The table element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitTable(
@@ -102,13 +96,12 @@ public interface SAFormalItemContentVisitor<A>
 
   /**
    * Visit a verbatim element.
-   * 
-   * @param text
-   *          The verbatim element
+   *
+   * @param text The verbatim element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitVerbatim(

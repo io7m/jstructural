@@ -20,12 +20,13 @@ import com.io7m.jfunctional.Option;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * An unordered list element.
  */
 
-public final class SListUnordered implements
+@Immutable public final class SListUnordered implements
   SListItemContent,
   SFootnoteContent,
   SParagraphContent,

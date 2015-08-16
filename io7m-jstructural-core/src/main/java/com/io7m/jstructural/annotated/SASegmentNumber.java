@@ -24,15 +24,13 @@ public interface SASegmentNumber
 {
   /**
    * Accept a segment number visitor.
-   * 
-   * @param <T>
-   *          The type of values returned by the visitor
-   * @param v
-   *          The visitor
+   *
+   * @param <T> The type of values returned by the visitor
+   * @param v   The visitor
+   *
    * @return The value returned by the visitor
-   * 
-   * @throws Exception
-   *           If the visitor raises an {@link Exception}
+   *
+   * @throws Exception If the visitor raises an {@link Exception}
    */
 
   <T> T segmentNumberAccept(

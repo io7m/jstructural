@@ -16,18 +16,18 @@
 
 package com.io7m.jstructural.annotated;
 
-import java.net.URI;
-
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
+
+import java.net.URI;
 
 /**
  * An image.
  */
 
-public final class SAImage implements
-  SAParagraphContent,
+@Immutable public final class SAImage implements SAParagraphContent,
   SALinkContent,
   SAListItemContent,
   SAFootnoteContent,
@@ -68,10 +68,10 @@ public final class SAImage implements
     }
     final SAImage other = (SAImage) obj;
     return this.height.equals(other.height)
-      && this.text.equals(other.text)
-      && this.type.equals(other.type)
-      && this.uri.equals(other.uri)
-      && this.width.equals(other.width);
+           && this.text.equals(other.text)
+           && this.type.equals(other.type)
+           && this.uri.equals(other.uri)
+           && this.width.equals(other.width);
   }
 
   @Override public <A> A footnoteContentAccept(

@@ -16,16 +16,17 @@
 
 package com.io7m.jstructural.annotated;
 
-import java.util.List;
-
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
+
+import java.util.List;
 
 /**
  * A table cell.
  */
 
-public final class SATableCell
+@Immutable public final class SATableCell
 {
   private final List<SATableCellContent> content;
 

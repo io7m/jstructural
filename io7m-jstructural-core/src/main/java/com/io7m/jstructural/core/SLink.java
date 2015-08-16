@@ -18,12 +18,13 @@ package com.io7m.jstructural.core;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A link to an internal document element.
  */
 
-public final class SLink implements
+@Immutable public final class SLink implements
   SParagraphContent,
   SListItemContent,
   SFootnoteContent,

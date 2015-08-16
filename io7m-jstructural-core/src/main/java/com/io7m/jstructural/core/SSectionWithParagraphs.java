@@ -20,12 +20,13 @@ import com.io7m.jfunctional.Option;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * The type of sections containing paragraphs.
  */
 
-public final class SSectionWithParagraphs extends SSection
+@Immutable public final class SSectionWithParagraphs extends SSection
 {
   /**
    * Create a section with the given title and section content.

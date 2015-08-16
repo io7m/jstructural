@@ -16,13 +16,13 @@
 
 package com.io7m.jstructural.annotated;
 
-import java.util.List;
-
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.jstructural.core.SSectionContents;
+
+import java.util.List;
 
 /**
  * The type of sections containing paragraphs.
@@ -34,21 +34,14 @@ public final class SASectionWithSubsections extends SASection
 
   /**
    * Construct a new section with top-level subsections.
-   * 
-   * @param in_number
-   *          The section number
-   * @param in_type
-   *          The type attribute
-   * @param in_id
-   *          The ID
-   * @param in_title
-   *          The section title
-   * @param in_contents
-   *          The section table of contents
-   * @param in_subsections
-   *          The subsections
-   * @param in_footnotes
-   *          The footnotes
+   *
+   * @param in_number      The section number
+   * @param in_type        The type attribute
+   * @param in_id          The ID
+   * @param in_title       The section title
+   * @param in_contents    The section table of contents
+   * @param in_subsections The subsections
+   * @param in_footnotes   The footnotes
    */
 
   public SASectionWithSubsections(

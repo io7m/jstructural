@@ -18,12 +18,13 @@ package com.io7m.jstructural.core;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A table header.
  */
 
-public final class STableHead
+@Immutable public final class STableHead
 {
   /**
    * Construct a new table header.

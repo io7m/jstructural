@@ -16,25 +16,24 @@
 
 package com.io7m.jstructural.annotated;
 
+import net.jcip.annotations.Immutable;
+
 /**
  * An abstract formal item number.
  */
 
-public abstract class SAFormalItemNumber implements
-  Comparable<SAFormalItemNumber>,
-  SASubsectionContentNumber
+@Immutable public abstract class SAFormalItemNumber
+  implements Comparable<SAFormalItemNumber>, SASubsectionContentNumber
 {
   /**
    * Accept a formal item number visitor.
-   * 
-   * @param <T>
-   *          The type of values returned by the visitor
-   * @param v
-   *          The visitor
+   *
+   * @param <T> The type of values returned by the visitor
+   * @param v   The visitor
+   *
    * @return The value returned by the visitor
-   * 
-   * @throws Exception
-   *           If the visitor raises an {@link Exception}
+   *
+   * @throws Exception If the visitor raises an {@link Exception}
    */
 
   public abstract <T> T formalItemNumberAccept(
@@ -43,7 +42,7 @@ public abstract class SAFormalItemNumber implements
 
   /**
    * @return A human-readable string representing the formal item number (such
-   *         as "1.2.3.4")
+   * as "1.2.3.4")
    */
 
   public abstract String formalItemNumberFormat();

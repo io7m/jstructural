@@ -19,13 +19,13 @@ package com.io7m.jstructural.annotated;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
+import net.jcip.annotations.Immutable;
 
 /**
  * A link to an internal document element.
  */
 
-public final class SALink implements
-  SAParagraphContent,
+@Immutable public final class SALink implements SAParagraphContent,
   SAListItemContent,
   SAFootnoteContent,
   SATableCellContent
@@ -55,7 +55,7 @@ public final class SALink implements
     }
     final SALink other = (SALink) obj;
     return this.content.equals(other.content)
-      && this.target.equals(other.target);
+           && this.target.equals(other.target);
   }
 
   @Override public <A> A footnoteContentAccept(

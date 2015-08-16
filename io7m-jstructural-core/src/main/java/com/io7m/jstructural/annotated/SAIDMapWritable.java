@@ -24,14 +24,12 @@ public interface SAIDMapWritable
 {
   /**
    * Associate the given content with the given ID.
-   * 
-   * @param id
-   *          The ID
-   * @param c
-   *          The content
-   * 
-   * @throws IllegalArgumentException
-   *           If an element with the given ID already exists.
+   *
+   * @param id The ID
+   * @param c  The content
+   *
+   * @throws IllegalArgumentException If an element with the given ID already
+   *                                  exists.
    */
 
   void put(

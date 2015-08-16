@@ -17,23 +17,20 @@
 package com.io7m.jstructural.annotated;
 
 /**
- * The type of elements appearing in subsections, and sections with
- * paragraphs.
+ * The type of elements appearing in subsections, and sections with paragraphs.
  */
 
 public interface SASubsectionContent
 {
   /**
    * Accept a section content visitor.
-   * 
-   * @param v
-   *          The visitor
-   * @param <A>
-   *          The type of values returned by the visitor
+   *
+   * @param v   The visitor
+   * @param <A> The type of values returned by the visitor
+   *
    * @return The value returned by the visitor.
-   * 
-   * @throws Exception
-   *           If the visitor raises and {@link Exception}
+   *
+   * @throws Exception If the visitor raises and {@link Exception}
    */
 
   <A> A subsectionContentAccept(

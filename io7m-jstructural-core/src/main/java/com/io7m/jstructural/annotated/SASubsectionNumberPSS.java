@@ -19,12 +19,13 @@ package com.io7m.jstructural.annotated;
 import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
 import com.io7m.jranges.Ranges;
+import net.jcip.annotations.Immutable;
 
 /**
  * A subsection number consisting of a part, section, and subsection.
  */
 
-public final class SASubsectionNumberPSS extends SASubsectionNumber
+@Immutable public final class SASubsectionNumberPSS extends SASubsectionNumber
 {
   private final int part;
   private final int section;

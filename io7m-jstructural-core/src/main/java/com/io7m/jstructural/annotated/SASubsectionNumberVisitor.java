@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * A subsection number visitor.
- * 
- * @param <T>
- *          The type of transformed subsection numbers
+ *
+ * @param <T> The type of transformed subsection numbers
  */
 
 public interface SASubsectionNumberVisitor<T>
 {
   /**
    * Visit a PSS subsection number.
-   * 
-   * @param p
-   *          The number
+   *
+   * @param p The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitSubsectionNumberPSS(
@@ -42,13 +40,12 @@ public interface SASubsectionNumberVisitor<T>
 
   /**
    * Visit an SS subsection number.
-   * 
-   * @param p
-   *          The number
+   *
+   * @param p The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitSubsectionNumberSS(

@@ -16,11 +16,13 @@
 
 package com.io7m.jstructural.core;
 
+import net.jcip.annotations.Immutable;
+
 /**
  * Document contents element.
  */
 
-public final class SDocumentContents
+@Immutable public final class SDocumentContents
 {
   private static final SDocumentContents INSTANCE;
 

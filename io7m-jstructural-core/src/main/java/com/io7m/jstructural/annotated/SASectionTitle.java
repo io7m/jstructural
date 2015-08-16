@@ -18,23 +18,22 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A section title.
  */
 
-public final class SASectionTitle
+@Immutable public final class SASectionTitle
 {
   private final String          actual;
   private final SASectionNumber number;
 
   /**
    * Construct a new section title.
-   * 
-   * @param in_number
-   *          The section number
-   * @param in_actual
-   *          The section title
+   *
+   * @param in_number The section number
+   * @param in_actual The section title
    */
 
   public SASectionTitle(
@@ -58,8 +57,7 @@ public final class SASectionTitle
       return false;
     }
     final SASectionTitle other = (SASectionTitle) obj;
-    return this.actual.equals(other.actual)
-      && this.number.equals(other.number);
+    return this.actual.equals(other.actual) && this.number.equals(other.number);
   }
 
   /**

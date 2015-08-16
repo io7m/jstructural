@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * A section number visitor.
- * 
- * @param <T>
- *          The type of transformed section numbers
+ *
+ * @param <T> The type of transformed section numbers
  */
 
 public interface SASectionNumberVisitor<T>
 {
   /**
    * Visit a section number without a part.
-   * 
-   * @param p
-   *          The number
+   *
+   * @param p The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitSectionNumberWithoutPart(
@@ -42,13 +40,12 @@ public interface SASectionNumberVisitor<T>
 
   /**
    * Visit a section number with a part.
-   * 
-   * @param p
-   *          The number
+   *
+   * @param p The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitSectionNumberWithPart(

@@ -20,12 +20,13 @@ import com.io7m.jfunctional.Option;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A formal item.
  */
 
-public final class SFormalItem implements SSubsectionContent
+@Immutable public final class SFormalItem implements SSubsectionContent
 {
   /**
    * Construct a new formal item with the given type attribute.

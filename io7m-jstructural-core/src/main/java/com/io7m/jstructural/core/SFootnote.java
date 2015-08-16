@@ -18,12 +18,13 @@ package com.io7m.jstructural.core;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A footnote element.
  */
 
-public final class SFootnote implements
+@Immutable public final class SFootnote implements
   SParagraphContent,
   SListItemContent,
   SFootnoteContent,

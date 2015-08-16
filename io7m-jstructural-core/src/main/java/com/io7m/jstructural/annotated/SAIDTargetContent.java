@@ -24,15 +24,13 @@ public interface SAIDTargetContent
 {
   /**
    * Accept an ID target content visitor.
-   * 
-   * @param v
-   *          The visitor
-   * @param <T>
-   *          The type of values returned by the visitor
+   *
+   * @param v   The visitor
+   * @param <T> The type of values returned by the visitor
+   *
    * @return The value returned by the visitor.
-   * 
-   * @throws Exception
-   *           If the visitor raises and {@link Exception}
+   *
+   * @throws Exception If the visitor raises and {@link Exception}
    */
 
   <T> T targetContentAccept(

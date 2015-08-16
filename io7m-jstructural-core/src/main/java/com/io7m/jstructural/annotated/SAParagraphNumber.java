@@ -16,13 +16,14 @@
 
 package com.io7m.jstructural.annotated;
 
+import net.jcip.annotations.Immutable;
+
 /**
  * An abstract paragraph number.
  */
 
-public abstract class SAParagraphNumber implements
-  Comparable<SAParagraphNumber>,
-  SASubsectionContentNumber
+@Immutable public abstract class SAParagraphNumber
+  implements Comparable<SAParagraphNumber>, SASubsectionContentNumber
 {
   /**
    * @return The paragraph number
@@ -32,15 +33,13 @@ public abstract class SAParagraphNumber implements
 
   /**
    * Accept a paragraph number visitor.
-   * 
-   * @param <T>
-   *          The type of values returned by the visitor
-   * @param v
-   *          The visitor
+   *
+   * @param <T> The type of values returned by the visitor
+   * @param v   The visitor
+   *
    * @return The value returned by the visitor
-   * 
-   * @throws Exception
-   *           If the visitor raises an {@link Exception}
+   *
+   * @throws Exception If the visitor raises an {@link Exception}
    */
 
   public abstract <T> T paragraphNumberAccept(
@@ -48,8 +47,8 @@ public abstract class SAParagraphNumber implements
     throws Exception;
 
   /**
-   * @return A human-readable string representing the paragraph number (such
-   *         as "1.2.3.4")
+   * @return A human-readable string representing the paragraph number (such as
+   * "1.2.3.4")
    */
 
   public abstract String paragraphNumberFormat();

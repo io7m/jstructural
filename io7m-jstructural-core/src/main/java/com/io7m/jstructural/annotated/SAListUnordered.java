@@ -20,13 +20,13 @@ import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
+import net.jcip.annotations.Immutable;
 
 /**
  * An unordered list element.
  */
 
-public final class SAListUnordered implements
-  SAListItemContent,
+@Immutable public final class SAListUnordered implements SAListItemContent,
   SAFootnoteContent,
   SAParagraphContent,
   SAFormalItemContent,

@@ -18,20 +18,20 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * An ID attribute, unique over a document.
  */
 
-public final class SAID
+@Immutable public final class SAID
 {
   private final String actual;
 
   /**
    * Construct a new ID.
-   * 
-   * @param in_actual
-   *          The ID text
+   *
+   * @param in_actual The ID text
    */
 
   public SAID(

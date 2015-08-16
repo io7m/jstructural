@@ -16,10 +16,6 @@
 
 package com.io7m.jstructural.annotated;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.io7m.jfunctional.FunctionType;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jfunctional.PartialFunctionType;
@@ -72,741 +68,35 @@ import com.io7m.jstructural.core.STerm;
 import com.io7m.jstructural.core.SText;
 import com.io7m.jstructural.core.SVerbatim;
 import com.io7m.junreachable.UnreachableCodeException;
+import net.jcip.annotations.Immutable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A document annotator.
  */
 
-@SuppressWarnings("synthetic-access") public final class SAnnotator
+@Immutable public final class SAnnotator
 {
-  private static final class DocumentAnnotator implements
-    SDocumentVisitor<SADocument>
+  private final SDocument     document;
+  private final LogUsableType log;
+
+  private SAnnotator(
+    final LogUsableType in_log,
+    final SDocument d)
   {
-    private final List<SAFootnote>    footnotes;
-    private final SAFormalItemsByKind formals;
-    private final SAIDMap             ids;
-
-    public DocumentAnnotator(
-      final LogUsableType log)
-    {
-      this.ids = new SAIDMap(log);
-      this.footnotes = new ArrayList<SAFootnote>();
-      this.formals = new SAFormalItemsByKind(log);
-    }
-
-    public SAPart part(
-      final SPart p,
-      final SAPartNumber part_no)
-      throws Exception
-    {
-      final OptionType<SAID> id = p.getID().map(new SAIDMapper());
-      final SAPartTitle title =
-        new SAPartTitle(part_no, p.getTitle().getActual());
-
-      final List<SASection> sections_r = new ArrayList<SASection>();
-      for (final SSection s : p.getSections().getElements()) {
-        final SASectionNumberPS number =
-          new SASectionNumberPS(part_no.getActual(), sections_r.size() + 1);
-
-        final SASection sp =
-          s.sectionAccept(new PartSectionAnnotator(
-            this.ids,
-            this.formals,
-            this.footnotes,
-            number));
-
-        sp.getID().map(new SAIDLinkCreator(this.ids, sp));
-        sections_r.add(sp);
-      }
-
-      final SNonEmptyList<SASection> sections =
-        SNonEmptyList.newList(sections_r);
-      return new SAPart(
-        part_no,
-        p.getType(),
-        id,
-        title,
-        p.getContents(),
-        sections);
-    }
-
-    @Override public SADocument visitDocumentWithParts(
-      final SDocumentWithParts dp)
-      throws Exception
-    {
-      final List<SAPart> parts_r = new ArrayList<SAPart>();
-      for (final SPart p : dp.getParts().getElements()) {
-        assert p != null;
-        final SAPart q = this.part(p, new SAPartNumber(parts_r.size() + 1));
-        q.getID().map(new SAIDLinkCreator(this.ids, q));
-        parts_r.add(q);
-      }
-      final SNonEmptyList<SAPart> parts = SNonEmptyList.newList(parts_r);
-
-      final SADocumentTitle title =
-        SADocumentTitle.documentTitle(dp.getTitle().getActual());
-
-      return new SADocumentWithParts(
-        this.ids,
-        title,
-        dp.getContents(),
-        dp.getStyle(),
-        parts,
-        this.footnotes,
-        this.formals);
-    }
-
-    @Override public SADocument visitDocumentWithSections(
-      final SDocumentWithSections ds)
-      throws Exception
-    {
-      final List<SASection> sections_r = new ArrayList<SASection>();
-      for (final SSection s : ds.getSections().getElements()) {
-        final SASection ss =
-          s.sectionAccept(new NoPartSectionAnnotator(
-            this.ids,
-            this.formals,
-            this.footnotes,
-            sections_r.size() + 1));
-
-        ss.getID().map(new SAIDLinkCreator(this.ids, ss));
-        sections_r.add(ss);
-      }
-      final SNonEmptyList<SASection> sections =
-        SNonEmptyList.newList(sections_r);
-
-      final SADocumentTitle title =
-        SADocumentTitle.documentTitle(ds.getTitle().getActual());
-
-      return new SADocumentWithSections(
-        this.ids,
-        title,
-        ds.getContents(),
-        ds.getStyle(),
-        sections,
-        this.footnotes,
-        this.formals);
-    }
-  }
-
-  private static final class FootnoteContentAnnotator implements
-    SFootnoteContentVisitor<SAFootnoteContent>
-  {
-    private final List<SAFootnote>          footnotes;
-    private final SAIDMap                   ids;
-    private final SASubsectionContentNumber number;
-
-    public FootnoteContentAnnotator(
-      final SAIDMap in_ids,
-      final List<SAFootnote> in_footnotes,
-      final SASubsectionContentNumber in_number)
-    {
-      this.ids = in_ids;
-      this.footnotes = in_footnotes;
-      this.number = in_number;
-    }
-
-    @Override public SAFootnoteContent visitFootnote(
-      final SFootnote footnote)
-      throws Exception
-    {
-      return SAnnotator.transformFootnote(
-        this.ids,
-        this.footnotes,
-        this.number,
-        footnote);
-    }
-
-    @Override public SAFootnoteContent visitImage(
-      final SImage image)
-      throws Exception
-    {
-      return SAnnotator.transformImage(image);
-    }
-
-    @Override public SAFootnoteContent visitLink(
-      final SLink link)
-      throws Exception
-    {
-      return SAnnotator.transformLink(link);
-    }
-
-    @Override public SAFootnoteContent visitLinkExternal(
-      final SLinkExternal link)
-      throws Exception
-    {
-      return SAnnotator.transformLinkExternal(link);
-    }
-
-    @Override public SAFootnoteContent visitListOrdered(
-      final SListOrdered list)
-      throws Exception
-    {
-      return SAnnotator.transformListOrdered(
-        this.ids,
-        this.footnotes,
-        this.number,
-        list);
-    }
-
-    @Override public SAFootnoteContent visitListUnordered(
-      final SListUnordered list)
-      throws Exception
-    {
-      return SAnnotator.transformListUnordered(
-        this.ids,
-        this.footnotes,
-        this.number,
-        list);
-    }
-
-    @Override public SAFootnoteContent visitTerm(
-      final STerm term)
-      throws Exception
-    {
-      return SAnnotator.transformTerm(term);
-    }
-
-    @Override public SAFootnoteContent visitText(
-      final SText text)
-      throws Exception
-    {
-      return SAnnotator.transformText(text);
-    }
-
-    @Override public SAFootnoteContent visitVerbatim(
-      final SVerbatim text)
-      throws Exception
-    {
-      return SAnnotator.transformVerbatim(text);
-    }
-  }
-
-  private static final class FormalItemContentAnnotator implements
-    SFormalItemContentVisitor<SAFormalItemContent>
-  {
-    private final List<SAFootnote>   footnotes;
-    private final SAIDMap            ids;
-    private final SAFormalItemNumber number;
-
-    public FormalItemContentAnnotator(
-      final SAIDMap in_ids,
-      final List<SAFootnote> in_footnotes,
-      final SAFormalItemNumber in_number)
-    {
-      this.ids = in_ids;
-      this.footnotes = in_footnotes;
-      this.number = in_number;
-    }
-
-    @Override public SAFormalItemContent visitFormalItemList(
-      final SFormalItemList list)
-      throws Exception
-    {
-      return SAnnotator.transformFormalItemList(list);
-    }
-
-    @Override public SAFormalItemContent visitImage(
-      final SImage image)
-      throws Exception
-    {
-      return SAnnotator.transformImage(image);
-    }
-
-    @Override public SAFormalItemContent visitListOrdered(
-      final SListOrdered list)
-      throws Exception
-    {
-      return SAnnotator.transformListOrdered(
-        this.ids,
-        this.footnotes,
-        this.number,
-        list);
-    }
-
-    @Override public SAFormalItemContent visitListUnordered(
-      final SListUnordered list)
-      throws Exception
-    {
-      return SAnnotator.transformListUnordered(
-        this.ids,
-        this.footnotes,
-        this.number,
-        list);
-    }
-
-    @Override public SAFormalItemContent visitTable(
-      final STable t)
-      throws Exception
-    {
-      return SAnnotator.transformTable(
-        this.ids,
-        this.footnotes,
-        this.number,
-        t);
-    }
-
-    @Override public SAFormalItemContent visitVerbatim(
-      final SVerbatim text)
-      throws Exception
-    {
-      return SAnnotator.transformVerbatim(text);
-    }
-  }
-
-  private static final class LinkContentAnnotator implements
-    SLinkContentVisitor<SALinkContent>
-  {
-    public LinkContentAnnotator()
-    {
-
-    }
-
-    @Override public SALinkContent visitImage(
-      final SImage image)
-      throws Exception
-    {
-      return SAnnotator.transformImage(image);
-    }
-
-    @Override public SALinkContent visitText(
-      final SText text)
-      throws Exception
-    {
-      return SAnnotator.transformText(text);
-    }
-  }
-
-  private static final class ListItemContentAnnotator implements
-    SListItemContentVisitor<SAListItemContent>
-  {
-    private final List<SAFootnote>          footnotes;
-    private final SAIDMap                   ids;
-    private final SASubsectionContentNumber number;
-
-    public ListItemContentAnnotator(
-      final SAIDMap in_ids,
-      final List<SAFootnote> in_footnotes,
-      final SASubsectionContentNumber in_number)
-    {
-      this.ids = in_ids;
-      this.footnotes = in_footnotes;
-      this.number = in_number;
-    }
-
-    @Override public SAListItemContent visitFootnote(
-      final SFootnote footnote)
-      throws Exception
-    {
-      return SAnnotator.transformFootnote(
-        this.ids,
-        this.footnotes,
-        this.number,
-        footnote);
-    }
-
-    @Override public SAListItemContent visitImage(
-      final SImage image)
-      throws Exception
-    {
-      return SAnnotator.transformImage(image);
-    }
-
-    @Override public SAListItemContent visitLink(
-      final SLink link)
-      throws Exception
-    {
-      return SAnnotator.transformLink(link);
-    }
-
-    @Override public SAListItemContent visitLinkExternal(
-      final SLinkExternal link)
-      throws Exception
-    {
-      return SAnnotator.transformLinkExternal(link);
-    }
-
-    @Override public SAListItemContent visitListOrdered(
-      final SListOrdered list)
-      throws Exception
-    {
-      return SAnnotator.transformListOrdered(
-        this.ids,
-        this.footnotes,
-        this.number,
-        list);
-    }
-
-    @Override public SAListItemContent visitListUnordered(
-      final SListUnordered list)
-      throws Exception
-    {
-      return SAnnotator.transformListUnordered(
-        this.ids,
-        this.footnotes,
-        this.number,
-        list);
-    }
-
-    @Override public SAListItemContent visitTerm(
-      final STerm term)
-      throws Exception
-    {
-      return SAnnotator.transformTerm(term);
-    }
-
-    @Override public SAListItemContent visitText(
-      final SText text)
-      throws Exception
-    {
-      return SAnnotator.transformText(text);
-    }
-
-    @Override public SAListItemContent visitVerbatim(
-      final SVerbatim text)
-      throws Exception
-    {
-      return SAnnotator.transformVerbatim(text);
-    }
-  }
-
-  private static final class NoPartSectionAnnotator implements
-    SSectionVisitor<SASection>
-  {
-    private final List<SAFootnote>    footnotes;
-    private final SAFormalItemsByKind formals;
-    private final SAIDMap             ids;
-    private final SASectionNumberS    number;
-
-    public NoPartSectionAnnotator(
-      final SAIDMap in_ids,
-      final SAFormalItemsByKind in_formals,
-      final List<SAFootnote> in_footnotes,
-      final int section_no)
-    {
-      this.ids = in_ids;
-      this.formals = in_formals;
-      this.number = new SASectionNumberS(section_no);
-      this.footnotes = in_footnotes;
-    }
-
-    @Override public SASection visitSectionWithParagraphs(
-      final SSectionWithParagraphs s)
-      throws Exception
-    {
-      return SAnnotator.transformSectionWithParagraphs(
-        this.ids,
-        this.formals,
-        this.footnotes,
-        s,
-        this.number);
-    }
-
-    @Override public SASection visitSectionWithSubsections(
-      final SSectionWithSubsections s)
-      throws Exception
-    {
-      return SAnnotator.transformSectionWithSubsections(
-        this.ids,
-        this.formals,
-        this.footnotes,
-        this.number,
-        s);
-    }
-  }
-
-  private static final class ParagraphContentAnnotator implements
-    SParagraphContentVisitor<SAParagraphContent>
-  {
-    private final List<SAFootnote>  footnotes;
-    private final SAIDMap           ids;
-    private final SAParagraphNumber number;
-
-    public ParagraphContentAnnotator(
-      final SAIDMap in_ids,
-      final List<SAFootnote> in_footnotes,
-      final SAParagraphNumber in_number)
-    {
-      this.ids = in_ids;
-      this.footnotes = in_footnotes;
-      this.number = in_number;
-    }
-
-    @Override public SAParagraphContent visitFootnote(
-      final SFootnote footnote)
-      throws Exception
-    {
-      return SAnnotator.transformFootnote(
-        this.ids,
-        this.footnotes,
-        this.number,
-        footnote);
-    }
-
-    @Override public SAParagraphContent visitFormalItemList(
-      final SFormalItemList list)
-      throws Exception
-    {
-      return SAnnotator.transformFormalItemList(list);
-    }
-
-    @Override public SAParagraphContent visitImage(
-      final SImage image)
-      throws Exception
-    {
-      return SAnnotator.transformImage(image);
-    }
-
-    @Override public SAParagraphContent visitLink(
-      final SLink link)
-      throws Exception
-    {
-      return SAnnotator.transformLink(link);
-    }
-
-    @Override public SAParagraphContent visitLinkExternal(
-      final SLinkExternal link)
-      throws Exception
-    {
-      return SAnnotator.transformLinkExternal(link);
-    }
-
-    @Override public SAParagraphContent visitListOrdered(
-      final SListOrdered list)
-      throws Exception
-    {
-      return SAnnotator.transformListOrdered(
-        this.ids,
-        this.footnotes,
-        this.number,
-        list);
-    }
-
-    @Override public SAParagraphContent visitListUnordered(
-      final SListUnordered list)
-      throws Exception
-    {
-      return SAnnotator.transformListUnordered(
-        this.ids,
-        this.footnotes,
-        this.number,
-        list);
-    }
-
-    @Override public SAParagraphContent visitTable(
-      final STable table)
-      throws Exception
-    {
-      return SAnnotator.transformTable(
-        this.ids,
-        this.footnotes,
-        this.number,
-        table);
-    }
-
-    @Override public SAParagraphContent visitTerm(
-      final STerm term)
-      throws Exception
-    {
-      return SAnnotator.transformTerm(term);
-    }
-
-    @Override public SAParagraphContent visitText(
-      final SText text)
-      throws Exception
-    {
-      return SAnnotator.transformText(text);
-    }
-
-    @Override public SAParagraphContent visitVerbatim(
-      final SVerbatim text)
-      throws Exception
-    {
-      return SAnnotator.transformVerbatim(text);
-    }
-  }
-
-  private static final class PartSectionAnnotator implements
-    SSectionVisitor<SASection>
-  {
-    private final List<SAFootnote>    footnotes;
-    private final SAFormalItemsByKind formals;
-    private final SAIDMap             ids;
-    private final SASectionNumberPS   number;
-
-    public PartSectionAnnotator(
-      final SAIDMap in_ids,
-      final SAFormalItemsByKind in_formals,
-      final List<SAFootnote> in_footnotes,
-      final SASectionNumberPS in_number)
-    {
-      this.ids = in_ids;
-      this.formals = in_formals;
-      this.footnotes = in_footnotes;
-      this.number = in_number;
-    }
-
-    @Override public SASection visitSectionWithParagraphs(
-      final SSectionWithParagraphs s)
-      throws Exception
-    {
-      return SAnnotator.transformSectionWithParagraphs(
-        this.ids,
-        this.formals,
-        this.footnotes,
-        s,
-        this.number);
-    }
-
-    @Override public SASection visitSectionWithSubsections(
-      final SSectionWithSubsections s)
-      throws Exception
-    {
-      return SAnnotator.transformSectionWithSubsections(
-        this.ids,
-        this.formals,
-        this.footnotes,
-        this.number,
-        s);
-    }
-  }
-
-  private static final class SAIDLinkCreator implements
-    FunctionType<SAID, Unit>
-  {
-    private final SAIDTargetContent content;
-    private final SAIDMap           ids;
-
-    public SAIDLinkCreator(
-      final SAIDMap map,
-      final SAIDTargetContent c)
-    {
-      this.ids = map;
-      this.content = c;
-    }
-
-    @Override public Unit call(
-      final SAID x)
-    {
-      this.ids.put(x, this.content);
-      return Unit.unit();
-    }
-  }
-
-  private static final class SAIDMapper implements FunctionType<SID, SAID>
-  {
-    public SAIDMapper()
-    {
-      // Nothing
-    }
-
-    @Override public SAID call(
-      final SID x)
-    {
-      return new SAID(x.getActual());
-    }
-  }
-
-  private static final class TableCellContentAnnotator implements
-    STableCellContentVisitor<SATableCellContent>
-  {
-    private final List<SAFootnote>          footnotes;
-    private final SAIDMap                   ids;
-    private final SASubsectionContentNumber number;
-
-    public TableCellContentAnnotator(
-      final SAIDMap in_ids,
-      final List<SAFootnote> in_footnotes,
-      final SASubsectionContentNumber in_number)
-    {
-      this.ids = in_ids;
-      this.footnotes = in_footnotes;
-      this.number = in_number;
-    }
-
-    @Override public SATableCellContent visitFootnote(
-      final SFootnote footnote)
-      throws Exception
-    {
-      return SAnnotator.transformFootnote(
-        this.ids,
-        this.footnotes,
-        this.number,
-        footnote);
-    }
-
-    @Override public SATableCellContent visitImage(
-      final SImage image)
-      throws Exception
-    {
-      return SAnnotator.transformImage(image);
-    }
-
-    @Override public SATableCellContent visitLink(
-      final SLink link)
-      throws Exception
-    {
-      return SAnnotator.transformLink(link);
-    }
-
-    @Override public SATableCellContent visitLinkExternal(
-      final SLinkExternal link)
-      throws Exception
-    {
-      return SAnnotator.transformLinkExternal(link);
-    }
-
-    @Override public SATableCellContent visitListOrdered(
-      final SListOrdered list)
-      throws Exception
-    {
-      return SAnnotator.transformListOrdered(
-        this.ids,
-        this.footnotes,
-        this.number,
-        list);
-    }
-
-    @Override public SATableCellContent visitListUnordered(
-      final SListUnordered list)
-      throws Exception
-    {
-      return SAnnotator.transformListUnordered(
-        this.ids,
-        this.footnotes,
-        this.number,
-        list);
-    }
-
-    @Override public SATableCellContent visitTerm(
-      final STerm term)
-      throws Exception
-    {
-      return SAnnotator.transformTerm(term);
-    }
-
-    @Override public SATableCellContent visitText(
-      final SText text)
-      throws Exception
-    {
-      return SAnnotator.transformText(text);
-    }
-
-    @Override public SATableCellContent visitVerbatim(
-      final SVerbatim text)
-      throws Exception
-    {
-      return SAnnotator.transformVerbatim(text);
-    }
+    this.document = NullCheck.notNull(d, "Document");
+    this.log = NullCheck.notNull(in_log, "Log").with("annotator");
   }
 
   /**
    * Annotate the given document.
    *
-   * @param log
-   *          A log handle
-   * @param d
-   *          The document
+   * @param log A log handle
+   * @param d   The document
+   *
    * @return An annotated document
    */
 
@@ -828,11 +118,9 @@ import com.io7m.junreachable.UnreachableCodeException;
       new ArrayList<SAFootnoteContent>();
 
     for (final SFootnoteContent c : footnote.getContent().getElements()) {
-      final SAFootnoteContent rc =
-        c.footnoteContentAccept(new FootnoteContentAnnotator(
-          ids,
-          footnotes,
-          number));
+      final SAFootnoteContent rc = c.footnoteContentAccept(
+        new FootnoteContentAnnotator(
+          ids, footnotes, number));
       content_r.add(rc);
     }
 
@@ -877,8 +165,7 @@ import com.io7m.junreachable.UnreachableCodeException;
   {
     final List<SALinkContent> content_r = new ArrayList<SALinkContent>();
     for (final SLinkContent c : link.getContent().getElements()) {
-      final SALinkContent rc =
-        c.linkContentAccept(new LinkContentAnnotator());
+      final SALinkContent rc = c.linkContentAccept(new LinkContentAnnotator());
       content_r.add(rc);
     }
 
@@ -893,8 +180,7 @@ import com.io7m.junreachable.UnreachableCodeException;
   {
     final List<SALinkContent> content_r = new ArrayList<SALinkContent>();
     for (final SLinkContent c : link.getContent().getElements()) {
-      final SALinkContent rc =
-        c.linkContentAccept(new LinkContentAnnotator());
+      final SALinkContent rc = c.linkContentAccept(new LinkContentAnnotator());
       content_r.add(rc);
     }
 
@@ -999,8 +285,9 @@ import com.io7m.junreachable.UnreachableCodeException;
   {
     final OptionType<SAID> id = formal.getID().map(new SAIDMapper());
 
-    final SAFormalItem saf =
-      number.sectionNumberAccept(new SASectionNumberVisitor<SAFormalItem>() {
+    final SAFormalItem saf = number.sectionNumberAccept(
+      new SASectionNumberVisitor<SAFormalItem>()
+      {
         @Override public SAFormalItem visitSectionNumberWithoutPart(
           final SASectionNumberS sn)
           throws Exception
@@ -1012,36 +299,39 @@ import com.io7m.junreachable.UnreachableCodeException;
 
           final SAFormalItemContent in_content =
             SAnnotator.transformFormalItemContent(
-              ids,
-              footnotes,
-              formal,
-              f_number);
+              ids, footnotes, formal, f_number);
 
-          return new SAFormalItem(f_number, title, formal.getKind(), formal
-            .getType(), in_content, formal_number, id);
+          return new SAFormalItem(
+            f_number,
+            title,
+            formal.getKind(),
+            formal.getType(),
+            in_content,
+            formal_number,
+            id);
         }
 
         @Override public SAFormalItem visitSectionNumberWithPart(
           final SASectionNumberPS sn)
           throws Exception
         {
-          final SAFormalItemNumber f_number =
-            new SAFormalItemNumberPSF(
-              sn.getPart(),
-              sn.getSection(),
-              formal_number);
+          final SAFormalItemNumber f_number = new SAFormalItemNumberPSF(
+            sn.getPart(), sn.getSection(), formal_number);
           final SAFormalItemTitle title =
             new SAFormalItemTitle(f_number, formal.getTitle().getActual());
 
           final SAFormalItemContent in_content =
             SAnnotator.transformFormalItemContent(
-              ids,
-              footnotes,
-              formal,
-              f_number);
+              ids, footnotes, formal, f_number);
 
-          return new SAFormalItem(f_number, title, formal.getKind(), formal
-            .getType(), in_content, formal_number, id);
+          return new SAFormalItem(
+            f_number,
+            title,
+            formal.getKind(),
+            formal.getType(),
+            in_content,
+            formal_number,
+            id);
         }
       });
 
@@ -1060,8 +350,9 @@ import com.io7m.junreachable.UnreachableCodeException;
   {
     final OptionType<SAID> id = paragraph.getID().map(new SAIDMapper());
 
-    final SAParagraph sap =
-      number.sectionNumberAccept(new SASectionNumberVisitor<SAParagraph>() {
+    final SAParagraph sap = number.sectionNumberAccept(
+      new SASectionNumberVisitor<SAParagraph>()
+      {
         @Override public SAParagraph visitSectionNumberWithoutPart(
           final SASectionNumberS sn)
           throws Exception
@@ -1071,40 +362,25 @@ import com.io7m.junreachable.UnreachableCodeException;
 
           final SNonEmptyList<SAParagraphContent> in_content =
             SAnnotator.transformParagraphContent(
-              ids,
-              footnotes,
-              paragraph,
-              p_number);
+              ids, footnotes, paragraph, p_number);
 
           return new SAParagraph(
-            p_number,
-            paragraph.getType(),
-            in_content,
-            id);
+            p_number, paragraph.getType(), in_content, id);
         }
 
         @Override public SAParagraph visitSectionNumberWithPart(
           final SASectionNumberPS sn)
           throws Exception
         {
-          final SAParagraphNumber p_number =
-            new SAParagraphNumberPSP(
-              sn.getPart(),
-              sn.getSection(),
-              paragraph_number);
+          final SAParagraphNumber p_number = new SAParagraphNumberPSP(
+            sn.getPart(), sn.getSection(), paragraph_number);
 
           final SNonEmptyList<SAParagraphContent> in_content =
             SAnnotator.transformParagraphContent(
-              ids,
-              footnotes,
-              paragraph,
-              p_number);
+              ids, footnotes, paragraph, p_number);
 
           return new SAParagraph(
-            p_number,
-            paragraph.getType(),
-            in_content,
-            id);
+            p_number, paragraph.getType(), in_content, id);
         }
       });
 
@@ -1130,38 +406,36 @@ import com.io7m.junreachable.UnreachableCodeException;
     final int footnotes_before = footnotes.size();
 
     for (final SSubsectionContent p : s.getSectionContent().getElements()) {
-      final SASubsectionContent r =
-        p
-          .subsectionContentAccept(new SSubsectionContentVisitor<SASubsectionContent>() {
-            @Override public SASubsectionContent visitFormalItem(
-              final SFormalItem formal)
-              throws Exception
-            {
-              final SAFormalItem pa =
-                SAnnotator.transformSectionFormalItem(
-                  ids,
-                  formals,
-                  footnotes,
-                  number,
-                  formal,
-                  formal_no.getAndIncrement());
-              return pa;
-            }
+      final SASubsectionContent r = p.subsectionContentAccept(
+        new SSubsectionContentVisitor<SASubsectionContent>()
+        {
+          @Override public SASubsectionContent visitFormalItem(
+            final SFormalItem formal)
+            throws Exception
+          {
+            final SAFormalItem pa = SAnnotator.transformSectionFormalItem(
+              ids,
+              formals,
+              footnotes,
+              number,
+              formal,
+              formal_no.getAndIncrement());
+            return pa;
+          }
 
-            @Override public SASubsectionContent visitParagraph(
-              final SParagraph paragraph)
-              throws Exception
-            {
-              final SAParagraph pa =
-                SAnnotator.transformSectionParagraph(
-                  ids,
-                  footnotes,
-                  number,
-                  paragraph,
-                  paragraph_no.getAndIncrement());
-              return pa;
-            }
-          });
+          @Override public SASubsectionContent visitParagraph(
+            final SParagraph paragraph)
+            throws Exception
+          {
+            final SAParagraph pa = SAnnotator.transformSectionParagraph(
+              ids,
+              footnotes,
+              number,
+              paragraph,
+              paragraph_no.getAndIncrement());
+            return pa;
+          }
+        });
 
       content_r.add(r);
     }
@@ -1179,13 +453,7 @@ import com.io7m.junreachable.UnreachableCodeException;
     final SNonEmptyList<SASubsectionContent> content =
       SNonEmptyList.newList(content_r);
     return new SASectionWithParagraphs(
-      number,
-      s.getType(),
-      id,
-      title,
-      s.getContents(),
-      content,
-      footnotes_here);
+      number, s.getType(), id, title, s.getContents(), content, footnotes_here);
   }
 
   private static SASection transformSectionWithSubsections(
@@ -1203,14 +471,8 @@ import com.io7m.junreachable.UnreachableCodeException;
     final List<SASubsection> subsections_r = new ArrayList<SASubsection>();
     for (final SSubsection ss : s.getSubsections().getElements()) {
       assert ss != null;
-      final SASubsection sa =
-        SAnnotator.transformSubsection(
-          ids,
-          formals,
-          footnotes,
-          number,
-          ss,
-          subsections_r.size() + 1);
+      final SASubsection sa = SAnnotator.transformSubsection(
+        ids, formals, footnotes, number, ss, subsections_r.size() + 1);
       sa.getID().map(new SAIDLinkCreator(ids, sa));
       subsections_r.add(sa);
     }
@@ -1258,36 +520,35 @@ import com.io7m.junreachable.UnreachableCodeException;
     final AtomicInteger formal_no = new AtomicInteger(1);
 
     for (final SSubsectionContent c : subsection.getContent().getElements()) {
-      final SASubsectionContent ca =
-        c
-          .subsectionContentAccept(new SSubsectionContentVisitor<SASubsectionContent>() {
-            @Override public SASubsectionContent visitFormalItem(
-              final SFormalItem formal)
-              throws Exception
-            {
-              return SAnnotator.transformSubsectionFormalItem(
-                ids,
-                formals,
-                footnotes,
-                s_number,
-                formal,
-                formal_no.getAndIncrement());
-            }
+      final SASubsectionContent ca = c.subsectionContentAccept(
+        new SSubsectionContentVisitor<SASubsectionContent>()
+        {
+          @Override public SASubsectionContent visitFormalItem(
+            final SFormalItem formal)
+            throws Exception
+          {
+            return SAnnotator.transformSubsectionFormalItem(
+              ids,
+              formals,
+              footnotes,
+              s_number,
+              formal,
+              formal_no.getAndIncrement());
+          }
 
-            @Override public SASubsectionContent visitParagraph(
-              final SParagraph paragraph)
-              throws Exception
-            {
-              final SAParagraph pa =
-                SAnnotator.transformSubsectionParagraph(
-                  ids,
-                  footnotes,
-                  s_number,
-                  paragraph,
-                  paragraph_no.getAndIncrement());
-              return pa;
-            }
-          });
+          @Override public SASubsectionContent visitParagraph(
+            final SParagraph paragraph)
+            throws Exception
+          {
+            final SAParagraph pa = SAnnotator.transformSubsectionParagraph(
+              ids,
+              footnotes,
+              s_number,
+              paragraph,
+              paragraph_no.getAndIncrement());
+            return pa;
+          }
+        });
       results_r.add(ca);
     }
 
@@ -1296,11 +557,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 
     final OptionType<SAID> id = subsection.getID().map(new SAIDMapper());
     return new SASubsection(
-      s_number,
-      subsection.getType(),
-      id,
-      title,
-      in_content);
+      s_number, subsection.getType(), id, title, in_content);
   }
 
   private static SAFormalItem transformSubsectionFormalItem(
@@ -1314,53 +571,55 @@ import com.io7m.junreachable.UnreachableCodeException;
   {
     final OptionType<SAID> id = formal.getID().map(new SAIDMapper());
 
-    final SAFormalItem saf =
-      s_number
-        .subsectionNumberAccept(new SASubsectionNumberVisitor<SAFormalItem>() {
-          @Override public SAFormalItem visitSubsectionNumberPSS(
-            final SASubsectionNumberPSS p)
-            throws Exception
-          {
-            final SAFormalItemNumber f_number =
-              new SAFormalItemNumberPSSF(p.getPart(), p.getSection(), p
-                .getSubsection(), formal_number);
-            final SAFormalItemTitle title =
-              new SAFormalItemTitle(f_number, formal.getTitle().getActual());
+    final SAFormalItem saf = s_number.subsectionNumberAccept(
+      new SASubsectionNumberVisitor<SAFormalItem>()
+      {
+        @Override public SAFormalItem visitSubsectionNumberPSS(
+          final SASubsectionNumberPSS p)
+          throws Exception
+        {
+          final SAFormalItemNumber f_number = new SAFormalItemNumberPSSF(
+            p.getPart(), p.getSection(), p.getSubsection(), formal_number);
+          final SAFormalItemTitle title =
+            new SAFormalItemTitle(f_number, formal.getTitle().getActual());
 
-            final SAFormalItemContent in_content =
-              SAnnotator.transformFormalItemContent(
-                ids,
-                footnotes,
-                formal,
-                f_number);
+          final SAFormalItemContent in_content =
+            SAnnotator.transformFormalItemContent(
+              ids, footnotes, formal, f_number);
 
-            return new SAFormalItem(f_number, title, formal.getKind(), formal
-              .getType(), in_content, formal_number, id);
-          }
+          return new SAFormalItem(
+            f_number,
+            title,
+            formal.getKind(),
+            formal.getType(),
+            in_content,
+            formal_number,
+            id);
+        }
 
-          @Override public SAFormalItem visitSubsectionNumberSS(
-            final SASubsectionNumberSS p)
-            throws Exception
-          {
-            final SAFormalItemNumber f_number =
-              new SAFormalItemNumberSSF(
-                p.getSection(),
-                p.getSubsection(),
-                formal_number);
-            final SAFormalItemTitle title =
-              new SAFormalItemTitle(f_number, formal.getTitle().getActual());
+        @Override public SAFormalItem visitSubsectionNumberSS(
+          final SASubsectionNumberSS p)
+          throws Exception
+        {
+          final SAFormalItemNumber f_number = new SAFormalItemNumberSSF(
+            p.getSection(), p.getSubsection(), formal_number);
+          final SAFormalItemTitle title =
+            new SAFormalItemTitle(f_number, formal.getTitle().getActual());
 
-            final SAFormalItemContent in_content =
-              SAnnotator.transformFormalItemContent(
-                ids,
-                footnotes,
-                formal,
-                f_number);
+          final SAFormalItemContent in_content =
+            SAnnotator.transformFormalItemContent(
+              ids, footnotes, formal, f_number);
 
-            return new SAFormalItem(f_number, title, formal.getKind(), formal
-              .getType(), in_content, formal_number, id);
-          }
-        });
+          return new SAFormalItem(
+            f_number,
+            title,
+            formal.getKind(),
+            formal.getType(),
+            in_content,
+            formal_number,
+            id);
+        }
+      });
 
     id.map(new SAIDLinkCreator(ids, saf));
     formals.put(saf.getKind(), saf);
@@ -1372,8 +631,9 @@ import com.io7m.junreachable.UnreachableCodeException;
     final int subsection_number)
     throws Exception
   {
-    return number
-      .sectionNumberAccept(new SASectionNumberVisitor<SASubsectionNumber>() {
+    return number.sectionNumberAccept(
+      new SASectionNumberVisitor<SASubsectionNumber>()
+      {
         @Override public SASubsectionNumber visitSectionNumberWithoutPart(
           final SASectionNumberS p)
           throws Exception
@@ -1386,9 +646,7 @@ import com.io7m.junreachable.UnreachableCodeException;
           throws Exception
         {
           return new SASubsectionNumberPSS(
-            p.getPart(),
-            p.getSection(),
-            subsection_number);
+            p.getPart(), p.getSection(), subsection_number);
         }
       });
   }
@@ -1403,55 +661,42 @@ import com.io7m.junreachable.UnreachableCodeException;
   {
     final OptionType<SAID> id = paragraph.getID().map(new SAIDMapper());
 
-    final SAParagraph sap =
-      number
-        .subsectionNumberAccept(new SASubsectionNumberVisitor<SAParagraph>() {
-          @Override public SAParagraph visitSubsectionNumberPSS(
-            final SASubsectionNumberPSS ssn)
-            throws Exception
-          {
-            final SAParagraphNumber p_number =
-              new SAParagraphNumberPSSP(ssn.getPart(), ssn.getSection(), ssn
-                .getSubsection(), paragraph_number);
+    final SAParagraph sap = number.subsectionNumberAccept(
+      new SASubsectionNumberVisitor<SAParagraph>()
+      {
+        @Override public SAParagraph visitSubsectionNumberPSS(
+          final SASubsectionNumberPSS ssn)
+          throws Exception
+        {
+          final SAParagraphNumber p_number = new SAParagraphNumberPSSP(
+            ssn.getPart(),
+            ssn.getSection(),
+            ssn.getSubsection(),
+            paragraph_number);
 
-            final SNonEmptyList<SAParagraphContent> in_content =
-              SAnnotator.transformParagraphContent(
-                ids,
-                footnotes,
-                paragraph,
-                p_number);
+          final SNonEmptyList<SAParagraphContent> in_content =
+            SAnnotator.transformParagraphContent(
+              ids, footnotes, paragraph, p_number);
 
-            return new SAParagraph(
-              p_number,
-              paragraph.getType(),
-              in_content,
-              id);
-          }
+          return new SAParagraph(
+            p_number, paragraph.getType(), in_content, id);
+        }
 
-          @Override public SAParagraph visitSubsectionNumberSS(
-            final SASubsectionNumberSS ssn)
-            throws Exception
-          {
-            final SAParagraphNumber p_number =
-              new SAParagraphNumberSSP(
-                ssn.getSection(),
-                ssn.getSubsection(),
-                paragraph_number);
+        @Override public SAParagraph visitSubsectionNumberSS(
+          final SASubsectionNumberSS ssn)
+          throws Exception
+        {
+          final SAParagraphNumber p_number = new SAParagraphNumberSSP(
+            ssn.getSection(), ssn.getSubsection(), paragraph_number);
 
-            final SNonEmptyList<SAParagraphContent> in_content =
-              SAnnotator.transformParagraphContent(
-                ids,
-                footnotes,
-                paragraph,
-                p_number);
+          final SNonEmptyList<SAParagraphContent> in_content =
+            SAnnotator.transformParagraphContent(
+              ids, footnotes, paragraph, p_number);
 
-            return new SAParagraph(
-              p_number,
-              paragraph.getType(),
-              in_content,
-              id);
-          }
-        });
+          return new SAParagraph(
+            p_number, paragraph.getType(), in_content, id);
+        }
+      });
 
     id.map(new SAIDLinkCreator(ids, sap));
     return sap;
@@ -1467,16 +712,16 @@ import com.io7m.junreachable.UnreachableCodeException;
     final SATableSummary in_summary =
       SAnnotator.transformTableSummary(t.getSummary());
 
-    final OptionType<SATableHead> in_header =
-      t.getHeader().mapPartial(
-        new PartialFunctionType<STableHead, SATableHead, Exception>() {
-          @Override public SATableHead call(
-            final STableHead x)
-            throws Exception
-          {
-            return SAnnotator.transformTableHead(x);
-          }
-        });
+    final OptionType<SATableHead> in_header = t.getHeader().mapPartial(
+      new PartialFunctionType<STableHead, SATableHead, Exception>()
+      {
+        @Override public SATableHead call(
+          final STableHead x)
+          throws Exception
+        {
+          return SAnnotator.transformTableHead(x);
+        }
+      });
 
     final SATableBody in_body =
       SAnnotator.transformTableBody(ids, footnotes, number, t.getBody());
@@ -1493,11 +738,9 @@ import com.io7m.junreachable.UnreachableCodeException;
     final List<SATableRow> rows_r = new ArrayList<SATableRow>();
     for (final STableRow r : body.getRows().getElements()) {
       assert r != null;
-      rows_r.add(SAnnotator.transformTableRow(
-        in_ids,
-        in_footnotes,
-        in_number,
-        r));
+      rows_r.add(
+        SAnnotator.transformTableRow(
+          in_ids, in_footnotes, in_number, r));
     }
 
     final SNonEmptyList<SATableRow> rows = SNonEmptyList.newList(rows_r);
@@ -1515,11 +758,9 @@ import com.io7m.junreachable.UnreachableCodeException;
       new ArrayList<SATableCellContent>();
     for (final STableCellContent cc : c.getContent()) {
       assert cc != null;
-      content_r.add(SAnnotator.transformTableCellContent(
-        in_ids,
-        in_footnotes,
-        in_number,
-        cc));
+      content_r.add(
+        SAnnotator.transformTableCellContent(
+          in_ids, in_footnotes, in_number, cc));
     }
 
     return new SATableCell(content_r);
@@ -1532,10 +773,9 @@ import com.io7m.junreachable.UnreachableCodeException;
     final STableCellContent cc)
     throws Exception
   {
-    return cc.tableCellContentAccept(new TableCellContentAnnotator(
-      in_ids,
-      in_footnotes,
-      in_number));
+    return cc.tableCellContentAccept(
+      new TableCellContentAnnotator(
+        in_ids, in_footnotes, in_number));
   }
 
   private static SATableColumnName transformTableColumnName(
@@ -1547,8 +787,7 @@ import com.io7m.junreachable.UnreachableCodeException;
   private static SATableHead transformTableHead(
     final STableHead x)
   {
-    final List<SATableColumnName> names_r =
-      new ArrayList<SATableColumnName>();
+    final List<SATableColumnName> names_r = new ArrayList<SATableColumnName>();
     for (final STableColumnName n : x.getHeader().getElements()) {
       assert n != null;
       names_r.add(SAnnotator.transformTableColumnName(n));
@@ -1569,11 +808,9 @@ import com.io7m.junreachable.UnreachableCodeException;
     final List<SATableCell> cells_r = new ArrayList<SATableCell>();
     for (final STableCell c : r.getColumns().getElements()) {
       assert c != null;
-      cells_r.add(SAnnotator.transformTableCell(
-        in_ids,
-        in_footnotes,
-        in_number,
-        c));
+      cells_r.add(
+        SAnnotator.transformTableCell(
+          in_ids, in_footnotes, in_number, c));
     }
 
     final SNonEmptyList<SATableCell> cells = SNonEmptyList.newList(cells_r);
@@ -1604,23 +841,657 @@ import com.io7m.junreachable.UnreachableCodeException;
     return new SAVerbatim(text.getText(), text.getType());
   }
 
-  private final SDocument     document;
-  private final LogUsableType log;
-
-  private SAnnotator(
-    final LogUsableType in_log,
-    final SDocument d)
-  {
-    this.document = NullCheck.notNull(d, "Document");
-    this.log = NullCheck.notNull(in_log, "Log").with("annotator");
-  }
-
   private SADocument process()
   {
     try {
       return this.document.documentAccept(new DocumentAnnotator(this.log));
     } catch (final Exception e) {
       throw new UnreachableCodeException(e);
+    }
+  }
+
+  private static final class DocumentAnnotator
+    implements SDocumentVisitor<SADocument>
+  {
+    private final List<SAFootnote>    footnotes;
+    private final SAFormalItemsByKind formals;
+    private final SAIDMap             ids;
+
+    public DocumentAnnotator(
+      final LogUsableType log)
+    {
+      this.ids = new SAIDMap(log);
+      this.footnotes = new ArrayList<SAFootnote>();
+      this.formals = new SAFormalItemsByKind(log);
+    }
+
+    public SAPart part(
+      final SPart p,
+      final SAPartNumber part_no)
+      throws Exception
+    {
+      final OptionType<SAID> id = p.getID().map(new SAIDMapper());
+      final SAPartTitle title =
+        new SAPartTitle(part_no, p.getTitle().getActual());
+
+      final List<SASection> sections_r = new ArrayList<SASection>();
+      for (final SSection s : p.getSections().getElements()) {
+        final SASectionNumberPS number =
+          new SASectionNumberPS(part_no.getActual(), sections_r.size() + 1);
+
+        final SASection sp = s.sectionAccept(
+          new PartSectionAnnotator(
+            this.ids, this.formals, this.footnotes, number));
+
+        sp.getID().map(new SAIDLinkCreator(this.ids, sp));
+        sections_r.add(sp);
+      }
+
+      final SNonEmptyList<SASection> sections =
+        SNonEmptyList.newList(sections_r);
+      return new SAPart(
+        part_no, p.getType(), id, title, p.getContents(), sections);
+    }
+
+    @Override public SADocument visitDocumentWithParts(
+      final SDocumentWithParts dp)
+      throws Exception
+    {
+      final List<SAPart> parts_r = new ArrayList<SAPart>();
+      for (final SPart p : dp.getParts().getElements()) {
+        assert p != null;
+        final SAPart q = this.part(p, new SAPartNumber(parts_r.size() + 1));
+        q.getID().map(new SAIDLinkCreator(this.ids, q));
+        parts_r.add(q);
+      }
+      final SNonEmptyList<SAPart> parts = SNonEmptyList.newList(parts_r);
+
+      final SADocumentTitle title =
+        SADocumentTitle.documentTitle(dp.getTitle().getActual());
+
+      return new SADocumentWithParts(
+        this.ids,
+        title,
+        dp.getContents(),
+        dp.getStyle(),
+        parts,
+        this.footnotes,
+        this.formals);
+    }
+
+    @Override public SADocument visitDocumentWithSections(
+      final SDocumentWithSections ds)
+      throws Exception
+    {
+      final List<SASection> sections_r = new ArrayList<SASection>();
+      for (final SSection s : ds.getSections().getElements()) {
+        final SASection ss = s.sectionAccept(
+          new NoPartSectionAnnotator(
+            this.ids, this.formals, this.footnotes, sections_r.size() + 1));
+
+        ss.getID().map(new SAIDLinkCreator(this.ids, ss));
+        sections_r.add(ss);
+      }
+      final SNonEmptyList<SASection> sections =
+        SNonEmptyList.newList(sections_r);
+
+      final SADocumentTitle title =
+        SADocumentTitle.documentTitle(ds.getTitle().getActual());
+
+      return new SADocumentWithSections(
+        this.ids,
+        title,
+        ds.getContents(),
+        ds.getStyle(),
+        sections,
+        this.footnotes,
+        this.formals);
+    }
+  }
+
+  private static final class FootnoteContentAnnotator
+    implements SFootnoteContentVisitor<SAFootnoteContent>
+  {
+    private final List<SAFootnote>          footnotes;
+    private final SAIDMap                   ids;
+    private final SASubsectionContentNumber number;
+
+    public FootnoteContentAnnotator(
+      final SAIDMap in_ids,
+      final List<SAFootnote> in_footnotes,
+      final SASubsectionContentNumber in_number)
+    {
+      this.ids = in_ids;
+      this.footnotes = in_footnotes;
+      this.number = in_number;
+    }
+
+    @Override public SAFootnoteContent visitFootnote(
+      final SFootnote footnote)
+      throws Exception
+    {
+      return SAnnotator.transformFootnote(
+        this.ids, this.footnotes, this.number, footnote);
+    }
+
+    @Override public SAFootnoteContent visitImage(
+      final SImage image)
+      throws Exception
+    {
+      return SAnnotator.transformImage(image);
+    }
+
+    @Override public SAFootnoteContent visitLink(
+      final SLink link)
+      throws Exception
+    {
+      return SAnnotator.transformLink(link);
+    }
+
+    @Override public SAFootnoteContent visitLinkExternal(
+      final SLinkExternal link)
+      throws Exception
+    {
+      return SAnnotator.transformLinkExternal(link);
+    }
+
+    @Override public SAFootnoteContent visitListOrdered(
+      final SListOrdered list)
+      throws Exception
+    {
+      return SAnnotator.transformListOrdered(
+        this.ids, this.footnotes, this.number, list);
+    }
+
+    @Override public SAFootnoteContent visitListUnordered(
+      final SListUnordered list)
+      throws Exception
+    {
+      return SAnnotator.transformListUnordered(
+        this.ids, this.footnotes, this.number, list);
+    }
+
+    @Override public SAFootnoteContent visitTerm(
+      final STerm term)
+      throws Exception
+    {
+      return SAnnotator.transformTerm(term);
+    }
+
+    @Override public SAFootnoteContent visitText(
+      final SText text)
+      throws Exception
+    {
+      return SAnnotator.transformText(text);
+    }
+
+    @Override public SAFootnoteContent visitVerbatim(
+      final SVerbatim text)
+      throws Exception
+    {
+      return SAnnotator.transformVerbatim(text);
+    }
+  }
+
+  private static final class FormalItemContentAnnotator
+    implements SFormalItemContentVisitor<SAFormalItemContent>
+  {
+    private final List<SAFootnote>   footnotes;
+    private final SAIDMap            ids;
+    private final SAFormalItemNumber number;
+
+    public FormalItemContentAnnotator(
+      final SAIDMap in_ids,
+      final List<SAFootnote> in_footnotes,
+      final SAFormalItemNumber in_number)
+    {
+      this.ids = in_ids;
+      this.footnotes = in_footnotes;
+      this.number = in_number;
+    }
+
+    @Override public SAFormalItemContent visitFormalItemList(
+      final SFormalItemList list)
+      throws Exception
+    {
+      return SAnnotator.transformFormalItemList(list);
+    }
+
+    @Override public SAFormalItemContent visitImage(
+      final SImage image)
+      throws Exception
+    {
+      return SAnnotator.transformImage(image);
+    }
+
+    @Override public SAFormalItemContent visitListOrdered(
+      final SListOrdered list)
+      throws Exception
+    {
+      return SAnnotator.transformListOrdered(
+        this.ids, this.footnotes, this.number, list);
+    }
+
+    @Override public SAFormalItemContent visitListUnordered(
+      final SListUnordered list)
+      throws Exception
+    {
+      return SAnnotator.transformListUnordered(
+        this.ids, this.footnotes, this.number, list);
+    }
+
+    @Override public SAFormalItemContent visitTable(
+      final STable t)
+      throws Exception
+    {
+      return SAnnotator.transformTable(
+        this.ids, this.footnotes, this.number, t);
+    }
+
+    @Override public SAFormalItemContent visitVerbatim(
+      final SVerbatim text)
+      throws Exception
+    {
+      return SAnnotator.transformVerbatim(text);
+    }
+  }
+
+  private static final class LinkContentAnnotator
+    implements SLinkContentVisitor<SALinkContent>
+  {
+    public LinkContentAnnotator()
+    {
+
+    }
+
+    @Override public SALinkContent visitImage(
+      final SImage image)
+      throws Exception
+    {
+      return SAnnotator.transformImage(image);
+    }
+
+    @Override public SALinkContent visitText(
+      final SText text)
+      throws Exception
+    {
+      return SAnnotator.transformText(text);
+    }
+  }
+
+  private static final class ListItemContentAnnotator
+    implements SListItemContentVisitor<SAListItemContent>
+  {
+    private final List<SAFootnote>          footnotes;
+    private final SAIDMap                   ids;
+    private final SASubsectionContentNumber number;
+
+    public ListItemContentAnnotator(
+      final SAIDMap in_ids,
+      final List<SAFootnote> in_footnotes,
+      final SASubsectionContentNumber in_number)
+    {
+      this.ids = in_ids;
+      this.footnotes = in_footnotes;
+      this.number = in_number;
+    }
+
+    @Override public SAListItemContent visitFootnote(
+      final SFootnote footnote)
+      throws Exception
+    {
+      return SAnnotator.transformFootnote(
+        this.ids, this.footnotes, this.number, footnote);
+    }
+
+    @Override public SAListItemContent visitImage(
+      final SImage image)
+      throws Exception
+    {
+      return SAnnotator.transformImage(image);
+    }
+
+    @Override public SAListItemContent visitLink(
+      final SLink link)
+      throws Exception
+    {
+      return SAnnotator.transformLink(link);
+    }
+
+    @Override public SAListItemContent visitLinkExternal(
+      final SLinkExternal link)
+      throws Exception
+    {
+      return SAnnotator.transformLinkExternal(link);
+    }
+
+    @Override public SAListItemContent visitListOrdered(
+      final SListOrdered list)
+      throws Exception
+    {
+      return SAnnotator.transformListOrdered(
+        this.ids, this.footnotes, this.number, list);
+    }
+
+    @Override public SAListItemContent visitListUnordered(
+      final SListUnordered list)
+      throws Exception
+    {
+      return SAnnotator.transformListUnordered(
+        this.ids, this.footnotes, this.number, list);
+    }
+
+    @Override public SAListItemContent visitTerm(
+      final STerm term)
+      throws Exception
+    {
+      return SAnnotator.transformTerm(term);
+    }
+
+    @Override public SAListItemContent visitText(
+      final SText text)
+      throws Exception
+    {
+      return SAnnotator.transformText(text);
+    }
+
+    @Override public SAListItemContent visitVerbatim(
+      final SVerbatim text)
+      throws Exception
+    {
+      return SAnnotator.transformVerbatim(text);
+    }
+  }
+
+  private static final class NoPartSectionAnnotator
+    implements SSectionVisitor<SASection>
+  {
+    private final List<SAFootnote>    footnotes;
+    private final SAFormalItemsByKind formals;
+    private final SAIDMap             ids;
+    private final SASectionNumberS    number;
+
+    public NoPartSectionAnnotator(
+      final SAIDMap in_ids,
+      final SAFormalItemsByKind in_formals,
+      final List<SAFootnote> in_footnotes,
+      final int section_no)
+    {
+      this.ids = in_ids;
+      this.formals = in_formals;
+      this.number = new SASectionNumberS(section_no);
+      this.footnotes = in_footnotes;
+    }
+
+    @Override public SASection visitSectionWithParagraphs(
+      final SSectionWithParagraphs s)
+      throws Exception
+    {
+      return SAnnotator.transformSectionWithParagraphs(
+        this.ids, this.formals, this.footnotes, s, this.number);
+    }
+
+    @Override public SASection visitSectionWithSubsections(
+      final SSectionWithSubsections s)
+      throws Exception
+    {
+      return SAnnotator.transformSectionWithSubsections(
+        this.ids, this.formals, this.footnotes, this.number, s);
+    }
+  }
+
+  private static final class ParagraphContentAnnotator
+    implements SParagraphContentVisitor<SAParagraphContent>
+  {
+    private final List<SAFootnote>  footnotes;
+    private final SAIDMap           ids;
+    private final SAParagraphNumber number;
+
+    public ParagraphContentAnnotator(
+      final SAIDMap in_ids,
+      final List<SAFootnote> in_footnotes,
+      final SAParagraphNumber in_number)
+    {
+      this.ids = in_ids;
+      this.footnotes = in_footnotes;
+      this.number = in_number;
+    }
+
+    @Override public SAParagraphContent visitFootnote(
+      final SFootnote footnote)
+      throws Exception
+    {
+      return SAnnotator.transformFootnote(
+        this.ids, this.footnotes, this.number, footnote);
+    }
+
+    @Override public SAParagraphContent visitFormalItemList(
+      final SFormalItemList list)
+      throws Exception
+    {
+      return SAnnotator.transformFormalItemList(list);
+    }
+
+    @Override public SAParagraphContent visitImage(
+      final SImage image)
+      throws Exception
+    {
+      return SAnnotator.transformImage(image);
+    }
+
+    @Override public SAParagraphContent visitLink(
+      final SLink link)
+      throws Exception
+    {
+      return SAnnotator.transformLink(link);
+    }
+
+    @Override public SAParagraphContent visitLinkExternal(
+      final SLinkExternal link)
+      throws Exception
+    {
+      return SAnnotator.transformLinkExternal(link);
+    }
+
+    @Override public SAParagraphContent visitListOrdered(
+      final SListOrdered list)
+      throws Exception
+    {
+      return SAnnotator.transformListOrdered(
+        this.ids, this.footnotes, this.number, list);
+    }
+
+    @Override public SAParagraphContent visitListUnordered(
+      final SListUnordered list)
+      throws Exception
+    {
+      return SAnnotator.transformListUnordered(
+        this.ids, this.footnotes, this.number, list);
+    }
+
+    @Override public SAParagraphContent visitTable(
+      final STable table)
+      throws Exception
+    {
+      return SAnnotator.transformTable(
+        this.ids, this.footnotes, this.number, table);
+    }
+
+    @Override public SAParagraphContent visitTerm(
+      final STerm term)
+      throws Exception
+    {
+      return SAnnotator.transformTerm(term);
+    }
+
+    @Override public SAParagraphContent visitText(
+      final SText text)
+      throws Exception
+    {
+      return SAnnotator.transformText(text);
+    }
+
+    @Override public SAParagraphContent visitVerbatim(
+      final SVerbatim text)
+      throws Exception
+    {
+      return SAnnotator.transformVerbatim(text);
+    }
+  }
+
+  private static final class PartSectionAnnotator
+    implements SSectionVisitor<SASection>
+  {
+    private final List<SAFootnote>    footnotes;
+    private final SAFormalItemsByKind formals;
+    private final SAIDMap             ids;
+    private final SASectionNumberPS   number;
+
+    public PartSectionAnnotator(
+      final SAIDMap in_ids,
+      final SAFormalItemsByKind in_formals,
+      final List<SAFootnote> in_footnotes,
+      final SASectionNumberPS in_number)
+    {
+      this.ids = in_ids;
+      this.formals = in_formals;
+      this.footnotes = in_footnotes;
+      this.number = in_number;
+    }
+
+    @Override public SASection visitSectionWithParagraphs(
+      final SSectionWithParagraphs s)
+      throws Exception
+    {
+      return SAnnotator.transformSectionWithParagraphs(
+        this.ids, this.formals, this.footnotes, s, this.number);
+    }
+
+    @Override public SASection visitSectionWithSubsections(
+      final SSectionWithSubsections s)
+      throws Exception
+    {
+      return SAnnotator.transformSectionWithSubsections(
+        this.ids, this.formals, this.footnotes, this.number, s);
+    }
+  }
+
+  private static final class SAIDLinkCreator implements FunctionType<SAID, Unit>
+  {
+    private final SAIDTargetContent content;
+    private final SAIDMap           ids;
+
+    public SAIDLinkCreator(
+      final SAIDMap map,
+      final SAIDTargetContent c)
+    {
+      this.ids = map;
+      this.content = c;
+    }
+
+    @Override public Unit call(
+      final SAID x)
+    {
+      this.ids.put(x, this.content);
+      return Unit.unit();
+    }
+  }
+
+  private static final class SAIDMapper implements FunctionType<SID, SAID>
+  {
+    public SAIDMapper()
+    {
+      // Nothing
+    }
+
+    @Override public SAID call(
+      final SID x)
+    {
+      return new SAID(x.getActual());
+    }
+  }
+
+  private static final class TableCellContentAnnotator
+    implements STableCellContentVisitor<SATableCellContent>
+  {
+    private final List<SAFootnote>          footnotes;
+    private final SAIDMap                   ids;
+    private final SASubsectionContentNumber number;
+
+    public TableCellContentAnnotator(
+      final SAIDMap in_ids,
+      final List<SAFootnote> in_footnotes,
+      final SASubsectionContentNumber in_number)
+    {
+      this.ids = in_ids;
+      this.footnotes = in_footnotes;
+      this.number = in_number;
+    }
+
+    @Override public SATableCellContent visitFootnote(
+      final SFootnote footnote)
+      throws Exception
+    {
+      return SAnnotator.transformFootnote(
+        this.ids, this.footnotes, this.number, footnote);
+    }
+
+    @Override public SATableCellContent visitImage(
+      final SImage image)
+      throws Exception
+    {
+      return SAnnotator.transformImage(image);
+    }
+
+    @Override public SATableCellContent visitLink(
+      final SLink link)
+      throws Exception
+    {
+      return SAnnotator.transformLink(link);
+    }
+
+    @Override public SATableCellContent visitLinkExternal(
+      final SLinkExternal link)
+      throws Exception
+    {
+      return SAnnotator.transformLinkExternal(link);
+    }
+
+    @Override public SATableCellContent visitListOrdered(
+      final SListOrdered list)
+      throws Exception
+    {
+      return SAnnotator.transformListOrdered(
+        this.ids, this.footnotes, this.number, list);
+    }
+
+    @Override public SATableCellContent visitListUnordered(
+      final SListUnordered list)
+      throws Exception
+    {
+      return SAnnotator.transformListUnordered(
+        this.ids, this.footnotes, this.number, list);
+    }
+
+    @Override public SATableCellContent visitTerm(
+      final STerm term)
+      throws Exception
+    {
+      return SAnnotator.transformTerm(term);
+    }
+
+    @Override public SATableCellContent visitText(
+      final SText text)
+      throws Exception
+    {
+      return SAnnotator.transformText(text);
+    }
+
+    @Override public SATableCellContent visitVerbatim(
+      final SVerbatim text)
+      throws Exception
+    {
+      return SAnnotator.transformVerbatim(text);
     }
   }
 }

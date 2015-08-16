@@ -18,23 +18,22 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A numbered part title.
  */
 
-public final class SAPartTitle
+@Immutable public final class SAPartTitle
 {
   private final String       actual;
   private final SAPartNumber number;
 
   /**
    * Construct a new part title.
-   * 
-   * @param in_number
-   *          The part number
-   * @param in_actual
-   *          The title text
+   *
+   * @param in_number The part number
+   * @param in_actual The title text
    */
 
   public SAPartTitle(
@@ -58,8 +57,7 @@ public final class SAPartTitle
       return false;
     }
     final SAPartTitle other = (SAPartTitle) obj;
-    return this.actual.equals(other.actual)
-      && this.number.equals(other.number);
+    return this.actual.equals(other.actual) && this.number.equals(other.number);
   }
 
   /**

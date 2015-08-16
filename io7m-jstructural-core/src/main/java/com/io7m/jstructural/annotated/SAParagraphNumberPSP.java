@@ -21,12 +21,13 @@ import com.io7m.jnull.Nullable;
 import com.io7m.jranges.RangeCheck;
 import com.io7m.jranges.Ranges;
 import com.io7m.junreachable.UnreachableCodeException;
+import net.jcip.annotations.Immutable;
 
 /**
  * A paragraph number consisting of a part, section, and paragraph.
  */
 
-public final class SAParagraphNumberPSP extends SAParagraphNumber
+@Immutable public final class SAParagraphNumberPSP extends SAParagraphNumber
 {
   private final int paragraph;
   private final int part;

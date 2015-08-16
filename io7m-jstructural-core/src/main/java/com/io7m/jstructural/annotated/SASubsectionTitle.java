@@ -18,12 +18,13 @@ package com.io7m.jstructural.annotated;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
+import net.jcip.annotations.Immutable;
 
 /**
  * A subsection title.
  */
 
-public final class SASubsectionTitle
+@Immutable public final class SASubsectionTitle
 {
   private final String             actual;
   private final SASubsectionNumber number;
@@ -49,8 +50,7 @@ public final class SASubsectionTitle
       return false;
     }
     final SASubsectionTitle other = (SASubsectionTitle) obj;
-    return this.actual.equals(other.actual)
-      && this.number.equals(other.number);
+    return this.actual.equals(other.actual) && this.number.equals(other.number);
   }
 
   /**

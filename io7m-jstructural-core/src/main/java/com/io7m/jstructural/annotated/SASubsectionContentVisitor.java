@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * A subsection content visitor.
- * 
- * @param <A>
- *          The type of values returned by the visitor.
+ *
+ * @param <A> The type of values returned by the visitor.
  */
 
 public interface SASubsectionContentVisitor<A>
 {
   /**
    * Visit a formal item.
-   * 
-   * @param formal
-   *          The formal item element
+   *
+   * @param formal The formal item element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitFormalItem(
@@ -42,13 +40,12 @@ public interface SASubsectionContentVisitor<A>
 
   /**
    * Visit a paragraph.
-   * 
-   * @param paragraph
-   *          The paragraph element
+   *
+   * @param paragraph The paragraph element
+   *
    * @return A value of type {@code A}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   A visitParagraph(

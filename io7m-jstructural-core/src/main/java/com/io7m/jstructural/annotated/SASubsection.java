@@ -20,12 +20,13 @@ import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
+import net.jcip.annotations.Immutable;
 
 /**
  * A subsection.
  */
 
-public final class SASubsection implements SAIDTargetContent
+@Immutable public final class SASubsection implements SAIDTargetContent
 {
   private final SNonEmptyList<SASubsectionContent> content;
   private final OptionType<SAID>                   id;
@@ -35,17 +36,12 @@ public final class SASubsection implements SAIDTargetContent
 
   /**
    * Construct a new subsection.
-   * 
-   * @param in_number
-   *          The subsection number
-   * @param in_type
-   *          The type attribute
-   * @param in_id
-   *          The ID
-   * @param in_title
-   *          The title
-   * @param in_content
-   *          The content
+   *
+   * @param in_number  The subsection number
+   * @param in_type    The type attribute
+   * @param in_id      The ID
+   * @param in_title   The title
+   * @param in_content The content
    */
 
   public SASubsection(
@@ -76,10 +72,10 @@ public final class SASubsection implements SAIDTargetContent
     }
     final SASubsection other = (SASubsection) obj;
     return this.number.equals(other.number)
-      && this.content.equals(other.content)
-      && this.id.equals(other.id)
-      && this.title.equals(other.title)
-      && this.type.equals(other.type);
+           && this.content.equals(other.content)
+           && this.id.equals(other.id)
+           && this.title.equals(other.title)
+           && this.type.equals(other.type);
   }
 
   /**

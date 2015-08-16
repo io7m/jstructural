@@ -20,12 +20,13 @@ import com.io7m.jfunctional.OptionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SNonEmptyList;
+import net.jcip.annotations.Immutable;
 
 /**
  * A list item element.
  */
 
-public final class SAListItem
+@Immutable public final class SAListItem
 {
   private final SNonEmptyList<SAListItemContent> content;
   private final OptionType<String>               type;

@@ -18,22 +18,20 @@ package com.io7m.jstructural.annotated;
 
 /**
  * A formal item number visitor.
- * 
- * @param <T>
- *          The type of transformed formal item numbers
+ *
+ * @param <T> The type of transformed formal item numbers
  */
 
 public interface SAFormalItemNumberVisitor<T>
 {
   /**
    * Visit a PSF formal item number.
-   * 
-   * @param f
-   *          The number
+   *
+   * @param f The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitFormalItemNumberPSF(
@@ -42,13 +40,12 @@ public interface SAFormalItemNumberVisitor<T>
 
   /**
    * Visit a PSSF formal item number.
-   * 
-   * @param f
-   *          The number
+   *
+   * @param f The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitFormalItemNumberPSSF(
@@ -57,13 +54,12 @@ public interface SAFormalItemNumberVisitor<T>
 
   /**
    * Visit a SF formal item number.
-   * 
-   * @param f
-   *          The number
+   *
+   * @param f The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitFormalItemNumberSF(
@@ -72,13 +68,12 @@ public interface SAFormalItemNumberVisitor<T>
 
   /**
    * Visit a SSF formal item number.
-   * 
-   * @param f
-   *          The number
+   *
+   * @param f The number
+   *
    * @return A value of type {@code T}
-   * 
-   * @throws Exception
-   *           If required
+   *
+   * @throws Exception If required
    */
 
   T visitFormalItemNumberSSF(

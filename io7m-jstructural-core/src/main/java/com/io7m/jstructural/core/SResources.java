@@ -16,16 +16,17 @@
 
 package com.io7m.jstructural.core;
 
+import com.io7m.junreachable.UnreachableCodeException;
+import net.jcip.annotations.Immutable;
+
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * Access to various resources used by processed documents.
  */
 
-public final class SResources
+@Immutable public final class SResources
 {
   /**
    * The CSS colour file name.
