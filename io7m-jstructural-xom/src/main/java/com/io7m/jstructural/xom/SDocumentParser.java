@@ -1517,12 +1517,12 @@ public final class SDocumentParser
     return Integer.valueOf(a.getValue());
   }
 
-  private static class TrivialErrorHandler implements ErrorHandler
+  private static final class TrivialErrorHandler implements ErrorHandler
   {
     private final     LogUsableType     log;
     private @Nullable SAXParseException exception;
 
-    public TrivialErrorHandler(
+    private TrivialErrorHandler(
       final LogUsableType in_log)
     {
       this.log = in_log;

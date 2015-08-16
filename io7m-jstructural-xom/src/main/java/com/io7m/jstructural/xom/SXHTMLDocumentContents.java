@@ -32,7 +32,7 @@ final class SXHTMLDocumentContents
 {
   private final SLinkProvider callbacks;
 
-  public SXHTMLDocumentContents(
+  SXHTMLDocumentContents(
     final SLinkProvider in_callbacks)
   {
     this.callbacks = in_callbacks;

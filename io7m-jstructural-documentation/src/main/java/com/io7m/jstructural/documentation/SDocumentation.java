@@ -23,6 +23,11 @@ import com.io7m.junreachable.UnreachableCodeException;
 
 public final class SDocumentation
 {
+  private SDocumentation()
+  {
+    throw new UnreachableCodeException();
+  }
+
   public static URI getDocumentationXMLLocation()
   {
     try {

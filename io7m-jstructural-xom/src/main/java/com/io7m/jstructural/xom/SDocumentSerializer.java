@@ -87,11 +87,11 @@ import com.io7m.junreachable.UnreachableCodeException;
 
 public final class SDocumentSerializer
 {
-  private static class IDAdder implements FunctionType<SID, Unit>
+  private static final class IDAdder implements FunctionType<SID, Unit>
   {
     private final Element e;
 
-    public IDAdder(
+    private IDAdder(
       final Element in_e)
     {
       this.e = in_e;
@@ -110,11 +110,11 @@ public final class SDocumentSerializer
     }
   }
 
-  private static class TypeAdder implements FunctionType<String, Unit>
+  private static final class TypeAdder implements FunctionType<String, Unit>
   {
     private final Element e;
 
-    public TypeAdder(
+    private TypeAdder(
       final Element in_e)
     {
       this.e = in_e;

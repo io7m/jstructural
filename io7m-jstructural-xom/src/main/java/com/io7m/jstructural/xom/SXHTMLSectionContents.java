@@ -25,7 +25,7 @@ final class SXHTMLSectionContents
 {
   private final SLinkProvider callbacks;
 
-  public SXHTMLSectionContents(
+  SXHTMLSectionContents(
     final SLinkProvider in_callbacks)
   {
     this.callbacks = in_callbacks;

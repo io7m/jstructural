@@ -857,7 +857,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     private final SAFormalItemsByKind formals;
     private final SAIDMap             ids;
 
-    public DocumentAnnotator(
+    private DocumentAnnotator(
       final LogUsableType log)
     {
       this.ids = new SAIDMap(log);
@@ -956,7 +956,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     private final SAIDMap                   ids;
     private final SASubsectionContentNumber number;
 
-    public FootnoteContentAnnotator(
+    private FootnoteContentAnnotator(
       final SAIDMap in_ids,
       final List<SAFootnote> in_footnotes,
       final SASubsectionContentNumber in_number)
@@ -1040,7 +1040,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     private final SAIDMap            ids;
     private final SAFormalItemNumber number;
 
-    public FormalItemContentAnnotator(
+    private FormalItemContentAnnotator(
       final SAIDMap in_ids,
       final List<SAFootnote> in_footnotes,
       final SAFormalItemNumber in_number)
@@ -1099,7 +1099,7 @@ import java.util.concurrent.atomic.AtomicInteger;
   private static final class LinkContentAnnotator
     implements SLinkContentVisitor<SALinkContent>
   {
-    public LinkContentAnnotator()
+    private LinkContentAnnotator()
     {
 
     }
@@ -1126,7 +1126,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     private final SAIDMap                   ids;
     private final SASubsectionContentNumber number;
 
-    public ListItemContentAnnotator(
+    private ListItemContentAnnotator(
       final SAIDMap in_ids,
       final List<SAFootnote> in_footnotes,
       final SASubsectionContentNumber in_number)
@@ -1211,7 +1211,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     private final SAIDMap             ids;
     private final SASectionNumberS    number;
 
-    public NoPartSectionAnnotator(
+    private NoPartSectionAnnotator(
       final SAIDMap in_ids,
       final SAFormalItemsByKind in_formals,
       final List<SAFootnote> in_footnotes,
@@ -1247,7 +1247,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     private final SAIDMap           ids;
     private final SAParagraphNumber number;
 
-    public ParagraphContentAnnotator(
+    private ParagraphContentAnnotator(
       final SAIDMap in_ids,
       final List<SAFootnote> in_footnotes,
       final SAParagraphNumber in_number)
@@ -1347,7 +1347,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     private final SAIDMap             ids;
     private final SASectionNumberPS   number;
 
-    public PartSectionAnnotator(
+    private PartSectionAnnotator(
       final SAIDMap in_ids,
       final SAFormalItemsByKind in_formals,
       final List<SAFootnote> in_footnotes,
@@ -1381,7 +1381,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     private final SAIDTargetContent content;
     private final SAIDMap           ids;
 
-    public SAIDLinkCreator(
+    private SAIDLinkCreator(
       final SAIDMap map,
       final SAIDTargetContent c)
     {
@@ -1399,7 +1399,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
   private static final class SAIDMapper implements FunctionType<SID, SAID>
   {
-    public SAIDMapper()
+    private SAIDMapper()
     {
       // Nothing
     }
@@ -1418,7 +1418,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     private final SAIDMap                   ids;
     private final SASubsectionContentNumber number;
 
-    public TableCellContentAnnotator(
+    private TableCellContentAnnotator(
       final SAIDMap in_ids,
       final List<SAFootnote> in_footnotes,
       final SASubsectionContentNumber in_number)

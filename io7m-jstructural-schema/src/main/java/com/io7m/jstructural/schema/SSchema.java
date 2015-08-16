@@ -16,11 +16,11 @@
 
 package com.io7m.jstructural.schema;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import com.io7m.jnull.NonNull;
 import com.io7m.junreachable.UnreachableCodeException;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Functions involving the XML schema files.
@@ -28,6 +28,11 @@ import com.io7m.junreachable.UnreachableCodeException;
 
 public final class SSchema
 {
+  private SSchema()
+  {
+    throw new UnreachableCodeException();
+  }
+
   public static @NonNull URI getSchemaRNGLocation()
   {
     try {
@@ -41,8 +46,7 @@ public final class SSchema
   public static @NonNull URI getSchemaXMLXSDLocation()
   {
     try {
-      return SSchema.class
-        .getResource("/com/io7m/jstructural/schema/xml.xsd")
+      return SSchema.class.getResource("/com/io7m/jstructural/schema/xml.xsd")
         .toURI();
     } catch (final URISyntaxException e) {
       throw new UnreachableCodeException(e);

@@ -30,7 +30,7 @@ final class SXHTMLPartContents
 {
   private final SLinkProvider callbacks;
 
-  public SXHTMLPartContents(
+  SXHTMLPartContents(
     final SLinkProvider in_callbacks)
   {
     this.callbacks = in_callbacks;
