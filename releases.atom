@@ -4,7 +4,7 @@
     <a:name>io7m release robot</a:name>
     <a:email>contact@io7m.com</a:email>
   </a:author>
-  <a:id>http://github.com/io7m/jstructural/releases.atom</a:id>
+  <a:id>http://io7m.github.io/jstructural/releases.atom</a:id>
   <a:title>io7m-jstructural Releases</a:title>
   <a:updated>2015-08-22T00:00:00Z</a:updated>
   <a:entry>

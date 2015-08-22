@@ -22,7 +22,8 @@ under the License.
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>io7m-jstructural-tests - About</title>
+    <title>io7m-jstructural - 
+    io7m-jstructural</title>
     <link rel="stylesheet" type="text/css" href="./css/reset.css"/>
     <link rel="stylesheet" type="text/css" href="./css/plain.css"/>
     <link rel="stylesheet" type="text/css" href="./css/site.css"/>
@@ -34,7 +35,7 @@ under the License.
   <body class="composite">
     <div id="banner">
                     <div id="bannerLeft">
-                io7m-jstructural-tests
+                io7m-jstructural
                 </div>
                     <div class="clear">
         <hr/>
@@ -85,16 +86,40 @@ under the License.
                           <a href="team-list.html" title="Contacts">Contacts</a>
             </li>
                   <li class="none">
-                          <a href="dependencies.html" title="Dependencies">Dependencies</a>
+                          <a href="integration.html" title="Continuous Integration">Continuous Integration</a>
             </li>
                   <li class="none">
                           <a href="project-info.html" title="Metadata">Metadata</a>
             </li>
+                  <li class="none">
+                          <a href="project-reports.html" title="Reports">Reports</a>
+            </li>
           </ul>
-                       <h5>Parent</h5>
+                       <h5>Modules</h5>
                   <ul>
                   <li class="none">
-                          <a href="../../../github.com/io7m/jstructural/index.html" title="io7m-jstructural">io7m-jstructural</a>
+                          <a href="io7m-jstructural-checkstyle/index.html" title="io7m-jstructural-checkstyle">io7m-jstructural-checkstyle</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-core/index.html" title="io7m-jstructural-core">io7m-jstructural-core</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-documentation/index.html" title="io7m-jstructural-documentation">io7m-jstructural-documentation</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-maven-plugin/index.html" title="io7m-jstructural-maven-plugin">io7m-jstructural-maven-plugin</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-schema/index.html" title="io7m-jstructural-schema">io7m-jstructural-schema</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-tests/index.html" title="io7m-jstructural-tests">io7m-jstructural-tests</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-tools/index.html" title="io7m-jstructural-tools">io7m-jstructural-tools</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-xom/index.html" title="io7m-jstructural-xom">io7m-jstructural-xom</a>
             </li>
           </ul>
                    
@@ -103,9 +128,57 @@ under the License.
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <div class="section">
-<h2>About io7m-jstructural-tests<a name="About_io7m-jstructural-tests"></a></h2><a name="About_io7m-jstructural-tests"></a>
-<p>Java implementation of the structural document language (Test suite)</p></div>
+        
+
+  
+    <div class="section">
+<h3>jstructural<a name="jstructural"></a></h3>
+      
+<p>
+        The <b>jstructural</b> package implements a set of primitives
+        for producing technical documentation. The package provides
+        a <a class="externalLink" href="http://relaxng.org">RELAX-NG</a> schema describing
+        the format of <b>structural</b> documents and a Java library
+        (and command line tools) for producing XHTML output.
+      </p>
+      
+<p>
+        In contrast to other systems such as <a class="externalLink" href="http://docbook.org">DocBook</a>, the <b>structural</b>
+        language only defines elements concerning the structure of the
+        document and not the semantics of the elements. The intention
+        is that higher level languages will produce <b>structural</b>
+        documents as output and then use the provided stylesheets to
+        get various services such as table of contents generation,
+        chapter numbering, footnotes, et cetera, without having to
+        re-implement all of those features for each new language.
+      </p>
+    </div>
+    
+<div class="section">
+<h3>Features<a name="Features"></a></h3>
+      
+<ul>
+        
+<li>Full <a class="externalLink" href="http://relaxng.org">RELAX-NG</a> schema for document validation.</li>
+        
+<li>Implemented as pure Java for platform-independence.</li>
+        
+<li>Carefully namespaced schema for ease of combination with other XML documents.</li>
+        
+<li>Extensive documentation.</li>
+        
+<li>Outputs clean and valid XHTML 1.0 Strict.</li>
+        
+<li>Maven plugin for producing documentation as part of a standard Maven build.</li>
+        
+<li>Complete and documented CSS for resulting XHTML, for ease of customization of output.</li>
+        
+<li>ISC license.</li>
+      </ul>
+    </div>
+  
+
+
       </div>
     </div>
     <div class="clear">

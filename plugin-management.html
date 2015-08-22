@@ -22,7 +22,7 @@ under the License.
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>io7m-jstructural-tests - Project Plugin Management</title>
+    <title>io7m-jstructural - Project Plugin Management</title>
     <link rel="stylesheet" type="text/css" href="./css/reset.css"/>
     <link rel="stylesheet" type="text/css" href="./css/plain.css"/>
     <link rel="stylesheet" type="text/css" href="./css/site.css"/>
@@ -34,7 +34,7 @@ under the License.
   <body class="composite">
     <div id="banner">
                     <div id="bannerLeft">
-                io7m-jstructural-tests
+                io7m-jstructural
                 </div>
                     <div class="clear">
         <hr/>
@@ -85,16 +85,40 @@ under the License.
                           <a href="team-list.html" title="Contacts">Contacts</a>
             </li>
                   <li class="none">
-                          <a href="dependencies.html" title="Dependencies">Dependencies</a>
+                          <a href="integration.html" title="Continuous Integration">Continuous Integration</a>
             </li>
                   <li class="none">
                           <a href="project-info.html" title="Metadata">Metadata</a>
             </li>
+                  <li class="none">
+                          <a href="project-reports.html" title="Reports">Reports</a>
+            </li>
           </ul>
-                       <h5>Parent</h5>
+                       <h5>Modules</h5>
                   <ul>
                   <li class="none">
-                          <a href="../../../github.com/io7m/jstructural/index.html" title="io7m-jstructural">io7m-jstructural</a>
+                          <a href="io7m-jstructural-checkstyle/index.html" title="io7m-jstructural-checkstyle">io7m-jstructural-checkstyle</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-core/index.html" title="io7m-jstructural-core">io7m-jstructural-core</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-documentation/index.html" title="io7m-jstructural-documentation">io7m-jstructural-documentation</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-maven-plugin/index.html" title="io7m-jstructural-maven-plugin">io7m-jstructural-maven-plugin</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-schema/index.html" title="io7m-jstructural-schema">io7m-jstructural-schema</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-tests/index.html" title="io7m-jstructural-tests">io7m-jstructural-tests</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-tools/index.html" title="io7m-jstructural-tools">io7m-jstructural-tools</a>
+            </li>
+                  <li class="none">
+                          <a href="io7m-jstructural-xom/index.html" title="io7m-jstructural-xom">io7m-jstructural-xom</a>
             </li>
           </ul>
                    
@@ -111,13 +135,21 @@ under the License.
 <th>ArtifactId</th>
 <th>Version</th></tr>
 <tr class="b">
+<td>com.io7m.jstructural</td>
+<td><a class="externalLink" href="http://io7m.github.io/jstructural">io7m-jstructural-maven-plugin</a></td>
+<td>4.2.0</td></tr>
+<tr class="a">
 <td>org.apache.maven.plugins</td>
 <td><a class="externalLink" href="http://maven.apache.org/plugins/maven-antrun-plugin/">maven-antrun-plugin</a></td>
 <td>1.3</td></tr>
-<tr class="a">
+<tr class="b">
 <td>org.apache.maven.plugins</td>
 <td><a class="externalLink" href="http://maven.apache.org/plugins/maven-assembly-plugin/">maven-assembly-plugin</a></td>
-<td>2.2-beta-5</td></tr>
+<td>2.5.5</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-checkstyle-plugin/">maven-checkstyle-plugin</a></td>
+<td>2.15</td></tr>
 <tr class="b">
 <td>org.apache.maven.plugins</td>
 <td><a class="externalLink" href="http://maven.apache.org/plugins/maven-clean-plugin/">maven-clean-plugin</a></td>
@@ -140,6 +172,14 @@ under the License.
 <td>2.5.2</td></tr>
 <tr class="a">
 <td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-jar-plugin/">maven-jar-plugin</a></td>
+<td>2.6</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-javadoc-plugin/">maven-javadoc-plugin</a></td>
+<td>2.10.3</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
 <td><a class="externalLink" href="http://maven.apache.org/plugins/maven-release-plugin/">maven-release-plugin</a></td>
 <td>2.3.2</td></tr>
 <tr class="b">
@@ -147,6 +187,18 @@ under the License.
 <td><a class="externalLink" href="http://maven.apache.org/plugins/maven-resources-plugin/">maven-resources-plugin</a></td>
 <td>2.7</td></tr>
 <tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-source-plugin/">maven-source-plugin</a></td>
+<td>2.4</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/surefire/maven-surefire-plugin">maven-surefire-plugin</a></td>
+<td>2.18.1</td></tr>
+<tr class="a">
+<td>org.codehaus.mojo</td>
+<td><a class="externalLink" href="http://mojo.codehaus.org/truezip/truezip-maven-plugin">truezip-maven-plugin</a></td>
+<td>1.2</td></tr>
+<tr class="b">
 <td>org.sonatype.plugins</td>
 <td><a class="externalLink" href="http://www.sonatype.com/public-parent/nexus-maven-plugins/nexus-staging/nexus-staging-maven-plugin/">nexus-staging-maven-plugin</a></td>
 <td>1.6.5</td></tr></table></div>
