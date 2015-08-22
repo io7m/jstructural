@@ -24,24 +24,24 @@
   </scm>
 
   <dependencies>
-    <!-- Depend on the javadoc artifacts of the other modules for aggregation. -->
+    <!-- Depend on each of the other modules for JavaDoc aggregation. -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>io7m-jstructural-core</artifactId>
       <version>${project.version}</version>
-      <classifier>javadoc</classifier>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>io7m-jstructural-xom</artifactId>
       <version>${project.version}</version>
-      <classifier>javadoc</classifier>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>io7m-jstructural-tools</artifactId>
       <version>${project.version}</version>
-      <classifier>javadoc</classifier>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
