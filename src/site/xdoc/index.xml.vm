@@ -36,6 +36,7 @@
         <li>Carefully namespaced schema for ease of combination with other XML documents.</li>
         <li>Extensive documentation.</li>
         <li>Outputs clean and valid XHTML 1.0 Strict.</li>
+        <li>Maven plugin for producing documentation as part of a standard Maven build.</li>
         <li>Complete and documented CSS for resulting XHTML, for ease of customization of output.</li>
         <li>ISC license.</li>
       </ul>

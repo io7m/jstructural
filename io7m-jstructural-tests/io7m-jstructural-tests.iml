@@ -26,11 +26,8 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.io7m.jranges:io7m-jranges-core:2.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.github.stephenc.jcip:jcip-annotations:1.0-1" level="project" />
     <orderEntry type="module" module-name="io7m-jstructural-documentation" scope="TEST" />
-    <orderEntry type="module" module-name="io7m-jstructural-core" scope="TEST" />
-    <orderEntry type="module" module-name="io7m-jstructural-xom" scope="TEST" />
     <orderEntry type="module" module-name="io7m-jstructural-tools" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-cli:commons-cli:1.2" level="project" />
-    <orderEntry type="module" module-name="io7m-jstructural-tools" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
   </component>

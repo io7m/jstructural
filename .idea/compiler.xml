@@ -66,12 +66,20 @@
         <processorPath useClasspath="true" />
         <module name="io7m-jstructural-xom" />
       </profile>
+      <profile default="false" name="Annotation profile for io7m-jstructural-maven-plugin" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="io7m-jstructural-maven-plugin" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="io7m-jstructural" target="1.5" />
       <module name="io7m-jstructural-checkstyle" target="1.6" />
       <module name="io7m-jstructural-core" target="1.6" />
       <module name="io7m-jstructural-documentation" target="1.6" />
+      <module name="io7m-jstructural-maven-plugin" target="1.6" />
       <module name="io7m-jstructural-schema" target="1.6" />
       <module name="io7m-jstructural-tests" target="1.6" />
       <module name="io7m-jstructural-tools" target="1.6" />
