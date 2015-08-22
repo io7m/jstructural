@@ -62,9 +62,9 @@
 
   <distributionManagement>
     <site>
-      <id>io7m</id>
-      <name>io7m.github.io</name>
-      <url>http://io7m.github.io/jstructural</url>
+      <id>GitHub</id>
+      <name>github.com</name>
+      <url>${project.url}</url>
     </site>
     <repository>
       <id>sonatype-nexus-staging</id>
