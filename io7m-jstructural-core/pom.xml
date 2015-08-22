@@ -13,9 +13,9 @@
   <artifactId>io7m-jstructural-core</artifactId>
 
   <packaging>jar</packaging>
+  <description>Java implementation of the structural document language (Core)</description>
+  <url>http://io7m.github.io/jstructural</url>
   <name>${project.artifactId}</name>
-  <description>Java implementation of the structural document language (Core types)</description>
-  <url>http://io7m.github.io/jstructural/</url>
 
   <scm>
     <url>${project.parent.scm.url}</url>
@@ -76,7 +76,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.15</version>
         <dependencies>
           <dependency>
             <groupId>${project.groupId}</groupId>
@@ -87,7 +86,7 @@
         <executions>
           <execution>
             <id>validate</id>
-            <phase>package</phase>
+            <phase>validate</phase>
             <configuration>
               <configLocation>com/io7m/jstructural/checkstyle/checkstyle.xml
               </configLocation>
@@ -106,7 +105,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.6</version>
         <configuration>
           <archive>
             <manifestEntries>
@@ -128,7 +126,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.4</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -158,7 +155,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.3</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
