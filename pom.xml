@@ -57,7 +57,7 @@
 
   <issueManagement>
     <url>http://github.com/io7m/jstructural/issues</url>
-    <system>Fossil</system>
+    <system>GitHub Issues</system>
   </issueManagement>
 
   <distributionManagement>
