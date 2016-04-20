@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.jstructural</groupId>
     <artifactId>io7m-jstructural</artifactId>
-    <version>4.2.0</version>
+    <version>5.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>io7m-jstructural-documentation</artifactId>
 
@@ -41,7 +41,6 @@
     <dependency>
       <groupId>com.io7m.junreachable</groupId>
       <artifactId>io7m-junreachable-core</artifactId>
-      <version>[1.0.0, 2.0.0)</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.io7m.jstructural</groupId>
   <artifactId>io7m-jstructural</artifactId>
-  <version>4.2.0</version>
+  <version>5.0.0-SNAPSHOT</version>
 
   <packaging>pom</packaging>
   <name>io7m-jstructural</name>
@@ -80,6 +80,71 @@
   <prerequisites>
     <maven>2.2.1</maven>
   </prerequisites>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.io7m.jfunctional</groupId>
+        <artifactId>io7m-jfunctional-core</artifactId>
+        <version>[1.0.0, 2.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jnull</groupId>
+        <artifactId>io7m-jnull-core</artifactId>
+        <version>[1.0.0, 2.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jlog</groupId>
+        <artifactId>io7m-jlog-core</artifactId>
+        <version>[3.1.0, 4.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jranges</groupId>
+        <artifactId>io7m-jranges-core</artifactId>
+        <version>[2.0.0, 3.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.junreachable</groupId>
+        <artifactId>io7m-junreachable-core</artifactId>
+        <version>[1.0.1, 2.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.xom</groupId>
+        <artifactId>xom</artifactId>
+        <version>1.2.10</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.github.stephenc.jcip</groupId>
+        <artifactId>jcip-annotations</artifactId>
+        <version>1.0-1</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-cli</groupId>
+        <artifactId>commons-cli</artifactId>
+        <version>1.2</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-plugin-api</artifactId>
+        <version>2.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.plugin-tools</groupId>
+        <artifactId>maven-plugin-annotations</artifactId>
+        <version>3.4</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <!-- Test suite -->
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <reporting>
     <plugins>
@@ -170,7 +235,7 @@
         <plugin>
           <groupId>com.io7m.jstructural</groupId>
           <artifactId>io7m-jstructural-maven-plugin</artifactId>
-          <version>4.2.0</version>
+          <version>5.0.0-SNAPSHOT</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
