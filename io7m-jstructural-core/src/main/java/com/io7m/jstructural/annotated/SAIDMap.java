@@ -16,11 +16,11 @@
 
 package com.io7m.jstructural.annotated;
 
-import com.io7m.jlog.LogLevel;
-import com.io7m.jlog.LogUsableType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import net.jcip.annotations.Immutable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,20 +32,21 @@ import java.util.Map;
 @Immutable public final class SAIDMap
   implements SAIDMapWritable, SAIDMapReadable
 {
-  private final LogUsableType                log;
+  private static final Logger LOG;
+
+  static {
+    LOG = LoggerFactory.getLogger(SAIDMap.class);
+  }
+
   private final Map<SAID, SAIDTargetContent> map;
 
   /**
    * Construct a new empty map.
-   *
-   * @param in_log The log handle
    */
 
-  public SAIDMap(
-    final LogUsableType in_log)
+  public SAIDMap()
   {
-    this.log = NullCheck.notNull(in_log, "Log").with("id-map");
-    this.map = new HashMap<SAID, SAIDTargetContent>();
+    this.map = new HashMap<SAID, SAIDTargetContent>(128);
   }
 
   @Override public @Nullable SAIDTargetContent get(
@@ -53,13 +54,8 @@ import java.util.Map;
   {
     NullCheck.notNull(id, "ID");
 
-    if (this.log.wouldLog(LogLevel.LOG_DEBUG)) {
-      final StringBuilder b = new StringBuilder();
-      b.append("get: ");
-      b.append(id.getActual());
-      final String r = b.toString();
-      assert r != null;
-      this.log.debug(r);
+    if (SAIDMap.LOG.isDebugEnabled()) {
+      SAIDMap.LOG.debug("get: {}", id.getActual());
     }
 
     return this.map.get(id);
@@ -76,13 +72,8 @@ import java.util.Map;
       throw new IllegalArgumentException("ID already used");
     }
 
-    if (this.log.wouldLog(LogLevel.LOG_DEBUG)) {
-      final StringBuilder b = new StringBuilder();
-      b.append("new: ");
-      b.append(id.getActual());
-      final String r = b.toString();
-      assert r != null;
-      this.log.debug(r);
+    if (SAIDMap.LOG.isDebugEnabled()) {
+      SAIDMap.LOG.debug("new: {}", id.getActual());
     }
 
     this.map.put(id, c);

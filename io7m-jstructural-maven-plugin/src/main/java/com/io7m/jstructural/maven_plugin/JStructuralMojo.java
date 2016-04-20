@@ -16,7 +16,6 @@
 
 package com.io7m.jstructural.maven_plugin;
 
-import com.io7m.jlog.LogUsableType;
 import com.io7m.jstructural.tools.JSCMain;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -122,8 +121,7 @@ public final class JStructuralMojo extends AbstractMojo
 
       log.debug("executing: " + args);
 
-      final LogUsableType jlog = JSCMain.getLog(false);
-      JSCMain.run(jlog, args_array);
+      JSCMain.run(args_array);
 
     } catch (final FileNotFoundException e) {
       throw new MojoExecutionException("File not found", e);

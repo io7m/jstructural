@@ -16,10 +16,9 @@
 
 package com.io7m.jstructural.annotated;
 
-import com.io7m.jlog.LogLevel;
-import com.io7m.jlog.LogUsableType;
-import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,9 +35,13 @@ import java.util.TreeMap;
 @Immutable public final class SAFormalItemsByKind
   implements SAFormalItemsByKindReadable, SAFormalItemsByKindWritable
 {
+  private static final Logger LOG;
+
   private static final SortedMap<SAFormalItemNumber, SAFormalItem> EMPTY;
 
   static {
+    LOG = LoggerFactory.getLogger(SAFormalItemsByKind.class);
+
     final SortedMap<SAFormalItemNumber, SAFormalItem> um =
       Collections.unmodifiableSortedMap(new TreeMap<SAFormalItemNumber,
                                           SAFormalItem>());
@@ -46,20 +49,15 @@ import java.util.TreeMap;
     EMPTY = um;
   }
 
-  private final LogUsableType                  log;
   private final Map<String, Set<SAFormalItem>> map;
 
   /**
    * Construct a new empty map.
-   *
-   * @param in_log A log handle
    */
 
-  public SAFormalItemsByKind(
-    final LogUsableType in_log)
+  public SAFormalItemsByKind()
   {
-    this.log = NullCheck.notNull(in_log, "Log").with("formal-items");
-    this.map = new HashMap<String, Set<SAFormalItem>>();
+    this.map = new HashMap<String, Set<SAFormalItem>>(128);
   }
 
   @Override public SortedMap<SAFormalItemNumber, SAFormalItem> get(
@@ -88,18 +86,12 @@ import java.util.TreeMap;
     final String kind,
     final SAFormalItem item)
   {
-    if (this.log.wouldLog(LogLevel.LOG_DEBUG)) {
-      final StringBuilder b = new StringBuilder();
-      b.append("new: ");
-      b.append(item.getNumber().formalItemNumberFormat());
-      b.append(" ");
-      b.append(item.getTitle().getActual());
-      b.append(" (kind ");
-      b.append(item.getKind());
-      b.append(")");
-      final String r = b.toString();
-      assert r != null;
-      this.log.debug(r);
+    if (SAFormalItemsByKind.LOG.isDebugEnabled()) {
+      SAFormalItemsByKind.LOG.debug(
+        "new: {} {} (kind {})",
+        item.getNumber().formalItemNumberFormat(),
+        item.getTitle().getActual(),
+        item.getKind());
     }
 
     Set<SAFormalItem> set = null;
