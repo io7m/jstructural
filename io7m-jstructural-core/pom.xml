@@ -33,10 +33,6 @@
       <artifactId>io7m-jnull-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.io7m.jlog</groupId>
-      <artifactId>io7m-jlog-core</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.io7m.jranges</groupId>
       <artifactId>io7m-jranges-core</artifactId>
     </dependency>
@@ -44,6 +40,10 @@
     <dependency>
       <groupId>com.github.stephenc.jcip</groupId>
       <artifactId>jcip-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
 
     <!-- Test suite -->

@@ -159,10 +159,7 @@ import java.util.SortedMap;
     s.flush();
 
     final ByteArrayInputStream i = new ByteArrayInputStream(o.toByteArray());
-    SXHTML10StrictValidator.fromStreamValidate(
-      i,
-      new URI(dd.getBaseURI()),
-      TestUtilities.getLog());
+    SXHTML10StrictValidator.fromStreamValidate(i, new URI(dd.getBaseURI()));
   }
 
   /**

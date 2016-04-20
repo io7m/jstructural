@@ -7,6 +7,12 @@
     <c:version>5.0.0</c:version>
     <c:item>
       <c:date>2016-04-20</c:date>
+      <c:type-code-change/>
+      <c:ticket>1</c:ticket>
+      <c:summary>Remove dependency on jlog and use logback/SLF4J instead. This affects all API functions that previously took LogUsableType handles.</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2016-04-20</c:date>
       <c:type-code-new/>
       <c:summary>Use newer Maven plugins and reorganize POM files. Require Maven 3.0.4 for builds.</c:summary>
     </c:item>

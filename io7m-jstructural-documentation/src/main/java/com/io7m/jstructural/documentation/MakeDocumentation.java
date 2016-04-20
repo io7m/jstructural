@@ -30,7 +30,7 @@ final class MakeDocumentation
     final String[] args)
     throws Throwable
   {
-    JSCMain.run(JSCMain.getLog(false), args);
+    JSCMain.run(args);
   }
 }
 
