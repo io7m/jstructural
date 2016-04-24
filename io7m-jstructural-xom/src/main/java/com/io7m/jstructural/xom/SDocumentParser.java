@@ -469,7 +469,6 @@ public final class SDocumentParser
     final URI uri)
     throws
     SAXException,
-
     ParserConfigurationException,
     ValidityException,
     ParsingException,
