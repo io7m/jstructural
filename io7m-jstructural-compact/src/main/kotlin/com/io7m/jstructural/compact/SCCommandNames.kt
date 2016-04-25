@@ -34,4 +34,12 @@ object SCCommandNames {
   const val TITLE = "title"
   const val TYPE = "type"
   const val VERBATIM = "verbatim"
+
+  val BLOCK_COMMANDS = listOf(
+    DOCUMENT,
+    IMPORT,
+    PARA,
+    PART,
+    SECTION,
+    SUBSECTION)
 }

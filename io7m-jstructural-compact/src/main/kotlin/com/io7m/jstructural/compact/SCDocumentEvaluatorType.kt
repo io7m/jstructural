@@ -21,13 +21,8 @@ import java.util.Deque
 
 interface SCDocumentEvaluatorType {
 
-  fun evaluateElement(
-    element : SCElement,
-    scids : SCIDContextType,
-    error_queue : Deque<SCError>) : Unit
+  fun evaluateElement(element : SCElement, error_queue : Deque<SCError>) : Unit
 
-  fun evaluateEOF(
-    scids : SCIDContextType,
-    error_queue : Deque<SCError>) : SDocument
+  fun evaluateEOF(error_queue : Deque<SCError>) : SDocument
 
 }

@@ -23,7 +23,6 @@ import com.io7m.jstructural.compact.SCDocumentEvaluator
 import com.io7m.jstructural.compact.SCError
 import com.io7m.jstructural.compact.SCException
 import com.io7m.jstructural.compact.SCExpression
-import com.io7m.jstructural.compact.SCIDContext
 import com.io7m.jstructural.compact.SCParser
 import com.io7m.jstructural.core.SDocument
 import com.io7m.jsx.lexer.JSXLexer
@@ -54,8 +53,6 @@ fun main(args : Array<String>) {
   val p = JSXParser.newParser(pc, lex);
   val scp = SCParser()
   val eq = ArrayDeque<SCError>()
-
-  val ids = SCIDContext.create()
   val de = SCDocumentEvaluator.beginDocument(
     base_directory = Paths.get("").toAbsolutePath())
 
@@ -67,10 +64,10 @@ fun main(args : Array<String>) {
       val e = p.parseExpressionOrEOF()
       if (e.isPresent) {
         val b = scp.parse(SCExpression.of(e.get()), eq)
-        de.evaluateElement(b, ids, eq)
+        de.evaluateElement(b, eq)
       } else {
         eof = true
-        document = Optional.of(de.evaluateEOF(ids, eq))
+        document = Optional.of(de.evaluateEOF(eq))
         break
       }
     } catch (x : SCException.SCParseException) {
