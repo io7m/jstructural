@@ -21,5 +21,5 @@ import java.util.Optional
 
 interface SCIDContextType {
   fun declare(scid : SCID) : SCIDContextDeclaration
-  fun check(id : SCID) : Optional<SID>
+  fun check(scid : SCID) : Optional<SID>
 }

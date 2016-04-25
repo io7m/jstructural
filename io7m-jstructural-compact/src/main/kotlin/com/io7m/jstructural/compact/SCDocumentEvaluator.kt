@@ -18,6 +18,9 @@ package com.io7m.jstructural.compact
 
 import com.io7m.jlexing.core.ImmutableLexicalPosition
 import com.io7m.jstructural.core.SDocument
+import com.io7m.jstructural.core.SDocumentTitle
+import com.io7m.jstructural.core.SDocumentWithParts
+import com.io7m.jstructural.core.SDocumentWithSections
 import com.io7m.jstructural.core.SID
 import com.io7m.jstructural.core.SNonEmptyList
 import com.io7m.jstructural.core.SParagraph
@@ -25,7 +28,12 @@ import com.io7m.jstructural.core.SParagraphContent
 import com.io7m.jstructural.core.SPart
 import com.io7m.jstructural.core.SPartTitle
 import com.io7m.jstructural.core.SSection
+import com.io7m.jstructural.core.SSectionTitle
+import com.io7m.jstructural.core.SSectionWithParagraphs
+import com.io7m.jstructural.core.SSectionWithSubsections
 import com.io7m.jstructural.core.SSubsection
+import com.io7m.jstructural.core.SSubsectionContent
+import com.io7m.jstructural.core.SSubsectionTitle
 import com.io7m.junreachable.UnimplementedCodeException
 import org.slf4j.LoggerFactory
 import org.valid4j.Assertive
@@ -89,16 +97,46 @@ class SCDocumentEvaluator private constructor(
     }
 
     private fun emptyPart(
-      e : SCElement,
+      e : SCLexicalType,
       eq : Deque<SCError>) : SCException.SCEvaluatorException {
       eq.add(SCError.SCSemanticError(e.lexical, "A part must contain at least one section."))
       return SCException.SCEvaluatorException()
     }
 
     private fun emptyPara(
-      e : SCElement,
+      e : SCLexicalType,
       eq : Deque<SCError>) : SCException.SCEvaluatorException {
       eq.add(SCError.SCSemanticError(e.lexical, "A paragraph must contain at least one element."))
+      return SCException.SCEvaluatorException()
+    }
+
+    private fun emptySection(
+      e : SCLexicalType,
+      eq : Deque<SCError>) : SCException.SCEvaluatorException {
+      eq.add(SCError.SCSemanticError(e.lexical,
+        "A section must contain at least one paragraph or subsection."))
+      return SCException.SCEvaluatorException()
+    }
+
+    private fun emptySubsection(
+      e : SCLexicalType,
+      eq : Deque<SCError>) : SCException.SCEvaluatorException {
+      eq.add(SCError.SCSemanticError(e.lexical,
+        "A subsection must contain at least one paragraph or formal item."))
+      return SCException.SCEvaluatorException()
+    }
+
+    private fun unexpectedEOF(
+      eq : Deque<SCError>) : SCException.SCEvaluatorException {
+      eq.add(SCError.SCSemanticError(Optional.empty(), "Unexpected EOF"))
+      return SCException.SCEvaluatorException()
+    }
+
+    private fun sectionMixedContent(
+      e : SCLexicalType,
+      eq : Deque<SCError>) : SCException.SCEvaluatorException {
+      eq.add(SCError.SCSemanticError(e.lexical,
+        "A section may contain subsections or subsection content (paragraphs, etc) but not both."))
       return SCException.SCEvaluatorException()
     }
 
@@ -110,20 +148,43 @@ class SCDocumentEvaluator private constructor(
     }
   }
 
-  private sealed class Result<T> {
-    class ResultUnfinished<T>() : Result<T>()
-    class ResultFinished<T>(val actual : T) : Result<T>()
+  private sealed class Result<T>(val consumed_element : Boolean) {
+
+    class ResultUnfinished<T>(
+      consumed_element : Boolean) : Result<T>(consumed_element)
+
+    class ResultFinished<T>(
+      consumed_element : Boolean,
+      val result : T) : Result<T>(consumed_element)
   }
 
   private interface EvaluatorType<T> {
-    fun evaluate(e : SCElement, scids : SCIDContextType, eq : Deque<SCError>) : Result<T>
+
+    fun evaluate(
+      e : SCElement,
+      scids : SCIDContextType,
+      eq : Deque<SCError>) : Result<T>
+
+    fun evaluateEOF(
+      scids : SCIDContextType,
+      error_queue : Deque<SCError>) : T
+
   }
 
   private class EvaluatorParagraph(
+    scids : SCIDContextType,
     private val directory_stack : Deque<Path>,
     private val paragraph : SCBlock.SCBlockParagraph) : EvaluatorType<SParagraph> {
 
     private val content = ArrayList<SCInline>()
+
+    init {
+      LOG.trace("start paragraph {}", this.paragraph)
+
+      if (this.paragraph.id.isPresent) {
+        scids.declare(this.paragraph.id.get())
+      }
+    }
 
     override fun evaluate(
       e : SCElement,
@@ -132,8 +193,18 @@ class SCDocumentEvaluator private constructor(
 
       return when (e) {
         is SCElement.SCElementInline -> {
-          this.content.add(e.actual)
-          Result.ResultUnfinished()
+          when (e.actual) {
+            is SCInline.SCInlineInclude ->
+              throw UnimplementedCodeException()
+            is SCInline.SCInlineLink,
+            is SCInline.SCInlineVerbatim,
+            is SCInline.SCInlineText,
+            is SCInline.SCInlineTerm,
+            is SCInline.SCInlineImage   -> {
+              this.content.add(e.actual)
+              Result.ResultUnfinished(consumed_element = true)
+            }
+          }
         }
         is SCElement.SCElementBlock  ->
           when (e.actual) {
@@ -145,9 +216,11 @@ class SCDocumentEvaluator private constructor(
                 throw emptyPara(e, eq)
               }
 
-              LOG.trace("finished paragraph due to {}", e)
+              LOG.trace("finished paragraph due to {}:{}", e, e.lexical)
               Assertive.require(!this.content.isEmpty())
-              Result.ResultFinished(finishPara(scids, eq))
+              Result.ResultFinished(
+                consumed_element = false,
+                result = finishPara(scids, eq))
             }
             is SCBlock.SCBlockImport    ->
               throw UnimplementedCodeException()
@@ -192,31 +265,160 @@ class SCDocumentEvaluator private constructor(
         }
       }
     }
+
+    override fun evaluateEOF(
+      scids : SCIDContextType,
+      error_queue : Deque<SCError>) : SParagraph {
+
+      if (this.content.isEmpty()) {
+        throw emptyPara(this.paragraph, error_queue)
+      }
+
+      LOG.trace("finished paragraph due to eof")
+      Assertive.require(!this.content.isEmpty())
+      return finishPara(scids, error_queue)
+    }
   }
 
   private class EvaluatorSubsection(
+    scids : SCIDContextType,
     private val directory_stack : Deque<Path>,
-    private val section : SCBlock.SCBlockSubsection) : EvaluatorType<SSubsection> {
+    private val subsection : SCBlock.SCBlockSubsection) : EvaluatorType<SSubsection> {
 
     private var paragraph = Optional.empty<EvaluatorParagraph>()
-    private val paragraphs = ArrayList<SParagraph>()
+    private val contents = ArrayList<SSubsectionContent>()
+
+    init {
+      LOG.trace("start subsection {}", subsection)
+
+      if (this.subsection.id.isPresent) {
+        scids.declare(this.subsection.id.get())
+      }
+    }
 
     override fun evaluate(
       e : SCElement,
       scids : SCIDContextType,
       eq : Deque<SCError>) : Result<SSubsection> {
-      throw UnimplementedCodeException()
+
+      if (this.paragraph.isPresent) {
+        val r = this.paragraph.get().evaluate(e, scids, eq)
+        return when (r) {
+          is SCDocumentEvaluator.Result.ResultUnfinished -> {
+            Result.ResultUnfinished(consumed_element = r.consumed_element)
+          }
+          is SCDocumentEvaluator.Result.ResultFinished   -> {
+            this.contents.add(r.result)
+            this.paragraph = Optional.empty()
+            Result.ResultUnfinished(consumed_element = r.consumed_element)
+          }
+        }
+      }
+
+      return evaluateSubsection(e, scids, eq)
+    }
+
+    private fun evaluateSubsection(
+      e : SCElement,
+      scids : SCIDContextType,
+      eq : Deque<SCError>) : Result<SSubsection> {
+
+      return when (e) {
+        is SCElement.SCElementInline ->
+          throw UnimplementedCodeException()
+        is SCElement.SCElementBlock  ->
+          when (e.actual) {
+            is SCBlock.SCBlockImport    -> {
+              throw UnimplementedCodeException()
+            }
+            is SCBlock.SCBlockParagraph -> {
+              Assertive.require(!this.paragraph.isPresent)
+              this.paragraph = Optional.of(
+                EvaluatorParagraph(scids, this.directory_stack, e.actual))
+              Result.ResultUnfinished(consumed_element = true)
+            }
+            is SCBlock.SCBlockSubsection,
+            is SCBlock.SCBlockDocument,
+            is SCBlock.SCBlockPart,
+            is SCBlock.SCBlockSection   -> {
+              if (this.contents.isEmpty()) {
+                throw emptySubsection(e, eq)
+              }
+
+              this.paragraph = Optional.empty()
+
+              LOG.trace("finished subsection due to {}:{}", e, e.lexical)
+              Result.ResultFinished(
+                consumed_element = false,
+                result = finishSubsection(scids))
+            }
+          }
+      }
+    }
+
+    private fun finishSubsection(scids : SCIDContextType) : SSubsection {
+      Assertive.require(!this.contents.isEmpty())
+
+      val title =
+        SSubsectionTitle.subsectionTitle(SCText.concatenate(this.subsection.title.elements))
+      val content = SNonEmptyList.newList(this.contents)
+      return when (this.subsection.id.isPresent) {
+        true  -> {
+          when (this.subsection.type.isPresent) {
+            true  ->
+              SSubsection.subsectionTypedID(
+                this.subsection.type.get(),
+                SID.newID(this.subsection.id.get().id),
+                title,
+                content)
+            false ->
+              SSubsection.subsectionID(
+                scids.check(this.subsection.id.get()).get(), title, content)
+          }
+        }
+        false -> {
+          when (this.subsection.type.isPresent) {
+            true  ->
+              SSubsection.subsectionTyped(this.subsection.type.get(), title, content)
+            false ->
+              SSubsection.subsection(title, content)
+          }
+        }
+      }
+    }
+
+    override fun evaluateEOF(
+      scids : SCIDContextType,
+      error_queue : Deque<SCError>) : SSubsection {
+
+      if (this.contents.isEmpty()) {
+        throw emptySubsection(this.subsection, error_queue)
+      }
+
+      this.paragraph = Optional.empty()
+
+      LOG.trace("finished subsection due to eof")
+      return finishSubsection(scids)
     }
   }
 
   private class EvaluatorSection(
+    scids : SCIDContextType,
     private val directory_stack : Deque<Path>,
     private val section : SCBlock.SCBlockSection) : EvaluatorType<SSection> {
 
     private var subsection = Optional.empty<EvaluatorSubsection>()
     private val subsections = ArrayList<SSubsection>()
     private var paragraph = Optional.empty<EvaluatorParagraph>()
-    private val paragraphs = ArrayList<SParagraph>()
+    private val subsection_content = ArrayList<SSubsectionContent>()
+
+    init {
+      LOG.trace("start section {}", this.section)
+
+      if (this.section.id.isPresent) {
+        scids.declare(this.section.id.get())
+      }
+    }
 
     override fun evaluate(
       e : SCElement,
@@ -225,23 +427,41 @@ class SCDocumentEvaluator private constructor(
 
       if (this.subsection.isPresent) {
         Assertive.require(!this.paragraph.isPresent)
+
+        if (this.subsection_content.isNotEmpty()) {
+          throw sectionMixedContent(e, eq)
+        }
+
+        Assertive.require(this.subsection_content.isEmpty())
         val r = this.subsection.get().evaluate(e, scids, eq)
         return when (r) {
           is SCDocumentEvaluator.Result.ResultUnfinished ->
-            throw UnimplementedCodeException()
-          is SCDocumentEvaluator.Result.ResultFinished   ->
-            throw UnimplementedCodeException()
+            Result.ResultUnfinished(consumed_element = r.consumed_element)
+          is SCDocumentEvaluator.Result.ResultFinished   -> {
+            this.subsections.add(r.result)
+            this.subsection = Optional.empty()
+            Result.ResultUnfinished(consumed_element = r.consumed_element)
+          }
         }
       }
 
       if (this.paragraph.isPresent) {
         Assertive.require(!this.subsection.isPresent)
+
+        if (this.subsections.isNotEmpty()) {
+          throw sectionMixedContent(e, eq)
+        }
+
+        Assertive.require(this.subsections.isEmpty())
         val r = this.paragraph.get().evaluate(e, scids, eq)
         return when (r) {
           is SCDocumentEvaluator.Result.ResultUnfinished ->
-            throw UnimplementedCodeException()
-          is SCDocumentEvaluator.Result.ResultFinished   ->
-            throw UnimplementedCodeException()
+            Result.ResultUnfinished(consumed_element = r.consumed_element)
+          is SCDocumentEvaluator.Result.ResultFinished   -> {
+            this.subsection_content.add(r.result)
+            this.paragraph = Optional.empty()
+            Result.ResultUnfinished(consumed_element = r.consumed_element)
+          }
         }
       }
 
@@ -255,39 +475,159 @@ class SCDocumentEvaluator private constructor(
 
       return when (e) {
         is SCElement.SCElementInline ->
-          throw elementCannotAppearHere(listOf(
-            SCCommandNames.SUBSECTION,
-            SCCommandNames.PARA,
-            SCCommandNames.IMPORT), e, eq)
+          throw UnimplementedCodeException()
         is SCElement.SCElementBlock  ->
           when (e.actual) {
             is SCBlock.SCBlockImport     -> {
               throw UnimplementedCodeException()
             }
-            is SCBlock.SCBlockParagraph -> {
-              throw UnimplementedCodeException()
+            is SCBlock.SCBlockParagraph  -> {
+              Assertive.require(!this.paragraph.isPresent)
+              Assertive.require(!this.subsection.isPresent)
+              this.paragraph = Optional.of(
+                EvaluatorParagraph(scids, this.directory_stack, e.actual))
+              Result.ResultUnfinished(consumed_element = true)
             }
             is SCBlock.SCBlockSubsection -> {
-              throw UnimplementedCodeException()
+              Assertive.require(!this.paragraph.isPresent)
+              Assertive.require(!this.subsection.isPresent)
+              this.subsection = Optional.of(
+                EvaluatorSubsection(scids, this.directory_stack, e.actual))
+              Result.ResultUnfinished(consumed_element = true)
             }
             is SCBlock.SCBlockDocument,
             is SCBlock.SCBlockPart,
-            is SCBlock.SCBlockSection ->
-              throw elementCannotAppearHere(listOf(
-                SCCommandNames.SUBSECTION,
-                SCCommandNames.PARA,
-                SCCommandNames.IMPORT), e, eq)
+            is SCBlock.SCBlockSection    -> {
+              if (this.subsections.isEmpty() && this.subsection_content.isEmpty()) {
+                throw emptySection(e, eq)
+              }
+
+              this.paragraph = Optional.empty()
+              this.subsection = Optional.empty()
+
+              LOG.trace("finished section due to {}:{}", e, e.lexical)
+              Result.ResultFinished(
+                consumed_element = false,
+                result = finishSection(scids))
+            }
           }
       }
+    }
+
+    private fun finishSection(scids : SCIDContextType) : SSection =
+      when (this.subsections.isNotEmpty()) {
+        true  -> finishSectionWithSubsections(scids)
+        false -> finishSectionWithParagraphs(scids)
+      }
+
+    private fun finishSectionWithParagraphs(scids : SCIDContextType) : SSectionWithParagraphs {
+      Assertive.require(this.subsections.isEmpty())
+      Assertive.require(!this.subsection.isPresent)
+      Assertive.require(this.subsection_content.isNotEmpty())
+
+      val title =
+        SSectionTitle.sectionTitle(
+          SCText.concatenate(this.section.title.elements))
+      val content =
+        SNonEmptyList.newList(this.subsection_content)
+
+      return when (this.section.id.isPresent) {
+        true  ->
+          when (this.section.type.isPresent) {
+            true  ->
+              SSectionWithParagraphs.sectionTypedID(
+                this.section.type.get(),
+                scids.check(this.section.id.get()).get(),
+                title,
+                content)
+            false ->
+              SSectionWithParagraphs.sectionID(
+                scids.check(this.section.id.get()).get(), title, content)
+          }
+
+        false ->
+          when (this.section.type.isPresent) {
+            true  -> SSectionWithParagraphs.sectionTyped(this.section.type.get(), title, content)
+            false -> SSectionWithParagraphs.section(title, content)
+          }
+      }
+    }
+
+    private fun finishSectionWithSubsections(scids : SCIDContextType) : SSectionWithSubsections {
+      Assertive.require(this.subsection_content.isEmpty())
+      Assertive.require(!this.paragraph.isPresent)
+      Assertive.require(this.subsections.isNotEmpty())
+
+      val title =
+        SSectionTitle.sectionTitle(
+          SCText.concatenate(this.section.title.elements))
+      val content =
+        SNonEmptyList.newList(this.subsections)
+
+      return when (this.section.id.isPresent) {
+        true  ->
+          when (this.section.type.isPresent) {
+            true  ->
+              SSectionWithSubsections.sectionTypedID(
+                this.section.type.get(),
+                scids.check(this.section.id.get()).get(),
+                title,
+                content)
+            false ->
+              SSectionWithSubsections.sectionID(
+                scids.check(this.section.id.get()).get(), title, content)
+          }
+        false ->
+          when (this.section.type.isPresent) {
+            true  -> SSectionWithSubsections.sectionTyped(this.section.type.get(), title, content)
+            false -> SSectionWithSubsections.section(title, content)
+          }
+      }
+    }
+
+    override fun evaluateEOF(
+      scids : SCIDContextType,
+      error_queue : Deque<SCError>) : SSection {
+
+      if (this.subsection.isPresent) {
+        val r = this.subsection.get().evaluateEOF(scids, error_queue)
+        this.subsections.add(r)
+        this.subsection = Optional.empty()
+      }
+
+      if (this.paragraph.isPresent) {
+        val r = this.paragraph.get().evaluateEOF(scids, error_queue)
+        this.subsection_content.add(r)
+        this.paragraph = Optional.empty()
+      }
+
+      if (this.subsections.isEmpty() && this.subsection_content.isEmpty()) {
+        throw emptySection(this.section, error_queue)
+      }
+
+      this.paragraph = Optional.empty()
+      this.subsection = Optional.empty()
+
+      LOG.trace("finished section due to EOF")
+      return finishSection(scids)
     }
   }
 
   private class EvaluatorPart(
+    scids : SCIDContextType,
     private val directory_stack : Deque<Path>,
     private val part : SCBlock.SCBlockPart) : EvaluatorType<SPart> {
 
     private var section = Optional.empty<EvaluatorSection>()
     private val sections = ArrayList<SSection>()
+
+    init {
+      LOG.trace("start part {}", part)
+
+      if (part.id.isPresent) {
+        scids.declare(part.id.get())
+      }
+    }
 
     override fun evaluate(
       e : SCElement,
@@ -331,8 +671,10 @@ class SCDocumentEvaluator private constructor(
               }
 
               Assertive.require(this.section.isPresent)
-              Assertive.require(!this.sections.isEmpty())
-              Result.ResultFinished(finishPart(scids, eq))
+              Assertive.require(this.sections.isNotEmpty())
+              Result.ResultFinished(
+                consumed_element = false,
+                result = finishPart(scids, eq))
             }
 
             is SCBlock.SCBlockImport     -> {
@@ -341,9 +683,9 @@ class SCDocumentEvaluator private constructor(
 
             is SCBlock.SCBlockSection    -> {
               LOG.trace("begin section: {}", e.actual)
-              val s = EvaluatorSection(this.directory_stack, e.actual)
+              val s = EvaluatorSection(scids, this.directory_stack, e.actual)
               this.section = Optional.of(s)
-              Result.ResultUnfinished()
+              Result.ResultUnfinished(consumed_element = true)
             }
           }
 
@@ -359,7 +701,7 @@ class SCDocumentEvaluator private constructor(
       scids : SCIDContextType,
       eq : Deque<SCError>) : SPart {
       Assertive.require(this.section.isPresent)
-      Assertive.require(!this.sections.isEmpty())
+      Assertive.require(this.sections.isNotEmpty())
 
       this.section = Optional.empty()
 
@@ -392,10 +734,12 @@ class SCDocumentEvaluator private constructor(
         }
       }
     }
-  }
 
-  private fun declareID(get : SCID) : SID {
-    throw UnimplementedCodeException()
+    override fun evaluateEOF(
+      scids : SCIDContextType,
+      error_queue : Deque<SCError>) : SPart {
+      throw UnimplementedCodeException()
+    }
   }
 
   private class EvaluatorDocument(
@@ -406,6 +750,10 @@ class SCDocumentEvaluator private constructor(
     private var part = Optional.empty<EvaluatorPart>()
     private val parts = ArrayList<SPart>()
     private val sections = ArrayList<SSection>()
+
+    init {
+      LOG.trace("start document {}", document)
+    }
 
     override fun evaluate(
       e : SCElement,
@@ -428,17 +776,21 @@ class SCDocumentEvaluator private constructor(
         val r = this.section.get().evaluate(e, scids, eq)
         return when (r) {
           is SCDocumentEvaluator.Result.ResultUnfinished ->
-            throw UnimplementedCodeException()
-          is SCDocumentEvaluator.Result.ResultFinished   ->
-            throw UnimplementedCodeException()
+            Result.ResultUnfinished(consumed_element = r.consumed_element)
+          is SCDocumentEvaluator.Result.ResultFinished   -> {
+            this.sections.add(r.result)
+            this.section = Optional.empty()
+            Result.ResultUnfinished(consumed_element = r.consumed_element)
+          }
         }
       }
 
-      return evaluateDocument(e, eq)
+      return evaluateDocument(e, scids, eq)
     }
 
     private fun evaluateDocument(
       e : SCElement,
+      scids : SCIDContextType,
       eq : Deque<SCError>) : Result<SDocument> {
 
       Assertive.require(!this.section.isPresent)
@@ -460,17 +812,13 @@ class SCDocumentEvaluator private constructor(
             }
 
             is SCBlock.SCBlockSection    -> {
-              LOG.trace("begin section: {}", e.actual)
-              val s = EvaluatorSection(this.directory_stack, e.actual)
-              this.section = Optional.of(s)
-              Result.ResultUnfinished()
+              this.section = Optional.of(EvaluatorSection(scids, this.directory_stack, e.actual))
+              Result.ResultUnfinished(consumed_element = true)
             }
 
             is SCBlock.SCBlockPart       -> {
-              LOG.trace("begin part: {}", e.actual)
-              val p = EvaluatorPart(this.directory_stack, e.actual)
-              this.part = Optional.of(p)
-              Result.ResultUnfinished()
+              this.part = Optional.of(EvaluatorPart(scids, this.directory_stack, e.actual))
+              Result.ResultUnfinished(consumed_element = true)
             }
           }
 
@@ -481,6 +829,35 @@ class SCDocumentEvaluator private constructor(
             SCCommandNames.IMPORT), e, eq)
         }
       }
+    }
+
+    override fun evaluateEOF(
+      scids : SCIDContextType,
+      error_queue : Deque<SCError>) : SDocument {
+
+      if (this.part.isPresent) {
+        Assertive.require(!this.section.isPresent)
+        val r = this.part.get().evaluateEOF(scids, error_queue)
+        this.parts.add(r)
+        this.part = Optional.empty()
+        val title = SDocumentTitle.documentTitle(SCText.concatenate(this.document.title.elements))
+        val content = SNonEmptyList.newList(this.parts)
+        return SDocumentWithParts.document(title, content)
+      }
+
+      if (this.section.isPresent) {
+        Assertive.require(!this.part.isPresent)
+        val r = this.section.get().evaluateEOF(scids, error_queue)
+        this.sections.add(r)
+        this.section = Optional.empty()
+        val title = SDocumentTitle.documentTitle(SCText.concatenate(this.document.title.elements))
+        val content = SNonEmptyList.newList(this.sections)
+        return SDocumentWithSections.document(title, content)
+      }
+
+      Assertive.require(this.parts.isEmpty())
+      Assertive.require(this.sections.isEmpty())
+      throw unexpectedEOF(error_queue)
     }
   }
 
@@ -509,9 +886,8 @@ class SCDocumentEvaluator private constructor(
                 throw UnimplementedCodeException()
               }
               is SCBlock.SCBlockDocument -> {
-                LOG.trace("begin document: {}", e.actual)
                 this.document = Optional.of(EvaluatorDocument(directory_stack, e.actual))
-                return Result.ResultUnfinished()
+                return Result.ResultUnfinished(consumed_element = true)
               }
               is SCBlock.SCBlockParagraph,
               is SCBlock.SCBlockSection,
@@ -525,18 +901,41 @@ class SCDocumentEvaluator private constructor(
         }
       }
     }
+
+    override fun evaluateEOF(
+      scids : SCIDContextType,
+      error_queue : Deque<SCError>) : SDocument {
+
+      return if (this.document.isPresent) {
+        this.document.get().evaluateEOF(scids, error_queue)
+      } else {
+        throw unexpectedEOF(error_queue)
+      }
+    }
   }
 
   override fun evaluateElement(
     element : SCElement,
     scids : SCIDContextType,
     error_queue : Deque<SCError>) {
-    this.evaluator.evaluate(element, scids, error_queue)
+    LOG.trace("evaluate {}", element)
+    val r = this.evaluator.evaluate(element, scids, error_queue)
+    return when (r) {
+      is SCDocumentEvaluator.Result.ResultUnfinished ->
+        return if (r.consumed_element == false) {
+          this.evaluateElement(element, scids, error_queue)
+        } else {
+
+        }
+      is SCDocumentEvaluator.Result.ResultFinished   ->
+        throw UnimplementedCodeException()
+    }
   }
 
   override fun evaluateEOF(
     scids : SCIDContextType,
     error_queue : Deque<SCError>) : SDocument {
-    throw UnimplementedCodeException()
+    LOG.trace("evaluate eof")
+    return this.evaluator.evaluateEOF(scids, error_queue)
   }
 }

@@ -733,7 +733,7 @@ class SCParser : SCParserType {
 
       val target = parseAttributeTarget(e.elements[1] as SCExpression.EList)
       val content = SNonEmptyList.newList(texts.map { e -> parseLinkContent(e, eq) })
-      return SCLink.SCLinkInternal(e.lexical, target, content)
+      return SCLink.SCLinkInternal(e.lexical, SCID(e.elements[1].lexical, target), content)
     } else {
       eq.add(failedToMatch(e, listOf(CommandMatchers.link)))
       throw SCException.SCParseException()

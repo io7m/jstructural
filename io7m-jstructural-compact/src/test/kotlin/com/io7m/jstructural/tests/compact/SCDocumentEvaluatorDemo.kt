@@ -18,12 +18,14 @@ package com.io7m.jstructural.tests.compact
 
 import com.io7m.jeucreader.UnicodeCharacterReader
 import com.io7m.jlexing.core.ImmutableLexicalPosition
+import com.io7m.jstructural.annotated.SAnnotator
 import com.io7m.jstructural.compact.SCDocumentEvaluator
 import com.io7m.jstructural.compact.SCError
 import com.io7m.jstructural.compact.SCException
 import com.io7m.jstructural.compact.SCExpression
 import com.io7m.jstructural.compact.SCIDContext
 import com.io7m.jstructural.compact.SCParser
+import com.io7m.jstructural.core.SDocument
 import com.io7m.jsx.lexer.JSXLexer
 import com.io7m.jsx.lexer.JSXLexerConfiguration
 import com.io7m.jsx.parser.JSXParser
@@ -34,6 +36,7 @@ import java.io.InputStreamReader
 import java.io.Reader
 import java.nio.file.Paths
 import java.util.ArrayDeque
+import java.util.Optional
 
 fun main(args : Array<String>) {
 
@@ -56,7 +59,9 @@ fun main(args : Array<String>) {
   val de = SCDocumentEvaluator.beginDocument(
     base_directory = Paths.get("").toAbsolutePath())
 
-  while (true) {
+  var document = Optional.empty<SDocument>()
+  var eof = false
+  while (!eof) {
     try {
       eq.clear()
       val e = p.parseExpressionOrEOF()
@@ -64,7 +69,8 @@ fun main(args : Array<String>) {
         val b = scp.parse(SCExpression.of(e.get()), eq)
         de.evaluateElement(b, ids, eq)
       } else {
-        de.evaluateEOF(ids, eq)
+        eof = true
+        document = Optional.of(de.evaluateEOF(ids, eq))
         break
       }
     } catch (x : SCException.SCParseException) {
@@ -90,6 +96,10 @@ fun main(args : Array<String>) {
           + ": "
           + x.message);
     }
+  }
+
+  if (document.isPresent) {
+    val da = SAnnotator.document(document.get())
   }
 }
 

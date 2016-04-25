@@ -29,7 +29,8 @@ import com.io7m.junreachable.UnimplementedCodeException
 object SCInlineContent {
 
   fun link(x : SCLink.SCLinkInternal) : SLink {
-    return SLink.link(x.target, SNonEmptyList.newList(x.content.elements.map { linkContent(it) }))
+    return SLink.link(
+      x.target.id, SNonEmptyList.newList(x.content.elements.map { linkContent(it) }))
   }
 
   fun paraContent(e : SCInline) : SParagraphContent {

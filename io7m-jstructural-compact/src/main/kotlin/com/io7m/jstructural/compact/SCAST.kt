@@ -62,9 +62,8 @@ class SCID(
     return id == other.id
   }
 
-  override fun hashCode() : Int{
-    return id.hashCode()
-  }
+  override fun hashCode() : Int = id.hashCode()
+  override fun toString() : String = id
 }
 
 /**
@@ -99,7 +98,7 @@ sealed class SCLink : SCLexicalType {
 
   class SCLinkInternal(
     override val lexical : Optional<LexicalPositionType<Path>>,
-    val target : String,
+    val target : SCID,
     val content : SNonEmptyList<SCLinkContent>)
   : SCLink() {
     override fun toString() : String {
@@ -412,6 +411,19 @@ sealed class SCLinkContent {
   class SCLinkImage(
     val actual : SCInline.SCInlineImage)
   : SCLinkContent() {
+    override fun toString() = actual.toString()
+  }
+}
+
+/**
+ * The type of content that can appear in subsections.
+ */
+
+sealed class SCSubsectionContent : SCLexicalType {
+
+  class SCSubsectionParagraph(
+    val actual : SCBlock.SCBlockParagraph) : SCSubsectionContent() {
+    override val lexical : Optional<LexicalPositionType<Path>> get() = actual.lexical
     override fun toString() = actual.toString()
   }
 

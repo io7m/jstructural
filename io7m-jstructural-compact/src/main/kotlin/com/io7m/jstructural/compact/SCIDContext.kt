@@ -17,6 +17,7 @@
 package com.io7m.jstructural.compact
 
 import com.io7m.jstructural.core.SID
+import org.slf4j.LoggerFactory
 import org.valid4j.Assertive
 import java.util.HashMap
 import java.util.Optional
@@ -26,18 +27,24 @@ class SCIDContext private constructor(
   private val sid_to_scid : MutableMap<SID, SCID>) : SCIDContextType {
 
   companion object {
+    private val LOG = LoggerFactory.getLogger(SCIDContext::class.java)
+
     fun create() : SCIDContextType =
       SCIDContext(HashMap(), HashMap())
   }
 
-  override fun check(id : SCID) : Optional<SID> {
-    return when (scid_to_sid.containsKey(id)) {
-      true -> Optional.of(scid_to_sid.get(id))
+  override fun check(scid : SCID) : Optional<SID> {
+    LOG.trace("check id {} at {}", scid, scid.lexical)
+
+    return when (scid_to_sid.containsKey(scid)) {
+      true -> Optional.of(scid_to_sid.get(scid))
       false -> Optional.empty()
     }
   }
 
   override fun declare(scid : SCID) : SCIDContextDeclaration {
+    LOG.trace("declared id {} at {}", scid, scid.lexical)
+
     return when (scid_to_sid.containsKey(scid)) {
       false -> {
         val sid = SID.newID(scid.id)
