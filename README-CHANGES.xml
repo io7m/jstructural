@@ -4,7 +4,7 @@
 
   <c:release c:ticket-system="com.github.io7m.jstructural">
     <c:date>2016-04-20</c:date>
-    <c:version>5.0.0</c:version>
+    <c:version>5.0.0-SNAPSHOT</c:version>
     <c:item>
       <c:date>2016-04-20</c:date>
       <c:type-code-change/>
