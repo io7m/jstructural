@@ -6,65 +6,72 @@
   </a:author>
   <a:id>http://io7m.github.io/jstructural/releases.atom</a:id>
   <a:title>io7m-jstructural Releases</a:title>
-  <a:updated>2015-08-22T00:00:00Z</a:updated>
+  <a:updated>2016-04-20T00:00:00Z</a:updated>
   <a:entry>
     <a:id>0</a:id>
+    <a:updated>2016-04-20T00:00:00Z</a:updated>
+    <a:published>2016-04-20T00:00:00Z</a:published>
+    <a:title>io7m-jstructural 5.0.0-SNAPSHOT released</a:title>
+    <a:content type="text"> io7m-jstructural 5.0.0-SNAPSHOT released </a:content>
+  </a:entry>
+  <a:entry>
+    <a:id>1</a:id>
     <a:updated>2015-08-22T00:00:00Z</a:updated>
     <a:published>2015-08-22T00:00:00Z</a:published>
     <a:title>io7m-jstructural 4.2.0 released</a:title>
     <a:content type="text"> io7m-jstructural 4.2.0 released </a:content>
   </a:entry>
   <a:entry>
-    <a:id>1</a:id>
+    <a:id>2</a:id>
     <a:updated>2015-07-19T00:00:00Z</a:updated>
     <a:published>2015-07-19T00:00:00Z</a:published>
     <a:title>io7m-jstructural 4.1.0 released</a:title>
     <a:content type="text"> io7m-jstructural 4.1.0 released </a:content>
   </a:entry>
   <a:entry>
-    <a:id>2</a:id>
+    <a:id>3</a:id>
     <a:updated>2014-08-21T00:00:00Z</a:updated>
     <a:published>2014-08-21T00:00:00Z</a:published>
     <a:title>io7m-jstructural 4.0.0 released</a:title>
     <a:content type="text"> io7m-jstructural 4.0.0 released </a:content>
   </a:entry>
   <a:entry>
-    <a:id>3</a:id>
+    <a:id>4</a:id>
     <a:updated>2014-06-22T00:00:00Z</a:updated>
     <a:published>2014-06-22T00:00:00Z</a:published>
     <a:title>io7m-jstructural 3.1.1 released</a:title>
     <a:content type="text"> io7m-jstructural 3.1.1 released </a:content>
   </a:entry>
   <a:entry>
-    <a:id>4</a:id>
+    <a:id>5</a:id>
     <a:updated>2014-06-22T00:00:00Z</a:updated>
     <a:published>2014-06-22T00:00:00Z</a:published>
     <a:title>io7m-jstructural 3.1.0 released</a:title>
     <a:content type="text"> io7m-jstructural 3.1.0 released </a:content>
   </a:entry>
   <a:entry>
-    <a:id>5</a:id>
+    <a:id>6</a:id>
     <a:updated>2014-06-22T00:00:00Z</a:updated>
     <a:published>2014-06-22T00:00:00Z</a:published>
     <a:title>io7m-jstructural 3.0.1 released</a:title>
     <a:content type="text"> io7m-jstructural 3.0.1 released </a:content>
   </a:entry>
   <a:entry>
-    <a:id>6</a:id>
+    <a:id>7</a:id>
     <a:updated>2014-06-22T00:00:00Z</a:updated>
     <a:published>2014-06-22T00:00:00Z</a:published>
     <a:title>io7m-jstructural 3.0.0 released</a:title>
     <a:content type="text"> io7m-jstructural 3.0.0 released </a:content>
   </a:entry>
   <a:entry>
-    <a:id>7</a:id>
+    <a:id>8</a:id>
     <a:updated>2014-04-28T00:00:00Z</a:updated>
     <a:published>2014-04-28T00:00:00Z</a:published>
     <a:title>io7m-jstructural 2.1.0 released</a:title>
     <a:content type="text"> io7m-jstructural 2.1.0 released </a:content>
   </a:entry>
   <a:entry>
-    <a:id>8</a:id>
+    <a:id>9</a:id>
     <a:updated>2014-04-18T00:00:00Z</a:updated>
     <a:published>2014-04-18T00:00:00Z</a:published>
     <a:title>io7m-jstructural 2.0.0 released</a:title>
