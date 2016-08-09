@@ -16,6 +16,12 @@
       <c:type-code-new/>
       <c:summary>Use newer Maven plugins and reorganize POM files. Require Maven 3.0.4 for builds.</c:summary>
     </c:item>
+    <c:item>
+      <c:date>2016-08-09</c:date>
+      <c:type-code-change/>
+      <c:ticket>6</c:ticket>
+      <c:summary>Add jstructural.skip property for the Maven plugin to allow skipping the generation of documentation.</c:summary>
+    </c:item>
   </c:release>
 
   <c:release c:ticket-system="com.github.io7m.jstructural">
