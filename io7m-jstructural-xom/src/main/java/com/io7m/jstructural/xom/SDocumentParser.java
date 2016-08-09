@@ -16,8 +16,6 @@
 
 package com.io7m.jstructural.xom;
 
-import com.io7m.jlog.LogLevel;
-import com.io7m.jlog.LogUsableType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jstructural.core.SDocument;
@@ -80,6 +78,8 @@ import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.InclusionLoopException;
 import nu.xom.xinclude.NoIncludeLocationException;
 import nu.xom.xinclude.XIncludeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -108,6 +108,12 @@ import java.util.List;
 
 public final class SDocumentParser
 {
+  private static final Logger LOG;
+
+  static {
+    LOG = LoggerFactory.getLogger(SDocumentParser.class);
+  }
+
   private SDocumentParser()
   {
 
@@ -117,8 +123,7 @@ public final class SDocumentParser
    * Attempt to parse a document from the given element. The element is assumed
    * to have been validated with the {@code structural} schema.
    *
-   * @param log A log handle
-   * @param e   The element
+   * @param e The element
    *
    * @return A document
    *
@@ -126,14 +131,12 @@ public final class SDocumentParser
    */
 
   static SDocument document(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
-    NullCheck.notNull(log, "Log");
     NullCheck.notNull(e, "Element");
 
-    log.debug("document: starting");
+    SDocumentParser.LOG.debug("document: starting");
 
     final SDocumentTitle title = SDocumentParser.documentTitleRoot(e);
     final SDocumentStyle style = SDocumentParser.documentStyleRoot(e);
@@ -141,9 +144,9 @@ public final class SDocumentParser
     final Element esect = SDocumentParser.getElement(e, "section");
     if (esect != null) {
       return SDocumentParser.documentWithSections(
-        log, e, title, style, contents);
+        e, title, style, contents);
     }
-    return SDocumentParser.documentWithParts(log, e, title, style, contents);
+    return SDocumentParser.documentWithParts(e, title, style, contents);
   }
 
   private static boolean documentContentsRoot(
@@ -153,7 +156,9 @@ public final class SDocumentParser
     return e != null;
   }
 
-  private static @Nullable SDocumentStyle documentStyleRoot(
+  private static
+  @Nullable
+  SDocumentStyle documentStyleRoot(
     final Element root)
     throws URISyntaxException
   {
@@ -173,7 +178,6 @@ public final class SDocumentParser
   }
 
   private static SDocument documentWithParts(
-    final LogUsableType log,
     final Element root,
     final SDocumentTitle title,
     final @Nullable SDocumentStyle style,
@@ -186,7 +190,7 @@ public final class SDocumentParser
 
     final List<SPart> elements = new ArrayList<SPart>();
     for (int index = 0; index < parts.size(); ++index) {
-      final SPart part = SDocumentParser.part(log, parts.get(index));
+      final SPart part = SDocumentParser.part(parts.get(index));
       elements.add(part);
     }
 
@@ -215,7 +219,6 @@ public final class SDocumentParser
   }
 
   private static SDocument documentWithSections(
-    final LogUsableType log,
     final Element root,
     final SDocumentTitle title,
     final @Nullable SDocumentStyle style,
@@ -229,7 +232,7 @@ public final class SDocumentParser
     final List<SSection> elements = new ArrayList<SSection>();
     for (int index = 0; index < sections.size(); ++index) {
       final SSection section =
-        SDocumentParser.section(log, sections.get(index));
+        SDocumentParser.section(sections.get(index));
       elements.add(section);
     }
 
@@ -259,17 +262,16 @@ public final class SDocumentParser
   }
 
   private static SFootnote footnote(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
-    log.debug("footnote: starting");
+    SDocumentParser.LOG.debug("footnote: starting");
 
     final List<SFootnoteContent> content_nodes =
       new ArrayList<SFootnoteContent>();
     for (int index = 0; index < e.getChildCount(); ++index) {
       final Node ec = e.getChild(index);
-      content_nodes.add(SDocumentParser.footnoteContent(log, ec));
+      content_nodes.add(SDocumentParser.footnoteContent(ec));
     }
 
     final SNonEmptyList<SFootnoteContent> content =
@@ -278,7 +280,6 @@ public final class SDocumentParser
   }
 
   private static SFootnoteContent footnoteContent(
-    final LogUsableType log,
     final Node c)
     throws URISyntaxException
   {
@@ -305,7 +306,7 @@ public final class SDocumentParser
         return SDocumentParser.verbatim(ecc);
       }
       if ("footnote".equals(ecc.getLocalName())) {
-        return SDocumentParser.footnote(log, ecc);
+        return SDocumentParser.footnote(ecc);
       }
     }
 
@@ -313,7 +314,6 @@ public final class SDocumentParser
   }
 
   private static SFormalItem formalItem(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
@@ -330,14 +330,13 @@ public final class SDocumentParser
         continue;
       }
       return SDocumentParser.formalItemMake(
-        type, kind, id, title, SDocumentParser.formalItemContent(log, ec));
+        type, kind, id, title, SDocumentParser.formalItemContent(ec));
     }
 
     throw new UnreachableCodeException();
   }
 
   private static SFormalItemContent formalItemContent(
-    final LogUsableType log,
     final Element ec)
     throws URISyntaxException
   {
@@ -348,13 +347,13 @@ public final class SDocumentParser
       return SDocumentParser.image(ec);
     }
     if ("list-ordered".equals(ec.getLocalName())) {
-      return SDocumentParser.listOrdered(log, ec);
+      return SDocumentParser.listOrdered(ec);
     }
     if ("list-unordered".equals(ec.getLocalName())) {
-      return SDocumentParser.listUnordered(log, ec);
+      return SDocumentParser.listUnordered(ec);
     }
     if ("table".equals(ec.getLocalName())) {
-      return SDocumentParser.table(log, ec);
+      return SDocumentParser.table(ec);
     }
     if ("verbatim".equals(ec.getLocalName())) {
       return SDocumentParser.verbatim(ec);
@@ -406,7 +405,6 @@ public final class SDocumentParser
    *
    * @param uri    The base URI of the document
    * @param stream The stream
-   * @param log    A log handle
    *
    * @return A document
    *
@@ -424,8 +422,7 @@ public final class SDocumentParser
 
   public static SDocument fromStream(
     final InputStream stream,
-    final URI uri,
-    final LogUsableType log)
+    final URI uri)
     throws
     ValidityException,
     SAXException,
@@ -438,12 +435,11 @@ public final class SDocumentParser
     NoIncludeLocationException,
     XIncludeException
   {
-    final LogUsableType lp = log.with("parser");
-    final Document doc = SDocumentParser.fromStreamValidate(stream, uri, log);
+    final Document doc = SDocumentParser.fromStreamValidate(stream, uri);
     final Element root = doc.getRootElement();
 
     if ("document".equals(root.getLocalName())) {
-      return SDocumentParser.document(lp, root);
+      return SDocumentParser.document(root);
     }
 
     throw new UnimplementedCodeException();
@@ -454,7 +450,6 @@ public final class SDocumentParser
    *
    * @param stream An input stream
    * @param uri    The document URI
-   * @param log    A log handle
    *
    * @return A parsed and validated document
    *
@@ -471,8 +466,7 @@ public final class SDocumentParser
 
   static Document fromStreamValidate(
     final InputStream stream,
-    final URI uri,
-    final LogUsableType log)
+    final URI uri)
     throws
     SAXException,
 
@@ -486,11 +480,8 @@ public final class SDocumentParser
     XIncludeException
   {
     NullCheck.notNull(stream, "Stream");
-    NullCheck.notNull(log, "Log");
 
-    final LogUsableType log_xml = log.with("xml");
-
-    log_xml.debug("creating sax parser");
+    SDocumentParser.LOG.debug("xml: creating sax parser");
 
     final SAXParserFactory factory = SAXParserFactory.newInstance();
     factory.setValidating(false);
@@ -498,19 +489,19 @@ public final class SDocumentParser
     factory.setXIncludeAware(true);
     factory.setFeature("http://apache.org/xml/features/xinclude", true);
 
-    log_xml.debug("opening xml.xsd");
+    SDocumentParser.LOG.debug("xml: opening xml.xsd");
 
     final InputStream xml_xsd =
       new URL(SSchema.getSchemaXMLXSDLocation().toString()).openStream();
 
     try {
-      log_xml.debug("opening schema.xsd");
+      SDocumentParser.LOG.debug("xml: opening schema.xsd");
 
       final InputStream schema_xsd =
         new URL(SSchema.getSchemaXSDLocation().toString()).openStream();
 
       try {
-        log_xml.debug("creating schema handler");
+        SDocumentParser.LOG.debug("xml: creating schema handler");
 
         final SchemaFactory schema_factory =
           SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
@@ -520,12 +511,12 @@ public final class SDocumentParser
         sources[1] = new StreamSource(schema_xsd);
         factory.setSchema(schema_factory.newSchema(sources));
 
-        final TrivialErrorHandler handler = new TrivialErrorHandler(log_xml);
+        final TrivialErrorHandler handler = new TrivialErrorHandler();
         final SAXParser parser = factory.newSAXParser();
         final XMLReader reader = parser.getXMLReader();
         reader.setErrorHandler(handler);
 
-        log_xml.debug("parsing and validating");
+        SDocumentParser.LOG.debug("xml: parsing and validating");
         final Builder builder = new Builder(reader);
         final Document doc = builder.build(stream, uri.toString());
 
@@ -543,21 +534,27 @@ public final class SDocumentParser
     }
   }
 
-  private static @Nullable Element getElement(
+  private static
+  @Nullable
+  Element getElement(
     final Element element,
     final String name)
   {
     return element.getFirstChildElement(name, SXML.XML_URI.toString());
   }
 
-  private static @Nullable Elements getElements(
+  private static
+  @Nullable
+  Elements getElements(
     final Element element,
     final String name)
   {
     return element.getChildElements(name, SXML.XML_URI.toString());
   }
 
-  private static @Nullable Integer heightAttribute(
+  private static
+  @Nullable
+  Integer heightAttribute(
     final Element ec)
   {
     final Attribute a = ec.getAttribute("height", SXML.XML_URI.toString());
@@ -567,7 +564,9 @@ public final class SDocumentParser
     return Integer.valueOf(a.getValue());
   }
 
-  private static @Nullable SID idAttribute(
+  private static
+  @Nullable
+  SID idAttribute(
     final Element e)
   {
     final Attribute eid =
@@ -707,17 +706,16 @@ public final class SDocumentParser
   }
 
   private static SListItem listItem(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
-    log.debug("list-item: starting");
+    SDocumentParser.LOG.debug("list-item: starting");
 
     final String type = SDocumentParser.typeAttribute(e);
     final List<SListItemContent> items = new ArrayList<SListItemContent>();
     for (int index = 0; index < e.getChildCount(); ++index) {
       final Node ec = e.getChild(index);
-      items.add(SDocumentParser.listItemContent(log, ec));
+      items.add(SDocumentParser.listItemContent(ec));
     }
 
     final SNonEmptyList<SListItemContent> content =
@@ -729,7 +727,6 @@ public final class SDocumentParser
   }
 
   private static SListItemContent listItemContent(
-    final LogUsableType log,
     final Node e)
     throws URISyntaxException
   {
@@ -741,7 +738,7 @@ public final class SDocumentParser
       final Element ee = (Element) e;
 
       if ("footnote".equals(ee.getLocalName())) {
-        return SDocumentParser.footnote(log, ee);
+        return SDocumentParser.footnote(ee);
       }
       if ("image".equals(ee.getLocalName())) {
         return SDocumentParser.image(ee);
@@ -753,10 +750,10 @@ public final class SDocumentParser
         return SDocumentParser.linkExternal(ee);
       }
       if ("list-ordered".equals(ee.getLocalName())) {
-        return SDocumentParser.listOrdered(log, ee);
+        return SDocumentParser.listOrdered(ee);
       }
       if ("list-unordered".equals(ee.getLocalName())) {
-        return SDocumentParser.listUnordered(log, ee);
+        return SDocumentParser.listUnordered(ee);
       }
       if ("term".equals(ee.getLocalName())) {
         return SDocumentParser.term(ee);
@@ -770,11 +767,10 @@ public final class SDocumentParser
   }
 
   private static SListOrdered listOrdered(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
-    log.debug("list-ordered: starting");
+    SDocumentParser.LOG.debug("list-ordered: starting");
 
     final String type = SDocumentParser.typeAttribute(e);
     final List<SListItem> items = new ArrayList<SListItem>();
@@ -782,7 +778,7 @@ public final class SDocumentParser
       e.getChildElements("list-item", SXML.XML_URI.toString());
     for (int index = 0; index < children.size(); ++index) {
       final Element ec = children.get(index);
-      items.add(SDocumentParser.listItem(log, ec));
+      items.add(SDocumentParser.listItem(ec));
     }
 
     final SNonEmptyList<SListItem> content = SNonEmptyList.newList(items);
@@ -793,11 +789,10 @@ public final class SDocumentParser
   }
 
   private static SListUnordered listUnordered(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
-    log.debug("list-unordered: starting");
+    SDocumentParser.LOG.debug("list-unordered: starting");
 
     final String type = SDocumentParser.typeAttribute(e);
     final List<SListItem> items = new ArrayList<SListItem>();
@@ -805,7 +800,7 @@ public final class SDocumentParser
       e.getChildElements("list-item", SXML.XML_URI.toString());
     for (int index = 0; index < children.size(); ++index) {
       final Element ec = children.get(index);
-      items.add(SDocumentParser.listItem(log, ec));
+      items.add(SDocumentParser.listItem(ec));
     }
 
     final SNonEmptyList<SListItem> content = SNonEmptyList.newList(items);
@@ -818,8 +813,7 @@ public final class SDocumentParser
   /**
    * Parse a paragraph element.
    *
-   * @param log A log handle
-   * @param e   The raw element
+   * @param e The raw element
    *
    * @return A paragraph element
    *
@@ -827,11 +821,10 @@ public final class SDocumentParser
    */
 
   public static SParagraph paragraph(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
-    log.debug("paragraph: starting");
+    SDocumentParser.LOG.debug("paragraph: starting");
 
     final SID id = SDocumentParser.idAttribute(e);
     final String type = SDocumentParser.typeAttribute(e);
@@ -840,16 +833,15 @@ public final class SDocumentParser
 
     for (int index = 0; index < e.getChildCount(); ++index) {
       final Node child = e.getChild(index);
-      elements.add(SDocumentParser.paragraphContent(log, child));
+      elements.add(SDocumentParser.paragraphContent(child));
     }
 
     final SNonEmptyList<SParagraphContent> content =
       SNonEmptyList.newList(elements);
-    return SDocumentParser.paragraphMake(log, id, type, content);
+    return SDocumentParser.paragraphMake(id, type, content);
   }
 
   private static SParagraphContent paragraphContent(
-    final LogUsableType log,
     final Node child)
     throws URISyntaxException
   {
@@ -862,7 +854,7 @@ public final class SDocumentParser
       final Element ec = (Element) child;
 
       if ("footnote".equals(ec.getLocalName())) {
-        return SDocumentParser.footnote(log, ec);
+        return SDocumentParser.footnote(ec);
       }
       if ("formal-item-list".equals(ec.getLocalName())) {
         return SDocumentParser.formalItemList(ec);
@@ -877,16 +869,16 @@ public final class SDocumentParser
         return SDocumentParser.linkExternal(ec);
       }
       if ("list-ordered".equals(ec.getLocalName())) {
-        return SDocumentParser.listOrdered(log, ec);
+        return SDocumentParser.listOrdered(ec);
       }
       if ("list-unordered".equals(ec.getLocalName())) {
-        return SDocumentParser.listUnordered(log, ec);
+        return SDocumentParser.listUnordered(ec);
       }
       if ("term".equals(ec.getLocalName())) {
         return SDocumentParser.term(ec);
       }
       if ("table".equals(ec.getLocalName())) {
-        return SDocumentParser.table(log, ec);
+        return SDocumentParser.table(ec);
       }
       if ("verbatim".equals(ec.getLocalName())) {
         return SDocumentParser.verbatim(ec);
@@ -897,17 +889,15 @@ public final class SDocumentParser
   }
 
   private static SParagraph paragraphMake(
-    final LogUsableType log,
     final @Nullable SID id,
     final @Nullable String type,
     final SNonEmptyList<SParagraphContent> content)
   {
-    if (log.wouldLog(LogLevel.LOG_DEBUG)) {
-      log.debug(
-        String.format(
-          "paragraph: (id: %s) (type: %s)",
-          id != null ? id.getActual() : id,
-          type));
+    if (SDocumentParser.LOG.isDebugEnabled()) {
+      SDocumentParser.LOG.debug(
+        "paragraph: (id: {}) (type: {})",
+        id != null ? id.getActual() : id,
+        type);
     }
 
     if (id != null) {
@@ -923,11 +913,10 @@ public final class SDocumentParser
   }
 
   private static SPart part(
-    final LogUsableType log,
     final Element pe)
     throws URISyntaxException
   {
-    log.debug("part: starting");
+    SDocumentParser.LOG.debug("part: starting");
 
     final SPartTitle title = SDocumentParser.partTitleRoot(pe);
     final boolean contents = SDocumentParser.partContentsRoot(pe);
@@ -949,12 +938,12 @@ public final class SDocumentParser
       }
 
       if ("section".equals(e.getLocalName())) {
-        elements.add(SDocumentParser.section(log, e));
+        elements.add(SDocumentParser.section(e));
       }
     }
 
     final SNonEmptyList<SSection> content = SNonEmptyList.newList(elements);
-    return SDocumentParser.partMake(log, title, contents, id, type, content);
+    return SDocumentParser.partMake(title, contents, id, type, content);
   }
 
   private static boolean partContentsRoot(
@@ -965,21 +954,19 @@ public final class SDocumentParser
   }
 
   private static SPart partMake(
-    final LogUsableType log,
     final SPartTitle title,
     final boolean contents,
     final @Nullable SID id,
     final @Nullable String type,
     final SNonEmptyList<SSection> sections)
   {
-    if (log.wouldLog(LogLevel.LOG_DEBUG)) {
-      log.debug(
-        String.format(
-          "part: (title: %s) (id: %s) (type: %s) (%s)",
-          title.getActual(),
-          id != null ? id.getActual() : id,
-          type,
-          contents ? "contents" : "no contents"));
+    if (SDocumentParser.LOG.isDebugEnabled()) {
+      SDocumentParser.LOG.debug(
+        "part: (title: {}) (id: {}) (type: {}) ({})",
+        title.getActual(),
+        id != null ? id.getActual() : id,
+        type,
+        contents ? "contents" : "no contents");
     }
 
     if (contents) {
@@ -1020,11 +1007,10 @@ public final class SDocumentParser
   }
 
   private static SSection section(
-    final LogUsableType log,
     final Element section)
     throws URISyntaxException
   {
-    log.debug("section: starting");
+    SDocumentParser.LOG.debug("section: starting");
 
     final SSectionTitle title = SDocumentParser.sectionTitleRoot(section);
     final boolean contents = SDocumentParser.sectionContentsRoot(section);
@@ -1034,10 +1020,10 @@ public final class SDocumentParser
     final Element esect = SDocumentParser.getElement(section, "subsection");
     if (esect != null) {
       return SDocumentParser.sectionWithSubsections(
-        log, section, title, id, type, contents);
+        section, title, id, type, contents);
     }
     return SDocumentParser.sectionWithParagraphs(
-      log, section, title, id, type, contents);
+      section, title, id, type, contents);
   }
 
   private static boolean sectionContentsRoot(
@@ -1056,7 +1042,6 @@ public final class SDocumentParser
   }
 
   private static SSectionWithParagraphs sectionWithParagraphs(
-    final LogUsableType log,
     final Element section,
     final SSectionTitle title,
     final @Nullable SID id,
@@ -1079,32 +1064,30 @@ public final class SDocumentParser
         continue;
       }
 
-      elements.add(SDocumentParser.subsectionContent(log, e));
+      elements.add(SDocumentParser.subsectionContent(e));
     }
 
     final SNonEmptyList<SSubsectionContent> content =
       SNonEmptyList.newList(elements);
 
     return SDocumentParser.sectionWithParagraphsMake(
-      log, title, contents, id, type, content);
+      title, contents, id, type, content);
   }
 
   private static SSectionWithParagraphs sectionWithParagraphsMake(
-    final LogUsableType log,
     final SSectionTitle title,
     final boolean contents,
     final @Nullable SID id,
     final @Nullable String type,
     final SNonEmptyList<SSubsectionContent> content)
   {
-    if (log.wouldLog(LogLevel.LOG_DEBUG)) {
-      log.debug(
-        String.format(
-          "section: (paragraphs) (title: %s) (id: %s) (type: %s) (%s)",
-          title.getActual(),
-          id != null ? id.getActual() : id,
-          type,
-          contents ? "contents" : "no contents"));
+    if (SDocumentParser.LOG.isDebugEnabled()) {
+      SDocumentParser.LOG.debug(
+        "section: (paragraphs) (title: {}) (id: {}) (type: {}) ({})",
+        title.getActual(),
+        id != null ? id.getActual() : id,
+        type,
+        contents ? "contents" : "no contents");
     }
 
     if (contents) {
@@ -1140,7 +1123,6 @@ public final class SDocumentParser
   }
 
   private static SSectionWithSubsections sectionWithSubsections(
-    final LogUsableType log,
     final Element section,
     final SSectionTitle title,
     final @Nullable SID id,
@@ -1160,7 +1142,7 @@ public final class SDocumentParser
       } else if ("section-contents".equals(e.getLocalName())) {
         continue;
       } else if ("subsection".equals(e.getLocalName())) {
-        elements.add(SDocumentParser.subsection(log, e));
+        elements.add(SDocumentParser.subsection(e));
         continue;
       }
 
@@ -1170,25 +1152,23 @@ public final class SDocumentParser
     final SNonEmptyList<SSubsection> content = SNonEmptyList.newList(elements);
 
     return SDocumentParser.sectionWithSubsectionsMake(
-      log, title, contents, id, type, content);
+      title, contents, id, type, content);
   }
 
   private static SSectionWithSubsections sectionWithSubsectionsMake(
-    final LogUsableType log,
     final SSectionTitle title,
     final boolean contents,
     final @Nullable SID id,
     final @Nullable String type,
     final SNonEmptyList<SSubsection> content)
   {
-    if (log.wouldLog(LogLevel.LOG_DEBUG)) {
-      log.debug(
-        String.format(
-          "section: (subsections) (title: %s) (id: %s) (type: %s) (%s)",
-          title.getActual(),
-          id != null ? id.getActual() : id,
-          type,
-          contents ? "contents" : "no contents"));
+    if (SDocumentParser.LOG.isDebugEnabled()) {
+      SDocumentParser.LOG.debug(
+        "section: (subsections) (title: {}) (id: {}) (type: {}) ({})",
+        title.getActual(),
+        id != null ? id.getActual() : id,
+        type,
+        contents ? "contents" : "no contents");
     }
 
     if (contents) {
@@ -1233,11 +1213,10 @@ public final class SDocumentParser
   }
 
   private static SSubsection subsection(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
-    log.debug("subsection: starting");
+    SDocumentParser.LOG.debug("subsection: starting");
 
     final SSubsectionTitle title = SDocumentParser.subsectionTitleRoot(e);
     final SID id = SDocumentParser.idAttribute(e);
@@ -1255,43 +1234,40 @@ public final class SDocumentParser
         continue;
       }
 
-      elements.add(SDocumentParser.subsectionContent(log, ec));
+      elements.add(SDocumentParser.subsectionContent(ec));
     }
 
     final SNonEmptyList<SSubsectionContent> content =
       SNonEmptyList.newList(elements);
 
-    return SDocumentParser.subsectionMake(log, title, id, type, content);
+    return SDocumentParser.subsectionMake(title, id, type, content);
   }
 
   private static SSubsectionContent subsectionContent(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
     if ("paragraph".equals(e.getLocalName())) {
-      return SDocumentParser.paragraph(log, e);
+      return SDocumentParser.paragraph(e);
     } else if ("formal-item".equals(e.getLocalName())) {
-      return SDocumentParser.formalItem(log, e);
+      return SDocumentParser.formalItem(e);
     }
 
     throw new UnreachableCodeException();
   }
 
   private static SSubsection subsectionMake(
-    final LogUsableType log,
     final SSubsectionTitle title,
     final @Nullable SID id,
     final @Nullable String type,
     final SNonEmptyList<SSubsectionContent> content)
   {
-    if (log.wouldLog(LogLevel.LOG_DEBUG)) {
-      log.debug(
-        String.format(
-          "subsection: (title: %s) (id: %s) (type: %s)",
-          title.getActual(),
-          id != null ? id.getActual() : id,
-          type));
+    if (SDocumentParser.LOG.isDebugEnabled()) {
+      SDocumentParser.LOG.debug(
+        "subsection: (title: {}) (id: {}) (type: {})",
+        title.getActual(),
+        id != null ? id.getActual() : id,
+        type);
     }
 
     if (id != null) {
@@ -1317,13 +1293,12 @@ public final class SDocumentParser
   }
 
   private static STable table(
-    final LogUsableType log,
     final Element ec)
     throws URISyntaxException
   {
     final STableSummary summary = SDocumentParser.tableSummary(ec);
     final STableHead head = SDocumentParser.tableHead(ec);
-    final STableBody body = SDocumentParser.tableBody(log, ec);
+    final STableBody body = SDocumentParser.tableBody(ec);
     if (head != null) {
       return STable.tableHeader(summary, head, body);
     }
@@ -1331,7 +1306,6 @@ public final class SDocumentParser
   }
 
   private static STableBody tableBody(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
@@ -1343,14 +1317,13 @@ public final class SDocumentParser
       ec.getChildElements("table-row", SXML.XML_URI.toString());
     for (int index = 0; index < ecs.size(); ++index) {
       final Element ecc = ecs.get(index);
-      rows.add(SDocumentParser.tableRow(log, ecc));
+      rows.add(SDocumentParser.tableRow(ecc));
     }
 
     return STableBody.tableBody(SNonEmptyList.newList(rows));
   }
 
   private static STableCell tableCell(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
@@ -1358,14 +1331,13 @@ public final class SDocumentParser
 
     for (int index = 0; index < e.getChildCount(); ++index) {
       final Node n = e.getChild(index);
-      content.add(SDocumentParser.tableCellContent(log, n));
+      content.add(SDocumentParser.tableCellContent(n));
     }
 
     return STableCell.tableCell(content);
   }
 
   private static STableCellContent tableCellContent(
-    final LogUsableType log,
     final Node n)
     throws URISyntaxException
   {
@@ -1377,7 +1349,7 @@ public final class SDocumentParser
     if (n instanceof Element) {
       final Element ecc = (Element) n;
       if ("footnote".equals(ecc.getLocalName())) {
-        return SDocumentParser.footnote(log, ecc);
+        return SDocumentParser.footnote(ecc);
       }
       if ("image".equals(ecc.getLocalName())) {
         return SDocumentParser.image(ecc);
@@ -1389,10 +1361,10 @@ public final class SDocumentParser
         return SDocumentParser.linkExternal(ecc);
       }
       if ("list-ordered".equals(ecc.getLocalName())) {
-        return SDocumentParser.listOrdered(log, ecc);
+        return SDocumentParser.listOrdered(ecc);
       }
       if ("list-unordered".equals(ecc.getLocalName())) {
-        return SDocumentParser.listUnordered(log, ecc);
+        return SDocumentParser.listUnordered(ecc);
       }
       if ("term".equals(ecc.getLocalName())) {
         return SDocumentParser.term(ecc);
@@ -1405,7 +1377,9 @@ public final class SDocumentParser
     throw new UnreachableCodeException();
   }
 
-  private static @Nullable STableHead tableHead(
+  private static
+  @Nullable
+  STableHead tableHead(
     final Element e)
   {
     final Element ec = SDocumentParser.getElement(e, "table-head");
@@ -1425,7 +1399,6 @@ public final class SDocumentParser
   }
 
   private static STableRow tableRow(
-    final LogUsableType log,
     final Element e)
     throws URISyntaxException
   {
@@ -1434,7 +1407,7 @@ public final class SDocumentParser
       e.getChildElements("table-cell", SXML.XML_URI.toString());
     for (int index = 0; index < ecs.size(); ++index) {
       final Element ecc = ecs.get(index);
-      cells.add(SDocumentParser.tableCell(log, ecc));
+      cells.add(SDocumentParser.tableCell(ecc));
     }
 
     return STableRow.tableRow(SNonEmptyList.newList(cells));
@@ -1476,7 +1449,9 @@ public final class SDocumentParser
     return STerm.term(text);
   }
 
-  private static @Nullable String typeAttribute(
+  private static
+  @Nullable
+  String typeAttribute(
     final Element e)
   {
     final Attribute et = e.getAttribute("type", SXML.XML_URI.toString());
@@ -1507,7 +1482,9 @@ public final class SDocumentParser
     return SVerbatim.verbatim(text);
   }
 
-  private static @Nullable Integer widthAttribute(
+  private static
+  @Nullable
+  Integer widthAttribute(
     final Element ec)
   {
     final Attribute a = ec.getAttribute("width", SXML.XML_URI.toString());
@@ -1519,44 +1496,47 @@ public final class SDocumentParser
 
   private static final class TrivialErrorHandler implements ErrorHandler
   {
-    private final     LogUsableType     log;
     private @Nullable SAXParseException exception;
 
-    private TrivialErrorHandler(
-      final LogUsableType in_log)
+    private TrivialErrorHandler()
     {
-      this.log = in_log;
+
     }
 
-    @Override public void error(
+    @Override
+    public void error(
       final @Nullable SAXParseException e)
       throws SAXException
     {
       assert e != null;
-      this.log.error(e + ": " + e.getMessage());
+      SDocumentParser.LOG.error(e + ": " + e.getMessage());
       this.exception = e;
     }
 
-    @Override public void fatalError(
+    @Override
+    public void fatalError(
       final @Nullable SAXParseException e)
       throws SAXException
     {
       assert e != null;
-      this.log.critical(e + ": " + e.getMessage());
+      SDocumentParser.LOG.error(e + ": " + e.getMessage());
       this.exception = e;
     }
 
-    public @Nullable SAXParseException getException()
+    public
+    @Nullable
+    SAXParseException getException()
     {
       return this.exception;
     }
 
-    @Override public void warning(
+    @Override
+    public void warning(
       final @Nullable SAXParseException e)
       throws SAXException
     {
       assert e != null;
-      this.log.warn(e + ": " + e.getMessage());
+      SDocumentParser.LOG.warn(e + ": " + e.getMessage());
       this.exception = e;
     }
   }

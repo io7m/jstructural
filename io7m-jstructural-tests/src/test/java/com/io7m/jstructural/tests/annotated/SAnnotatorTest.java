@@ -31,7 +31,6 @@ import com.io7m.jstructural.annotated.SAnnotator;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SNonEmptyList;
 import com.io7m.jstructural.tests.xom.SDocumentParserTest;
-import com.io7m.jstructural.tests.xom.TestUtilities;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +43,7 @@ import java.util.List;
     final String name)
   {
     final SDocument d = SDocumentParserTest.roundTripParse(name);
-    return SAnnotator.document(TestUtilities.getLog(), d);
+    return SAnnotator.document(d);
   }
 
   /**

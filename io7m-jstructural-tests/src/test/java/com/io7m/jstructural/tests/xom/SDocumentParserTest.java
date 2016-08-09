@@ -84,8 +84,7 @@ import java.util.List;
 
     return SDocumentParser.fromStream(
       SDocumentParserTest.class.getResourceAsStream(file),
-      uri,
-      TestUtilities.getLog());
+      uri);
   }
 
   public static SDocument roundTripParse(
@@ -106,7 +105,7 @@ import java.util.List;
 
       final URI uri = new URI("/temporary");
       final SDocument d1 =
-        SDocumentParser.fromStream(bai, uri, TestUtilities.getLog());
+        SDocumentParser.fromStream(bai, uri);
 
       Assert.assertEquals(d0, d1);
       return d1;
@@ -659,7 +658,7 @@ import java.util.List;
     final Element e = new Element("s:paragraph", SXML.XML_URI.toString());
     e.appendChild("Paragraph.");
 
-    final SParagraph p = SDocumentParser.paragraph(TestUtilities.getLog(), e);
+    final SParagraph p = SDocumentParser.paragraph(e);
     final SNonEmptyList<SParagraphContent> content = p.getContent();
 
     Assert.assertTrue(p.getID().isNone());
@@ -683,7 +682,7 @@ import java.util.List;
     e.addAttribute(a);
     e.appendChild("Paragraph.");
 
-    final SParagraph p = SDocumentParser.paragraph(TestUtilities.getLog(), e);
+    final SParagraph p = SDocumentParser.paragraph(e);
     final SNonEmptyList<SParagraphContent> content = p.getContent();
 
     Assert.assertTrue(p.getID().isSome());
@@ -719,7 +718,7 @@ import java.util.List;
     e.addAttribute(ai);
     e.appendChild("Paragraph.");
 
-    final SParagraph p = SDocumentParser.paragraph(TestUtilities.getLog(), e);
+    final SParagraph p = SDocumentParser.paragraph(e);
     final SNonEmptyList<SParagraphContent> content = p.getContent();
 
     Assert.assertTrue(p.getID().isSome());
@@ -759,7 +758,7 @@ import java.util.List;
     e.addAttribute(at);
     e.appendChild("Paragraph.");
 
-    final SParagraph p = SDocumentParser.paragraph(TestUtilities.getLog(), e);
+    final SParagraph p = SDocumentParser.paragraph(e);
     final SNonEmptyList<SParagraphContent> content = p.getContent();
 
     Assert.assertTrue(p.getID().isNone());

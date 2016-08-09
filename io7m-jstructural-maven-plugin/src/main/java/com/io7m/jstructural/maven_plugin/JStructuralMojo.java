@@ -16,7 +16,6 @@
 
 package com.io7m.jstructural.maven_plugin;
 
-import com.io7m.jlog.LogUsableType;
 import com.io7m.jstructural.tools.JSCMain;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -68,6 +67,13 @@ public final class JStructuralMojo extends AbstractMojo
   private String brandFile;
 
   /**
+   * Parameter to allow skipping of the generation.
+   */
+
+  @Parameter( property = "jstructural.skip", defaultValue = "false")
+  private boolean skip;
+
+  /**
    * Construct a plugin mojo.
    */
 
@@ -95,6 +101,11 @@ public final class JStructuralMojo extends AbstractMojo
       log.info("Transform directory  : " + this.outputDirectory);
       log.info("Transform brand      : " + this.brandFile);
       log.info("Transform pagination : " + this.pagination);
+      log.info("Skipping             : " + this.skip);
+
+      if (this.skip) {
+        return;
+      }
 
       final List<String> args = new ArrayList<String>();
       switch (this.pagination) {
@@ -122,8 +133,7 @@ public final class JStructuralMojo extends AbstractMojo
 
       log.debug("executing: " + args);
 
-      final LogUsableType jlog = JSCMain.getLog(false);
-      JSCMain.run(jlog, args_array);
+      JSCMain.run(args_array);
 
     } catch (final FileNotFoundException e) {
       throw new MojoExecutionException("File not found", e);

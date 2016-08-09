@@ -20,7 +20,6 @@ import com.io7m.jfunctional.FunctionType;
 import com.io7m.jfunctional.OptionType;
 import com.io7m.jfunctional.PartialFunctionType;
 import com.io7m.jfunctional.Unit;
-import com.io7m.jlog.LogUsableType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jstructural.core.SDocument;
 import com.io7m.jstructural.core.SDocumentVisitor;
@@ -69,6 +68,8 @@ import com.io7m.jstructural.core.SText;
 import com.io7m.jstructural.core.SVerbatim;
 import com.io7m.junreachable.UnreachableCodeException;
 import net.jcip.annotations.Immutable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,33 +79,35 @@ import java.util.concurrent.atomic.AtomicInteger;
  * A document annotator.
  */
 
-@Immutable public final class SAnnotator
+@Immutable
+public final class SAnnotator
 {
-  private final SDocument     document;
-  private final LogUsableType log;
+  private static final Logger LOG;
+
+  static {
+    LOG = LoggerFactory.getLogger(SAnnotator.class);
+  }
+
+  private final SDocument document;
 
   private SAnnotator(
-    final LogUsableType in_log,
     final SDocument d)
   {
     this.document = NullCheck.notNull(d, "Document");
-    this.log = NullCheck.notNull(in_log, "Log").with("annotator");
   }
 
   /**
    * Annotate the given document.
    *
-   * @param log A log handle
-   * @param d   The document
+   * @param d The document
    *
    * @return An annotated document
    */
 
   public static SADocument document(
-    final LogUsableType log,
     final SDocument d)
   {
-    return new SAnnotator(log, d).process();
+    return new SAnnotator(d).process();
   }
 
   private static SAFootnote transformFootnote(
@@ -286,7 +289,8 @@ import java.util.concurrent.atomic.AtomicInteger;
     final SAFormalItem saf = number.sectionNumberAccept(
       new SASectionNumberVisitor<SAFormalItem>()
       {
-        @Override public SAFormalItem visitSectionNumberWithoutPart(
+        @Override
+        public SAFormalItem visitSectionNumberWithoutPart(
           final SASectionNumberS sn)
           throws Exception
         {
@@ -309,7 +313,8 @@ import java.util.concurrent.atomic.AtomicInteger;
             id);
         }
 
-        @Override public SAFormalItem visitSectionNumberWithPart(
+        @Override
+        public SAFormalItem visitSectionNumberWithPart(
           final SASectionNumberPS sn)
           throws Exception
         {
@@ -351,7 +356,8 @@ import java.util.concurrent.atomic.AtomicInteger;
     final SAParagraph sap = number.sectionNumberAccept(
       new SASectionNumberVisitor<SAParagraph>()
       {
-        @Override public SAParagraph visitSectionNumberWithoutPart(
+        @Override
+        public SAParagraph visitSectionNumberWithoutPart(
           final SASectionNumberS sn)
           throws Exception
         {
@@ -366,7 +372,8 @@ import java.util.concurrent.atomic.AtomicInteger;
             p_number, paragraph.getType(), in_content, id);
         }
 
-        @Override public SAParagraph visitSectionNumberWithPart(
+        @Override
+        public SAParagraph visitSectionNumberWithPart(
           final SASectionNumberPS sn)
           throws Exception
         {
@@ -407,7 +414,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       final SASubsectionContent r = p.subsectionContentAccept(
         new SSubsectionContentVisitor<SASubsectionContent>()
         {
-          @Override public SASubsectionContent visitFormalItem(
+          @Override
+          public SASubsectionContent visitFormalItem(
             final SFormalItem formal)
             throws Exception
           {
@@ -420,7 +428,8 @@ import java.util.concurrent.atomic.AtomicInteger;
               formal_no.getAndIncrement());
           }
 
-          @Override public SASubsectionContent visitParagraph(
+          @Override
+          public SASubsectionContent visitParagraph(
             final SParagraph paragraph)
             throws Exception
           {
@@ -519,7 +528,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       final SASubsectionContent ca = c.subsectionContentAccept(
         new SSubsectionContentVisitor<SASubsectionContent>()
         {
-          @Override public SASubsectionContent visitFormalItem(
+          @Override
+          public SASubsectionContent visitFormalItem(
             final SFormalItem formal)
             throws Exception
           {
@@ -532,7 +542,8 @@ import java.util.concurrent.atomic.AtomicInteger;
               formal_no.getAndIncrement());
           }
 
-          @Override public SASubsectionContent visitParagraph(
+          @Override
+          public SASubsectionContent visitParagraph(
             final SParagraph paragraph)
             throws Exception
           {
@@ -569,7 +580,8 @@ import java.util.concurrent.atomic.AtomicInteger;
     final SAFormalItem saf = s_number.subsectionNumberAccept(
       new SASubsectionNumberVisitor<SAFormalItem>()
       {
-        @Override public SAFormalItem visitSubsectionNumberPSS(
+        @Override
+        public SAFormalItem visitSubsectionNumberPSS(
           final SASubsectionNumberPSS p)
           throws Exception
         {
@@ -592,7 +604,8 @@ import java.util.concurrent.atomic.AtomicInteger;
             id);
         }
 
-        @Override public SAFormalItem visitSubsectionNumberSS(
+        @Override
+        public SAFormalItem visitSubsectionNumberSS(
           final SASubsectionNumberSS p)
           throws Exception
         {
@@ -629,14 +642,16 @@ import java.util.concurrent.atomic.AtomicInteger;
     return number.sectionNumberAccept(
       new SASectionNumberVisitor<SASubsectionNumber>()
       {
-        @Override public SASubsectionNumber visitSectionNumberWithoutPart(
+        @Override
+        public SASubsectionNumber visitSectionNumberWithoutPart(
           final SASectionNumberS p)
           throws Exception
         {
           return new SASubsectionNumberSS(p.getSection(), subsection_number);
         }
 
-        @Override public SASubsectionNumber visitSectionNumberWithPart(
+        @Override
+        public SASubsectionNumber visitSectionNumberWithPart(
           final SASectionNumberPS p)
           throws Exception
         {
@@ -659,7 +674,8 @@ import java.util.concurrent.atomic.AtomicInteger;
     final SAParagraph sap = number.subsectionNumberAccept(
       new SASubsectionNumberVisitor<SAParagraph>()
       {
-        @Override public SAParagraph visitSubsectionNumberPSS(
+        @Override
+        public SAParagraph visitSubsectionNumberPSS(
           final SASubsectionNumberPSS ssn)
           throws Exception
         {
@@ -677,7 +693,8 @@ import java.util.concurrent.atomic.AtomicInteger;
             p_number, paragraph.getType(), in_content, id);
         }
 
-        @Override public SAParagraph visitSubsectionNumberSS(
+        @Override
+        public SAParagraph visitSubsectionNumberSS(
           final SASubsectionNumberSS ssn)
           throws Exception
         {
@@ -710,7 +727,8 @@ import java.util.concurrent.atomic.AtomicInteger;
     final OptionType<SATableHead> in_header = t.getHeader().mapPartial(
       new PartialFunctionType<STableHead, SATableHead, Exception>()
       {
-        @Override public SATableHead call(
+        @Override
+        public SATableHead call(
           final STableHead x)
           throws Exception
         {
@@ -839,7 +857,7 @@ import java.util.concurrent.atomic.AtomicInteger;
   private SADocument process()
   {
     try {
-      return this.document.documentAccept(new DocumentAnnotator(this.log));
+      return this.document.documentAccept(new DocumentAnnotator());
     } catch (final Exception e) {
       throw new UnreachableCodeException(e);
     }
@@ -848,16 +866,15 @@ import java.util.concurrent.atomic.AtomicInteger;
   private static final class DocumentAnnotator
     implements SDocumentVisitor<SADocument>
   {
-    private final List<SAFootnote>    footnotes;
+    private final List<SAFootnote> footnotes;
     private final SAFormalItemsByKind formals;
-    private final SAIDMap             ids;
+    private final SAIDMap ids;
 
-    private DocumentAnnotator(
-      final LogUsableType log)
+    private DocumentAnnotator()
     {
-      this.ids = new SAIDMap(log);
+      this.ids = new SAIDMap();
       this.footnotes = new ArrayList<SAFootnote>();
-      this.formals = new SAFormalItemsByKind(log);
+      this.formals = new SAFormalItemsByKind();
     }
 
     public SAPart part(
@@ -888,7 +905,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         part_no, p.getType(), id, title, p.getContents(), sections);
     }
 
-    @Override public SADocument visitDocumentWithParts(
+    @Override
+    public SADocument visitDocumentWithParts(
       final SDocumentWithParts dp)
       throws Exception
     {
@@ -914,7 +932,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.formals);
     }
 
-    @Override public SADocument visitDocumentWithSections(
+    @Override
+    public SADocument visitDocumentWithSections(
       final SDocumentWithSections ds)
       throws Exception
     {
@@ -947,8 +966,8 @@ import java.util.concurrent.atomic.AtomicInteger;
   private static final class FootnoteContentAnnotator
     implements SFootnoteContentVisitor<SAFootnoteContent>
   {
-    private final List<SAFootnote>          footnotes;
-    private final SAIDMap                   ids;
+    private final List<SAFootnote> footnotes;
+    private final SAIDMap ids;
     private final SASubsectionContentNumber number;
 
     private FootnoteContentAnnotator(
@@ -961,7 +980,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       this.number = in_number;
     }
 
-    @Override public SAFootnoteContent visitFootnote(
+    @Override
+    public SAFootnoteContent visitFootnote(
       final SFootnote footnote)
       throws Exception
     {
@@ -969,28 +989,32 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, footnote);
     }
 
-    @Override public SAFootnoteContent visitImage(
+    @Override
+    public SAFootnoteContent visitImage(
       final SImage image)
       throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
-    @Override public SAFootnoteContent visitLink(
+    @Override
+    public SAFootnoteContent visitLink(
       final SLink link)
       throws Exception
     {
       return SAnnotator.transformLink(link);
     }
 
-    @Override public SAFootnoteContent visitLinkExternal(
+    @Override
+    public SAFootnoteContent visitLinkExternal(
       final SLinkExternal link)
       throws Exception
     {
       return SAnnotator.transformLinkExternal(link);
     }
 
-    @Override public SAFootnoteContent visitListOrdered(
+    @Override
+    public SAFootnoteContent visitListOrdered(
       final SListOrdered list)
       throws Exception
     {
@@ -998,7 +1022,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, list);
     }
 
-    @Override public SAFootnoteContent visitListUnordered(
+    @Override
+    public SAFootnoteContent visitListUnordered(
       final SListUnordered list)
       throws Exception
     {
@@ -1006,21 +1031,24 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, list);
     }
 
-    @Override public SAFootnoteContent visitTerm(
+    @Override
+    public SAFootnoteContent visitTerm(
       final STerm term)
       throws Exception
     {
       return SAnnotator.transformTerm(term);
     }
 
-    @Override public SAFootnoteContent visitText(
+    @Override
+    public SAFootnoteContent visitText(
       final SText text)
       throws Exception
     {
       return SAnnotator.transformText(text);
     }
 
-    @Override public SAFootnoteContent visitVerbatim(
+    @Override
+    public SAFootnoteContent visitVerbatim(
       final SVerbatim text)
       throws Exception
     {
@@ -1031,8 +1059,8 @@ import java.util.concurrent.atomic.AtomicInteger;
   private static final class FormalItemContentAnnotator
     implements SFormalItemContentVisitor<SAFormalItemContent>
   {
-    private final List<SAFootnote>   footnotes;
-    private final SAIDMap            ids;
+    private final List<SAFootnote> footnotes;
+    private final SAIDMap ids;
     private final SAFormalItemNumber number;
 
     private FormalItemContentAnnotator(
@@ -1045,21 +1073,24 @@ import java.util.concurrent.atomic.AtomicInteger;
       this.number = in_number;
     }
 
-    @Override public SAFormalItemContent visitFormalItemList(
+    @Override
+    public SAFormalItemContent visitFormalItemList(
       final SFormalItemList list)
       throws Exception
     {
       return SAnnotator.transformFormalItemList(list);
     }
 
-    @Override public SAFormalItemContent visitImage(
+    @Override
+    public SAFormalItemContent visitImage(
       final SImage image)
       throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
-    @Override public SAFormalItemContent visitListOrdered(
+    @Override
+    public SAFormalItemContent visitListOrdered(
       final SListOrdered list)
       throws Exception
     {
@@ -1067,7 +1098,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, list);
     }
 
-    @Override public SAFormalItemContent visitListUnordered(
+    @Override
+    public SAFormalItemContent visitListUnordered(
       final SListUnordered list)
       throws Exception
     {
@@ -1075,7 +1107,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, list);
     }
 
-    @Override public SAFormalItemContent visitTable(
+    @Override
+    public SAFormalItemContent visitTable(
       final STable t)
       throws Exception
     {
@@ -1083,7 +1116,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, t);
     }
 
-    @Override public SAFormalItemContent visitVerbatim(
+    @Override
+    public SAFormalItemContent visitVerbatim(
       final SVerbatim text)
       throws Exception
     {
@@ -1099,14 +1133,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
     }
 
-    @Override public SALinkContent visitImage(
+    @Override
+    public SALinkContent visitImage(
       final SImage image)
       throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
-    @Override public SALinkContent visitText(
+    @Override
+    public SALinkContent visitText(
       final SText text)
       throws Exception
     {
@@ -1117,8 +1153,8 @@ import java.util.concurrent.atomic.AtomicInteger;
   private static final class ListItemContentAnnotator
     implements SListItemContentVisitor<SAListItemContent>
   {
-    private final List<SAFootnote>          footnotes;
-    private final SAIDMap                   ids;
+    private final List<SAFootnote> footnotes;
+    private final SAIDMap ids;
     private final SASubsectionContentNumber number;
 
     private ListItemContentAnnotator(
@@ -1131,7 +1167,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       this.number = in_number;
     }
 
-    @Override public SAListItemContent visitFootnote(
+    @Override
+    public SAListItemContent visitFootnote(
       final SFootnote footnote)
       throws Exception
     {
@@ -1139,28 +1176,32 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, footnote);
     }
 
-    @Override public SAListItemContent visitImage(
+    @Override
+    public SAListItemContent visitImage(
       final SImage image)
       throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
-    @Override public SAListItemContent visitLink(
+    @Override
+    public SAListItemContent visitLink(
       final SLink link)
       throws Exception
     {
       return SAnnotator.transformLink(link);
     }
 
-    @Override public SAListItemContent visitLinkExternal(
+    @Override
+    public SAListItemContent visitLinkExternal(
       final SLinkExternal link)
       throws Exception
     {
       return SAnnotator.transformLinkExternal(link);
     }
 
-    @Override public SAListItemContent visitListOrdered(
+    @Override
+    public SAListItemContent visitListOrdered(
       final SListOrdered list)
       throws Exception
     {
@@ -1168,7 +1209,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, list);
     }
 
-    @Override public SAListItemContent visitListUnordered(
+    @Override
+    public SAListItemContent visitListUnordered(
       final SListUnordered list)
       throws Exception
     {
@@ -1176,21 +1218,24 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, list);
     }
 
-    @Override public SAListItemContent visitTerm(
+    @Override
+    public SAListItemContent visitTerm(
       final STerm term)
       throws Exception
     {
       return SAnnotator.transformTerm(term);
     }
 
-    @Override public SAListItemContent visitText(
+    @Override
+    public SAListItemContent visitText(
       final SText text)
       throws Exception
     {
       return SAnnotator.transformText(text);
     }
 
-    @Override public SAListItemContent visitVerbatim(
+    @Override
+    public SAListItemContent visitVerbatim(
       final SVerbatim text)
       throws Exception
     {
@@ -1201,10 +1246,10 @@ import java.util.concurrent.atomic.AtomicInteger;
   private static final class NoPartSectionAnnotator
     implements SSectionVisitor<SASection>
   {
-    private final List<SAFootnote>    footnotes;
+    private final List<SAFootnote> footnotes;
     private final SAFormalItemsByKind formals;
-    private final SAIDMap             ids;
-    private final SASectionNumberS    number;
+    private final SAIDMap ids;
+    private final SASectionNumberS number;
 
     private NoPartSectionAnnotator(
       final SAIDMap in_ids,
@@ -1218,7 +1263,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       this.footnotes = in_footnotes;
     }
 
-    @Override public SASection visitSectionWithParagraphs(
+    @Override
+    public SASection visitSectionWithParagraphs(
       final SSectionWithParagraphs s)
       throws Exception
     {
@@ -1226,7 +1272,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.formals, this.footnotes, s, this.number);
     }
 
-    @Override public SASection visitSectionWithSubsections(
+    @Override
+    public SASection visitSectionWithSubsections(
       final SSectionWithSubsections s)
       throws Exception
     {
@@ -1238,8 +1285,8 @@ import java.util.concurrent.atomic.AtomicInteger;
   private static final class ParagraphContentAnnotator
     implements SParagraphContentVisitor<SAParagraphContent>
   {
-    private final List<SAFootnote>  footnotes;
-    private final SAIDMap           ids;
+    private final List<SAFootnote> footnotes;
+    private final SAIDMap ids;
     private final SAParagraphNumber number;
 
     private ParagraphContentAnnotator(
@@ -1252,7 +1299,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       this.number = in_number;
     }
 
-    @Override public SAParagraphContent visitFootnote(
+    @Override
+    public SAParagraphContent visitFootnote(
       final SFootnote footnote)
       throws Exception
     {
@@ -1260,35 +1308,40 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, footnote);
     }
 
-    @Override public SAParagraphContent visitFormalItemList(
+    @Override
+    public SAParagraphContent visitFormalItemList(
       final SFormalItemList list)
       throws Exception
     {
       return SAnnotator.transformFormalItemList(list);
     }
 
-    @Override public SAParagraphContent visitImage(
+    @Override
+    public SAParagraphContent visitImage(
       final SImage image)
       throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
-    @Override public SAParagraphContent visitLink(
+    @Override
+    public SAParagraphContent visitLink(
       final SLink link)
       throws Exception
     {
       return SAnnotator.transformLink(link);
     }
 
-    @Override public SAParagraphContent visitLinkExternal(
+    @Override
+    public SAParagraphContent visitLinkExternal(
       final SLinkExternal link)
       throws Exception
     {
       return SAnnotator.transformLinkExternal(link);
     }
 
-    @Override public SAParagraphContent visitListOrdered(
+    @Override
+    public SAParagraphContent visitListOrdered(
       final SListOrdered list)
       throws Exception
     {
@@ -1296,7 +1349,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, list);
     }
 
-    @Override public SAParagraphContent visitListUnordered(
+    @Override
+    public SAParagraphContent visitListUnordered(
       final SListUnordered list)
       throws Exception
     {
@@ -1304,7 +1358,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, list);
     }
 
-    @Override public SAParagraphContent visitTable(
+    @Override
+    public SAParagraphContent visitTable(
       final STable table)
       throws Exception
     {
@@ -1312,21 +1367,24 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, table);
     }
 
-    @Override public SAParagraphContent visitTerm(
+    @Override
+    public SAParagraphContent visitTerm(
       final STerm term)
       throws Exception
     {
       return SAnnotator.transformTerm(term);
     }
 
-    @Override public SAParagraphContent visitText(
+    @Override
+    public SAParagraphContent visitText(
       final SText text)
       throws Exception
     {
       return SAnnotator.transformText(text);
     }
 
-    @Override public SAParagraphContent visitVerbatim(
+    @Override
+    public SAParagraphContent visitVerbatim(
       final SVerbatim text)
       throws Exception
     {
@@ -1337,10 +1395,10 @@ import java.util.concurrent.atomic.AtomicInteger;
   private static final class PartSectionAnnotator
     implements SSectionVisitor<SASection>
   {
-    private final List<SAFootnote>    footnotes;
+    private final List<SAFootnote> footnotes;
     private final SAFormalItemsByKind formals;
-    private final SAIDMap             ids;
-    private final SASectionNumberPS   number;
+    private final SAIDMap ids;
+    private final SASectionNumberPS number;
 
     private PartSectionAnnotator(
       final SAIDMap in_ids,
@@ -1354,7 +1412,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       this.number = in_number;
     }
 
-    @Override public SASection visitSectionWithParagraphs(
+    @Override
+    public SASection visitSectionWithParagraphs(
       final SSectionWithParagraphs s)
       throws Exception
     {
@@ -1362,7 +1421,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.formals, this.footnotes, s, this.number);
     }
 
-    @Override public SASection visitSectionWithSubsections(
+    @Override
+    public SASection visitSectionWithSubsections(
       final SSectionWithSubsections s)
       throws Exception
     {
@@ -1374,7 +1434,7 @@ import java.util.concurrent.atomic.AtomicInteger;
   private static final class SAIDLinkCreator implements FunctionType<SAID, Unit>
   {
     private final SAIDTargetContent content;
-    private final SAIDMap           ids;
+    private final SAIDMap ids;
 
     private SAIDLinkCreator(
       final SAIDMap map,
@@ -1384,7 +1444,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       this.content = c;
     }
 
-    @Override public Unit call(
+    @Override
+    public Unit call(
       final SAID x)
     {
       this.ids.put(x, this.content);
@@ -1399,7 +1460,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       // Nothing
     }
 
-    @Override public SAID call(
+    @Override
+    public SAID call(
       final SID x)
     {
       return new SAID(x.getActual());
@@ -1409,8 +1471,8 @@ import java.util.concurrent.atomic.AtomicInteger;
   private static final class TableCellContentAnnotator
     implements STableCellContentVisitor<SATableCellContent>
   {
-    private final List<SAFootnote>          footnotes;
-    private final SAIDMap                   ids;
+    private final List<SAFootnote> footnotes;
+    private final SAIDMap ids;
     private final SASubsectionContentNumber number;
 
     private TableCellContentAnnotator(
@@ -1423,7 +1485,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       this.number = in_number;
     }
 
-    @Override public SATableCellContent visitFootnote(
+    @Override
+    public SATableCellContent visitFootnote(
       final SFootnote footnote)
       throws Exception
     {
@@ -1431,28 +1494,32 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, footnote);
     }
 
-    @Override public SATableCellContent visitImage(
+    @Override
+    public SATableCellContent visitImage(
       final SImage image)
       throws Exception
     {
       return SAnnotator.transformImage(image);
     }
 
-    @Override public SATableCellContent visitLink(
+    @Override
+    public SATableCellContent visitLink(
       final SLink link)
       throws Exception
     {
       return SAnnotator.transformLink(link);
     }
 
-    @Override public SATableCellContent visitLinkExternal(
+    @Override
+    public SATableCellContent visitLinkExternal(
       final SLinkExternal link)
       throws Exception
     {
       return SAnnotator.transformLinkExternal(link);
     }
 
-    @Override public SATableCellContent visitListOrdered(
+    @Override
+    public SATableCellContent visitListOrdered(
       final SListOrdered list)
       throws Exception
     {
@@ -1460,7 +1527,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, list);
     }
 
-    @Override public SATableCellContent visitListUnordered(
+    @Override
+    public SATableCellContent visitListUnordered(
       final SListUnordered list)
       throws Exception
     {
@@ -1468,21 +1536,24 @@ import java.util.concurrent.atomic.AtomicInteger;
         this.ids, this.footnotes, this.number, list);
     }
 
-    @Override public SATableCellContent visitTerm(
+    @Override
+    public SATableCellContent visitTerm(
       final STerm term)
       throws Exception
     {
       return SAnnotator.transformTerm(term);
     }
 
-    @Override public SATableCellContent visitText(
+    @Override
+    public SATableCellContent visitText(
       final SText text)
       throws Exception
     {
       return SAnnotator.transformText(text);
     }
 
-    @Override public SATableCellContent visitVerbatim(
+    @Override
+    public SATableCellContent visitVerbatim(
       final SVerbatim text)
       throws Exception
     {
