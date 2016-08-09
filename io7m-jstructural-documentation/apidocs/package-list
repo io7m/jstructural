@@ -1,6 +1,7 @@
 com.io7m.jstructural.annotated
 com.io7m.jstructural.core
 com.io7m.jstructural.documentation
+com.io7m.jstructural.maven_plugin
 com.io7m.jstructural.schema
 com.io7m.jstructural.tools
 com.io7m.jstructural.xom

@@ -19,7 +19,7 @@
 <s:document
   xmlns:s="http://schemas.io7m.com/structural/2.1.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
-  <s:document-title>io7m-jstructural 5.0.0-SNAPSHOT Documentation</s:document-title>
+  <s:document-title>io7m-jstructural 5.0.0 Documentation</s:document-title>
   <s:document-style>documentation.css</s:document-style>
   <s:document-contents/>
 
@@ -102,8 +102,8 @@
       <s:paragraph>
         If only the command-line <s:link s:target="tool_ref_jsc">jsc</s:link> tool
         is required, it can be downloaded directly from 
-        <s:link-external s:target="http://search.maven.org/remotecontent?filepath=com/io7m/jstructural/io7m-jstructural-tools/5.0.0-SNAPSHOT/io7m-jstructural-tools-5.0.0-SNAPSHOT-jsc.jar">Maven Central</s:link-external>
-        (<s:link-external s:target="http://search.maven.org/remotecontent?filepath=com/io7m/jstructural/io7m-jstructural-tools/5.0.0-SNAPSHOT/io7m-jstructural-tools-5.0.0-SNAPSHOT-jsc.jar.asc">PGP</s:link-external>).
+        <s:link-external s:target="http://search.maven.org/remotecontent?filepath=com/io7m/jstructural/io7m-jstructural-tools/5.0.0/io7m-jstructural-tools-5.0.0-jsc.jar">Maven Central</s:link-external>
+        (<s:link-external s:target="http://search.maven.org/remotecontent?filepath=com/io7m/jstructural/io7m-jstructural-tools/5.0.0/io7m-jstructural-tools-5.0.0-jsc.jar.asc">PGP</s:link-external>).
       </s:paragraph>
     </s:subsection>
   </s:section>
@@ -321,8 +321,8 @@ SortedMap&lt;String, Document> pages = writer.writeDocuments(callbacks, doc);
       <s:paragraph>
         When either <s:term s:type="command">--xhtml-multi</s:term> or
         <s:term s:type="command">--xhtml-single</s:term> are specified, the files
-        <s:term s:type="file">outdir/jstructural-5.0.0-SNAPSHOT-layout.css</s:term> and
-        <s:term s:type="file">outdir/jstructural-5.0.0-SNAPSHOT-colour.css</s:term> are
+        <s:term s:type="file">outdir/jstructural-5.0.0-layout.css</s:term> and
+        <s:term s:type="file">outdir/jstructural-5.0.0-colour.css</s:term> are
         created iff they do not already exist. These files contain CSS controlling
         the visual presentation of the XHTML.
       </s:paragraph>
@@ -345,7 +345,7 @@ SortedMap&lt;String, Document> pages = writer.writeDocuments(callbacks, doc);
       <s:subsection-title>Packaging</s:subsection-title>
       <s:paragraph>
         The <s:term s:type="command">jsc</s:term> tool is packaged into the
-        standalone <s:term s:type="file">io7m-jstructural-tools-5.0.0-SNAPSHOT-jsc.jar</s:term>
+        standalone <s:term s:type="file">io7m-jstructural-tools-5.0.0-jsc.jar</s:term>
         file distributed with <s:term s:type="package">jstructural</s:term>.
       </s:paragraph>
     </s:subsection>
