@@ -29,8 +29,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <structural.schema_uri>http://schemas.io7m.com/structural/2.1.0</structural.schema_uri>
-    <siteReposDirectory>/com/io7m/jstructural</siteReposDirectory>
-    <siteDocumentationDirectory>/com/io7m/jstructural/io7m-jstructural-documentation</siteDocumentationDirectory>
+    <siteReposDirectory>com/io7m/jstructural</siteReposDirectory>
+    <siteDocumentationDirectory>com/io7m/jstructural/io7m-jstructural-documentation</siteDocumentationDirectory>
   </properties>
 
   <licenses>
