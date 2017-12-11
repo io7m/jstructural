@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<table xmlns="structural:com.io7m.structural:xml:6.0" summary="A table">
+  <table-head type="xyz">
+    <table-column-name name="a" type="xyz"/>
+    <table-column-name name="b"/>
+    <table-column-name name="c"/>
+  </table-head>
+  <table-body type="xyz">
+    <table-row type="xyz">
+      <table-cell type="xyz">r0c0</table-cell>
+      <table-cell>r0c1</table-cell>
+      <table-cell>r0c2</table-cell>
+    </table-row>
+    <table-row>
+      <table-cell>r1c0</table-cell>
+      <table-cell>r1c1</table-cell>
+      <table-cell>r1c2</table-cell>
+    </table-row>
+    <table-row>
+      <table-cell>r2c0</table-cell>
+      <table-cell>r2c1</table-cell>
+      <table-cell>r2c2</table-cell>
+    </table-row>
+  </table-body>
+</table>

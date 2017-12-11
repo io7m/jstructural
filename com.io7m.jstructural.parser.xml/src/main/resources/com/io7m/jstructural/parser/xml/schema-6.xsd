@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+  Copyright © 2017 Mark Raynsford <code@io7m.com> http://io7m.com
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+  SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
+  IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+-->
+
+<schema
+  version="1.0"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified"
+  targetNamespace="structural:com.io7m.structural:xml:6.0"
+  xmlns:xml="http://www.w3.org/XML/1998/namespace"
+  xmlns:s="structural:com.io7m.structural:xml:6.0"
+  xmlns="http://www.w3.org/2001/XMLSchema">
+
+  <import
+    schemaLocation="xml.xsd"
+    namespace="http://www.w3.org/XML/1998/namespace"/>
+
+  <simpleType name="blockIDType">
+    <restriction base="string">
+      <pattern value="[a-zA-Z][a-zA-Z0-9_\.\-]*"/>
+    </restriction>
+  </simpleType>
+
+  <simpleType name="typeType">
+    <restriction base="string">
+      <pattern value="[a-zA-Z][a-zA-Z0-9_\.\-]*"/>
+    </restriction>
+  </simpleType>
+
+  <!--
+    Inline content.
+  -->
+
+  <complexType name="inlineTermType" mixed="true">
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="token" use="optional"/>
+  </complexType>
+
+  <element
+    name="term"
+    type="s:inlineTermType"/>
+
+  <simpleType name="inlineVerbatimTextType">
+    <restriction base="string">
+      <whiteSpace value="preserve" />
+    </restriction>
+  </simpleType>
+
+  <complexType name="inlineVerbatimType" mixed="true">
+    <simpleContent>
+      <extension base="s:inlineVerbatimTextType">
+        <attribute ref="xml:lang"/>
+        <attribute ref="xml:base"/>
+        <attribute name="type" type="s:typeType" use="optional"/>
+      </extension>
+    </simpleContent>
+  </complexType>
+
+  <element
+    name="verbatim"
+    type="s:inlineVerbatimType"/>
+
+  <complexType name="inlineImageType" mixed="true">
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+    <attribute name="width" type="nonNegativeInteger" use="optional"/>
+    <attribute name="height" type="nonNegativeInteger" use="optional"/>
+    <attribute name="source" type="anyURI" use="required"/>
+  </complexType>
+
+  <element
+    name="image"
+    type="s:inlineImageType"/>
+
+  <complexType name="inlineFootnoteReferenceType" mixed="false">
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+    <attribute name="target" type="s:blockIDType" use="required"/>
+  </complexType>
+
+  <element
+    name="footnote-ref"
+    type="s:inlineFootnoteReferenceType"/>
+
+  <complexType name="inlineFormalItemReferenceType">
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+    <attribute name="target" type="s:blockIDType" use="required"/>
+  </complexType>
+
+  <element
+    name="formal-item-ref"
+    type="s:inlineFormalItemReferenceType"/>
+
+  <group name="inlineLinkContentChoice">
+    <choice>
+      <element ref="s:image"/>
+    </choice>
+  </group>
+
+  <complexType name="inlineLinkContentType" mixed="true">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <group ref="s:inlineLinkContentChoice"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="inlineLinkType" mixed="true">
+    <complexContent>
+      <extension base="s:inlineLinkContentType">
+        <attribute ref="xml:lang"/>
+        <attribute ref="xml:base"/>
+        <attribute name="type" type="s:typeType" use="optional"/>
+        <attribute name="target" type="s:blockIDType" use="required"/>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element
+    name="link"
+    type="s:inlineLinkType"/>
+
+  <complexType name="inlineLinkExternalType" mixed="true">
+    <complexContent>
+      <extension base="s:inlineLinkContentType">
+        <attribute ref="xml:lang"/>
+        <attribute ref="xml:base"/>
+        <attribute name="type" type="s:typeType" use="optional"/>
+        <attribute name="target" type="anyURI" use="required"/>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <element
+    name="link-external"
+    type="s:inlineLinkExternalType"/>
+
+  <group name="inlineContentChoice">
+    <choice>
+      <element ref="s:term"/>
+      <element ref="s:verbatim"/>
+      <element ref="s:image"/>
+      <element ref="s:link"/>
+      <element ref="s:link-external"/>
+      <element ref="s:footnote-ref"/>
+      <element ref="s:formal-item-ref"/>
+      <element ref="s:list-ordered"/>
+      <element ref="s:list-unordered"/>
+    </choice>
+  </group>
+
+  <complexType name="inlineListOrderedType">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <element ref="s:list-item"/>
+    </sequence>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+  </complexType>
+
+  <element
+    name="list-ordered"
+    type="s:inlineListOrderedType"/>
+
+  <complexType name="inlineListUnorderedType">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <element ref="s:list-item"/>
+    </sequence>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+  </complexType>
+
+  <element
+    name="list-unordered"
+    type="s:inlineListUnorderedType"/>
+
+  <complexType name="inlineListItemType" mixed="true">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <group ref="s:inlineContentChoice"/>
+    </sequence>
+  </complexType>
+
+  <element
+    name="list-item"
+    type="s:inlineListItemType"/>
+
+  <complexType name="inlineTableHeadColumnNameType" mixed="false">
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+    <attribute name="name" type="string" use="required"/>
+  </complexType>
+
+  <element
+    name="table-column-name"
+    type="s:inlineTableHeadColumnNameType"/>
+
+  <complexType name="inlineTableHeadType">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <element ref="s:table-column-name"/>
+    </sequence>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+  </complexType>
+
+  <element
+    name="table-head"
+    type="s:inlineTableHeadType"/>
+
+  <complexType name="inlineTableBodyCellType" mixed="true">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <group ref="s:inlineContentChoice"/>
+    </sequence>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+  </complexType>
+
+  <element
+    name="table-cell"
+    type="s:inlineTableBodyCellType"/>
+
+  <complexType name="inlineTableBodyRowType">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <element ref="s:table-cell"/>
+    </sequence>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+  </complexType>
+
+  <element
+    name="table-row"
+    type="s:inlineTableBodyRowType"/>
+
+  <complexType name="inlineTableBodyType">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <element ref="s:table-row"/>
+    </sequence>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+  </complexType>
+
+  <element
+    name="table-body"
+    type="s:inlineTableBodyType"/>
+
+  <complexType name="inlineTableType">
+    <choice>
+      <sequence minOccurs="1" maxOccurs="1">
+        <element ref="s:table-head"/>
+        <element ref="s:table-body"/>
+      </sequence>
+      <sequence minOccurs="0" maxOccurs="unbounded">
+        <element ref="s:table-row"/>
+      </sequence>
+    </choice>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+    <attribute name="summary" type="string" use="required"/>
+  </complexType>
+
+  <element
+    name="table"
+    type="s:inlineTableType"/>
+
+  <!--
+    Subsection-level content.
+  -->
+
+  <complexType name="formalItemType" mixed="true">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <group ref="s:inlineContentChoice"/>
+    </sequence>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+    <attribute name="id" type="s:blockIDType" use="optional"/>
+    <attribute name="title" type="string" use="required"/>
+  </complexType>
+
+  <element
+    name="formal-item"
+    type="s:formalItemType">
+  </element>
+
+  <complexType name="paragraphType" mixed="true">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <group ref="s:inlineContentChoice"/>
+    </sequence>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+    <attribute name="id" type="s:blockIDType" use="optional"/>
+  </complexType>
+
+  <element
+    name="paragraph"
+    type="s:paragraphType">
+  </element>
+
+  <complexType name="footnoteType" mixed="true">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <group ref="s:inlineContentChoice"/>
+    </sequence>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+    <attribute name="id" type="s:blockIDType" use="required"/>
+  </complexType>
+
+  <element
+    name="footnote"
+    type="s:footnoteType">
+  </element>
+
+  <group name="subsectionContentChoice">
+    <choice>
+      <element ref="s:paragraph"/>
+      <element ref="s:formal-item"/>
+      <element ref="s:footnote"/>
+    </choice>
+  </group>
+
+  <complexType name="subsectionType">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <group ref="s:subsectionContentChoice"/>
+    </sequence>
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+    <attribute name="id" type="s:blockIDType" use="optional"/>
+    <attribute name="title" type="string" use="required"/>
+  </complexType>
+
+  <element
+    name="subsection"
+    type="s:subsectionType"/>
+
+  <!--
+    Sections.
+  -->
+
+  <complexType name="sectionType">
+    <choice>
+      <sequence minOccurs="0" maxOccurs="unbounded">
+        <group ref="s:subsectionContentChoice"/>
+      </sequence>
+      <sequence minOccurs="0" maxOccurs="unbounded">
+        <element ref="s:subsection"/>
+      </sequence>
+      <sequence minOccurs="0" maxOccurs="unbounded">
+        <element ref="s:section"/>
+      </sequence>
+    </choice>
+
+    <attribute ref="xml:lang"/>
+    <attribute ref="xml:base"/>
+
+    <attribute name="toc" type="boolean" use="optional" default="true">
+      <annotation>
+        <documentation>
+          If the toc attribute is set to true, then the section will get
+          a generated table of contents.
+        </documentation>
+      </annotation>
+    </attribute>
+
+    <attribute name="id" type="s:blockIDType" use="optional"/>
+    <attribute name="type" type="s:typeType" use="optional"/>
+
+    <attribute name="title" type="string" use="required"/>
+  </complexType>
+
+  <element
+    name="section"
+    type="s:sectionType"/>
+
+  <!--
+    Documents.
+    -->
+
+  <complexType name="documentType">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <element ref="s:section"/>
+    </sequence>
+    <attribute name="title" type="string" use="required"/>
+    <attribute name="styles" type="string" use="optional" default=""/>
+  </complexType>
+
+  <element
+    name="document"
+    type="s:documentType">
+
+    <unique name="blockIDsAreUnique">
+      <selector xpath=".//s:formal-item|s:paragraph|s:footnote|s:subsection|s:section"/>
+      <field xpath="@id"/>
+    </unique>
+
+    <unique name="formalItemIDsAreUnique">
+      <selector xpath=".//s:formal-item"/>
+      <field xpath="@id"/>
+    </unique>
+
+    <key name="footnoteIDKey">
+      <selector xpath=".//s:footnote"/>
+      <field xpath="@id"/>
+    </key>
+
+    <keyref name="linkReferences" refer="s:blockIDsAreUnique">
+      <selector xpath=".//s:link"/>
+      <field xpath="@target"/>
+    </keyref>
+
+    <keyref name="footnoteReferences" refer="s:footnoteIDKey">
+      <selector xpath=".//s:footnote-ref"/>
+      <field xpath="@target"/>
+    </keyref>
+
+    <keyref name="formalItemReferences" refer="s:formalItemIDsAreUnique">
+      <selector xpath=".//s:formal-item-ref"/>
+      <field xpath="@target"/>
+    </keyref>
+  </element>
+
+</schema>

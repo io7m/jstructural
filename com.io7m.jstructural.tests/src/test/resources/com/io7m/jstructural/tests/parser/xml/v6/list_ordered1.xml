@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<list-ordered xmlns="structural:com.io7m.structural:xml:6.0" type="xyz">
+  <list-item>0</list-item>
+  <list-item><term>x</term></list-item>
+  <list-item><image source="z"/></list-item>
+</list-ordered>

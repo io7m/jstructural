@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<table xmlns="structural:com.io7m.structural:xml:6.0" summary="A table">
+  <table-head>
+    <table-column-name name="a"/>
+    <table-column-name name="b"/>
+    <table-column-name name="c"/>
+  </table-head>
+  <table-row>
+    <table-cell>r0c0</table-cell>
+    <table-cell>r0c1</table-cell>
+    <table-cell>r0c2</table-cell>
+  </table-row>
+</table>
