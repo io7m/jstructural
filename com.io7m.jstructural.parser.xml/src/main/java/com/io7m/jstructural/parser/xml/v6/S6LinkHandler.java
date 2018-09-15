@@ -17,6 +17,8 @@
 package com.io7m.jstructural.parser.xml.v6;
 
 import com.io7m.jaffirm.core.Preconditions;
+import com.io7m.jstructural.ast.SInlineAnyContentType;
+import com.io7m.jstructural.ast.SInlineLinkContentType;
 import com.io7m.jstructural.ast.SLink;
 import com.io7m.jstructural.ast.SModelType;
 import com.io7m.jstructural.ast.SParsed;
@@ -62,10 +64,10 @@ final class S6LinkHandler extends S6ElementHandler
   {
     Preconditions.checkPrecondition(
       c,
-      c instanceof SModelType.SInlineLinkContentType,
+      c instanceof SInlineLinkContentType,
       x -> "Content must be inline link content");
 
-    this.link_builder.addContent((SModelType.SInlineLinkContentType<SParsed>) c);
+    this.link_builder.addContent((SInlineLinkContentType<SParsed>) c);
   }
 
   @Override
@@ -75,7 +77,7 @@ final class S6LinkHandler extends S6ElementHandler
   }
 
   @Override
-  SModelType.SInlineAnyContentType<SParsed> finishContent()
+  SInlineAnyContentType<SParsed> finishContent()
   {
     return this.link_builder.build();
   }

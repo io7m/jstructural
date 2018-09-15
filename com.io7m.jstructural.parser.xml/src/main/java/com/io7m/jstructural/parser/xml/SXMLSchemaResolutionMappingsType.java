@@ -16,20 +16,21 @@
 
 package com.io7m.jstructural.parser.xml;
 
-import com.io7m.jstructural.annotations.SImmutableStyleType;
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import io.vavr.collection.Map;
-import org.immutables.value.Value;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
 import java.net.URI;
+
+import static org.immutables.value.Value.Immutable;
 
 /**
  * A set of mappings from namespace URIs to schemas.
  */
 
-@SImmutableStyleType
+@ImmutablesStyleType
 @VavrEncodingEnabled
-@Value.Immutable
+@Immutable
 public interface SXMLSchemaResolutionMappingsType
 {
   /**

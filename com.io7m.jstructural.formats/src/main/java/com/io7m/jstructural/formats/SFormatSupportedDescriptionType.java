@@ -16,16 +16,18 @@
 
 package com.io7m.jstructural.formats;
 
-import com.io7m.jstructural.annotations.SImmutableStyleType;
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import io.vavr.collection.Set;
 import org.immutables.value.Value;
+
+import static org.immutables.value.Value.Immutable;
 
 /**
  * Information about a supported format.
  */
 
-@SImmutableStyleType
-@Value.Immutable
+@ImmutablesStyleType
+@Immutable
 public interface SFormatSupportedDescriptionType
 {
   /**

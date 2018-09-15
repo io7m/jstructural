@@ -100,11 +100,11 @@ final class SXMLHardenedSAXParsers
       "http://apache.org/xml/features/validation/schema",
       false);
 
-     /*
-      * Tell the parser to use the full EntityResolver2 interface (by default,
-      * the extra EntityResolver2 methods will not be called - only those of
-      * the original EntityResolver interface would be called).
-      */
+    /*
+     * Tell the parser to use the full EntityResolver2 interface (by default,
+     * the extra EntityResolver2 methods will not be called - only those of
+     * the original EntityResolver interface would be called).
+     */
 
     reader.setFeature(
       "http://xml.org/sax/features/use-entity-resolver2",
@@ -208,11 +208,11 @@ final class SXMLHardenedSAXParsers
       "http://apache.org/xml/properties/schema/external-schemaLocation",
       locations.toString());
 
-     /*
-      * Tell the parser to use the full EntityResolver2 interface (by default,
-      * the extra EntityResolver2 methods will not be called - only those of
-      * the original EntityResolver interface would be called).
-      */
+    /*
+     * Tell the parser to use the full EntityResolver2 interface (by default,
+     * the extra EntityResolver2 methods will not be called - only those of
+     * the original EntityResolver interface would be called).
+     */
 
     reader.setFeature(
       "http://xml.org/sax/features/use-entity-resolver2",

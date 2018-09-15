@@ -20,6 +20,8 @@
 
 module com.io7m.jstructural.parser.api
 {
+  requires static org.osgi.annotation.bundle;
+
   requires com.io7m.jstructural.ast;
   requires com.io7m.jstructural.parser.spi;
   requires io.vavr;

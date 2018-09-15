@@ -16,6 +16,7 @@
 
 package com.io7m.jstructural.parser.xml;
 
+import com.io7m.jstructural.ast.SContentType;
 import com.io7m.jstructural.ast.SModelType;
 import com.io7m.jstructural.ast.SParsed;
 import com.io7m.jstructural.formats.SFormatDescription;
@@ -114,6 +115,35 @@ public final class SXMLParserProvider
     }
   }
 
+  @Override
+  public Optional<SFormatDescription> probe(
+    final SPIProbeRequest r)
+    throws IOException
+  {
+    Objects.requireNonNull(r, "Request");
+
+    final SchemaFinder finder = new SchemaFinder();
+
+    LOG.debug("probe: {}", r.uri());
+
+    try (InputStream stream = r.streams().open()) {
+      final XMLReader reader =
+        this.parsers.createXMLReaderNonValidating(false, r.baseDirectory());
+
+      final InputSource source = new InputSource(stream);
+      source.setSystemId(r.uri().toString());
+      reader.setContentHandler(finder);
+      reader.parse(source);
+    } catch (final SAXException | ParserConfigurationException e) {
+      if (!(e instanceof StopSAXParsing)) {
+        LOG.error("could not create probe: ", e);
+        return Optional.empty();
+      }
+    }
+
+    return finder.schema;
+  }
+
   private static final class StopSAXParsing extends SAXException
   {
     StopSAXParsing()
@@ -157,35 +187,6 @@ public final class SXMLParserProvider
     }
   }
 
-  @Override
-  public Optional<SFormatDescription> probe(
-    final SPIProbeRequest r)
-    throws IOException
-  {
-    Objects.requireNonNull(r, "Request");
-
-    final SchemaFinder finder = new SchemaFinder();
-
-    LOG.debug("probe: {}", r.uri());
-
-    try (InputStream stream = r.streams().open()) {
-      final XMLReader reader =
-        this.parsers.createXMLReaderNonValidating(false, r.baseDirectory());
-
-      final InputSource source = new InputSource(stream);
-      source.setSystemId(r.uri().toString());
-      reader.setContentHandler(finder);
-      reader.parse(source);
-    } catch (final SAXException | ParserConfigurationException e) {
-      if (!(e instanceof StopSAXParsing)) {
-        LOG.error("could not create probe: ", e);
-        return Optional.empty();
-      }
-    }
-
-    return finder.schema;
-  }
-
   private static final class Parser implements SPIParserType
   {
     private final XMLReader reader;
@@ -203,7 +204,7 @@ public final class SXMLParserProvider
     }
 
     @Override
-    public Validation<Seq<SParseError>, SModelType.SContentType<SParsed>> parse()
+    public Validation<Seq<SParseError>, SContentType<SParsed>> parse()
       throws IOException
     {
       try {
@@ -216,8 +217,8 @@ public final class SXMLParserProvider
             Objects.requireNonNull(this.handler, "Handler")
               .content();
 
-          if (result instanceof SModelType.SContentType) {
-            return Validation.valid((SModelType.SContentType<SParsed>) result);
+          if (result instanceof SContentType) {
+            return Validation.valid((SContentType<SParsed>) result);
           }
 
           throw new UnimplementedCodeException();

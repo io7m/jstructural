@@ -17,7 +17,9 @@
 module com.io7m.jstructural.formats
 {
   requires static org.immutables.value;
-  requires static com.io7m.jstructural.annotations;
+  requires static org.osgi.annotation.bundle;
+  requires static com.io7m.immutables.style;
+
   requires io.vavr;
 
   exports com.io7m.jstructural.formats;

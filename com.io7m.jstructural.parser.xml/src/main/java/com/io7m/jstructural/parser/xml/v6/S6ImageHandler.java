@@ -18,7 +18,7 @@ package com.io7m.jstructural.parser.xml.v6;
 
 import com.io7m.jstructural.ast.SImage;
 import com.io7m.jstructural.ast.SImageSize;
-import com.io7m.jstructural.ast.SModelType;
+import com.io7m.jstructural.ast.SInlineAnyContentType;
 import com.io7m.jstructural.ast.SParsed;
 import com.io7m.jstructural.ast.SText;
 import com.io7m.jstructural.ast.STypeName;
@@ -73,7 +73,7 @@ final class S6ImageHandler extends S6ElementHandler
   }
 
   @Override
-  SModelType.SInlineAnyContentType<SParsed> finishContent()
+  SInlineAnyContentType<SParsed> finishContent()
   {
     return this.image_builder.build();
   }

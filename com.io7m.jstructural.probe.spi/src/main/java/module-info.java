@@ -20,8 +20,9 @@
 
 module com.io7m.jstructural.probe.spi
 {
-  requires static com.io7m.jstructural.annotations;
   requires static org.immutables.value;
+  requires static org.osgi.annotation.bundle;
+  requires static com.io7m.immutables.style;
 
   requires com.io7m.jstructural.formats;
 

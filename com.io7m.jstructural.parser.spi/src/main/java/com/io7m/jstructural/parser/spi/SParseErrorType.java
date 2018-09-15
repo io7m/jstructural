@@ -16,20 +16,22 @@
 
 package com.io7m.jstructural.parser.spi;
 
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jlexing.core.LexicalType;
-import com.io7m.jstructural.annotations.SImmutableStyleType;
 import org.immutables.value.Value;
 
 import java.net.URI;
 import java.util.Optional;
 
+import static org.immutables.value.Value.Immutable;
+
 /**
  * The type of parse errors.
  */
 
-@SImmutableStyleType
-@Value.Immutable
+@ImmutablesStyleType
+@Immutable
 public interface SParseErrorType extends LexicalType<URI>
 {
   @Override

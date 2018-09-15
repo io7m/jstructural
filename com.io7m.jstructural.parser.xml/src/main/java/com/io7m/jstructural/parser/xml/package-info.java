@@ -18,4 +18,5 @@
  * XML format parser provider.
  */
 
+@org.osgi.annotation.bundle.Export
 package com.io7m.jstructural.parser.xml;

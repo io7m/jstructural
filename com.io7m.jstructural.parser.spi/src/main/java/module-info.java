@@ -21,7 +21,8 @@
 module com.io7m.jstructural.parser.spi
 {
   requires static org.immutables.value;
-  requires static com.io7m.jstructural.annotations;
+  requires static org.osgi.annotation.bundle;
+  requires static com.io7m.immutables.style;
 
   requires com.io7m.jstructural.ast;
   requires com.io7m.jlexing.core;

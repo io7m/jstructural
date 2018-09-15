@@ -16,6 +16,8 @@
 
 module com.io7m.jstructural.probe.api
 {
+  requires static org.osgi.annotation.bundle;
+
   requires com.io7m.jstructural.formats;
   requires com.io7m.jstructural.probe.spi;
 }

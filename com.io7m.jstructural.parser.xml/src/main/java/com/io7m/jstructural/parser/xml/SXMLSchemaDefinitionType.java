@@ -16,18 +16,20 @@
 
 package com.io7m.jstructural.parser.xml;
 
-import com.io7m.jstructural.annotations.SImmutableStyleType;
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
 
 import java.net.URI;
 import java.net.URL;
 
+import static org.immutables.value.Value.Immutable;
+
 /**
  * The type of schema definitions.
  */
 
-@SImmutableStyleType
-@Value.Immutable
+@ImmutablesStyleType
+@Immutable
 public interface SXMLSchemaDefinitionType
 {
   /**

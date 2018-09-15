@@ -22,6 +22,9 @@ import com.io7m.jstructural.ast.SModelType;
 import com.io7m.jstructural.ast.SParsed;
 import com.io7m.jstructural.ast.STable;
 import com.io7m.jstructural.ast.STableBody;
+import com.io7m.jstructural.ast.STableBodyType;
+import com.io7m.jstructural.ast.STableHeaderType;
+import com.io7m.jstructural.ast.STableRowType;
 import com.io7m.jstructural.ast.SText;
 import com.io7m.jstructural.ast.STypeName;
 import com.io7m.junreachable.UnreachableCodeException;
@@ -38,8 +41,8 @@ final class S6TableHandler extends S6ElementHandler
 {
   private final STable.Builder<SParsed> table_builder;
   private final STableBody.Builder<SParsed> table_body_builder;
-  private SModelType.STableBodyType<SParsed> body;
-  private SModelType.STableHeaderType<SParsed> head;
+  private STableBodyType<SParsed> body;
+  private STableHeaderType<SParsed> head;
 
   S6TableHandler(
     final S6ElementHandler in_parent,
@@ -71,21 +74,21 @@ final class S6TableHandler extends S6ElementHandler
     final SModelType<SParsed> c)
     throws SAXParseException
   {
-    if (c instanceof SModelType.STableHeaderType) {
-      this.head = (SModelType.STableHeaderType<SParsed>) c;
+    if (c instanceof STableHeaderType) {
+      this.head = (STableHeaderType<SParsed>) c;
       this.table_builder.setHeader(this.head);
       return;
     }
 
-    if (c instanceof SModelType.STableBodyType) {
-      this.body = (SModelType.STableBodyType<SParsed>) c;
+    if (c instanceof STableBodyType) {
+      this.body = (STableBodyType<SParsed>) c;
       this.table_builder.setBody(this.body);
       return;
     }
 
-    if (c instanceof SModelType.STableRowType) {
-      final SModelType.STableRowType<SParsed> row =
-        (SModelType.STableRowType<SParsed>) c;
+    if (c instanceof STableRowType) {
+      final STableRowType<SParsed> row =
+        (STableRowType<SParsed>) c;
 
       this.checkRow(row);
       this.table_body_builder.addRows(row);
@@ -96,7 +99,7 @@ final class S6TableHandler extends S6ElementHandler
   }
 
   private void checkRow(
-    final SModelType.STableRowType<SParsed> row)
+    final STableRowType<SParsed> row)
     throws SAXParseException
   {
     if (this.head != null) {
@@ -146,7 +149,7 @@ final class S6TableHandler extends S6ElementHandler
       this.table_builder.setBody(this.body);
     }
 
-    for (final SModelType.STableRowType<SParsed> row : this.body.rows()) {
+    for (final STableRowType<SParsed> row : this.body.rows()) {
       this.checkRow(row);
     }
     return this.table_builder.build();

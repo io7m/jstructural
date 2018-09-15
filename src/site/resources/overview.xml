@@ -1,0 +1,37 @@
+<div xmlns="http://www.w3.org/1999/xhtml">
+  <p class="shields">
+      <a href="https://travis-ci.org/io7m/jstructural">
+         <img src="https://img.shields.io/travis/io7m/jstructural.png?style=flat-square"
+              alt="Build status"/>
+      </a>
+      <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.io7m.jstructural%22">
+         <img src="https://img.shields.io/maven-central/v/com.io7m.jstructural/com.io7m.jstructural.png?style=flat-square"
+              alt="Maven Central"/>
+      </a>
+      <a href="https://www.codacy.com/app/github_79/jstructural">
+         <img src="https://img.shields.io/codacy/grade/97f853737ec84d449e83d58c2fff8e0f.png?style=flat-square"
+              alt="Codacy"/>
+      </a>
+      <a href="https://codecov.io/gh/io7m/jstructural">
+         <img src="https://img.shields.io/codecov/c/github/io7m/jstructural.png?style=flat-square"
+              alt="Codecov"/>
+      </a>
+  </p>
+
+  <p>
+    The <b>jstructural</b> package implements a set of primitives
+    for producing technical documentation.
+  </p>
+
+  <p>
+    In contrast to other systems such as <a class="externalLink" href="http://docbook.org">DocBook</a>, the <b>structural</b>
+    language only defines elements concerning the structure of the
+    document and not the semantics of the elements. The intention
+    is that higher level languages will produce <b>structural</b>
+    documents as output and then use the provided stylesheets to
+    get various services such as table of contents generation,
+    chapter numbering, footnotes, et cetera, without having to
+    re-implement all of those features for each new language.
+  </p>
+
+</div>

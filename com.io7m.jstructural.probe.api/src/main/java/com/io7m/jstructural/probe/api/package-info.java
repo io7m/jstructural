@@ -18,4 +18,5 @@
  * Probe API.
  */
 
+@org.osgi.annotation.bundle.Export
 package com.io7m.jstructural.probe.api;

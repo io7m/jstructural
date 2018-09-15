@@ -9,7 +9,7 @@
   <parent>
     <artifactId>com.io7m.jstructural</artifactId>
     <groupId>com.io7m.jstructural</groupId>
-    <version>6.0.0</version>
+    <version>6.0.0-SNAPSHOT</version>
   </parent>
 
   <packaging>jar</packaging>
@@ -18,6 +18,10 @@
   <name>com.io7m.jstructural.tests</name>
   <description>Structural documentation language (Test suite)</description>
   <url>http://github.com/io7m/jstructural</url>
+
+  <properties>
+    <mdep.analyze.skip>true</mdep.analyze.skip>
+  </properties>
 
   <dependencies>
     <dependency>

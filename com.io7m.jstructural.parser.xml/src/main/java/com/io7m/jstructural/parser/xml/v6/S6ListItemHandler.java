@@ -17,6 +17,7 @@
 package com.io7m.jstructural.parser.xml.v6;
 
 import com.io7m.jaffirm.core.Preconditions;
+import com.io7m.jstructural.ast.SInlineAnyContentType;
 import com.io7m.jstructural.ast.SListItem;
 import com.io7m.jstructural.ast.SModelType;
 import com.io7m.jstructural.ast.SParsed;
@@ -47,10 +48,10 @@ final class S6ListItemHandler extends S6ElementHandler
   {
     Preconditions.checkPrecondition(
       c,
-      c instanceof SModelType.SInlineAnyContentType,
+      c instanceof SInlineAnyContentType,
       x -> "Content must be inline content");
 
-    this.item_builder.addContent((SModelType.SInlineAnyContentType<SParsed>) c);
+    this.item_builder.addContent((SInlineAnyContentType<SParsed>) c);
   }
 
   @Override

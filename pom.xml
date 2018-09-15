@@ -9,12 +9,12 @@
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
     <artifactId>com.io7m.primogenitor</artifactId>
-    <version>2.0.0</version>
+    <version>3.0.0-beta0013</version>
   </parent>
 
   <groupId>com.io7m.jstructural</groupId>
   <artifactId>com.io7m.jstructural</artifactId>
-  <version>6.0.0</version>
+  <version>6.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>com.io7m.jstructural</name>
@@ -23,23 +23,20 @@
 
   <modules>
     <module>com.io7m.jstructural.ast</module>
-    <module>com.io7m.jstructural.checkstyle</module>
+    <module>com.io7m.jstructural.formats</module>
     <module>com.io7m.jstructural.parser.api</module>
     <module>com.io7m.jstructural.parser.spi</module>
     <module>com.io7m.jstructural.parser.xml</module>
-    <module>com.io7m.jstructural.tests</module>
-    <module>com.io7m.jstructural.formats</module>
-    <module>com.io7m.jstructural.probe.spi</module>
-    <module>com.io7m.jstructural.annotations</module>
     <module>com.io7m.jstructural.probe.api</module>
+    <module>com.io7m.jstructural.probe.spi</module>
+    <module>com.io7m.jstructural.tests</module>
   </modules>
 
   <properties>
-    <io7m.checkstyle.artifact>com.io7m.jstructural.checkstyle</io7m.checkstyle.artifact>
-    <io7m.checkstyle.path>/com/io7m/jstructural/checkstyle/checkstyle.xml</io7m.checkstyle.path>
     <io7m.api.previousVersion>0.0.1</io7m.api.previousVersion>
-    <io7m.org.immutables.version>2.6.0-alpha1</io7m.org.immutables.version>
-    <io7m.org.immutables.vavr.version>0.4.0</io7m.org.immutables.vavr.version>
+    <io7m.org.immutables.version>2.7.1</io7m.org.immutables.version>
+    <io7m.org.immutables.vavr.version>0.6.0</io7m.org.immutables.vavr.version>
+    <com.io7m.immutables.style.version>0.0.1</com.io7m.immutables.style.version>
   </properties>
 
   <inceptionYear>2017</inceptionYear>
@@ -108,6 +105,11 @@
         <artifactId>com.io7m.jaffirm.core</artifactId>
         <version>2.0.0</version>
       </dependency>
+      <dependency>
+        <groupId>com.io7m.junreachable</groupId>
+        <artifactId>com.io7m.junreachable.core</artifactId>
+        <version>2.1.1</version>
+      </dependency>
 
       <dependency>
         <groupId>org.immutables</groupId>
@@ -118,6 +120,17 @@
         <groupId>org.immutables.vavr</groupId>
         <artifactId>vavr-encodings</artifactId>
         <version>${io7m.org.immutables.vavr.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.immutables.style</groupId>
+        <artifactId>com.io7m.immutables.style</artifactId>
+        <version>${com.io7m.immutables.style.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.annotation.bundle</artifactId>
+        <version>1.0.0</version>
       </dependency>
 
       <dependency>
@@ -165,6 +178,23 @@
             <source>9</source>
             <target>9</target>
             <release>9</release>
+            <annotationProcessorPaths>
+              <dependency>
+                <groupId>org.immutables</groupId>
+                <artifactId>value</artifactId>
+                <version>${io7m.org.immutables.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.immutables.vavr</groupId>
+                <artifactId>vavr-encodings</artifactId>
+                <version>${io7m.org.immutables.vavr.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>com.io7m.immutables.style</groupId>
+                <artifactId>com.io7m.immutables.style</artifactId>
+                <version>${com.io7m.immutables.style.version}</version>
+              </dependency>
+            </annotationProcessorPaths>
           </configuration>
         </plugin>
       </plugins>

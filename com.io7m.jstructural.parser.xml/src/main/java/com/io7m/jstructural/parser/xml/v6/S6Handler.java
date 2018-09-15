@@ -149,7 +149,7 @@ public final class S6Handler
     if (h != null) {
       final SText<SParsed> text =
         SText.<SParsed>builder()
-          .setText(new String(ch, start, length))
+          .setText(String.valueOf(ch, start, length))
           .setData(PARSED)
           .setLexical(S6Lexical.makeFromLocator(this.locator))
           .build();
@@ -157,6 +157,7 @@ public final class S6Handler
     }
   }
 
+  // CHECKSTYLE:OFF
   @Override
   public void startElement(
     final String uri,
@@ -173,19 +174,16 @@ public final class S6Handler
       return;
     }
 
-    LOG.trace("startElement: {} {} {} {}",
-              uri, local_name, qual_name, attrs);
+    LOG.trace("startElement: {} {} {} {}", uri, local_name, qual_name, attrs);
 
     switch (local_name) {
       case "table-body": {
-        this.handler =
-          new S6TableBodyHandler(this.handler, attrs, this.locator);
+        this.handler = new S6TableBodyHandler(this.handler, attrs, this.locator);
         break;
       }
 
       case "table-cell": {
-        this.handler =
-          new S6TableCellHandler(this.handler, attrs, this.locator);
+        this.handler = new S6TableCellHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -194,8 +192,7 @@ public final class S6Handler
       }
 
       case "footnote-ref": {
-        this.handler =
-          new S6FootnoteRefHandler(this.handler, attrs, this.locator);
+        this.handler = new S6FootnoteRefHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -204,8 +201,7 @@ public final class S6Handler
       }
 
       case "formal-item-ref": {
-        this.handler =
-          new S6FormalItemRefHandler(this.handler, attrs, this.locator);
+        this.handler = new S6FormalItemRefHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -253,8 +249,7 @@ public final class S6Handler
       }
 
       case "table-column-name": {
-        this.handler =
-          new S6TableColumnNameHandler(this.handler, attrs, this.locator);
+        this.handler = new S6TableColumnNameHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -295,6 +290,7 @@ public final class S6Handler
       }
     }
   }
+  // CHECKSTYLE:ON
 
   @Override
   public void endElement(

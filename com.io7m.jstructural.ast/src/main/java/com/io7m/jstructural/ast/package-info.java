@@ -18,4 +18,5 @@
  * Core AST types.
  */
 
+@org.osgi.annotation.bundle.Export
 package com.io7m.jstructural.ast;

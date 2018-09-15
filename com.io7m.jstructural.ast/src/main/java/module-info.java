@@ -21,8 +21,9 @@
 module com.io7m.jstructural.ast
 {
   requires static org.immutables.value;
-  requires static com.io7m.jstructural.annotations;
-  requires static vavr.encodings;
+  requires static org.immutables.vavr.encodings;
+  requires static org.osgi.annotation.bundle;
+  requires static com.io7m.immutables.style;
 
   requires com.io7m.jaffirm.core;
   requires com.io7m.jlexing.core;

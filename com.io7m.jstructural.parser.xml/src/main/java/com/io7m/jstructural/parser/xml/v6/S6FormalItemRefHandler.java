@@ -17,7 +17,7 @@
 package com.io7m.jstructural.parser.xml.v6;
 
 import com.io7m.jstructural.ast.SFormalItemReference;
-import com.io7m.jstructural.ast.SModelType;
+import com.io7m.jstructural.ast.SInlineAnyContentType;
 import com.io7m.jstructural.ast.SParsed;
 import com.io7m.jstructural.ast.SText;
 import com.io7m.jstructural.ast.STypeName;
@@ -63,7 +63,7 @@ final class S6FormalItemRefHandler extends S6ElementHandler
   }
 
   @Override
-  SModelType.SInlineAnyContentType<SParsed> finishContent()
+  SInlineAnyContentType<SParsed> finishContent()
   {
     return this.formal_builder.build();
   }

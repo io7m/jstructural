@@ -21,8 +21,9 @@
 module com.io7m.jstructural.parser.xml
 {
   requires static org.immutables.value;
-  requires static vavr.encodings;
-  requires static com.io7m.jstructural.annotations;
+  requires static org.immutables.vavr.encodings;
+  requires static org.osgi.annotation.bundle;
+  requires static com.io7m.immutables.style;
 
   requires java.xml;
   requires com.io7m.jaffirm.core;

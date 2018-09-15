@@ -16,7 +16,7 @@
 
 package com.io7m.jstructural.parser.api;
 
-import com.io7m.jstructural.ast.SModelType;
+import com.io7m.jstructural.ast.SBlockContentType;
 import com.io7m.jstructural.ast.SParsed;
 import com.io7m.jstructural.parser.spi.SParseError;
 import io.vavr.collection.Seq;
@@ -34,5 +34,5 @@ public interface SParserType
    * @return The parsed content
    */
 
-  Validation<Seq<SParseError>, SModelType.SBlockContentType<SParsed>> parse();
+  Validation<Seq<SParseError>, SBlockContentType<SParsed>> parse();
 }

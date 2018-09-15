@@ -24,7 +24,7 @@ import com.io7m.jstructural.ast.SLink;
 import com.io7m.jstructural.ast.SLinkExternal;
 import com.io7m.jstructural.ast.SListOrdered;
 import com.io7m.jstructural.ast.SListUnordered;
-import com.io7m.jstructural.ast.SModelType.SContentType;
+import com.io7m.jstructural.ast.SContentType;
 import com.io7m.jstructural.ast.SParsed;
 import com.io7m.jstructural.ast.STable;
 import com.io7m.jstructural.ast.STerm;

@@ -16,17 +16,19 @@
 
 package com.io7m.jstructural.formats;
 
-import com.io7m.jstructural.annotations.SImmutableStyleType;
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
 
 import java.util.Comparator;
+
+import static org.immutables.value.Value.Immutable;
 
 /**
  * A specific version of a format.
  */
 
-@SImmutableStyleType
-@Value.Immutable
+@ImmutablesStyleType
+@Immutable
 public interface SFormatVersionType extends Comparable<SFormatVersionType>
 {
   /**

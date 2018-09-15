@@ -18,4 +18,5 @@
  * Parser API.
  */
 
+@org.osgi.annotation.bundle.Export
 package com.io7m.jstructural.parser.api;

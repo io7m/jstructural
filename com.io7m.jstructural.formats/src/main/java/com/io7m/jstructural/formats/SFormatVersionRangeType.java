@@ -16,15 +16,17 @@
 
 package com.io7m.jstructural.formats;
 
-import com.io7m.jstructural.annotations.SImmutableStyleType;
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
+
+import static org.immutables.value.Value.Immutable;
 
 /**
  * A range of format versions
  */
 
-@SImmutableStyleType
-@Value.Immutable
+@ImmutablesStyleType
+@Immutable
 public interface SFormatVersionRangeType
 {
   /**

@@ -16,19 +16,21 @@
 
 package com.io7m.jstructural.parser.spi;
 
-import com.io7m.jstructural.annotations.SImmutableStyleType;
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
 
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Path;
 
+import static org.immutables.value.Value.Immutable;
+
 /**
  * A request to parse a file.
  */
 
-@SImmutableStyleType
-@Value.Immutable
+@ImmutablesStyleType
+@Immutable
 public interface SPIParserRequestType
 {
   /**

@@ -16,18 +16,20 @@
 
 package com.io7m.jstructural.probe.spi;
 
-import com.io7m.jstructural.annotations.SImmutableStyleType;
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
 
 import java.net.URI;
 import java.nio.file.Path;
 
+import static org.immutables.value.Value.Immutable;
+
 /**
  * A request to probe the format of a given file.
  */
 
-@SImmutableStyleType
-@Value.Immutable
+@ImmutablesStyleType
+@Immutable
 public interface SPIProbeRequestType
 {
   /**

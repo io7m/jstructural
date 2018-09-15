@@ -43,57 +43,6 @@ public final class SXMLErrorLog
     this.errors = Vector.empty();
   }
 
-  private void logError(
-    final SParseError e)
-  {
-    this.errors = this.errors.append(
-      Objects.requireNonNull(e, "Error"));
-  }
-
-  /**
-   * Add the given parse error.
-   *
-   * @param e The parse error
-   */
-
-  public void addError(
-    final SParseError e)
-  {
-    this.logError(Objects.requireNonNull(e, "Error"));
-  }
-
-  /**
-   * @return The current (immutable) vector of errors
-   */
-
-  public Vector<SParseError> errors()
-  {
-    return this.errors;
-  }
-
-  /**
-   * Add a warning based on the given exception
-   *
-   * @param e The exception
-   */
-
-  public void warning(
-    final SAXParseException e)
-  {
-    this.logError(
-      SParseError.builder()
-        .setException(e)
-        .setLexical(
-          LexicalPosition.<URI>builder()
-            .setFile(URI.create(e.getSystemId()))
-            .setColumn(e.getColumnNumber())
-            .setLine(e.getLineNumber())
-            .build())
-        .setSeverity(SParseErrorType.Severity.WARNING)
-        .setMessage(e.getMessage())
-        .build());
-  }
-
   /**
    * Create a parse error from the given parse exception.
    *
@@ -147,6 +96,57 @@ public final class SXMLErrorLog
       .setSeverity(SParseErrorType.Severity.ERROR)
       .setMessage(e.getMessage())
       .build();
+  }
+
+  private void logError(
+    final SParseError e)
+  {
+    this.errors = this.errors.append(
+      Objects.requireNonNull(e, "Error"));
+  }
+
+  /**
+   * Add the given parse error.
+   *
+   * @param e The parse error
+   */
+
+  public void addError(
+    final SParseError e)
+  {
+    this.logError(Objects.requireNonNull(e, "Error"));
+  }
+
+  /**
+   * @return The current (immutable) vector of errors
+   */
+
+  public Vector<SParseError> errors()
+  {
+    return this.errors;
+  }
+
+  /**
+   * Add a warning based on the given exception
+   *
+   * @param e The exception
+   */
+
+  public void warning(
+    final SAXParseException e)
+  {
+    this.logError(
+      SParseError.builder()
+        .setException(e)
+        .setLexical(
+          LexicalPosition.<URI>builder()
+            .setFile(URI.create(e.getSystemId()))
+            .setColumn(e.getColumnNumber())
+            .setLine(e.getLineNumber())
+            .build())
+        .setSeverity(SParseErrorType.Severity.WARNING)
+        .setMessage(e.getMessage())
+        .build());
   }
 
   /**

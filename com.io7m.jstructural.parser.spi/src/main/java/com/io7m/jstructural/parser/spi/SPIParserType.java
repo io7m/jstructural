@@ -16,7 +16,7 @@
 
 package com.io7m.jstructural.parser.spi;
 
-import com.io7m.jstructural.ast.SModelType;
+import com.io7m.jstructural.ast.SContentType;
 import com.io7m.jstructural.ast.SParsed;
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
@@ -37,6 +37,6 @@ public interface SPIParserType
    * @throws IOException On I/O errors
    */
 
-  Validation<Seq<SParseError>, SModelType.SContentType<SParsed>> parse()
+  Validation<Seq<SParseError>, SContentType<SParsed>> parse()
     throws IOException;
 }

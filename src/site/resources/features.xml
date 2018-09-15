@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<div xmlns="http://www.w3.org/1999/xhtml">
+  <ul>
+    <li>Full <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XSD</a> schema for document validation.</li>
+    <li>Implemented as pure Java for platform-independence.</li>
+    <li>Carefully namespaced schema for ease of combination with other XML documents.</li>
+    <li>Extensive documentation.</li>
+    <li>Outputs clean and valid XHTML 1.0 Strict.</li>
+    <li>Maven plugin for producing documentation as part of a standard Maven build.</li>
+    <li>Complete and documented CSS for resulting XHTML, for ease of customization of output.</li>
+    <li><a href="https://www.osgi.org/">OSGi</a>-ready</li>
+    <li><a href="https://en.wikipedia.org/wiki/Java_Platform_Module_System">JPMS</a>-ready</li>
+    <li>ISC license.</li>
+  </ul>
+</div>

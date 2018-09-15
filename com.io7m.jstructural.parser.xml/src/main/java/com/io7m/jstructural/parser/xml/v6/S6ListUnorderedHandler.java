@@ -17,6 +17,8 @@
 package com.io7m.jstructural.parser.xml.v6;
 
 import com.io7m.jaffirm.core.Preconditions;
+import com.io7m.jstructural.ast.SInlineAnyContentType;
+import com.io7m.jstructural.ast.SListItemType;
 import com.io7m.jstructural.ast.SListUnordered;
 import com.io7m.jstructural.ast.SModelType;
 import com.io7m.jstructural.ast.SParsed;
@@ -61,10 +63,10 @@ final class S6ListUnorderedHandler extends S6ElementHandler
   {
     Preconditions.checkPrecondition(
       c,
-      c instanceof SModelType.SListItemType,
+      c instanceof SListItemType,
       x -> "Content must be list item");
 
-    this.list_builder.addItems((SModelType.SListItemType<SParsed>) c);
+    this.list_builder.addItems((SListItemType<SParsed>) c);
   }
 
   @Override
@@ -74,7 +76,7 @@ final class S6ListUnorderedHandler extends S6ElementHandler
   }
 
   @Override
-  SModelType.SInlineAnyContentType<SParsed> finishContent()
+  SInlineAnyContentType<SParsed> finishContent()
   {
     return this.list_builder.build();
   }

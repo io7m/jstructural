@@ -18,4 +18,5 @@
  * Formats API.
  */
 
+@org.osgi.annotation.bundle.Export
 package com.io7m.jstructural.formats;

@@ -18,4 +18,5 @@
  * Parser SPI.
  */
 
+@org.osgi.annotation.bundle.Export
 package com.io7m.jstructural.parser.spi;
