@@ -30,6 +30,10 @@ import com.io7m.jstructural.parser.xml.v6.S6Schema;
 import com.io7m.jstructural.probe.spi.SPIProbeRequest;
 import com.io7m.jstructural.probe.spi.SPIProbeType;
 import com.io7m.junreachable.UnimplementedCodeException;
+import com.io7m.jxe.core.JXEHardenedSAXParsers;
+import com.io7m.jxe.core.JXESchemaDefinition;
+import com.io7m.jxe.core.JXESchemaResolutionMappings;
+import com.io7m.jxe.core.JXEXInclude;
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
 import org.slf4j.Logger;
@@ -65,16 +69,16 @@ public final class SXMLParserProvider
   private static final URI XML_NAMESPACE =
     URI.create("http://www.w3.org/XML/1998/namespace");
 
-  private static final SXMLSchemaDefinition XML_SCHEMA =
-    SXMLSchemaDefinition.builder()
+  private static final JXESchemaDefinition XML_SCHEMA =
+    JXESchemaDefinition.builder()
       .setNamespace(XML_NAMESPACE)
       .setFileIdentifier("file::xml.xsd")
       .setLocation(SXMLParserProvider.class.getResource(
         "/com/io7m/jstructural/parser/xml/xml.xsd"))
       .build();
 
-  private static final SXMLSchemaResolutionMappings SCHEMAS =
-    SXMLSchemaResolutionMappings.builder()
+  private static final JXESchemaResolutionMappings SCHEMAS =
+    JXESchemaResolutionMappings.builder()
       .putMappings(S6Schema.SCHEMA.namespace(), S6Schema.SCHEMA)
       .putMappings(XML_NAMESPACE, XML_SCHEMA)
       .build();
@@ -86,7 +90,7 @@ public final class SXMLParserProvider
     FORMATS.put(S6Schema.SCHEMA.namespace(), S6Schema.FORMAT);
   }
 
-  private final SXMLHardenedSAXParsers parsers;
+  private final JXEHardenedSAXParsers parsers;
 
   /**
    * Instantiate a parser provider.
@@ -94,7 +98,7 @@ public final class SXMLParserProvider
 
   public SXMLParserProvider()
   {
-    this.parsers = new SXMLHardenedSAXParsers();
+    this.parsers = new JXEHardenedSAXParsers();
   }
 
   @Override
@@ -106,7 +110,8 @@ public final class SXMLParserProvider
 
     try {
       final XMLReader reader =
-        this.parsers.createXMLReader(r.baseDirectory(), true, SCHEMAS);
+        this.parsers.createXMLReader(
+          Optional.of(r.baseDirectory()), JXEXInclude.XINCLUDE_ENABLED, SCHEMAS);
       final SHandlerInitial handler = new SHandlerInitial(r, reader);
       reader.setContentHandler(handler);
       return new Parser(r, reader, handler);
@@ -128,7 +133,8 @@ public final class SXMLParserProvider
 
     try (InputStream stream = r.streams().open()) {
       final XMLReader reader =
-        this.parsers.createXMLReaderNonValidating(false, r.baseDirectory());
+        this.parsers.createXMLReaderNonValidating(
+          Optional.of(r.baseDirectory()), JXEXInclude.XINCLUDE_ENABLED);
 
       final InputSource source = new InputSource(stream);
       source.setSystemId(r.uri().toString());

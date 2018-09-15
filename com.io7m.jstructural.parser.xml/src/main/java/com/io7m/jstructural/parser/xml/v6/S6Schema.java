@@ -17,8 +17,8 @@
 package com.io7m.jstructural.parser.xml.v6;
 
 import com.io7m.jstructural.formats.SFormatDescription;
-import com.io7m.jstructural.parser.xml.SXMLSchemaDefinition;
 import com.io7m.junreachable.UnreachableCodeException;
+import com.io7m.jxe.core.JXESchemaDefinition;
 
 import java.net.URI;
 
@@ -32,7 +32,7 @@ public final class S6Schema
    * The schema definition.
    */
 
-  public static final SXMLSchemaDefinition SCHEMA;
+  public static final JXESchemaDefinition SCHEMA;
 
   /**
    * The format.
@@ -42,7 +42,7 @@ public final class S6Schema
 
   static {
 
-    SCHEMA = SXMLSchemaDefinition.builder()
+    SCHEMA = JXESchemaDefinition.builder()
       .setNamespace(URI.create("structural:com.io7m.structural:xml:6.0"))
       .setFileIdentifier("file::schema-6.xsd")
       .setLocation(S6Schema.class.getResource(
