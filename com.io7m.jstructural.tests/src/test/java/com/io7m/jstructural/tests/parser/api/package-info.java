@@ -14,39 +14,8 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural.ast;
-
-import java.util.Objects;
-import java.util.regex.Pattern;
-
 /**
- * Valid block IDs.
+ * Parser test suite.
  */
 
-public final class SBlockIDs
-{
-  /**
-   * The pattern describing valid names.
-   */
-
-  public static final Pattern VALID_NAME =
-    Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
-
-  private SBlockIDs()
-  {
-
-  }
-
-  /**
-   * @param text The input text
-   *
-   * @return {@code true} if the given name is valid with respect to {@link #VALID_NAME}
-   */
-
-  public static boolean isValid(
-    final String text)
-  {
-    return VALID_NAME.matcher(
-      Objects.requireNonNull(text, "Text")).matches();
-  }
-}
+package com.io7m.jstructural.tests.parser.api;

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Mark Raynsford <code@io7m.com> http://io7m.com
+ * Copyright © 2018 Mark Raynsford <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,37 +16,37 @@
 
 package com.io7m.jstructural.ast;
 
+import io.vavr.collection.Vector;
+
+import java.math.BigInteger;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
- * Valid block IDs.
+ * Functions to parse content numbers.
  */
 
-public final class SBlockIDs
+public final class SContentNumbers
 {
-  /**
-   * The pattern describing valid names.
-   */
-
-  public static final Pattern VALID_NAME =
-    Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
-
-  private SBlockIDs()
+  private SContentNumbers()
   {
 
   }
 
   /**
-   * @param text The input text
+   * Parse a content number from the given text.
    *
-   * @return {@code true} if the given name is valid with respect to {@link #VALID_NAME}
+   * @param text Text of the form {@code [0-9]+(\.[0-9]+)+}
+   *
+   * @return A parsed content number
+   *
+   * @throws NumberFormatException If the number cannot be parsed
    */
 
-  public static boolean isValid(
+  public static SContentNumber parse(
     final String text)
+    throws NumberFormatException
   {
-    return VALID_NAME.matcher(
-      Objects.requireNonNull(text, "Text")).matches();
+    Objects.requireNonNull(text, "text");
+    return SContentNumber.of(Vector.of(text.split("\\.")).map(BigInteger::new));
   }
 }

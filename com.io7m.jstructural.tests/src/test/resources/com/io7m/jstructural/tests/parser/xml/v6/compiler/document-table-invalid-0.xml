@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document xmlns="structural:com.io7m.structural:xml:6.0"
+          title="Title">
+  <section title="Section 1"
+           id="i">
+    <paragraph>
+      <table summary="xyz">
+        <table-head>
+          <table-column-name name="c0"/>
+          <table-column-name name="c1"/>
+          <table-column-name name="c2"/>
+        </table-head>
+        <table-body>
+          <table-row>
+            <table-cell>r0c0</table-cell>
+            <table-cell>r0c2</table-cell>
+          </table-row>
+          <table-row>
+            <table-cell>r1c0</table-cell>
+            <table-cell>r1c2</table-cell>
+          </table-row>
+          <table-row>
+            <table-cell>r2c0</table-cell>
+            <table-cell>r2c2</table-cell>
+          </table-row>
+        </table-body>
+      </table>
+    </paragraph>
+  </section>
+</document>

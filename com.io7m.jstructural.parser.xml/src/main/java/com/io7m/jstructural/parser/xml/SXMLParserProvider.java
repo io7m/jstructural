@@ -104,7 +104,7 @@ public final class SXMLParserProvider
   @Override
   public SPIParserType create(
     final SPIParserRequest r)
-    throws IOException, SPIParserConfigurationException
+    throws SPIParserConfigurationException
   {
     Objects.requireNonNull(r, "Request");
 
@@ -173,7 +173,9 @@ public final class SXMLParserProvider
       final String uri)
       throws SAXException
     {
-      LOG.debug("startPrefixMapping: {} {}", prefix, uri);
+      if (LOG.isTraceEnabled()) {
+        LOG.trace("startPrefixMapping: {} {}", prefix, uri);
+      }
 
       this.schema = Optional.ofNullable(FORMATS.get(URI.create(uri)));
       if (this.schema.isPresent()) {
@@ -273,7 +275,6 @@ public final class SXMLParserProvider
     @Override
     public void warning(
       final SAXParseException e)
-      throws SAXException
     {
       this.errors.warning(e);
     }
@@ -281,7 +282,6 @@ public final class SXMLParserProvider
     @Override
     public void error(
       final SAXParseException e)
-      throws SAXException
     {
       this.errors.error(e);
     }
@@ -297,16 +297,14 @@ public final class SXMLParserProvider
 
     @Override
     public void startDocument()
-      throws SAXException
     {
-      LOG.debug("startDocument");
+      LOG.trace("startDocument");
     }
 
     @Override
     public void endDocument()
-      throws SAXException
     {
-      LOG.debug("endDocument");
+      LOG.trace("endDocument");
     }
 
     @Override
@@ -315,7 +313,9 @@ public final class SXMLParserProvider
       final String uri)
       throws SAXException
     {
-      LOG.debug("startPrefixMapping: {} {}", prefix, uri);
+      if (LOG.isTraceEnabled()) {
+        LOG.trace("startPrefixMapping: {} {}", prefix, uri);
+      }
 
       if (Objects.equals(uri, S6Schema.SCHEMA.namespace().toString())) {
         this.sub_handler =

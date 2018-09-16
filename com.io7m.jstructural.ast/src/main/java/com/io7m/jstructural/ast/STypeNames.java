@@ -39,6 +39,7 @@ public final class STypeNames
 
   /**
    * @param text The input text
+   *
    * @return {@code true} if the given name is valid with respect to {@link #VALID_NAME}
    */
 

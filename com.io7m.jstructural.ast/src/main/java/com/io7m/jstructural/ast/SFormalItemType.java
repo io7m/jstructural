@@ -18,7 +18,9 @@ package com.io7m.jstructural.ast;
 
 import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jlexing.core.LexicalPosition;
+import io.vavr.collection.Vector;
 import org.immutables.value.Value;
+import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
 import java.net.URI;
 import java.util.Optional;
@@ -30,9 +32,9 @@ import java.util.Optional;
  */
 
 @ImmutablesStyleType
+@VavrEncodingEnabled
 @Value.Immutable
-public
-interface SFormalItemType<T> extends SSubsectionContentType<T>
+public interface SFormalItemType<T> extends SSubsectionContentType<T>
 {
   @Value.Auxiliary
   @Value.Default
@@ -73,4 +75,11 @@ interface SFormalItemType<T> extends SSubsectionContentType<T>
 
   @Value.Parameter
   String title();
+
+  /**
+   * @return The formal item content
+   */
+
+  @Value.Parameter
+  Vector<SInlineAnyContentType<T>> content();
 }

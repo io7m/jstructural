@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Mark Raynsford <code@io7m.com> http://io7m.com
+ * Copyright © 2018 Mark Raynsford <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,39 +14,35 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural.ast;
+package com.io7m.jstructural.compiler.main;
+
+import com.io7m.jstructural.ast.SDocument;
+import com.io7m.jstructural.ast.SParsed;
+import com.io7m.jstructural.compiler.api.SCompilationTaskType;
+import com.io7m.jstructural.compiler.api.SCompilerType;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
- * Valid block IDs.
+ * A compiler.
  */
 
-public final class SBlockIDs
+public final class SCompiler implements SCompilerType
 {
   /**
-   * The pattern describing valid names.
+   * Construct a compiler.
    */
 
-  public static final Pattern VALID_NAME =
-    Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
-
-  private SBlockIDs()
+  public SCompiler()
   {
 
   }
 
-  /**
-   * @param text The input text
-   *
-   * @return {@code true} if the given name is valid with respect to {@link #VALID_NAME}
-   */
-
-  public static boolean isValid(
-    final String text)
+  @Override
+  public SCompilationTaskType createTask(
+    final SDocument<SParsed> document)
   {
-    return VALID_NAME.matcher(
-      Objects.requireNonNull(text, "Text")).matches();
+    Objects.requireNonNull(document, "document");
+    return new SCompilationTask(document);
   }
 }

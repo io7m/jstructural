@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document xmlns="structural:com.io7m.structural:xml:6.0"
+          title="Title">
+  <section title="Section 1" id="i">
+    <paragraph>Hello.</paragraph>
+    <paragraph><term>Hello.</term></paragraph>
+    <paragraph><term type="t">Hello.</term></paragraph>
+    <paragraph><image source="http://www.example.com" type="t" width="32" height="64">Hello.</image></paragraph>
+    <paragraph><link target="i">Hello.</link></paragraph>
+    <paragraph><link-external target="http://www.example.com">Hello.</link-external></paragraph>
+    <paragraph><link target="i"><image source="http://www.example.com">Hello.</image></link></paragraph>
+    <paragraph><footnote-ref target="x"/></paragraph>
+    <paragraph><formal-item-ref target="y"/></paragraph>
+    <paragraph><verbatim>Hello.</verbatim></paragraph>
+    <paragraph><list-ordered><list-item>Hello.</list-item></list-ordered></paragraph>
+    <paragraph><list-unordered><list-item>Hello.</list-item></list-unordered></paragraph>
+    <paragraph><table summary="xyz">
+      <table-head>
+        <table-column-name name="c0"/>
+        <table-column-name name="c1"/>
+        <table-column-name name="c2"/>
+      </table-head>
+      <table-body>
+        <table-row>
+          <table-cell>r0c0</table-cell>
+          <table-cell>r0c1</table-cell>
+          <table-cell>r0c2</table-cell>
+        </table-row>
+        <table-row>
+          <table-cell>r1c0</table-cell>
+          <table-cell>r1c1</table-cell>
+          <table-cell>r1c2</table-cell>
+        </table-row>
+        <table-row>
+          <table-cell>r2c0</table-cell>
+          <table-cell>r2c1</table-cell>
+          <table-cell>r2c2</table-cell>
+        </table-row>
+      </table-body>
+    </table></paragraph>
+
+    <footnote id="x"/>
+    <formal-item title="Formal" id="y"/>
+  </section>
+</document>

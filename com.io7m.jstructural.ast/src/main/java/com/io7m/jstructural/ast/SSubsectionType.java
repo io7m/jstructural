@@ -34,8 +34,7 @@ import java.util.Optional;
 @ImmutablesStyleType
 @VavrEncodingEnabled
 @Value.Immutable
-public
-interface SSubsectionType<T> extends SBlockContentType<T>
+public interface SSubsectionType<T> extends SBlockContentType<T>
 {
   @Override
   default BlockKind blockKind()

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Mark Raynsford <code@io7m.com> http://io7m.com
+ * Copyright © 2018 Mark Raynsford <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -17,62 +17,51 @@
 package com.io7m.jstructural.ast;
 
 import com.io7m.immutables.styles.ImmutablesStyleType;
-import com.io7m.jlexing.core.LexicalPosition;
+import com.io7m.jaffirm.core.Preconditions;
 import io.vavr.collection.Vector;
 import org.immutables.value.Value;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
-import java.net.URI;
-import java.util.Optional;
+import java.math.BigInteger;
+import java.util.stream.Collectors;
 
 /**
- * The type of footnotes.
- *
- * @param <T> The type of data associated with the AST
+ * The type of numbers for content.
  */
 
 @ImmutablesStyleType
-@VavrEncodingEnabled
 @Value.Immutable
-public interface SFootnoteType<T> extends SSubsectionContentType<T>
+@VavrEncodingEnabled
+public interface SContentNumberType
 {
-  @Value.Auxiliary
-  @Value.Default
-  @Override
-  default LexicalPosition<URI> lexical()
+  /**
+   * @return The numeric components in order from most to least significant
+   */
+
+  @Value.Parameter
+  Vector<BigInteger> components();
+
+  /**
+   * @return The number as a humanly-readable string
+   */
+
+  default String toHumanString()
   {
-    return SLexicalDefaults.DEFAULT_POSITION;
+    return this.components()
+      .map(BigInteger::toString)
+      .collect(Collectors.joining("."));
   }
 
-  @Override
-  default SubsectionContentKind subsectionContentKind()
+  /**
+   * Check preconditions for the type.
+   */
+
+  @Value.Check
+  default void checkPreconditions()
   {
-    return SubsectionContentKind.SUBSECTION_FOOTNOTE;
+    Preconditions.checkPreconditionI(
+      this.components().size(),
+      value -> value >= 1,
+      i -> "Must provide at least one numeric component");
   }
-
-  @Override
-  @Value.Auxiliary
-  @Value.Parameter
-  T data();
-
-  /**
-   * @return The type
-   */
-
-  @Value.Parameter
-  Optional<STypeNameType<T>> type();
-
-  /**
-   * @return The unique identifier
-   */
-
-  @Value.Parameter
-  SBlockIDType<T> id();
-
-  /**
-   * @return The footnote content
-   */
-
-  @Value.Parameter
-  Vector<SInlineAnyContentType<T>> content();
 }

@@ -17,7 +17,6 @@
 package com.io7m.jstructural.parser.xml.v6;
 
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jstructural.ast.SModelType;
 import com.io7m.jstructural.ast.SParsed;
 import com.io7m.jstructural.ast.STable;
@@ -32,7 +31,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.ext.Locator2;
 
-import java.net.URI;
 import java.util.Map;
 
 import static com.io7m.jstructural.ast.SParsed.PARSED;
@@ -87,46 +85,12 @@ final class S6TableHandler extends S6ElementHandler
     }
 
     if (c instanceof STableRowType) {
-      final STableRowType<SParsed> row =
-        (STableRowType<SParsed>) c;
-
-      this.checkRow(row);
+      final STableRowType<SParsed> row = (STableRowType<SParsed>) c;
       this.table_body_builder.addRows(row);
       return;
     }
 
     throw new UnreachableCodeException();
-  }
-
-  private void checkRow(
-    final STableRowType<SParsed> row)
-    throws SAXParseException
-  {
-    if (this.head != null) {
-      final int row_expected = this.head.names().size();
-      final int row_size = row.cells().size();
-      if (row_size != row_expected) {
-        final LexicalPosition<URI> lex = this.lexical();
-        throw new SAXParseException(
-          new StringBuilder(128)
-            .append(
-              "Number of columns in table row does not match the number declared in the table header.")
-            .append(System.lineSeparator())
-            .append("  Expected: ")
-            .append(row_expected)
-            .append(" columns")
-            .append(System.lineSeparator())
-            .append("  Received: ")
-            .append(row_size)
-            .append(" columns")
-            .append(System.lineSeparator())
-            .toString(),
-          null,
-          lex.file().map(URI::toString).orElse(null),
-          lex.line(),
-          lex.column());
-      }
-    }
   }
 
   @Override
@@ -149,9 +113,6 @@ final class S6TableHandler extends S6ElementHandler
       this.table_builder.setBody(this.body);
     }
 
-    for (final STableRowType<SParsed> row : this.body.rows()) {
-      this.checkRow(row);
-    }
     return this.table_builder.build();
   }
 }

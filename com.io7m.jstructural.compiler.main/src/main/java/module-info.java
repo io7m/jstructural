@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Mark Raynsford <code@io7m.com> http://io7m.com
+ * Copyright © 2018 Mark Raynsford <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,39 +14,20 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural.ast;
-
-import java.util.Objects;
-import java.util.regex.Pattern;
-
 /**
- * Valid block IDs.
+ * Structural documentation language (Compiler main implementation)
  */
 
-public final class SBlockIDs
+module com.io7m.jstructural.compiler.main
 {
-  /**
-   * The pattern describing valid names.
-   */
+  requires static org.osgi.annotation.bundle;
 
-  public static final Pattern VALID_NAME =
-    Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
+  requires com.io7m.junreachable.core;
+  requires com.io7m.jstructural.compiler.api;
+  requires com.io7m.jstructural.ast;
+  requires com.io7m.jlexing.core;
+  requires io.vavr;
+  requires com.io7m.jaffirm.core;
 
-  private SBlockIDs()
-  {
-
-  }
-
-  /**
-   * @param text The input text
-   *
-   * @return {@code true} if the given name is valid with respect to {@link #VALID_NAME}
-   */
-
-  public static boolean isValid(
-    final String text)
-  {
-    return VALID_NAME.matcher(
-      Objects.requireNonNull(text, "Text")).matches();
-  }
+  exports com.io7m.jstructural.compiler.main;
 }

@@ -16,6 +16,7 @@
 
 package com.io7m.jstructural.tests.parser.xml;
 
+import com.io7m.jstructural.ast.SContentType;
 import com.io7m.jstructural.ast.SFootnoteReference;
 import com.io7m.jstructural.ast.SFormalItemReference;
 import com.io7m.jstructural.ast.SImage;
@@ -24,7 +25,6 @@ import com.io7m.jstructural.ast.SLink;
 import com.io7m.jstructural.ast.SLinkExternal;
 import com.io7m.jstructural.ast.SListOrdered;
 import com.io7m.jstructural.ast.SListUnordered;
-import com.io7m.jstructural.ast.SContentType;
 import com.io7m.jstructural.ast.SParsed;
 import com.io7m.jstructural.ast.STable;
 import com.io7m.jstructural.ast.STerm;
@@ -677,16 +677,6 @@ public final class SParserXMLTest
     throws Exception
   {
     final SPIParserType p = createParser(fs, "table_invalid0.xml");
-    final Validation<Seq<SParseError>, SContentType<SParsed>> r = p.parse();
-    Assertions.assertTrue(r.isInvalid());
-  }
-
-  @Test
-  public void testTableInvalid1(
-    final FileSystem fs)
-    throws Exception
-  {
-    final SPIParserType p = createParser(fs, "table_invalid1.xml");
     final Validation<Seq<SParseError>, SContentType<SParsed>> r = p.parse();
     Assertions.assertTrue(r.isInvalid());
   }

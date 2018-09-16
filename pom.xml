@@ -30,6 +30,8 @@
     <module>com.io7m.jstructural.probe.api</module>
     <module>com.io7m.jstructural.probe.spi</module>
     <module>com.io7m.jstructural.tests</module>
+    <module>com.io7m.jstructural.compiler.api</module>
+    <module>com.io7m.jstructural.compiler.main</module>
   </modules>
 
   <properties>
@@ -154,6 +156,11 @@
         <version>2.10.0</version>
       </dependency>
 
+      <dependency>
+        <groupId>nl.jqno.equalsverifier</groupId>
+        <artifactId>equalsverifier</artifactId>
+        <version>2.5.2</version>
+      </dependency>
       <dependency>
         <groupId>com.github.marschall</groupId>
         <artifactId>memoryfilesystem</artifactId>

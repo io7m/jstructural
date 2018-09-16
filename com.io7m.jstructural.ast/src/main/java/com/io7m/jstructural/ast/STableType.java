@@ -17,7 +17,6 @@
 package com.io7m.jstructural.ast;
 
 import com.io7m.immutables.styles.ImmutablesStyleType;
-import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import org.immutables.value.Value;
 
@@ -74,23 +73,4 @@ interface STableType<T> extends SInlineAnyContentType<T>
 
   @Value.Parameter
   STableBodyType<T> body();
-
-  /**
-   * Check preconditions for the type.
-   */
-
-  @Value.Check
-  default void checkPreconditions()
-  {
-    if (this.header().isPresent()) {
-      final STableHeaderType<T> h = this.header().get();
-      final int size = h.names().size();
-      for (final STableRowType<T> row : this.body().rows()) {
-        Preconditions.checkPreconditionI(
-          row.cells().size(),
-          row.cells().size() == size,
-          s -> "All table rows must contain " + size + " columns");
-      }
-    }
-  }
 }

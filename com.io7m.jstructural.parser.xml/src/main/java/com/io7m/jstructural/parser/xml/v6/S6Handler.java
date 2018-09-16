@@ -75,15 +75,15 @@ public final class S6Handler
 
   @Override
   public void startDocument()
-    throws SAXException
   {
-    LOG.debug("startDocument");
+    if (LOG.isTraceEnabled()) {
+      LOG.trace("startDocument");
+    }
   }
 
   @Override
   public void warning(
     final SAXParseException e)
-    throws SAXException
   {
     this.errors.warning(e);
   }
@@ -91,7 +91,6 @@ public final class S6Handler
   @Override
   public void error(
     final SAXParseException e)
-    throws SAXException
   {
     this.errors.error(e);
   }
@@ -107,26 +106,29 @@ public final class S6Handler
 
   @Override
   public void endDocument()
-    throws SAXException
   {
-    LOG.debug("endDocument");
+    if (LOG.isTraceEnabled()) {
+      LOG.trace("endDocument");
+    }
   }
 
   @Override
   public void startPrefixMapping(
     final String prefix,
     final String uri)
-    throws SAXException
   {
-    LOG.debug("startPrefixMapping: {} {}", prefix, uri);
+    if (LOG.isTraceEnabled()) {
+      LOG.trace("startPrefixMapping: {} {}", prefix, uri);
+    }
   }
 
   @Override
   public void endPrefixMapping(
     final String prefix)
-    throws SAXException
   {
-    LOG.debug("endPrefixMapping: {}", prefix);
+    if (LOG.isTraceEnabled()) {
+      LOG.trace("endPrefixMapping: {}", prefix);
+    }
   }
 
   @Override
@@ -134,12 +136,13 @@ public final class S6Handler
     final char[] ch,
     final int start,
     final int length)
-    throws SAXException
   {
-    LOG.debug(
-      "characters: {} of {}",
-      Integer.valueOf(length),
-      this.locator.getEncoding());
+    if (LOG.isTraceEnabled()) {
+      LOG.trace(
+        "characters: {} of {}",
+        Integer.valueOf(length),
+        this.locator.getEncoding());
+    }
 
     if (!this.errors.errors().isEmpty()) {
       return;
@@ -164,7 +167,6 @@ public final class S6Handler
     final String local_name,
     final String qual_name,
     final Attributes attrs)
-    throws SAXException
   {
     if (!this.errors.errors().isEmpty()) {
       return;
@@ -188,6 +190,7 @@ public final class S6Handler
       }
 
       case "document": {
+        this.handler = new S6DocumentHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -197,6 +200,7 @@ public final class S6Handler
       }
 
       case "footnote": {
+        this.handler = new S6FootnoteHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -206,12 +210,12 @@ public final class S6Handler
       }
 
       case "formal-item": {
+        this.handler = new S6FormalItemHandler(this.handler, attrs, this.locator);
         break;
       }
 
       case "table-head": {
-        this.handler =
-          new S6TableHeadHandler(this.handler, attrs, this.locator);
+        this.handler = new S6TableHeadHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -221,8 +225,7 @@ public final class S6Handler
       }
 
       case "link-external": {
-        this.handler =
-          new S6LinkExternalHandler(this.handler, attrs, this.locator);
+        this.handler = new S6LinkExternalHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -237,14 +240,12 @@ public final class S6Handler
       }
 
       case "list-ordered": {
-        this.handler =
-          new S6ListOrderedHandler(this.handler, attrs, this.locator);
+        this.handler = new S6ListOrderedHandler(this.handler, attrs, this.locator);
         break;
       }
 
       case "list-unordered": {
-        this.handler =
-          new S6ListUnorderedHandler(this.handler, attrs, this.locator);
+        this.handler = new S6ListUnorderedHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -254,6 +255,7 @@ public final class S6Handler
       }
 
       case "paragraph": {
+        this.handler = new S6ParagraphHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -263,10 +265,12 @@ public final class S6Handler
       }
 
       case "section": {
+        this.handler = new S6SectionHandler(this.handler, attrs, this.locator);
         break;
       }
 
       case "subsection": {
+        this.handler = new S6SubsectionHandler(this.handler, attrs, this.locator);
         break;
       }
 
@@ -307,7 +311,9 @@ public final class S6Handler
       return;
     }
 
-    LOG.trace("endElement: {} {} {} {}", uri, local_name, qual_name);
+    if (LOG.isTraceEnabled()) {
+      LOG.trace("endElement: {} {} {} {}", uri, local_name, qual_name);
+    }
 
     this.handler.onCompleted();
     if (this.handler.parent() != null) {

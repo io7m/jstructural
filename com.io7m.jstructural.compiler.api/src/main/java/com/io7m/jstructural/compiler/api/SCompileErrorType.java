@@ -14,65 +14,67 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural.ast;
+package com.io7m.jstructural.compiler.api;
 
 import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jlexing.core.LexicalPosition;
-import io.vavr.collection.Vector;
+import com.io7m.jlexing.core.LexicalType;
 import org.immutables.value.Value;
-import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
 import java.net.URI;
 import java.util.Optional;
 
+import static org.immutables.value.Value.Immutable;
+
 /**
- * The type of footnotes.
- *
- * @param <T> The type of data associated with the AST
+ * The type of parse errors.
  */
 
 @ImmutablesStyleType
-@VavrEncodingEnabled
-@Value.Immutable
-public interface SFootnoteType<T> extends SSubsectionContentType<T>
+@Immutable
+public interface SCompileErrorType extends LexicalType<URI>
 {
-  @Value.Auxiliary
-  @Value.Default
   @Override
-  default LexicalPosition<URI> lexical()
+  @Value.Parameter
+  LexicalPosition<URI> lexical();
+
+  /**
+   * @return The severity of the error
+   */
+
+  @Value.Parameter
+  Severity severity();
+
+  /**
+   * @return The error message
+   */
+
+  @Value.Parameter
+  String message();
+
+  /**
+   * @return The exception raised, if any
+   */
+
+  @Value.Parameter
+  Optional<Exception> exception();
+
+  /**
+   * The severity of the error.
+   */
+
+  enum Severity
   {
-    return SLexicalDefaults.DEFAULT_POSITION;
+    /**
+     * A warning.
+     */
+
+    WARNING,
+
+    /**
+     * An error.
+     */
+
+    ERROR
   }
-
-  @Override
-  default SubsectionContentKind subsectionContentKind()
-  {
-    return SubsectionContentKind.SUBSECTION_FOOTNOTE;
-  }
-
-  @Override
-  @Value.Auxiliary
-  @Value.Parameter
-  T data();
-
-  /**
-   * @return The type
-   */
-
-  @Value.Parameter
-  Optional<STypeNameType<T>> type();
-
-  /**
-   * @return The unique identifier
-   */
-
-  @Value.Parameter
-  SBlockIDType<T> id();
-
-  /**
-   * @return The footnote content
-   */
-
-  @Value.Parameter
-  Vector<SInlineAnyContentType<T>> content();
 }

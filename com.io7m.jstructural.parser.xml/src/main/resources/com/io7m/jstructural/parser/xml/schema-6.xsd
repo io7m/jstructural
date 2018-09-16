@@ -163,6 +163,7 @@
       <element ref="s:formal-item-ref"/>
       <element ref="s:list-ordered"/>
       <element ref="s:list-unordered"/>
+      <element ref="s:table"/>
     </choice>
   </group>
 

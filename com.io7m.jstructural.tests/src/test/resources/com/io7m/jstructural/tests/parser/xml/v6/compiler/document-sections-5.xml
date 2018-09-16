@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document xmlns="structural:com.io7m.structural:xml:6.0"
+          title="Title">
+  <section title="Section 1">
+    <footnote id="foot_1_1"/>
+    <footnote id="foot_1_2"/>
+    <footnote id="foot_1_3"/>
+  </section>
+  <section title="Section 2">
+    <footnote id="foot_2_1"/>
+    <footnote id="foot_2_2"/>
+    <footnote id="foot_2_3"/>
+  </section>
+  <section title="Section 3">
+    <footnote id="foot_3_1"/>
+    <footnote id="foot_3_2"/>
+    <footnote id="foot_3_3"/>
+  </section>
+</document>

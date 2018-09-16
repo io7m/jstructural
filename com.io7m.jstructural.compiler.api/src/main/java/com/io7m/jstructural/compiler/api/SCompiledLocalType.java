@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Mark Raynsford <code@io7m.com> http://io7m.com
+ * Copyright © 2018 Mark Raynsford <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,39 +14,26 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural.ast;
+package com.io7m.jstructural.compiler.api;
 
-import java.util.Objects;
-import java.util.regex.Pattern;
+import com.io7m.jstructural.ast.SBlockContentType;
+import com.io7m.jstructural.ast.SContentNumber;
 
 /**
- * Valid block IDs.
+ * The type of compiled context local to each element of the document.
  */
 
-public final class SBlockIDs
+public interface SCompiledLocalType
 {
   /**
-   * The pattern describing valid names.
+   * @return The content number of this element
    */
 
-  public static final Pattern VALID_NAME =
-    Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
-
-  private SBlockIDs()
-  {
-
-  }
+  SContentNumber number();
 
   /**
-   * @param text The input text
-   *
-   * @return {@code true} if the given name is valid with respect to {@link #VALID_NAME}
+   * @return The block content enclosing this element
    */
 
-  public static boolean isValid(
-    final String text)
-  {
-    return VALID_NAME.matcher(
-      Objects.requireNonNull(text, "Text")).matches();
-  }
+  SBlockContentType<SCompiledLocalType> parent();
 }
