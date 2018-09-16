@@ -68,6 +68,10 @@ interface SSectionWithSubsectionContentType<T> extends SSectionType<T>
   @Value.Parameter
   String title();
 
+  @Override
+  @Value.Parameter
+  boolean tableOfContents();
+
   /**
    * @return The nested subsection content
    */

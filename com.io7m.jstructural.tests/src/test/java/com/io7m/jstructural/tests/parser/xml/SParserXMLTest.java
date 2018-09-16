@@ -16,6 +16,7 @@
 
 package com.io7m.jstructural.tests.parser.xml;
 
+import com.io7m.jstructural.ast.SBlockID;
 import com.io7m.jstructural.ast.SContentType;
 import com.io7m.jstructural.ast.SFootnoteReference;
 import com.io7m.jstructural.ast.SFormalItemReference;
@@ -26,6 +27,8 @@ import com.io7m.jstructural.ast.SLinkExternal;
 import com.io7m.jstructural.ast.SListOrdered;
 import com.io7m.jstructural.ast.SListUnordered;
 import com.io7m.jstructural.ast.SParsed;
+import com.io7m.jstructural.ast.SSectionType;
+import com.io7m.jstructural.ast.SSectionWithSections;
 import com.io7m.jstructural.ast.STable;
 import com.io7m.jstructural.ast.STerm;
 import com.io7m.jstructural.ast.SText;
@@ -679,5 +682,50 @@ public final class SParserXMLTest
     final SPIParserType p = createParser(fs, "table_invalid0.xml");
     final Validation<Seq<SParseError>, SContentType<SParsed>> r = p.parse();
     Assertions.assertTrue(r.isInvalid());
+  }
+
+  @Test
+  public void testSection0(
+    final FileSystem fs)
+    throws Exception
+  {
+    final SPIParserType p = createParser(fs, "section0.xml");
+    final Validation<Seq<SParseError>, SContentType<SParsed>> r = p.parse();
+
+    final SSectionWithSections<SParsed> c = assertTypeOf(assertValid(r), SSectionWithSections.class);
+    Assertions.assertEquals(STypeName.of(PARSED, "t"), c.type().get());
+    Assertions.assertEquals(SBlockID.of(PARSED, "i"), c.id().get());
+    Assertions.assertTrue(c.tableOfContents());
+    Assertions.assertEquals("T", c.title());
+  }
+
+  @Test
+  public void testSection1(
+    final FileSystem fs)
+    throws Exception
+  {
+    final SPIParserType p = createParser(fs, "section1.xml");
+    final Validation<Seq<SParseError>, SContentType<SParsed>> r = p.parse();
+
+    final SSectionWithSections<SParsed> c = assertTypeOf(assertValid(r), SSectionWithSections.class);
+    Assertions.assertEquals(Optional.empty(), c.type());
+    Assertions.assertEquals(Optional.empty(), c.id());
+    Assertions.assertTrue(c.tableOfContents());
+    Assertions.assertEquals("T", c.title());
+  }
+
+  @Test
+  public void testSection2(
+    final FileSystem fs)
+    throws Exception
+  {
+    final SPIParserType p = createParser(fs, "section2.xml");
+    final Validation<Seq<SParseError>, SContentType<SParsed>> r = p.parse();
+
+    final SSectionWithSections<SParsed> c = assertTypeOf(assertValid(r), SSectionWithSections.class);
+    Assertions.assertEquals(Optional.empty(), c.type());
+    Assertions.assertEquals(Optional.empty(), c.id());
+    Assertions.assertFalse(c.tableOfContents());
+    Assertions.assertEquals("T", c.title());
   }
 }

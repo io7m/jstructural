@@ -332,7 +332,14 @@ final class SCompilationTask implements SCompilationTaskType
       section.id().map(block_id -> compileBlockId(local, block_id));
 
     final SSectionWithSubsectionContent<CompiledLocal> result =
-      SSectionWithSubsectionContent.of(local, type, id, section.title(), content);
+      SSectionWithSubsectionContent.of(
+        local,
+        type,
+        id,
+        section.title(),
+        section.tableOfContents(),
+        content);
+
     assignAllParents(content, result);
     return result;
   }
@@ -360,7 +367,14 @@ final class SCompilationTask implements SCompilationTaskType
       section.id().map(block_id -> compileBlockId(local, block_id));
 
     final SSectionWithSubsections<CompiledLocal> result =
-      SSectionWithSubsections.of(local, type, id, section.title(), subsections);
+      SSectionWithSubsections.of(
+        local,
+        type,
+        id,
+        section.title(),
+        section.tableOfContents(),
+        subsections);
+
     assignAllParents(subsections, result);
     return result;
   }
@@ -1024,7 +1038,14 @@ final class SCompilationTask implements SCompilationTaskType
       section.id().map(block_id -> compileBlockId(local, block_id));
 
     final SSectionWithSections<CompiledLocal> result =
-      SSectionWithSections.of(local, type, id, section.title(), sections);
+      SSectionWithSections.of(
+        local,
+        type,
+        id,
+        section.title(),
+        section.tableOfContents(),
+        sections);
+
     assignAllParents(sections, result);
     return result;
   }

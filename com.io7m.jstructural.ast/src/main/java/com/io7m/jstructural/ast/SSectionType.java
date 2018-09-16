@@ -57,6 +57,12 @@ public interface SSectionType<T> extends SBlockContentType<T>
   String title();
 
   /**
+   * @return {@code true} iff this section should get a generated table of contents
+   */
+
+  boolean tableOfContents();
+
+  /**
    * The precise kind of section.
    */
 
