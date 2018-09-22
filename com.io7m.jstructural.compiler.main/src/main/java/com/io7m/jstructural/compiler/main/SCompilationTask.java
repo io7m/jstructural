@@ -140,39 +140,34 @@ final class SCompilationTask implements SCompilationTaskType
     child_elements.forEach(child_element -> {
       switch (child_element.inlineKind()) {
         case INLINE_TEXT: {
-          final SText<CompiledLocal> element =
-            (SText<CompiledLocal>) child_element;
+          final SText<CompiledLocal> element = (SText<CompiledLocal>) child_element;
           setElementParentTo(element, parent);
           return;
         }
 
         case INLINE_TERM: {
-          final STerm<CompiledLocal> element =
-            (STerm<CompiledLocal>) child_element;
+          final STerm<CompiledLocal> element = (STerm<CompiledLocal>) child_element;
           setElementParentTo(element, parent);
           assignAllInlineParents(element.text(), parent);
           return;
         }
 
         case INLINE_IMAGE: {
-          final SImage<CompiledLocal> element =
-            (SImage<CompiledLocal>) child_element;
+          final SImage<CompiledLocal> element = (SImage<CompiledLocal>) child_element;
           setElementParentTo(element, parent);
           assignAllInlineParents(element.text(), parent);
           return;
         }
 
         case INLINE_LINK: {
-          final SLink<CompiledLocal> element =
-            (SLink<CompiledLocal>) child_element;
+          final SLink<CompiledLocal> element = (SLink<CompiledLocal>) child_element;
           setElementParentTo(element, parent);
           assignAllInlineParents(element.content(), parent);
           return;
         }
 
         case INLINE_LINK_EXTERNAL: {
-          final SLinkExternal<CompiledLocal> element =
-            (SLinkExternal<CompiledLocal>) child_element;
+          final SLinkExternal<CompiledLocal> element = (SLinkExternal<CompiledLocal>) child_element;
           setElementParentTo(element, parent);
           assignAllInlineParents(element.content(), parent);
           return;
@@ -1114,6 +1109,12 @@ final class SCompilationTask implements SCompilationTaskType
         p -> "Parent must be assigned exactly once");
 
       this.parent = Objects.requireNonNull(in_parent, "parent");
+    }
+
+    @Override
+    public SCompiledGlobalType global()
+    {
+      return this.global;
     }
 
     @Override

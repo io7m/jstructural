@@ -26,6 +26,12 @@ import com.io7m.jstructural.ast.SContentNumber;
 public interface SCompiledLocalType
 {
   /**
+   * @return The compiled context global to the document
+   */
+
+  SCompiledGlobalType global();
+
+  /**
    * @return The content number of this element
    */
 
