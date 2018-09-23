@@ -27,7 +27,6 @@ import com.io7m.jstructural.ast.SLinkExternal;
 import com.io7m.jstructural.ast.SListOrdered;
 import com.io7m.jstructural.ast.SListUnordered;
 import com.io7m.jstructural.ast.SParsed;
-import com.io7m.jstructural.ast.SSectionType;
 import com.io7m.jstructural.ast.SSectionWithSections;
 import com.io7m.jstructural.ast.STable;
 import com.io7m.jstructural.ast.STerm;

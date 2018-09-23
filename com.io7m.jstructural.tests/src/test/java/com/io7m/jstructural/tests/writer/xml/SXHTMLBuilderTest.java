@@ -17,7 +17,7 @@
 package com.io7m.jstructural.tests.writer.xml;
 
 import com.io7m.jstructural.ast.SBlockID;
-import com.io7m.jstructural.ast.SContentNumber;
+import com.io7m.jstructural.ast.SContentNumbers;
 import com.io7m.jstructural.ast.SFootnoteReference;
 import com.io7m.jstructural.ast.SFootnoteType;
 import com.io7m.jstructural.ast.SFormalItemReference;
@@ -41,10 +41,9 @@ import com.io7m.jstructural.writer.xml.SXHTMLLink;
 import com.io7m.jstructural.writer.xml.SXHTMLLinkProviderType;
 import com.io7m.junreachable.UnreachableCodeException;
 import io.vavr.collection.Vector;
-import mockit.Expectations;
-import mockit.Mocked;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -53,15 +52,12 @@ import org.w3c.dom.Text;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -72,9 +68,11 @@ public final class SXHTMLBuilderTest
   private static final Logger LOG = LoggerFactory.getLogger(SXHTMLBuilderTest.class);
 
   @Test
-  public void testText(
-    final @Mocked SCompiledLocalType local)
+  public void testText()
   {
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+
     final SXHTMLBuilder xhtml = SXHTMLBuilder.create();
     final SText<SCompiledLocalType> text = SText.of(local, "Hello.");
     final Text xt = xhtml.text(text);
@@ -84,11 +82,14 @@ public final class SXHTMLBuilderTest
   }
 
   @Test
-  public void testTerm(
-    final @Mocked SCompiledLocalType local)
+  public void testTerm()
   {
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+
     final SXHTMLBuilder xhtml =
       SXHTMLBuilder.create();
+
     final STerm<SCompiledLocalType> term =
       STerm.of(
         local,
@@ -105,11 +106,14 @@ public final class SXHTMLBuilderTest
   }
 
   @Test
-  public void testImage(
-    final @Mocked SCompiledLocalType local)
+  public void testImage()
   {
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+
     final SXHTMLBuilder xhtml =
       SXHTMLBuilder.create();
+
     final SImage<SCompiledLocalType> image =
       SImage.of(
         local,
@@ -131,11 +135,14 @@ public final class SXHTMLBuilderTest
   }
 
   @Test
-  public void testLinkExternal(
-    final @Mocked SCompiledLocalType local)
+  public void testLinkExternal()
   {
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+
     final SXHTMLBuilder xhtml =
       SXHTMLBuilder.create();
+
     final SLinkExternal<SCompiledLocalType> link =
       SLinkExternal.of(
         local,
@@ -154,23 +161,26 @@ public final class SXHTMLBuilderTest
   }
 
   @Test
-  public void testLink(
-    final @Mocked SXHTMLLinkProviderType links,
-    final @Mocked SCompiledLocalType local)
+  public void testLink()
   {
-    new Expectations()
-    {{
-      links.linkOf(SBlockID.of(local, "a"));
-      this.result = SXHTMLLink.of("index.xhtml", "a");
-    }};
+    final SXHTMLLinkProviderType links =
+      Mockito.mock(SXHTMLLinkProviderType.class);
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+
+    final SBlockID<SCompiledLocalType> id = SBlockID.of(local, "a");
+
+    Mockito.when(links.linkOf(id))
+      .thenReturn(SXHTMLLink.of("index.xhtml", "a"));
 
     final SXHTMLBuilder xhtml =
       SXHTMLBuilder.create();
+
     final SLink<SCompiledLocalType> link =
       SLink.of(
         local,
         Optional.of(STypeName.of(local, "t")),
-        SBlockID.of(local, "a"),
+        id,
         Vector.of(SText.of(local, "Hello.")));
 
     final Element xt = xhtml.link(links, link);
@@ -184,31 +194,38 @@ public final class SXHTMLBuilderTest
   }
 
   @Test
-  public void testFootnoteReference(
-    final @Mocked SXHTMLLinkProviderType links,
-    final @Mocked SFootnoteType<SCompiledLocalType> footnote,
-    final @Mocked SCompiledGlobalType global,
-    final @Mocked SCompiledLocalType local)
+  public void testFootnoteReference()
   {
-    new Expectations()
-    {{
-      global.findFootnoteForID(SBlockID.of(local, "a"));
-      this.result = footnote;
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+    final SCompiledGlobalType global =
+      Mockito.mock(SCompiledGlobalType.class);
+    final SFootnoteType<SCompiledLocalType> footnote =
+      Mockito.mock(SFootnoteType.class);
 
-      global.footnoteIndexOf(footnote);
-      this.result = BigInteger.ONE;
+    final SBlockID<SCompiledLocalType> id =
+      SBlockID.of(local, "a");
 
-      links.linkOf(SBlockID.of(local, "a"));
-      this.result = SXHTMLLink.of("index.xhtml", "a");
-    }};
+    final SXHTMLLinkProviderType links =
+      Mockito.mock(SXHTMLLinkProviderType.class);
+
+    Mockito.when(local.global())
+      .thenReturn(global);
+
+    Mockito.when(links.linkOf(id))
+      .thenReturn(SXHTMLLink.of("index.xhtml", "a"));
+
+    Mockito.when(global.findFootnoteForID(id))
+      .thenReturn(footnote);
+
+    Mockito.when(global.footnoteIndexOf(footnote))
+      .thenReturn(BigInteger.ONE);
 
     final SXHTMLBuilder xhtml =
       SXHTMLBuilder.create();
+
     final SFootnoteReference<SCompiledLocalType> ref =
-      SFootnoteReference.of(
-        local,
-        Optional.of(STypeName.of(local, "t")),
-        SBlockID.of(local, "a"));
+      SFootnoteReference.of(local, Optional.of(STypeName.of(local, "t")), id);
 
     final Element xt = xhtml.footnoteReference(links, ref);
     LOG.debug("xhtml: {}", xt);
@@ -230,26 +247,39 @@ public final class SXHTMLBuilderTest
   }
 
   @Test
-  public void testFormalItemReference(
-    final @Mocked SXHTMLLinkProviderType links,
-    final @Mocked SFormalItemType<SCompiledLocalType> formal,
-    final @Mocked SCompiledGlobalType global,
-    final @Mocked SCompiledLocalType local)
+  public void testFormalItemReference()
   {
-    new Expectations()
-    {{
-      global.findFormalItemForID(SBlockID.of(local, "a"));
-      this.result = formal;
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+    final SCompiledGlobalType global =
+      Mockito.mock(SCompiledGlobalType.class);
+    final SFormalItemType<SCompiledLocalType> formal =
+      Mockito.mock(SFormalItemType.class);
 
-      formal.data().number().toHumanString();
-      this.result = "1.2.3";
+    final SBlockID<SCompiledLocalType> id =
+      SBlockID.of(local, "a");
 
-      links.linkOf(SBlockID.of(local, "a"));
-      this.result = SXHTMLLink.of("index.xhtml", "a");
-    }};
+    final SXHTMLLinkProviderType links =
+      Mockito.mock(SXHTMLLinkProviderType.class);
+
+    Mockito.when(local.global())
+      .thenReturn(global);
+
+    Mockito.when(formal.data())
+      .thenReturn(local);
+
+    Mockito.when(local.number())
+      .thenReturn(SContentNumbers.parse("1.2.3"));
+
+    Mockito.when(links.linkOf(id))
+      .thenReturn(SXHTMLLink.of("index.xhtml", "a"));
+
+    Mockito.when(global.findFormalItemForID(id))
+      .thenReturn(formal);
 
     final SXHTMLBuilder xhtml =
       SXHTMLBuilder.create();
+
     final SFormalItemReference<SCompiledLocalType> ref =
       SFormalItemReference.of(
         local,
@@ -276,11 +306,14 @@ public final class SXHTMLBuilderTest
   }
 
   @Test
-  public void testVerbatim(
-    final @Mocked SCompiledLocalType local)
+  public void testVerbatim()
   {
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+
     final SXHTMLBuilder xhtml =
       SXHTMLBuilder.create();
+
     final SVerbatim<SCompiledLocalType> verbatim =
       SVerbatim.of(
         local,
@@ -297,20 +330,33 @@ public final class SXHTMLBuilderTest
   }
 
   @Test
-  public void testListOrdered(
-    final @Mocked SXHTMLLinkProviderType links,
-    final @Mocked SCompiledLocalType local)
+  public void testListOrdered()
   {
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+    final SXHTMLLinkProviderType links =
+      Mockito.mock(SXHTMLLinkProviderType.class);
+
     final SXHTMLBuilder xhtml =
       SXHTMLBuilder.create();
+
     final SListOrdered<SCompiledLocalType> list =
       SListOrdered.of(
         local,
         Optional.of(STypeName.of(local, "t")),
         Vector.of(
-          SListItem.of(local, Vector.of(SText.of(local, "1")), Optional.of(STypeName.of(local, "x"))),
-          SListItem.of(local, Vector.of(SText.of(local, "2")), Optional.of(STypeName.of(local, "y"))),
-          SListItem.of(local, Vector.of(SText.of(local, "3")), Optional.of(STypeName.of(local, "z")))));
+          SListItem.of(
+            local,
+            Vector.of(SText.of(local, "1")),
+            Optional.of(STypeName.of(local, "x"))),
+          SListItem.of(
+            local,
+            Vector.of(SText.of(local, "2")),
+            Optional.of(STypeName.of(local, "y"))),
+          SListItem.of(
+            local,
+            Vector.of(SText.of(local, "3")),
+            Optional.of(STypeName.of(local, "z")))));
 
     final Element xt = xhtml.listOrdered(links, list);
     LOG.debug("xhtml: {}", xt);
@@ -336,20 +382,33 @@ public final class SXHTMLBuilderTest
   }
 
   @Test
-  public void testListUnordered(
-    final @Mocked SXHTMLLinkProviderType links,
-    final @Mocked SCompiledLocalType local)
+  public void testListUnordered()
   {
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+    final SXHTMLLinkProviderType links =
+      Mockito.mock(SXHTMLLinkProviderType.class);
+
     final SXHTMLBuilder xhtml =
       SXHTMLBuilder.create();
+
     final SListUnordered<SCompiledLocalType> list =
       SListUnordered.of(
         local,
         Optional.of(STypeName.of(local, "t")),
         Vector.of(
-          SListItem.of(local, Vector.of(SText.of(local, "1")), Optional.of(STypeName.of(local, "x"))),
-          SListItem.of(local, Vector.of(SText.of(local, "2")), Optional.of(STypeName.of(local, "y"))),
-          SListItem.of(local, Vector.of(SText.of(local, "3")), Optional.of(STypeName.of(local, "z")))));
+          SListItem.of(
+            local,
+            Vector.of(SText.of(local, "1")),
+            Optional.of(STypeName.of(local, "x"))),
+          SListItem.of(
+            local,
+            Vector.of(SText.of(local, "2")),
+            Optional.of(STypeName.of(local, "y"))),
+          SListItem.of(
+            local,
+            Vector.of(SText.of(local, "3")),
+            Optional.of(STypeName.of(local, "z")))));
 
     final Element xt = xhtml.listUnordered(links, list);
     LOG.debug("xhtml: {}", xt);
@@ -375,19 +434,15 @@ public final class SXHTMLBuilderTest
   }
 
   @Test
-  public void testParagraph(
-    final @Mocked SXHTMLLinkProviderType links,
-    final @Mocked SCompiledLocalType local)
+  public void testParagraph()
   {
-    new Expectations()
-    {{
-      local.number();
-      this.result = SContentNumber.of(
-        Vector.of(
-          BigInteger.valueOf(1L),
-          BigInteger.valueOf(2L),
-          BigInteger.valueOf(3L)));
-    }};
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+    final SXHTMLLinkProviderType links =
+      Mockito.mock(SXHTMLLinkProviderType.class);
+
+    Mockito.when(local.number())
+      .thenReturn(SContentNumbers.parse("1.2.3"));
 
     final SXHTMLBuilder xhtml =
       SXHTMLBuilder.create();
@@ -408,12 +463,16 @@ public final class SXHTMLBuilderTest
 
     final Element number_container = (Element) xt.getFirstChild();
     Assertions.assertEquals("3", number_container.getTextContent());
+    Assertions.assertEquals("st_paragraph_number", number_container.getAttribute("class"));
+
     final Element number_link = (Element) number_container.getFirstChild();
     Assertions.assertEquals("a", number_link.getLocalName());
     Assertions.assertEquals("st_paragraph_1_2_3", number_link.getAttribute("id"));
+    Assertions.assertEquals("#st_paragraph_1_2_3", number_link.getAttribute("href"));
 
     final Element content_container = (Element) number_container.getNextSibling();
     Assertions.assertEquals("Hello", content_container.getTextContent());
+    Assertions.assertEquals("st_paragraph_content", content_container.getAttribute("class"));
 
     dump(xt);
   }

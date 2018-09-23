@@ -450,20 +450,20 @@ public final class SXHTMLBuilder
   {
     Objects.requireNonNull(paragraph, "paragraph");
 
-    final Element container =
-      this.document.createElementNS(XHTML_NAMESPACE, "div");
+    final Element container = this.document.createElementNS(XHTML_NAMESPACE, "div");
     addClassAttribute(container, paragraph);
 
-    final Element number_container =
-      this.document.createElementNS(XHTML_NAMESPACE, "div");
+    final Element number_container = this.document.createElementNS(XHTML_NAMESPACE, "div");
+    number_container.setAttribute("class", "st_paragraph_number");
 
     final Element number_link = this.document.createElementNS(XHTML_NAMESPACE, "a");
     number_link.setTextContent(paragraph.data().number().components().last().toString());
     number_link.setAttribute("id", anchorOf(paragraph));
+    number_link.setAttribute("href", '#' + anchorOf(paragraph));
     number_container.appendChild(number_link);
 
-    final Element content_container =
-      this.document.createElementNS(XHTML_NAMESPACE, "div");
+    final Element content_container = this.document.createElementNS(XHTML_NAMESPACE, "div");
+    content_container.setAttribute("class", "st_paragraph_content");
 
     paragraph.content().forEach(
       paragraph_content -> content_container.appendChild(this.inlineAny(links, paragraph_content)));

@@ -41,8 +41,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.jmockit</groupId>
-      <artifactId>jmockit</artifactId>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
     </dependency>
     <dependency>
       <groupId>nl.jqno.equalsverifier</groupId>
@@ -72,15 +72,6 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <argLine>
-            -javaagent:${settings.localRepository}/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar
-          </argLine>
-        </configuration>
       </plugin>
     </plugins>
   </build>
