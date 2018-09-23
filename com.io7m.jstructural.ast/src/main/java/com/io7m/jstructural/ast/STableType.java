@@ -32,7 +32,7 @@ import java.util.Optional;
 @ImmutablesStyleType
 @Value.Immutable
 public
-interface STableType<T> extends SInlineAnyContentType<T>
+interface STableType<T> extends SInlineAnyContentType<T>, STypeableType<T>
 {
   @Value.Auxiliary
   @Value.Default
@@ -53,10 +53,7 @@ interface STableType<T> extends SInlineAnyContentType<T>
   @Value.Parameter
   T data();
 
-  /**
-   * @return The type
-   */
-
+  @Override
   @Value.Parameter
   Optional<STypeNameType<T>> type();
 

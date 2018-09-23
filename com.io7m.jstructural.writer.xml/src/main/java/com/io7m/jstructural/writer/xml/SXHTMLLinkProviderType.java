@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Mark Raynsford <code@io7m.com> http://io7m.com
+ * Copyright © 2018 Mark Raynsford <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,38 +14,24 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural.ast;
+package com.io7m.jstructural.writer.xml;
+
+import com.io7m.jstructural.ast.SBlockIDType;
+import com.io7m.jstructural.compiler.api.SCompiledLocalType;
 
 /**
- * The type of content.
- *
- * @param <T> The type of data associated with the AST
+ * A provider of links for elements.
  */
 
-public interface SContentType<T> extends SModelType<T>
+public interface SXHTMLLinkProviderType
 {
   /**
-   * @return The precise kind of content
+   * Construct a link that can be used to address the given element.
+   *
+   * @param id The ID
+   *
+   * @return A link
    */
 
-  ContentKind contentKind();
-
-  /**
-   * The precise kind of content.
-   */
-
-  enum ContentKind
-  {
-    /**
-     * @see SInlineAnyContentType
-     */
-
-    CONTENT_INLINE_ANY,
-
-    /**
-     * @see SBlockContentType
-     */
-
-    CONTENT_BLOCK
-  }
+  SXHTMLLink linkOf(SBlockIDType<SCompiledLocalType> id);
 }

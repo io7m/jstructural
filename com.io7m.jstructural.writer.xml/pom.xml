@@ -13,32 +13,24 @@
   </parent>
 
   <packaging>jar</packaging>
-  <artifactId>com.io7m.jstructural.compiler.main</artifactId>
+  <artifactId>com.io7m.jstructural.writer.xml</artifactId>
 
-  <name>com.io7m.jstructural.compiler.main</name>
-  <description>Structural documentation language (Compiler main implementation)</description>
+  <name>com.io7m.jstructural.writer.xml</name>
+  <description>Structural documentation language (XML Writer)</description>
   <url>http://github.com/io7m/jstructural</url>
 
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>com.io7m.jstructural.compiler.api</artifactId>
+      <artifactId>com.io7m.jstructural.ast</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>com.io7m.jstructural.ast</artifactId>
+      <artifactId>com.io7m.jstructural.compiler.api</artifactId>
       <version>${project.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>com.io7m.jaffirm</groupId>
-      <artifactId>com.io7m.jaffirm.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.jlexing</groupId>
-      <artifactId>com.io7m.jlexing.core</artifactId>
-    </dependency>
     <dependency>
       <groupId>com.io7m.junreachable</groupId>
       <artifactId>com.io7m.junreachable.core</artifactId>
@@ -47,11 +39,17 @@
       <groupId>io.vavr</groupId>
       <artifactId>vavr</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
 
+    <dependency>
+      <groupId>com.io7m.immutables.style</groupId>
+      <artifactId>com.io7m.immutables.style</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.immutables</groupId>
+      <artifactId>value</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.annotation.bundle</artifactId>
@@ -68,5 +66,6 @@
       </plugin>
     </plugins>
   </build>
+
 
 </project>

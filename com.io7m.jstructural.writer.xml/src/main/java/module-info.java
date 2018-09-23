@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Mark Raynsford <code@io7m.com> http://io7m.com
+ * Copyright © 2018 Mark Raynsford <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,38 +14,23 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural.ast;
-
 /**
- * The type of content.
- *
- * @param <T> The type of data associated with the AST
+ * Structural documentation language (Compiler API)
  */
 
-public interface SContentType<T> extends SModelType<T>
+module com.io7m.jstructural.writer.xml
 {
-  /**
-   * @return The precise kind of content
-   */
+  requires static org.immutables.value;
+  requires static org.osgi.annotation.bundle;
+  requires static com.io7m.immutables.style;
 
-  ContentKind contentKind();
+  requires java.xml;
 
-  /**
-   * The precise kind of content.
-   */
+  requires com.io7m.jstructural.compiler.api;
+  requires com.io7m.jstructural.ast;
+  requires com.io7m.jlexing.core;
+  requires com.io7m.junreachable.core;
+  requires io.vavr;
 
-  enum ContentKind
-  {
-    /**
-     * @see SInlineAnyContentType
-     */
-
-    CONTENT_INLINE_ANY,
-
-    /**
-     * @see SBlockContentType
-     */
-
-    CONTENT_BLOCK
-  }
+  exports com.io7m.jstructural.writer.xml;
 }

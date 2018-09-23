@@ -16,6 +16,7 @@
 
 package com.io7m.jstructural.parser.xml.v6;
 
+import com.io7m.jstructural.ast.SBlockID;
 import com.io7m.jstructural.ast.SFormalItemReference;
 import com.io7m.jstructural.ast.SInlineAnyContentType;
 import com.io7m.jstructural.ast.SParsed;
@@ -53,7 +54,7 @@ final class S6FormalItemRefHandler extends S6ElementHandler
           .build());
     }
 
-    this.formal_builder.setTarget(am.get("target"));
+    this.formal_builder.setTarget(SBlockID.of(PARSED, am.get("target")));
   }
 
   @Override

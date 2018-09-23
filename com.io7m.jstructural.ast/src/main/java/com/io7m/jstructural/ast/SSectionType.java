@@ -39,12 +39,6 @@ public interface SSectionType<T> extends SBlockContentType<T>
   }
 
   /**
-   * @return The type
-   */
-
-  Optional<STypeNameType<T>> type();
-
-  /**
    * @return The unique identifier
    */
 

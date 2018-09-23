@@ -35,7 +35,7 @@ import java.util.Optional;
 @VavrEncodingEnabled
 @Value.Immutable
 public
-interface SListOrderedType<T> extends SInlineTableContentType<T>
+interface SListOrderedType<T> extends SInlineTableContentType<T>, STypeableType<T>
 {
   @Value.Auxiliary
   @Value.Default
@@ -62,10 +62,7 @@ interface SListOrderedType<T> extends SInlineTableContentType<T>
   @Value.Parameter
   T data();
 
-  /**
-   * @return The type
-   */
-
+  @Override
   @Value.Parameter
   Optional<STypeNameType<T>> type();
 

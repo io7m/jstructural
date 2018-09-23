@@ -359,7 +359,7 @@ public final class SParserXMLTest
     final SFootnoteReference<SParsed> c =
       assertTypeOf(assertValid(r), SFootnoteReference.class);
     Assertions.assertFalse(c.type().isPresent());
-    Assertions.assertEquals("abc", c.target());
+    Assertions.assertEquals("abc", c.target().value());
   }
 
   @Test
@@ -373,7 +373,7 @@ public final class SParserXMLTest
     final SFootnoteReference<SParsed> c =
       assertTypeOf(assertValid(r), SFootnoteReference.class);
     Assertions.assertEquals(Optional.of(STypeName.of(PARSED, "xyz")), c.type());
-    Assertions.assertEquals("abc", c.target());
+    Assertions.assertEquals("abc", c.target().value());
   }
 
   @Test
@@ -397,7 +397,7 @@ public final class SParserXMLTest
     final SFormalItemReference<SParsed> c =
       assertTypeOf(assertValid(r), SFormalItemReference.class);
     Assertions.assertFalse(c.type().isPresent());
-    Assertions.assertEquals("abc", c.target());
+    Assertions.assertEquals("abc", c.target().value());
   }
 
   @Test
@@ -411,7 +411,7 @@ public final class SParserXMLTest
     final SFormalItemReference<SParsed> c =
       assertTypeOf(assertValid(r), SFormalItemReference.class);
     Assertions.assertEquals(Optional.of(STypeName.of(PARSED, "xyz")), c.type());
-    Assertions.assertEquals("abc", c.target());
+    Assertions.assertEquals("abc", c.target().value());
   }
 
   @Test
@@ -436,7 +436,7 @@ public final class SParserXMLTest
 
     final SLink<SParsed> c = assertTypeOf(assertValid(r), SLink.class);
     Assertions.assertFalse(c.type().isPresent());
-    Assertions.assertEquals("abc", c.target());
+    Assertions.assertEquals("abc", c.target().value());
   }
 
   @Test
@@ -449,7 +449,7 @@ public final class SParserXMLTest
 
     final SLink<SParsed> c = assertTypeOf(assertValid(r), SLink.class);
     Assertions.assertEquals(Optional.of(STypeName.of(PARSED, "xyz")), c.type());
-    Assertions.assertEquals("abc", c.target());
+    Assertions.assertEquals("abc", c.target().value());
   }
 
   @Test
@@ -462,7 +462,7 @@ public final class SParserXMLTest
 
     final SLink<SParsed> c = assertTypeOf(assertValid(r), SLink.class);
     Assertions.assertEquals(Optional.of(STypeName.of(PARSED, "xyz")), c.type());
-    Assertions.assertEquals("abc", c.target());
+    Assertions.assertEquals("abc", c.target().value());
     Assertions.assertEquals(3, c.content().size());
 
     final SText<SParsed> cc0 = assertTypeOf(c.content().get(0), SText.class);

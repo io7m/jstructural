@@ -17,6 +17,7 @@
 package com.io7m.jstructural.parser.xml.v6;
 
 import com.io7m.jaffirm.core.Preconditions;
+import com.io7m.jstructural.ast.SBlockID;
 import com.io7m.jstructural.ast.SInlineAnyContentType;
 import com.io7m.jstructural.ast.SInlineLinkContentType;
 import com.io7m.jstructural.ast.SLink;
@@ -55,7 +56,7 @@ final class S6LinkHandler extends S6ElementHandler
           .build());
     }
 
-    this.link_builder.setTarget(am.get("target"));
+    this.link_builder.setTarget(SBlockID.of(PARSED, am.get("target")));
   }
 
   @Override

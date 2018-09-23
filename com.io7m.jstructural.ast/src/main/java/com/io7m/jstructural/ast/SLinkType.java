@@ -35,7 +35,7 @@ import java.util.Optional;
 @VavrEncodingEnabled
 @Value.Immutable
 public
-interface SLinkType<T> extends SInlineTableContentType<T>
+interface SLinkType<T> extends SInlineTableContentType<T>, STypeableType<T>
 {
   @Value.Auxiliary
   @Value.Default
@@ -62,10 +62,7 @@ interface SLinkType<T> extends SInlineTableContentType<T>
   @Value.Parameter
   T data();
 
-  /**
-   * @return The type
-   */
-
+  @Override
   @Value.Parameter
   Optional<STypeNameType<T>> type();
 
@@ -74,7 +71,7 @@ interface SLinkType<T> extends SInlineTableContentType<T>
    */
 
   @Value.Parameter
-  String target();
+  SBlockID<T> target();
 
   /**
    * @return The link content

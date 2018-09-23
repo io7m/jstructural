@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Mark Raynsford <code@io7m.com> http://io7m.com
+ * Copyright © 2018 Mark Raynsford <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,50 +14,43 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural.ast;
+package com.io7m.jstructural.writer.xml;
 
 import com.io7m.immutables.styles.ImmutablesStyleType;
-import com.io7m.jlexing.core.LexicalPosition;
-import io.vavr.collection.Vector;
 import org.immutables.value.Value;
-import org.immutables.vavr.encodings.VavrEncodingEnabled;
-
-import java.net.URI;
-import java.util.Optional;
 
 /**
- * The type of table headers.
- *
- * @param <T> The type of data associated with the AST
+ * A link to an element in an XHTML file.
  */
 
-@ImmutablesStyleType
-@VavrEncodingEnabled
 @Value.Immutable
-public
-interface STableHeaderType<T> extends STypeableType<T>
+@ImmutablesStyleType
+public interface SXHTMLLinkType
 {
-  @Value.Auxiliary
-  @Value.Default
-  @Override
-  default LexicalPosition<URI> lexical()
-  {
-    return SLexicalDefaults.DEFAULT_POSITION;
-  }
-
-  @Override
-  @Value.Auxiliary
-  @Value.Parameter
-  T data();
-
-  @Override
-  @Value.Parameter
-  Optional<STypeNameType<T>> type();
-
   /**
-   * @return The column names
+   * @return The file
    */
 
   @Value.Parameter
-  Vector<STableColumnNameType<T>> names();
+  String file();
+
+  /**
+   * @return The anchor
+   */
+
+  @Value.Parameter
+  String anchor();
+
+  /**
+   * @return The formatted link
+   */
+
+  default String formatted()
+  {
+    return new StringBuilder(32)
+      .append(this.file())
+      .append('#')
+      .append(this.anchor())
+      .toString();
+  }
 }

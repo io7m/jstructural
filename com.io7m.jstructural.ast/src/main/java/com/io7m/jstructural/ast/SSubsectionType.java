@@ -34,7 +34,7 @@ import java.util.Optional;
 @ImmutablesStyleType
 @VavrEncodingEnabled
 @Value.Immutable
-public interface SSubsectionType<T> extends SBlockContentType<T>
+public interface SSubsectionType<T> extends SBlockContentType<T>, STypeableType<T>
 {
   @Override
   default BlockKind blockKind()
@@ -55,10 +55,7 @@ public interface SSubsectionType<T> extends SBlockContentType<T>
   @Value.Parameter
   T data();
 
-  /**
-   * @return The type
-   */
-
+  @Override
   @Value.Parameter
   Optional<STypeNameType<T>> type();
 

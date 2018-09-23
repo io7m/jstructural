@@ -23,6 +23,7 @@ import org.immutables.value.Value;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
 import java.net.URI;
+import java.util.Optional;
 
 /**
  * The type of list items.
@@ -34,7 +35,7 @@ import java.net.URI;
 @VavrEncodingEnabled
 @Value.Immutable
 public
-interface SListItemType<T> extends SModelType<T>
+interface SListItemType<T> extends SModelType<T>, STypeableType<T>
 {
   @Value.Auxiliary
   @Value.Default
@@ -55,4 +56,12 @@ interface SListItemType<T> extends SModelType<T>
 
   @Value.Parameter
   Vector<SInlineAnyContentType<T>> content();
+
+  /**
+   * @return The type
+   */
+
+  @Override
+  @Value.Parameter
+  Optional<STypeNameType<T>> type();
 }

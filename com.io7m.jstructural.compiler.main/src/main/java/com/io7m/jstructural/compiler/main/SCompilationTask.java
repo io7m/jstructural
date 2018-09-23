@@ -25,8 +25,10 @@ import com.io7m.jstructural.ast.SContentNumber;
 import com.io7m.jstructural.ast.SDocument;
 import com.io7m.jstructural.ast.SFootnote;
 import com.io7m.jstructural.ast.SFootnoteReference;
+import com.io7m.jstructural.ast.SFootnoteType;
 import com.io7m.jstructural.ast.SFormalItem;
 import com.io7m.jstructural.ast.SFormalItemReference;
+import com.io7m.jstructural.ast.SFormalItemType;
 import com.io7m.jstructural.ast.SImage;
 import com.io7m.jstructural.ast.SImageSize;
 import com.io7m.jstructural.ast.SImageSizeType;
@@ -41,6 +43,7 @@ import com.io7m.jstructural.ast.SListOrdered;
 import com.io7m.jstructural.ast.SListUnordered;
 import com.io7m.jstructural.ast.SModelType;
 import com.io7m.jstructural.ast.SParagraph;
+import com.io7m.jstructural.ast.SParagraphType;
 import com.io7m.jstructural.ast.SParsed;
 import com.io7m.jstructural.ast.SSectionType;
 import com.io7m.jstructural.ast.SSectionWithSections;
@@ -78,7 +81,12 @@ import io.vavr.Value;
 import io.vavr.collection.Seq;
 import io.vavr.collection.Vector;
 import io.vavr.control.Validation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -88,6 +96,8 @@ import static com.io7m.jstructural.compiler.api.SCompileErrorType.Severity.ERROR
 
 final class SCompilationTask implements SCompilationTaskType
 {
+  private static final Logger LOG = LoggerFactory.getLogger(SCompilationTask.class);
+
   private final SDocument<SParsed> document;
 
   SCompilationTask(final SDocument<SParsed> in_document)
@@ -119,7 +129,10 @@ final class SCompilationTask implements SCompilationTaskType
     final CompiledLocal local,
     final Vector<SSectionType<CompiledLocal>> sections)
   {
-    final SDocument<CompiledLocal> result = SDocument.of(local, sections, document.title());
+    final Optional<STypeNameType<CompiledLocal>> type =
+      document.type().map(name -> compileTypeName(local, name));
+
+    final SDocument<CompiledLocal> result = SDocument.of(local, type, sections, document.title());
     setElementParentTo(result, result);
     assignAllParents(sections, result);
     return result;
@@ -336,6 +349,7 @@ final class SCompilationTask implements SCompilationTaskType
         content);
 
     assignAllParents(content, result);
+    local.global.registerBlock(result);
     return result;
   }
 
@@ -371,6 +385,7 @@ final class SCompilationTask implements SCompilationTaskType
         subsections);
 
     assignAllParents(subsections, result);
+    local.global.registerBlock(result);
     return result;
   }
 
@@ -413,6 +428,8 @@ final class SCompilationTask implements SCompilationTaskType
     final SSubsection<CompiledLocal> result =
       SSubsection.of(local, type, id, subsection.title(), content);
     assignAllParents(content, result);
+
+    local.global.registerBlock(result);
     return result;
   }
 
@@ -467,6 +484,8 @@ final class SCompilationTask implements SCompilationTaskType
     final SFormalItem<CompiledLocal> result =
       SFormalItem.of(local, type, id, formal_item.title(), content);
     assignAllInlineParents(content, result);
+
+    local.global.registerBlock(result);
     return result;
   }
 
@@ -493,6 +512,9 @@ final class SCompilationTask implements SCompilationTaskType
 
     final SFootnote<CompiledLocal> result = SFootnote.of(local, type, id, content);
     assignAllInlineParents(content, result);
+
+    local.global.registerBlock(result);
+    local.global.addFootnote(result);
     return result;
   }
 
@@ -880,9 +902,12 @@ final class SCompilationTask implements SCompilationTaskType
   {
     final CompiledLocal local = createNewLocal(global);
 
+    final Optional<STypeNameType<CompiledLocal>> type =
+      item.type().map(name -> compileTypeName(local, name));
+
     return Validation.sequence(item.content().map(content -> compileInlineAny(global, content)))
       .map(Value::toVector)
-      .map(items -> SListItem.of(local, items));
+      .map(items -> SListItem.of(local, items, type));
   }
 
   private static Validation<Seq<SCompileError>, STerm<CompiledLocal>>
@@ -940,7 +965,8 @@ final class SCompilationTask implements SCompilationTaskType
     final Optional<STypeNameType<CompiledLocal>> type =
       reference.type().map(name -> compileTypeName(local, name));
 
-    return Validation.valid(SFootnoteReference.of(local, type, reference.target()));
+    return Validation.valid(SFootnoteReference.of(
+      local, type, compileBlockId(local, reference.target())));
   }
 
   private static Validation<Seq<SCompileError>, SFormalItemReference<CompiledLocal>>
@@ -951,7 +977,8 @@ final class SCompilationTask implements SCompilationTaskType
     final Optional<STypeNameType<CompiledLocal>> type =
       reference.type().map(name -> compileTypeName(local, name));
 
-    return Validation.valid(SFormalItemReference.of(local, type, reference.target()));
+    return Validation.valid(SFormalItemReference.of(
+      local, type, compileBlockId(local, reference.target())));
   }
 
   private static Validation<Seq<SCompileError>, SLink<CompiledLocal>>
@@ -965,7 +992,7 @@ final class SCompilationTask implements SCompilationTaskType
 
     return Validation.sequence(link.content().map(content -> compileLinkContent(global, content)))
       .map(Value::toVector)
-      .map(contents -> SLink.of(local, type, link.target(), contents));
+      .map(contents -> SLink.of(local, type, compileBlockId(local, link.target()), contents));
   }
 
   private static Validation<Seq<SCompileError>, SLinkExternal<CompiledLocal>>
@@ -1008,6 +1035,8 @@ final class SCompilationTask implements SCompilationTaskType
 
     final SParagraph<CompiledLocal> result = SParagraph.of(local, type, id, content);
     assignAllInlineParents(content, result);
+
+    local.global.registerBlock(result);
     return result;
   }
 
@@ -1042,10 +1071,11 @@ final class SCompilationTask implements SCompilationTaskType
         sections);
 
     assignAllParents(sections, result);
+    local.global.registerBlock(result);
     return result;
   }
 
-  private static SBlockIDType<CompiledLocal> compileBlockId(
+  private static SBlockID<CompiledLocal> compileBlockId(
     final CompiledLocal local,
     final SBlockIDType<SParsed> id)
   {
@@ -1079,10 +1109,138 @@ final class SCompilationTask implements SCompilationTaskType
   private static final class CompiledGlobal implements SCompiledGlobalType
   {
     private final SContentNumbering numbering;
+    private final Map<String, SBlockContentType<CompiledLocal>> blocks;
+    private final Map<SFootnoteType<CompiledLocal>, BigInteger> footnotes;
+    private BigInteger footnote_next;
 
     CompiledGlobal()
     {
       this.numbering = SContentNumbering.create();
+      this.blocks = new HashMap<>(128);
+      this.footnotes = new HashMap<>(128);
+      this.footnote_next = BigInteger.ZERO;
+    }
+
+    private static Optional<SBlockIDType<CompiledLocal>> blockIdFor(
+      final SBlockContentType<CompiledLocal> block)
+    {
+      switch (block.blockKind()) {
+        case BLOCK_SUBSECTION_CONTENT: {
+          return blockIdForSubsectionContent((SSubsectionContentType<CompiledLocal>) block);
+        }
+        case BLOCK_SUBSECTION: {
+          return ((SSubsectionType<CompiledLocal>) block).id();
+        }
+        case BLOCK_SECTION: {
+          return ((SSectionType<CompiledLocal>) block).id();
+        }
+        case BLOCK_DOCUMENT: {
+          return Optional.empty();
+        }
+      }
+
+      throw new UnreachableCodeException();
+    }
+
+    private static Optional<SBlockIDType<CompiledLocal>> blockIdForSubsectionContent(
+      final SSubsectionContentType<CompiledLocal> block)
+    {
+      switch (block.subsectionContentKind()) {
+        case SUBSECTION_PARAGRAPH:
+          return ((SParagraphType<CompiledLocal>) block).id();
+        case SUBSECTION_FORMAL_ITEM:
+          return ((SFormalItemType<CompiledLocal>) block).id();
+        case SUBSECTION_FOOTNOTE:
+          return Optional.of(((SFootnoteType<CompiledLocal>) block).id());
+      }
+
+      throw new UnreachableCodeException();
+    }
+
+    void registerBlock(
+      final SBlockContentType<CompiledLocal> block)
+    {
+      Objects.requireNonNull(block, "block");
+
+      final Optional<SBlockIDType<CompiledLocal>> block_id = blockIdFor(block);
+
+      block_id.ifPresent(id -> {
+        Preconditions.checkPrecondition(
+          id,
+          !this.blocks.containsKey(id),
+          iid -> new StringBuilder(32)
+            .append("Block ID ")
+            .append(iid.value())
+            .append(" cannot already have been registered")
+            .toString());
+
+        if (LOG.isTraceEnabled()) {
+          LOG.trace(
+            "register {} -> {} @ {}:{}:{}",
+            id.value(),
+            block.getClass().getCanonicalName(),
+            block.lexical().file(),
+            Integer.valueOf(block.lexical().line()),
+            Integer.valueOf(block.lexical().column()));
+        }
+
+        this.blocks.put(id.value(), block);
+      });
+    }
+
+    @Override
+    public BigInteger footnoteIndexOf(
+      final SFootnoteType<SCompiledLocalType> footnote)
+    {
+      Objects.requireNonNull(footnote, "footnote");
+
+      final BigInteger index = this.footnotes.get(footnote);
+      if (index == null) {
+        throw new IllegalArgumentException(
+          new StringBuilder(32)
+            .append("No such footnote: ")
+            .append(footnote.id().value())
+            .toString());
+      }
+      return index;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public SBlockContentType<SCompiledLocalType> findBlockFor(
+      final String block_id)
+    {
+      Objects.requireNonNull(block_id, "block_id");
+
+      final SBlockContentType<CompiledLocal> value = this.blocks.get(block_id);
+      if (value == null) {
+        throw new IllegalArgumentException(
+          new StringBuilder(32)
+            .append("No such block: ")
+            .append(block_id)
+            .toString());
+      }
+
+      return (SBlockContentType<SCompiledLocalType>) (Object) value;
+    }
+
+    void addFootnote(
+      final SFootnote<CompiledLocal> footnote)
+    {
+      Objects.requireNonNull(footnote, "footnote");
+
+      if (LOG.isTraceEnabled()) {
+        LOG.trace(
+          "footnote {} -> {} @ {}:{}:{}",
+          this.footnote_next,
+          footnote.getClass().getCanonicalName(),
+          footnote.lexical().file(),
+          Integer.valueOf(footnote.lexical().line()),
+          Integer.valueOf(footnote.lexical().column()));
+      }
+
+      this.footnotes.put(footnote, this.footnote_next);
+      this.footnote_next = this.footnote_next.add(BigInteger.ONE);
     }
   }
 

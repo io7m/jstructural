@@ -32,7 +32,7 @@ import java.util.Optional;
 @ImmutablesStyleType
 @Value.Immutable
 public
-interface SFormalItemReferenceType<T> extends SInlineTableContentType<T>
+interface SFormalItemReferenceType<T> extends SInlineTableContentType<T>, STypeableType<T>
 {
   @Value.Auxiliary
   @Value.Default
@@ -59,17 +59,14 @@ interface SFormalItemReferenceType<T> extends SInlineTableContentType<T>
   @Value.Parameter
   T data();
 
-  /**
-   * @return The type
-   */
-
+  @Override
   @Value.Parameter
   Optional<STypeNameType<T>> type();
 
   /**
-   * @return The target footnote
+   * @return The target formal item
    */
 
   @Value.Parameter
-  String target();
+  SBlockIDType<T> target();
 }

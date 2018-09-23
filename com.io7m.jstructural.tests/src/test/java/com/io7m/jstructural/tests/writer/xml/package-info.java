@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Mark Raynsford <code@io7m.com> http://io7m.com
+ * Copyright © 2018 Mark Raynsford <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,38 +14,8 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jstructural.ast;
-
 /**
- * The type of content.
- *
- * @param <T> The type of data associated with the AST
+ * XML writer test suite.
  */
 
-public interface SContentType<T> extends SModelType<T>
-{
-  /**
-   * @return The precise kind of content
-   */
-
-  ContentKind contentKind();
-
-  /**
-   * The precise kind of content.
-   */
-
-  enum ContentKind
-  {
-    /**
-     * @see SInlineAnyContentType
-     */
-
-    CONTENT_INLINE_ANY,
-
-    /**
-     * @see SBlockContentType
-     */
-
-    CONTENT_BLOCK
-  }
-}
+package com.io7m.jstructural.tests.writer.xml;

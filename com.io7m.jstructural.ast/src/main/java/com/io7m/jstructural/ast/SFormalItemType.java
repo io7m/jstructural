@@ -34,7 +34,7 @@ import java.util.Optional;
 @ImmutablesStyleType
 @VavrEncodingEnabled
 @Value.Immutable
-public interface SFormalItemType<T> extends SSubsectionContentType<T>
+public interface SFormalItemType<T> extends SSubsectionContentType<T>, STypeableType<T>
 {
   @Value.Auxiliary
   @Value.Default
@@ -55,10 +55,7 @@ public interface SFormalItemType<T> extends SSubsectionContentType<T>
   @Value.Parameter
   T data();
 
-  /**
-   * @return The type
-   */
-
+  @Override
   @Value.Parameter
   Optional<STypeNameType<T>> type();
 

@@ -17,13 +17,16 @@
 package com.io7m.jstructural.tests.compiler.api;
 
 import com.io7m.jstructural.ast.SBlockContentType;
+import com.io7m.jstructural.ast.SBlockID;
 import com.io7m.jstructural.ast.SContentNumbers;
 import com.io7m.jstructural.ast.SContentType;
 import com.io7m.jstructural.ast.SDocument;
 import com.io7m.jstructural.ast.SFootnote;
 import com.io7m.jstructural.ast.SFootnoteReference;
+import com.io7m.jstructural.ast.SFootnoteType;
 import com.io7m.jstructural.ast.SFormalItem;
 import com.io7m.jstructural.ast.SFormalItemReference;
+import com.io7m.jstructural.ast.SFormalItemType;
 import com.io7m.jstructural.ast.SImage;
 import com.io7m.jstructural.ast.SLink;
 import com.io7m.jstructural.ast.SLinkExternal;
@@ -31,6 +34,7 @@ import com.io7m.jstructural.ast.SListOrdered;
 import com.io7m.jstructural.ast.SListUnordered;
 import com.io7m.jstructural.ast.SModelType;
 import com.io7m.jstructural.ast.SParagraph;
+import com.io7m.jstructural.ast.SParagraphType;
 import com.io7m.jstructural.ast.SParsed;
 import com.io7m.jstructural.ast.SSectionType;
 import com.io7m.jstructural.ast.SSectionWithSections;
@@ -44,6 +48,7 @@ import com.io7m.jstructural.ast.STextType;
 import com.io7m.jstructural.ast.SVerbatim;
 import com.io7m.jstructural.compiler.api.SCompilationTaskType;
 import com.io7m.jstructural.compiler.api.SCompileError;
+import com.io7m.jstructural.compiler.api.SCompiledGlobalType;
 import com.io7m.jstructural.compiler.api.SCompiledLocalType;
 import com.io7m.jstructural.compiler.api.SCompilerType;
 import com.io7m.jstructural.parser.spi.SPIParserRequest;
@@ -53,6 +58,7 @@ import com.io7m.jstructural.parser.xml.SXMLParserProvider;
 import com.io7m.jstructural.tests.TestMemoryFilesystemExtension;
 import com.io7m.jstructural.tests.parser.xml.SParserXMLTest;
 import io.vavr.collection.Seq;
+import io.vavr.collection.Vector;
 import io.vavr.control.Validation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -64,10 +70,12 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.util.Optional;
 
 @ExtendWith(TestMemoryFilesystemExtension.class)
 public abstract class SCompilerContract
@@ -821,6 +829,105 @@ public abstract class SCompilerContract
     Assertions.assertTrue(
       results.getError()
         .forAll(error -> error.message().contains("Number of columns in table row")));
+  }
+
+  @Test
+  public void testDocumentBlocks0(
+    final FileSystem fs)
+    throws Exception
+  {
+    final SCompilerType compiler = this.compiler();
+    final SDocument<SParsed> document_parsed = document(fs, "document-blocks-0.xml");
+    final SCompilationTaskType task = compiler.createTask(document_parsed);
+    final Validation<Seq<SCompileError>, SDocument<SCompiledLocalType>> results = task.run();
+    final SDocument<SCompiledLocalType> document_compiled = checkResults(results);
+
+    final SCompiledGlobalType global = document_compiled.data().global();
+
+    final SBlockContentType<SCompiledLocalType> s1 = global.findBlockFor("s1");
+    Assertions.assertTrue(s1 instanceof SSectionType);
+    Assertions.assertEquals(s1, global.findSectionFor("s1"));
+
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findFootnoteFor("s1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findFormalItemFor("s1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findParagraphFor("s1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findSubsectionFor("s1"));
+
+    final SBlockContentType<SCompiledLocalType> ss1 = global.findBlockFor("ss1");
+    Assertions.assertTrue(ss1 instanceof SSubsectionType);
+    Assertions.assertEquals(ss1, global.findSubsectionFor("ss1"));
+
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findFootnoteFor("ss1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findFormalItemFor("ss1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findParagraphFor("ss1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findSectionFor("ss1"));
+
+    final SBlockContentType<SCompiledLocalType> p1 = global.findBlockFor("p1");
+    Assertions.assertTrue(p1 instanceof SParagraphType);
+    Assertions.assertEquals(p1, global.findParagraphFor("p1"));
+
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findFootnoteFor("p1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findFormalItemFor("p1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findSectionFor("p1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findSubsectionFor("p1"));
+
+    final SBlockContentType<SCompiledLocalType> fi1 = global.findBlockFor("fi1");
+    Assertions.assertTrue(fi1 instanceof SFormalItemType);
+    Assertions.assertEquals(fi1, global.findFormalItemFor("fi1"));
+
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findFootnoteFor("fi1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findParagraphFor("fi1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findSectionFor("fi1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findSubsectionFor("fi1"));
+
+    final SBlockContentType<SCompiledLocalType> fn1 = global.findBlockFor("fn1");
+    Assertions.assertTrue(fn1 instanceof SFootnoteType);
+    Assertions.assertEquals(fn1, global.findFootnoteFor("fn1"));
+
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findFormalItemFor("fn1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findParagraphFor("fn1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findSectionFor("fn1"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findSubsectionFor("fn1"));
+
+    Assertions.assertThrows(
+      IllegalArgumentException.class, () -> global.findBlockFor("unknown"));
+    Assertions.assertThrows(
+      IllegalArgumentException.class,
+      () -> global.findBlockForID(SBlockID.of(new Object(), "unknown")));
+
+    Assertions.assertEquals(
+      BigInteger.ZERO,
+      global.footnoteIndexOf(global.findFootnoteFor("fn1")));
+
+    Assertions.assertThrows(
+      IllegalArgumentException.class,
+      () -> global.footnoteIndexOf(SFootnote.of(
+        document_compiled.data(),
+        Optional.empty(),
+        SBlockID.of(document_compiled.data(), "nothing"),
+        Vector.empty())));
+
+    Assertions.assertEquals(document_parsed, document_compiled);
   }
 
   private static void assertContentNumberIsEqualTo(

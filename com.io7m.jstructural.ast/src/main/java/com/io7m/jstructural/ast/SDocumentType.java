@@ -23,6 +23,7 @@ import org.immutables.value.Value;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
 import java.net.URI;
+import java.util.Optional;
 
 /**
  * The type of sections that contain nested subsection content.
@@ -33,7 +34,7 @@ import java.net.URI;
 @ImmutablesStyleType
 @VavrEncodingEnabled
 @Value.Immutable
-public interface SDocumentType<T> extends SBlockContentType<T>
+public interface SDocumentType<T> extends SBlockContentType<T>, STypeableType<T>
 {
   @Override
   default BlockKind blockKind()
@@ -53,6 +54,10 @@ public interface SDocumentType<T> extends SBlockContentType<T>
   @Value.Auxiliary
   @Value.Parameter
   T data();
+
+  @Override
+  @Value.Parameter
+  Optional<STypeNameType<T>> type();
 
   /**
    * @return The document's sections

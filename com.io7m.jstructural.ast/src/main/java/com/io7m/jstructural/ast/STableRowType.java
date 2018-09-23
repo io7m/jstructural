@@ -35,7 +35,7 @@ import java.util.Optional;
 @VavrEncodingEnabled
 @Value.Immutable
 public
-interface STableRowType<T> extends SModelType<T>
+interface STableRowType<T> extends STypeableType<T>
 {
   @Value.Auxiliary
   @Value.Default
@@ -50,10 +50,7 @@ interface STableRowType<T> extends SModelType<T>
   @Value.Parameter
   T data();
 
-  /**
-   * @return The type
-   */
-
+  @Override
   @Value.Parameter
   Optional<STypeNameType<T>> type();
 

@@ -37,5 +37,4 @@ public interface SModelType<T> extends LexicalType<URI>
    */
 
   T data();
-
 }

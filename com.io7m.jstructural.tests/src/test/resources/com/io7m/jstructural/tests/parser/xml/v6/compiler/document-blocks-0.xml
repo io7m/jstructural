@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document xmlns="structural:com.io7m.structural:xml:6.0"
+          title="Title">
+  <section title="Section 1"
+           id="s1">
+    <subsection title="Subsection 1"
+                id="ss1">
+      <paragraph id="p1"/>
+      <formal-item title="Formal Item 1"
+                   id="fi1"/>
+      <footnote id="fn1"/>
+    </subsection>
+  </section>
+</document>

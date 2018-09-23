@@ -32,7 +32,7 @@ import java.util.Optional;
 @ImmutablesStyleType
 @Value.Immutable
 public
-interface STableColumnNameType<T> extends SModelType<T>
+interface STableColumnNameType<T> extends STypeableType<T>
 {
   @Value.Auxiliary
   @Value.Default
@@ -47,10 +47,7 @@ interface STableColumnNameType<T> extends SModelType<T>
   @Value.Parameter
   T data();
 
-  /**
-   * @return The type
-   */
-
+  @Override
   @Value.Parameter
   Optional<STypeNameType<T>> type();
 

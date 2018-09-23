@@ -28,6 +28,7 @@ module com.io7m.jstructural.compiler.main
   requires com.io7m.jlexing.core;
   requires io.vavr;
   requires com.io7m.jaffirm.core;
+  requires org.slf4j;
 
   exports com.io7m.jstructural.compiler.main;
 }

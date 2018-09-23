@@ -36,7 +36,7 @@ import java.util.Optional;
 @Value.Immutable
 public
 interface SImageType<T>
-  extends SInlineLinkContentType<T>, SInlineTableContentType<T>
+  extends SInlineLinkContentType<T>, SInlineTableContentType<T>, STypeableType<T>
 {
   @Value.Auxiliary
   @Value.Default
@@ -69,10 +69,7 @@ interface SImageType<T>
   @Value.Parameter
   T data();
 
-  /**
-   * @return The type
-   */
-
+  @Override
   @Value.Parameter
   Optional<STypeNameType<T>> type();
 
