@@ -465,6 +465,12 @@ public final class SXHTMLBuilder
     final Element container = this.document.createElementNS(XHTML_NAMESPACE, "div");
     addClassAttribute(container, paragraph);
 
+    final String title_text =
+      new StringBuilder(128)
+        .append("Paragraph ")
+        .append(paragraph.data().number().toHumanString())
+        .toString();
+
     final Element number_container = this.document.createElementNS(XHTML_NAMESPACE, "div");
     number_container.setAttribute("class", "st_paragraph_number");
 
@@ -472,6 +478,7 @@ public final class SXHTMLBuilder
     number_link.setTextContent(paragraph.data().number().components().last().toString());
     number_link.setAttribute("id", anchorOf(paragraph));
     number_link.setAttribute("href", '#' + anchorOf(paragraph));
+    number_link.setAttribute("title", title_text);
     number_container.appendChild(number_link);
 
     final Element content_container = this.document.createElementNS(XHTML_NAMESPACE, "p");
@@ -507,6 +514,14 @@ public final class SXHTMLBuilder
     final Element title = this.document.createElementNS(XHTML_NAMESPACE, "h4");
     container.appendChild(title);
 
+    final String title_text =
+      new StringBuilder(128)
+        .append("Formal Item ")
+        .append(formal.data().number().toHumanString())
+        .append(": ")
+        .append(formal.title())
+        .toString();
+
     final String text =
       new StringBuilder(128)
         .append(formal.data().number().toHumanString())
@@ -519,6 +534,7 @@ public final class SXHTMLBuilder
     title_link.setTextContent(text);
     title_link.setAttribute("id", anchorOf(formal));
     title_link.setAttribute("href", '#' + anchorOf(formal));
+    title_link.setAttribute("title", title_text);
     title.appendChild(title_link);
 
     final Element content_container = this.document.createElementNS(XHTML_NAMESPACE, "p");
@@ -550,6 +566,14 @@ public final class SXHTMLBuilder
     final Element container = this.document.createElementNS(XHTML_NAMESPACE, "div");
     addClassAttribute(container, subsection);
 
+    final String title_text =
+      new StringBuilder(128)
+        .append("Subsection ")
+        .append(subsection.data().number().toHumanString())
+        .append(": ")
+        .append(subsection.title())
+        .toString();
+
     final Element number_container = this.document.createElementNS(XHTML_NAMESPACE, "div");
     number_container.setAttribute("class", "st_subsection_number");
 
@@ -557,6 +581,7 @@ public final class SXHTMLBuilder
     number_link.setTextContent(subsection.data().number().toHumanString());
     number_link.setAttribute("id", anchorOf(subsection));
     number_link.setAttribute("href", '#' + anchorOf(subsection));
+    number_link.setAttribute("title", title_text);
     number_container.appendChild(number_link);
 
     final Element title_container = this.document.createElementNS(XHTML_NAMESPACE, "h3");
@@ -592,6 +617,14 @@ public final class SXHTMLBuilder
     final Element container = this.document.createElementNS(XHTML_NAMESPACE, "div");
     addClassAttribute(container, section);
 
+    final String title_text =
+      new StringBuilder(128)
+        .append("Section ")
+        .append(section.data().number().toHumanString())
+        .append(": ")
+        .append(section.title())
+        .toString();
+
     final Element number_container = this.document.createElementNS(XHTML_NAMESPACE, "div");
     number_container.setAttribute("class", "st_section_number");
 
@@ -599,6 +632,7 @@ public final class SXHTMLBuilder
     number_link.setTextContent(section.data().number().toHumanString());
     number_link.setAttribute("id", anchorOf(section));
     number_link.setAttribute("href", '#' + anchorOf(section));
+    number_link.setAttribute("title", title_text);
     number_container.appendChild(number_link);
 
     final Element title_container = this.document.createElementNS(XHTML_NAMESPACE, "h2");
