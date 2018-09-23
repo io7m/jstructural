@@ -35,7 +35,7 @@ import java.util.Optional;
 @VavrEncodingEnabled
 @Value.Immutable
 public
-interface SSectionWithSubsectionContentType<T> extends SSectionType<T>, STypeableType<T>
+interface SSectionWithSubsectionContentType<T> extends SSectionType<T>
 {
   @Value.Auxiliary
   @Value.Default

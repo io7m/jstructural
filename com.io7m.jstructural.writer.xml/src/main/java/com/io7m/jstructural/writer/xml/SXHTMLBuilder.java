@@ -29,6 +29,10 @@ import com.io7m.jstructural.ast.SListItemType;
 import com.io7m.jstructural.ast.SListOrderedType;
 import com.io7m.jstructural.ast.SListUnorderedType;
 import com.io7m.jstructural.ast.SParagraphType;
+import com.io7m.jstructural.ast.SSectionType;
+import com.io7m.jstructural.ast.SSectionWithSectionsType;
+import com.io7m.jstructural.ast.SSectionWithSubsectionContentType;
+import com.io7m.jstructural.ast.SSectionWithSubsectionsType;
 import com.io7m.jstructural.ast.SSubsectionContentType;
 import com.io7m.jstructural.ast.SSubsectionType;
 import com.io7m.jstructural.ast.STermType;
@@ -565,6 +569,72 @@ public final class SXHTMLBuilder
     subsection.content().forEach(
       subsection_content -> container.appendChild(
         this.subsectionContent(links, subsection_content)));
+
+    return container;
+  }
+
+  /**
+   * Construct an XHTML element for the given section.
+   *
+   * @param links   A link provider
+   * @param section The section
+   *
+   * @return An XHTML element
+   */
+
+  public Element section(
+    final SXHTMLLinkProviderType links,
+    final SSectionType<SCompiledLocalType> section)
+  {
+    Objects.requireNonNull(links, "links");
+    Objects.requireNonNull(section, "subsection");
+
+    final Element container = this.document.createElementNS(XHTML_NAMESPACE, "div");
+    addClassAttribute(container, section);
+
+    final Element number_container = this.document.createElementNS(XHTML_NAMESPACE, "div");
+    number_container.setAttribute("class", "st_section_number");
+
+    final Element number_link = this.document.createElementNS(XHTML_NAMESPACE, "a");
+    number_link.setTextContent(section.data().number().toHumanString());
+    number_link.setAttribute("id", anchorOf(section));
+    number_link.setAttribute("href", '#' + anchorOf(section));
+    number_container.appendChild(number_link);
+
+    final Element title_container = this.document.createElementNS(XHTML_NAMESPACE, "h2");
+    title_container.setAttribute("class", "st_section_title");
+    title_container.setTextContent(section.title());
+
+    container.appendChild(number_container);
+    container.appendChild(title_container);
+
+    if (section.tableOfContents()) {
+      throw new UnimplementedCodeException();
+    }
+
+    switch (section.sectionKind()) {
+      case SECTION_WITH_SECTIONS: {
+        final SSectionWithSectionsType<SCompiledLocalType> s =
+          (SSectionWithSectionsType<SCompiledLocalType>) section;
+
+        s.sections().forEach(child -> container.appendChild(this.section(links, child)));
+        break;
+      }
+      case SECTION_WITH_SUBSECTIONS: {
+        final SSectionWithSubsectionsType<SCompiledLocalType> s =
+          (SSectionWithSubsectionsType<SCompiledLocalType>) section;
+
+        s.subsections().forEach(child -> container.appendChild(this.subsection(links, child)));
+        break;
+      }
+      case SECTION_WITH_SUBSECTION_CONTENT: {
+        final SSectionWithSubsectionContentType<SCompiledLocalType> s =
+          (SSectionWithSubsectionContentType<SCompiledLocalType>) section;
+
+        s.content().forEach(child -> container.appendChild(this.subsectionContent(links, child)));
+        break;
+      }
+    }
 
     return container;
   }

@@ -24,7 +24,7 @@ import java.util.Optional;
  * @param <T> The type of data associated with the AST
  */
 
-public interface SSectionType<T> extends SBlockContentType<T>
+public interface SSectionType<T> extends SBlockContentType<T>, STypeableType<T>
 {
   /**
    * @return The precise kind of section
