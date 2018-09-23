@@ -20,6 +20,7 @@ import com.io7m.jstructural.ast.SBlockID;
 import com.io7m.jstructural.ast.SContentNumbers;
 import com.io7m.jstructural.ast.SFootnoteReference;
 import com.io7m.jstructural.ast.SFootnoteType;
+import com.io7m.jstructural.ast.SFormalItem;
 import com.io7m.jstructural.ast.SFormalItemReference;
 import com.io7m.jstructural.ast.SFormalItemType;
 import com.io7m.jstructural.ast.SImage;
@@ -30,6 +31,7 @@ import com.io7m.jstructural.ast.SListItem;
 import com.io7m.jstructural.ast.SListOrdered;
 import com.io7m.jstructural.ast.SListUnordered;
 import com.io7m.jstructural.ast.SParagraph;
+import com.io7m.jstructural.ast.SSubsection;
 import com.io7m.jstructural.ast.STerm;
 import com.io7m.jstructural.ast.SText;
 import com.io7m.jstructural.ast.STypeName;
@@ -97,7 +99,7 @@ public final class SXHTMLBuilderTest
         Vector.of(SText.of(local, "Hello.")));
 
     final Element xt = xhtml.term(term);
-    LOG.debug("xhtml: {}", xt);
+    dump(xt);
 
     Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
     Assertions.assertEquals("span", xt.getLocalName());
@@ -123,7 +125,7 @@ public final class SXHTMLBuilderTest
         Vector.of(SText.of(local, "Hello.")));
 
     final Element xt = xhtml.image(image);
-    LOG.debug("xhtml: {}", xt);
+    dump(xt);
 
     Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
     Assertions.assertEquals("img", xt.getLocalName());
@@ -151,7 +153,7 @@ public final class SXHTMLBuilderTest
         Vector.of(SText.of(local, "Hello.")));
 
     final Element xt = xhtml.linkExternal(link);
-    LOG.debug("xhtml: {}", xt);
+    dump(xt);
 
     Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
     Assertions.assertEquals("a", xt.getLocalName());
@@ -184,7 +186,7 @@ public final class SXHTMLBuilderTest
         Vector.of(SText.of(local, "Hello.")));
 
     final Element xt = xhtml.link(links, link);
-    LOG.debug("xhtml: {}", xt);
+    dump(xt);
 
     Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
     Assertions.assertEquals("a", xt.getLocalName());
@@ -228,7 +230,7 @@ public final class SXHTMLBuilderTest
       SFootnoteReference.of(local, Optional.of(STypeName.of(local, "t")), id);
 
     final Element xt = xhtml.footnoteReference(links, ref);
-    LOG.debug("xhtml: {}", xt);
+    dump(xt);
 
     Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
     Assertions.assertEquals("span", xt.getLocalName());
@@ -287,7 +289,7 @@ public final class SXHTMLBuilderTest
         SBlockID.of(local, "a"));
 
     final Element xt = xhtml.formalItemReference(links, ref);
-    LOG.debug("xhtml: {}", xt);
+    dump(xt);
 
     Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
     Assertions.assertEquals("span", xt.getLocalName());
@@ -321,7 +323,7 @@ public final class SXHTMLBuilderTest
         SText.of(local, "Hello."));
 
     final Element xt = xhtml.verbatim(verbatim);
-    LOG.debug("xhtml: {}", xt);
+    dump(xt);
 
     Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
     Assertions.assertEquals("pre", xt.getLocalName());
@@ -359,7 +361,7 @@ public final class SXHTMLBuilderTest
             Optional.of(STypeName.of(local, "z")))));
 
     final Element xt = xhtml.listOrdered(links, list);
-    LOG.debug("xhtml: {}", xt);
+    dump(xt);
 
     Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
     Assertions.assertEquals("ol", xt.getLocalName());
@@ -411,7 +413,7 @@ public final class SXHTMLBuilderTest
             Optional.of(STypeName.of(local, "z")))));
 
     final Element xt = xhtml.listUnordered(links, list);
-    LOG.debug("xhtml: {}", xt);
+    dump(xt);
 
     Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
     Assertions.assertEquals("ul", xt.getLocalName());
@@ -455,7 +457,7 @@ public final class SXHTMLBuilderTest
         Vector.of(SText.of(local, "Hello")));
 
     final Element xt = xhtml.paragraph(links, para);
-    LOG.debug("xhtml: {}", xt);
+    dump(xt);
 
     Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
     Assertions.assertEquals("div", xt.getLocalName());
@@ -471,10 +473,109 @@ public final class SXHTMLBuilderTest
     Assertions.assertEquals("#st_paragraph_1_2_3", number_link.getAttribute("href"));
 
     final Element content_container = (Element) number_container.getNextSibling();
+    Assertions.assertEquals("p", content_container.getLocalName());
     Assertions.assertEquals("Hello", content_container.getTextContent());
     Assertions.assertEquals("st_paragraph_content", content_container.getAttribute("class"));
+  }
 
+  @Test
+  public void testFormalItem()
+  {
+    final SCompiledLocalType local =
+      Mockito.mock(SCompiledLocalType.class);
+    final SXHTMLLinkProviderType links =
+      Mockito.mock(SXHTMLLinkProviderType.class);
+
+    Mockito.when(local.number())
+      .thenReturn(SContentNumbers.parse("1.2.3"));
+
+    final SXHTMLBuilder xhtml =
+      SXHTMLBuilder.create();
+
+    final SFormalItem<SCompiledLocalType> formal =
+      SFormalItem.of(
+        local,
+        Optional.of(STypeName.of(local, "t")),
+        Optional.of(SBlockID.of(local, "x")),
+        "Formal Item",
+        Vector.of(SText.of(local, "Hello")));
+
+    final Element xt = xhtml.formalItem(links, formal);
     dump(xt);
+
+    Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
+    Assertions.assertEquals("div", xt.getLocalName());
+    Assertions.assertEquals("st_formal_item t", xt.getAttribute("class"));
+
+    final Element title_container = (Element) xt.getFirstChild();
+    Assertions.assertEquals("h4", title_container.getLocalName());
+
+    final Element title_link = (Element) title_container.getFirstChild();
+    Assertions.assertEquals("a", title_link.getLocalName());
+    Assertions.assertEquals("st_formal_1_2_3", title_link.getAttribute("id"));
+    Assertions.assertEquals("#st_formal_1_2_3", title_link.getAttribute("href"));
+
+    final Element content_container = (Element) title_container.getNextSibling();
+    Assertions.assertEquals("Hello", content_container.getTextContent());
+    Assertions.assertEquals("st_formal_item_content", content_container.getAttribute("class"));
+  }
+
+  @Test
+  public void testSubsection()
+  {
+    final SCompiledLocalType subsection_local =
+      Mockito.mock(SCompiledLocalType.class);
+    final SCompiledLocalType paragraph_local =
+      Mockito.mock(SCompiledLocalType.class);
+    final SXHTMLLinkProviderType links =
+      Mockito.mock(SXHTMLLinkProviderType.class);
+
+    Mockito.when(subsection_local.number())
+      .thenReturn(SContentNumbers.parse("1.2.3"));
+    Mockito.when(paragraph_local.number())
+      .thenReturn(SContentNumbers.parse("1.2.3.1"));
+
+    final SXHTMLBuilder xhtml =
+      SXHTMLBuilder.create();
+
+    final SParagraph<SCompiledLocalType> para =
+      SParagraph.of(
+        paragraph_local,
+        Optional.of(STypeName.of(paragraph_local, "t")),
+        Optional.of(SBlockID.of(paragraph_local, "x")),
+        Vector.of(SText.of(paragraph_local, "Hello")));
+
+    final SSubsection<SCompiledLocalType> subsection =
+      SSubsection.of(
+        subsection_local,
+        Optional.of(STypeName.of(subsection_local, "t")),
+        Optional.of(SBlockID.of(subsection_local, "x")),
+        "Subsection",
+        Vector.of(para));
+
+    final Element xt = xhtml.subsection(links, subsection);
+    dump(xt);
+
+    Assertions.assertEquals(SXHTMLBuilder.XHTML_NAMESPACE, xt.getNamespaceURI());
+    Assertions.assertEquals("div", xt.getLocalName());
+    Assertions.assertEquals("st_subsection t", xt.getAttribute("class"));
+
+    final Element number_container = (Element) xt.getFirstChild();
+    Assertions.assertEquals("1.2.3", number_container.getTextContent());
+    Assertions.assertEquals("st_subsection_number", number_container.getAttribute("class"));
+
+    final Element number_link = (Element) number_container.getFirstChild();
+    Assertions.assertEquals("a", number_link.getLocalName());
+    Assertions.assertEquals("st_subsection_1_2_3", number_link.getAttribute("id"));
+    Assertions.assertEquals("#st_subsection_1_2_3", number_link.getAttribute("href"));
+
+    final Element title_container = (Element) number_container.getNextSibling();
+    Assertions.assertEquals("h3", title_container.getLocalName());
+    Assertions.assertEquals("st_subsection_title", title_container.getAttribute("class"));
+
+    final Element paragraph = (Element) title_container.getNextSibling();
+    Assertions.assertEquals("div", paragraph.getLocalName());
+    Assertions.assertEquals("st_paragraph t", paragraph.getAttribute("class"));
   }
 
   private static void dump(final Element element)

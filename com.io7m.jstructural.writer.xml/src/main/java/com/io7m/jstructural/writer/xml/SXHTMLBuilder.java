@@ -19,6 +19,7 @@ package com.io7m.jstructural.writer.xml;
 import com.io7m.jstructural.ast.SBlockContentType;
 import com.io7m.jstructural.ast.SFootnoteReference;
 import com.io7m.jstructural.ast.SFormalItemReference;
+import com.io7m.jstructural.ast.SFormalItemType;
 import com.io7m.jstructural.ast.SImageType;
 import com.io7m.jstructural.ast.SInlineAnyContentType;
 import com.io7m.jstructural.ast.SInlineLinkContentType;
@@ -29,6 +30,7 @@ import com.io7m.jstructural.ast.SListOrderedType;
 import com.io7m.jstructural.ast.SListUnorderedType;
 import com.io7m.jstructural.ast.SParagraphType;
 import com.io7m.jstructural.ast.SSubsectionContentType;
+import com.io7m.jstructural.ast.SSubsectionType;
 import com.io7m.jstructural.ast.STermType;
 import com.io7m.jstructural.ast.STextType;
 import com.io7m.jstructural.ast.STypeableType;
@@ -330,7 +332,9 @@ public final class SXHTMLBuilder
     final SXHTMLLinkProviderType links,
     final SListOrderedType<SCompiledLocalType> list)
   {
+    Objects.requireNonNull(links, "links");
     Objects.requireNonNull(list, "list");
+
     final Element element = this.document.createElementNS(XHTML_NAMESPACE, "ol");
     addClassAttribute(element, list);
     return this.listItems(links, element, list.items());
@@ -349,7 +353,9 @@ public final class SXHTMLBuilder
     final SXHTMLLinkProviderType links,
     final SListUnorderedType<SCompiledLocalType> list)
   {
+    Objects.requireNonNull(links, "links");
     Objects.requireNonNull(list, "list");
+
     final Element element = this.document.createElementNS(XHTML_NAMESPACE, "ul");
     addClassAttribute(element, list);
     return this.listItems(links, element, list.items());
@@ -393,7 +399,7 @@ public final class SXHTMLBuilder
   }
 
   /**
-   * Construct an XHTML element for the given verbatim.
+   * Construct an XHTML element for the given inline content.
    *
    * @param links   A link provider
    * @param content The content
@@ -405,6 +411,7 @@ public final class SXHTMLBuilder
     final SXHTMLLinkProviderType links,
     final SInlineAnyContentType<SCompiledLocalType> content)
   {
+    Objects.requireNonNull(links, "links");
     Objects.requireNonNull(content, "content");
 
     switch (content.inlineKind()) {
@@ -438,8 +445,8 @@ public final class SXHTMLBuilder
   /**
    * Construct an XHTML element for the given paragraph.
    *
-   * @param links A link provider
-   * @param paragraph  The paragraph
+   * @param links     A link provider
+   * @param paragraph The paragraph
    *
    * @return An XHTML element
    */
@@ -448,6 +455,7 @@ public final class SXHTMLBuilder
     final SXHTMLLinkProviderType links,
     final SParagraphType<SCompiledLocalType> paragraph)
   {
+    Objects.requireNonNull(links, "links");
     Objects.requireNonNull(paragraph, "paragraph");
 
     final Element container = this.document.createElementNS(XHTML_NAMESPACE, "div");
@@ -462,7 +470,7 @@ public final class SXHTMLBuilder
     number_link.setAttribute("href", '#' + anchorOf(paragraph));
     number_container.appendChild(number_link);
 
-    final Element content_container = this.document.createElementNS(XHTML_NAMESPACE, "div");
+    final Element content_container = this.document.createElementNS(XHTML_NAMESPACE, "p");
     content_container.setAttribute("class", "st_paragraph_content");
 
     paragraph.content().forEach(
@@ -471,6 +479,122 @@ public final class SXHTMLBuilder
     container.appendChild(number_container);
     container.appendChild(content_container);
     return container;
+  }
+
+  /**
+   * Construct an XHTML element for the given formal item.
+   *
+   * @param links  A link provider
+   * @param formal The formal item
+   *
+   * @return An XHTML element
+   */
+
+  public Element formalItem(
+    final SXHTMLLinkProviderType links,
+    final SFormalItemType<SCompiledLocalType> formal)
+  {
+    Objects.requireNonNull(links, "links");
+    Objects.requireNonNull(formal, "formal");
+
+    final Element container = this.document.createElementNS(XHTML_NAMESPACE, "div");
+    addClassAttribute(container, formal);
+
+    final Element title = this.document.createElementNS(XHTML_NAMESPACE, "h4");
+    container.appendChild(title);
+
+    final String text =
+      new StringBuilder(128)
+        .append(formal.data().number().toHumanString())
+        .append('.')
+        .append(' ')
+        .append(formal.title())
+        .toString();
+
+    final Element title_link = this.document.createElementNS(XHTML_NAMESPACE, "a");
+    title_link.setTextContent(text);
+    title_link.setAttribute("id", anchorOf(formal));
+    title_link.setAttribute("href", '#' + anchorOf(formal));
+    title.appendChild(title_link);
+
+    final Element content_container = this.document.createElementNS(XHTML_NAMESPACE, "p");
+    content_container.setAttribute("class", "st_formal_item_content");
+
+    formal.content().forEach(
+      paragraph_content -> content_container.appendChild(this.inlineAny(links, paragraph_content)));
+
+    container.appendChild(content_container);
+    return container;
+  }
+
+  /**
+   * Construct an XHTML element for the given subsection.
+   *
+   * @param links      A link provider
+   * @param subsection The subsection
+   *
+   * @return An XHTML element
+   */
+
+  public Element subsection(
+    final SXHTMLLinkProviderType links,
+    final SSubsectionType<SCompiledLocalType> subsection)
+  {
+    Objects.requireNonNull(links, "links");
+    Objects.requireNonNull(subsection, "subsection");
+
+    final Element container = this.document.createElementNS(XHTML_NAMESPACE, "div");
+    addClassAttribute(container, subsection);
+
+    final Element number_container = this.document.createElementNS(XHTML_NAMESPACE, "div");
+    number_container.setAttribute("class", "st_subsection_number");
+
+    final Element number_link = this.document.createElementNS(XHTML_NAMESPACE, "a");
+    number_link.setTextContent(subsection.data().number().toHumanString());
+    number_link.setAttribute("id", anchorOf(subsection));
+    number_link.setAttribute("href", '#' + anchorOf(subsection));
+    number_container.appendChild(number_link);
+
+    final Element title_container = this.document.createElementNS(XHTML_NAMESPACE, "h3");
+    title_container.setAttribute("class", "st_subsection_title");
+    title_container.setTextContent(subsection.title());
+
+    container.appendChild(number_container);
+    container.appendChild(title_container);
+
+    subsection.content().forEach(
+      subsection_content -> container.appendChild(
+        this.subsectionContent(links, subsection_content)));
+
+    return container;
+  }
+
+  /**
+   * Construct an XHTML element for the given subsection content.
+   *
+   * @param links   A link provider
+   * @param content The content
+   *
+   * @return An XHTML element
+   */
+
+  public Node subsectionContent(
+    final SXHTMLLinkProviderType links,
+    final SSubsectionContentType<SCompiledLocalType> content)
+  {
+    Objects.requireNonNull(links, "links");
+    Objects.requireNonNull(content, "content");
+
+    switch (content.subsectionContentKind()) {
+      case SUBSECTION_PARAGRAPH:
+        return this.paragraph(links, (SParagraphType<SCompiledLocalType>) content);
+      case SUBSECTION_FORMAL_ITEM:
+        return this.formalItem(links, (SFormalItemType<SCompiledLocalType>) content);
+      case SUBSECTION_FOOTNOTE:
+        throw new UnimplementedCodeException();
+    }
+
+    throw new UnreachableCodeException();
   }
 
   private static String anchorOf(
