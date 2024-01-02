@@ -37,7 +37,7 @@
 
   <properties>
     <io7m.api.previousVersion>0.0.1</io7m.api.previousVersion>
-    <io7m.org.immutables.version>2.9.3</io7m.org.immutables.version>
+    <io7m.org.immutables.version>2.10.0</io7m.org.immutables.version>
     <io7m.org.immutables.vavr.version>0.6.2</io7m.org.immutables.vavr.version>
     <com.io7m.immutables.style.version>0.0.1</com.io7m.immutables.style.version>
   </properties>
@@ -116,7 +116,7 @@
       <dependency>
         <groupId>com.io7m.jxe</groupId>
         <artifactId>com.io7m.jxe.core</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.2</version>
       </dependency>
 
       <dependency>
@@ -149,38 +149,38 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>2.0.7</version>
+        <version>2.0.10</version>
       </dependency>
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.4.7</version>
+        <version>1.4.14</version>
       </dependency>
 
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
-        <version>5.3.1</version>
+        <version>5.8.0</version>
       </dependency>
       <dependency>
         <groupId>nl.jqno.equalsverifier</groupId>
         <artifactId>equalsverifier</artifactId>
-        <version>3.14.2</version>
+        <version>3.15.5</version>
       </dependency>
       <dependency>
         <groupId>com.github.marschall</groupId>
         <artifactId>memoryfilesystem</artifactId>
-        <version>2.6.1</version>
+        <version>2.7.0</version>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
-        <version>5.9.3</version>
+        <version>5.10.1</version>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-engine</artifactId>
-        <version>5.9.3</version>
+        <version>5.10.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
